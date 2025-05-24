@@ -152,7 +152,6 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
     setContent("اظهارات مشتری:");
   }, []);
 
-  console.log("dataform3", dataform3);
   return (
     <Grid
       size={12}
