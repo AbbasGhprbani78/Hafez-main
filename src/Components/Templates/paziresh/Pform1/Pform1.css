@@ -1,0 +1,278 @@
+/* start style tab1 */
+.form1-container {
+  width: 93%;
+  margin: 0 auto 0 auto;
+}
+
+.tab1-pform1 {
+  background-color: #fff;
+  border-radius: var(--border-radius-1);
+  box-shadow: var(--box-shadow-2);
+}
+
+.p-form1-contant {
+  width: 92%;
+  max-height: 70vh;
+  overflow-y: scroll;
+}
+
+.inputwidth,
+.inputwidth2 {
+  width: 80%;
+}
+
+.p-form2-complete {
+  margin-top: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.make-turn {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.refer-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+.refer-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.refrer-option {
+  display: flex;
+  align-items: center;
+}
+
+.options-services-wrappper {
+  width: 93.5%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.options-services {
+  margin-right: 3.5rem;
+}
+
+.title-item-form {
+  color: var(--color-1);
+  font-weight: bold;
+  font-size: clamp(0.8rem, 0.9vw, 1rem);
+  width: max-content;
+}
+
+.title-type-res {
+  color: var(--color-1);
+  font-weight: bold;
+  font-size: clamp(0.8rem, 0.9vw, 1rem);
+  width: max-content;
+  margin-bottom: 0.5rem;
+}
+
+.complete-info {
+  font-weight: bold;
+  color: var(--color-15);
+}
+
+.p-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 25px;
+  margin: 1.4rem 0 0 2rem;
+}
+
+/* ens style tab1 */
+
+/* start style tab2 */
+
+.p-fomrm1-tab2-wrapper {
+  width: 92%;
+  max-height: 70vh;
+  overflow-y: scroll;
+}
+
+.p-form1-contant-tab2-left {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+.tab2-left-item {
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+}
+
+.tab2-refer-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.p-form1-contant-tab2-botton {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+
+/* end style tab2 */
+
+.eara1 {
+  resize: none;
+  height: 100px;
+}
+
+.eara2 {
+  resize: none;
+  height: 120px;
+}
+
+.css-nzhyv8-MuiButtonBase-root-MuiTab-root.Mui-selected {
+  color: var(--color-1) !important;
+  font-weight: bold;
+}
+
+.css-1aquho2-MuiTabs-indicator {
+  background-color: var(--color-1) !important;
+}
+
+.wrapper-refrer-option {
+  display: flex;
+  align-items: center;
+}
+
+.wrap-coplete-info {
+  margin: 3rem 0;
+}
+
+/* end style co */
+@media (max-width: 1256px) {
+  .inputwidth2 {
+    width: 90%;
+  }
+}
+
+@media (max-width: 1183px) {
+  .p-form1-contant {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1120px) {
+  .p-fomrm1-tab2-wrapper {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1051px) {
+  .tab2-refer-wrapper {
+    padding-left: 15px;
+  }
+}
+
+@media (max-width: 900px) {
+  .options-services-wrappper {
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .options-services {
+    margin-right: 0;
+  }
+
+  .wrap-coplete-info {
+    margin: 0;
+  }
+}
+
+@media (max-width: 842px) {
+  .inputwidth2 {
+    width: 95%;
+  }
+}
+
+@media (max-width: 824px) {
+  .dropdown-wrapper {
+    width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .p-form1-contant-tab2-left {
+    align-items: start;
+  }
+
+  .tab2-left-item {
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .refer-wrapper {
+    align-items: start;
+  }
+}
+
+@media (max-width: 600px) {
+  .form1-container {
+    width: 100%;
+  }
+
+  .options-services-wrappper {
+    flex-direction: column;
+  }
+
+  .css-19kzrtu {
+    padding: 24px !important;
+  }
+
+  .inputwidth {
+    width: 100%;
+  }
+
+  .p-form1-texte {
+    width: 100%;
+  }
+
+  .wrapper-refrer-option {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .p-form-actions {
+    margin: 1rem 0 0 0;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+  }
+
+  .tab2-refer-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .make-turn {
+    width: 100%;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+  }
+
+  .title-item-form {
+    margin-bottom: 0.5rem;
+  }
+  .refrer-option {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

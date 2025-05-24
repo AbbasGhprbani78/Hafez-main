@@ -1,0 +1,114 @@
+
+
+.css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
+    color: var(--color-5) !important;
+}
+
+.css-1aquho2-MuiTabs-indicator {
+    background-color: var(--color-5) !important;
+}
+
+.form-content-activity {
+    width: 50%;
+}
+
+.form-wrapper-activity {}
+
+.css-ahj2mt-MuiTypography-root {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+.css-nzhyv8-MuiButtonBase-root-MuiTab-root.Mui-selected {
+    color: var(--color-5) !important;
+    font-weight: bold;
+}
+
+.marginRight {
+    margin-right: 3rem !important;
+}
+
+.form-content-all-form {
+    max-height: 58vh;
+    overflow-y: scroll;
+    width: 100%;
+}
+
+.form-content-all-form::-webkit-scrollbar {
+    display: none;
+}
+
+.form-content-all-form {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.form-content-top {
+    width: 50%;
+    margin-bottom: 1.5rem;
+}
+
+.form-content-bottom {
+    width: 75%;
+}
+
+
+
+.add-signature-title {
+    font-size: clamp(.8rem, .9vw, 1rem);
+    color: var(--color-1);
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.add-signature-title>span {
+    margin-right: 10px;
+}
+
+#simple-tabpanel-0,
+#simple-tabpanel-1,
+#simple-tabpanel-2, 
+#simple-tabpanel-3{
+    margin-top: 1rem !important;
+}
+
+.signature-true-wrapper {
+    position: relative;
+}
+
+.info-owner-text {
+    font-size: clamp(.8rem, .9vw, 1rem);
+    color: var(--color-1);
+    font-weight: bold;
+}
+
+
+
+@media (max-width:992px) {
+    .activity-back {
+        height: 30vh !important;
+    }
+
+    .form-content-top {
+        width: 75%;
+    }
+
+    .form-content-bottom {
+        width: 100%;
+    }
+}
+
+@media (max-width:600px) {
+    .form-content-top {
+        width: 100%;
+    }
+
+    .activityheight {
+        max-height: 58vh !important;
+        overflow-y: scroll;
+    }
+
+
+}

@@ -1,0 +1,47 @@
+.car_onfo_box {
+
+    border-bottom: 1px solid var(--color-7);
+}
+
+.car_onfo_box_title {
+    color: var(--color-1);
+}
+
+.wrap_colums {
+    color: var(--color-3);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.info_col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: .9rem;
+}
+
+.item_info_car {
+    margin: 12px 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+
+}
+
+.title_info_car {
+    font-weight: bold;
+}
+
+.text_info_car {
+    display: inline-block;
+}
+
+
+@media (max-width:768px) {
+    .wrap_colums {
+        justify-content: start;
+    }
+}

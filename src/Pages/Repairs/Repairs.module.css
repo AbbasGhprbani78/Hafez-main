@@ -1,0 +1,20 @@
+.wrap_repairs {
+    max-height: 100vh;
+    overflow-y: scroll;
+}
+
+.wrap_actions_repairs {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    margin-top: 2rem;
+    gap: 20px;
+}
+
+@media (max-width:600px) {
+    .wrap_actions_repairs {
+        flex-direction: column;
+    }
+
+   
+}

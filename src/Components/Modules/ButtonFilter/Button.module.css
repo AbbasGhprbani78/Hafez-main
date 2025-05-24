@@ -1,0 +1,21 @@
+.filter_btn {
+    border: none;
+    outline: none;
+    border-radius: 100px;
+    padding: 7px 20px;
+    background-color: #f2f2f2;
+    color: var(--color-21);
+    text-align: center;
+    font-size: .9rem;
+    transition: all .3s ease-in;
+}
+
+.filter_btn:hover {
+    background-color: var(--color-3);
+    color: #fff;
+}
+
+.active {
+    background-color: var(--color-3);
+    color: #fff;
+}

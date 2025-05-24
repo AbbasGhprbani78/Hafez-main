@@ -1,0 +1,36 @@
+.wrapper {
+    margin-top: 1.5rem;
+}
+
+.wrap_filters {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.wrap_button {
+    display: flex;
+    justify-content: end;
+}
+
+.wrap_table {
+    margin-top: 1rem;
+}
+
+.wrap_btn {
+    width: 100%;
+}
+
+.btn {
+    background-color: var(--color-3);
+    border: none;
+    outline: none;
+    line-height: 38px;
+    border-radius: 100px;
+    padding: 0 18px;
+    color: #fff;
+    max-width: 102px;
+    min-width: 102px;
+    max-height: 35px;
+    min-height: 35px;
+}

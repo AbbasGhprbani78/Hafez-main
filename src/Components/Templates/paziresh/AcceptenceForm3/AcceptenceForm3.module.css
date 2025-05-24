@@ -1,0 +1,50 @@
+.form3_container {
+  border-radius: var(--border-radius-1);
+  box-shadow: var(--box-shadow-2);
+}
+
+.title_page {
+  color: var(--color-3) !important;
+  font-weight: 600 !important;
+  font-family: "iranYekan", sans-serif !important;
+}
+
+.label_input_form3 {
+  color: var(--color-1) !important;
+  margin-right: 8px !important;
+  font-size: clamp(0.8rem, 0.9vw, 1rem) !important;
+  font-weight: bold !important;
+  font-family: "iranYekan", sans-serif !important;
+}
+.error_subtitle_form3 {
+  font-size: clamp(0.8rem, 0.9vw, 1rem) !important;
+  color: var(--color-17);
+  margin-right: 8px !important;
+  font-weight: normal;
+  font-family: "iranYekan", sans-serif !important;
+}
+.upladerButton {
+  cursor: pointer;
+  border-radius: var(--border-radius-1);
+  background-color: var(--color-9) !important;
+  border: 1px solid var(--color-3);
+  min-width: 150px;
+  padding: 5px 10px;
+}
+.upladerButton:hover {
+  box-shadow: 0px 2px 4px -1px rgba(62, 132, 107, 0.2),
+    0px 4px 5px 0px rgba(62, 132, 107, 0.141),
+    0px 1px 10px 0px rgba(62, 132, 107, 0.12);
+}
+
+.uploadIcon {
+  color: var(--color-3);
+  font-weight: 600;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.payComponent_wrapper {
+  max-height: 300px;
+  overflow-y: auto;
+}

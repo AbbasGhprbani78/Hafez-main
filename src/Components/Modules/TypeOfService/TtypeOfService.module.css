@@ -1,0 +1,6 @@
+.title_item_form {
+  color: var(--color-1);
+  font-weight: bold;
+  font-size: clamp(0.8rem, 0.9vw, 1rem);
+  margin-bottom: 1.2rem;
+}

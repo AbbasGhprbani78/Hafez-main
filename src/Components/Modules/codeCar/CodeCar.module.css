@@ -1,0 +1,50 @@
+.inputs_wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+}
+
+.input_carector {
+  all: unset;
+  border-bottom: 1px solid var(--color-1);
+  padding-bottom: 5px;
+  text-align: center;
+  width: 58px;
+}
+
+.text_carector {
+  color: var(--color-21);
+  font-size: 0.9rem;
+}
+
+.code_car {
+  color: var(--color-1);
+  font-weight: 500;
+  width: max-content;
+}
+
+.codecar_itemes {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .inputs_wrapper {
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+  }
+
+  .codecar_itemes {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .input_carector {
+    width: 38px;
+  }
+
+  .text_carector {
+    font-size: 0.8rem;
+  }
+}

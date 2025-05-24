@@ -1,0 +1,17 @@
+.sumItem_wrapper {
+    background-color: #f2f2f2;
+    color: var(--color-3);
+    padding: 15px 15px 10px 15px;
+    margin-bottom: 2px;
+}
+
+.title_price {
+    font-weight: 500;
+}
+
+.number_price {}
+
+
+.color {
+    color: var(--color-17);
+}

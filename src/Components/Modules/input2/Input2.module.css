@@ -1,0 +1,24 @@
+@import url('../../../');
+
+.input2_container {
+    border-bottom: 1px solid var(--color-21);
+    width: max-content;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.input2_form {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    width: 100%
+}
+
+.input2_container input::placeholder {
+    color: var(--color-21);
+    opacity: 1;
+    font-size: clamp(.8rem, .9vw, 1rem);
+}

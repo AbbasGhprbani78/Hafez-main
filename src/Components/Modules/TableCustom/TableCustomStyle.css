@@ -1,0 +1,55 @@
+.text_navigation{
+    color: var(--color-1) !important;
+    font-family: Inter;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    line-height: 20px !important;    
+}
+
+/* Webkit Browsers (Chrome, Safari, Edge) */
+#table_custome_info::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+#table_custome_info::-webkit-scrollbar-track {
+    background: var(--color-11);
+    border-radius: 10px; /* Rounded corners for track */
+}
+
+#table_custome_info::-webkit-scrollbar-thumb {
+    background: var(--color-3);
+    border-radius: 10px; /* Rounded scrollbar */
+    border: 2px solid var(--color-1); /* Creates a small spacing effect */
+    transition: background 0.3s ease;
+}
+
+#table_custome_info::-webkit-scrollbar-thumb:hover {
+    background: var(--color-5);
+}
+
+/* Firefox */
+#table_custome_info {
+    scrollbar-width: thin;
+    scrollbar-color:  var(--color-3) var(--color-11);
+    border-radius: 10px;
+}
+
+/* Edge and IE */
+#table_custome_info {
+    -ms-overflow-style: none;
+}
+
+#table_custome_info::-ms-scrollbar {
+    width: 10px;
+}
+
+#table_custome_info::-ms-scrollbar-thumb {
+    background: var(--color-11);
+    border-radius: 10px;
+    border: 2px solid var(--color-3);
+}
+
+#table_custome_info::-ms-scrollbar-thumb:hover {
+    background: var(--color-1);
+}

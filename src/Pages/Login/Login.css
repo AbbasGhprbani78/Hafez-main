@@ -1,0 +1,32 @@
+.loginpage {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.form-content-login {
+    width: 50%;
+}
+
+.text-tosignup {
+    font-size: calc(.8rem + .1vw);
+    color: var(--color-1);
+}
+
+.link-to-signup {
+    all: unset;
+    color: var(--color-16);
+    cursor: pointer;
+}
+
+@media (max-width:992px) {
+    .form-content-login {
+        width: 100%;
+    }
+}
+
+@media (max-width:600px) {
+    .text-tosignup {
+        margin-top: 1.4rem;
+    }
+}

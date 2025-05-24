@@ -1,0 +1,95 @@
+.modal_parent{
+    min-width: 28dvw !important;
+    border-radius: var(--border-radius-1);
+    padding: 20px;
+}
+
+@media (max-width:1238px) {
+    .modal_parent {
+        width: 30dvw;
+    }
+}
+
+@media (max-width:1024px) {
+    .modal_parent {
+        width: 34dvw;
+    }
+}
+
+@media (max-width:992px) {
+    .modal_parent {
+        width: 50dvw;
+    }
+}
+
+@media (max-width:768px) {
+    .modal_parent {
+        width: 60dvw;
+    }
+}
+
+@media (max-width:600px) {
+    .modal_parent {
+        width: 90dvw;
+    }
+}
+/* Delete modal style */
+.confirm_btn{
+    border: none !important;
+    outline: none !important;
+    border-radius: 100px !important;
+    padding: 9px 15px !important;
+    color: #ffffff !important;
+    background-color: var(--color-3) !important;
+    font-size: .9rem !important;
+    font-family: 'iranYekan', sans-serif !important;
+    font-weight: 700 !important;
+    min-width: 132px !important;
+
+}
+.cancell_btn{
+    border: none !important;
+    outline: none !important;
+    border-radius: 100px !important;
+    padding: 9px 15px !important;
+    color: #768B95 !important;
+    background-color: #E5E5E5!important;
+    font-size: .9rem !important;
+    font-family: 'iranYekan', sans-serif !important;
+    font-weight: 700 !important;
+    min-width: 132px !important;
+
+}
+.delete_icon_modal{
+    border: 1px solid #292D32;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 100px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.title_modal{
+    font-family: 'iranYekan', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #15616D;
+}
+.description_modal{
+    text-align: right;
+    font-family: 'iranYekan', sans-serif !important;
+    font-weight: 400 !important;
+    font-size: .9rem !important;
+    padding: 0 0 30px 10px;
+}
+
+/* Add and Edit Halls Modal Styles */
+.input_label{
+    font-family: 'iranYekan', sans-serif !important;
+    color:#15616D;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+}
+
+

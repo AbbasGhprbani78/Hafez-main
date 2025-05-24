@@ -1,0 +1,50 @@
+.manual_btn{
+   font-size: 0.9rem !important;
+   font-weight: 500 !important;
+   color: #FFFFFF !important;
+   background-color:  #C3C3C3 !important;
+   border-radius: 100px !important;
+   border: none !important;
+   outline: none !important;
+   font-family: 'iranYekan', sans-serif !important;
+   line-height: 20px !important;
+   font-weight: 500;
+   padding: 9px 20px !important;
+   /* box-shadow: none !important; */
+}
+.active_btn{
+   font-family: 'iranYekan', sans-serif !important;
+   font-size: 1rem !important;
+   font-weight: 600 !important;
+   line-height: 20px !important;
+   color: #FFFFFF !important;
+   background-color:  var(--color-3) !important;
+   border-radius: 100px !important;
+   border: none !important;
+   outline: none !important;
+   padding: 9px 20px !important;
+}
+
+/* Halls Info table */
+.status_btn_halls {
+   padding: 5px;
+   border-radius: 100px;
+   min-width: 100px;
+}
+
+.status_halls_one {
+   background-color: #ccf3ea;
+   color: #3e846b;
+}
+
+.status_halls_two {
+   background-color: #F1444433;
+   color: #D90429;
+}
+
+.status_halls_defualt {
+   background-color: #a5b6ff;
+   color: #4c6fff;
+}
+
+

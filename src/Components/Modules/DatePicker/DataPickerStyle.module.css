@@ -1,0 +1,28 @@
+.date_picker_content_wrapper {
+    border: 1px solid var(--color-8);
+    border-radius: var(--border-radius-1);
+    padding: 10px 9px 10px 15px;
+    background-color: var(--color-20);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 45.6px;
+}
+
+.date_picker_content_wrapper .date_text_placeholder {
+    color: var(--color-21);
+    opacity: 1;
+    font-size: clamp(.8rem, .9vw, 1rem);
+}
+.date_picker_content_wrapper .date_text {
+    color: var(--color-1);
+    opacity: 1;
+}
+.date_picker_content_wrapper .icon_input_pick{
+    margin: 0 .5rem;
+    color: var(--color-1);
+}
+.date_picker_content_wrapper .icon_input_remove{
+    margin: 0 .5rem;
+    color: red;
+}

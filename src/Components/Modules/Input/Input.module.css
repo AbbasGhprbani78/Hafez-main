@@ -1,0 +1,55 @@
+.input_content_wrapper {
+  border: 1px solid var(--color-8);
+  border-radius: var(--border-radius-1);
+  padding: 10px 9px 10px 15px;
+  background-color: var(--color-20);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+.input_content_wrapper input::placeholder {
+  color: var(--color-21);
+  opacity: 1;
+  font-size: clamp(0.8rem, 0.9vw, 1rem);
+  font-family: "iranYekan", sans-serif !important;
+}
+.admission_number_input {
+  width: 100%;
+}
+.input_form {
+  all: unset;
+  width: 100% !important;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.icon_input {
+  color: var(--color-1);
+}
+
+.width {
+  width: 70%;
+}
+
+@media (max-width: 767.5px) {
+  .width {
+    width: 35.5%;
+  }
+}
+
+@media (max-width: 600px) {
+  .width {
+    width: 100%;
+  }
+
+  .inputtire {
+    width: 100%;
+  }
+}
+
+.full_width {
+  width: 100%;
+}

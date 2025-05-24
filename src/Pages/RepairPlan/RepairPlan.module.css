@@ -1,0 +1,43 @@
+.wrapper {
+    margin-top: 1.5rem;
+}
+
+.input_wrap {
+    margin: 1.5rem 0 1rem 0;
+    max-width: 280px;
+}
+
+.status_wrap,
+.btn {
+    border-radius: 100px;
+    padding: 0 18px;
+    color: #fff;
+    max-width: 102px;
+    min-width: 102px;
+    max-height: 35px;
+    min-height: 35px;
+    line-height: 35px;
+}
+
+.wrap_btn {
+    width: 100%;
+}
+
+.btn {
+    background-color: var(--color-3);
+    border: none;
+    outline: none;
+    line-height: 38px;
+}
+
+.free {
+    background-color: var(--color-6);
+}
+
+.hide {
+    background-color: #f14444;
+}
+
+.under {
+    background-color: #fde487;
+}
