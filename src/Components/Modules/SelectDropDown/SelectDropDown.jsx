@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./SelectDropDown.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { toFarsiNumber } from "../../../utils/helper";
 
 export default function SelectDropDown({
   icon,
@@ -75,6 +76,10 @@ export default function SelectDropDown({
     };
   }, []);
 
+  useEffect(() => {
+    setDisplayedValue(value || "");
+  }, [value]);
+
   return (
     <div className={styles.select_car_wrapper} ref={dropdownRef}>
       {label && (
@@ -88,7 +93,7 @@ export default function SelectDropDown({
           id="myInput"
           name={name}
           className={styles.input_cars}
-          value={displayedValue}
+          value={toFarsiNumber(displayedValue)}
           onChange={handleInputChange}
           onFocus={handleInputFocus}
           autoComplete="off"
@@ -105,7 +110,7 @@ export default function SelectDropDown({
                   className={styles.car_item}
                   onClick={() => handleOptionClick(item.value, item.value_id)}
                 >
-                  {item.value}
+                  {toFarsiNumber(item.value)}
                 </li>
               ))
             ) : (

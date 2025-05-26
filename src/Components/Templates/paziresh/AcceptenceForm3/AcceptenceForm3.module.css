@@ -44,7 +44,13 @@
   cursor: pointer;
 }
 
-.payComponent_wrapper {
-  max-height: 300px;
-  overflow-y: auto;
+.deleteIconWrapper {
+  position: absolute;
+  left: 0;
+  top: 50%;
+}
+
+.top_modal {
+  padding: 15px 20px 5px 20px;
+  border-bottom: 1px solid var(--color-22);
 }

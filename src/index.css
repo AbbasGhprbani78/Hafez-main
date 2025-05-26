@@ -24,6 +24,7 @@
   --color-19: #f14444;
   --color-20: #f7f7f7;
   --color-21: #c3c3c3;
+  --color-22: #eeeeee;
   --box-shadow-1: 0px 2px 4px 0px #00000040;
   --box-shadow-2: 0px 2px 15px 0px #e5e5e5;
   --border-radius-1: 10px;
@@ -137,7 +138,7 @@ body {
 
 .deleteIcon {
   color: var(--color-17);
-  font-size: 1rem;
+  font-size: 1.1rem;
   cursor: pointer;
 }
 @media (max-width: 600px) {

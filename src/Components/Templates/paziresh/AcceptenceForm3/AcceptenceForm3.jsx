@@ -20,22 +20,14 @@ import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { ToastContainer } from "react-toastify";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 //Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faMicrophone,
-  faFile,
-  faMicrophoneSlash,
-  faFileLines,
   faXmark,
-  faImage,
   faPen,
   faTrash,
-  faPenToSquare,
   faCheck,
   faUserTie,
   faFileImage,
@@ -49,6 +41,8 @@ import {
   toEnglishNumber,
   toFarsiNumber,
 } from "../../../../utils/helper";
+import TableForm3 from "../../../Modules/TableForm3/TableForm3";
+import MediaModal from "../../../Modules/MediaModal/MediaModal";
 
 function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
   const endRef = useRef(null);
@@ -70,11 +64,11 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
   });
 
   const [loading, setLoading] = useState({ page: false, finalForm: false });
-
-  const [expertFileModal, setExpertFileModal] = useState(false);
+  const [showModal, setShowModal] = useState(true);
+  const [typeModal, setTypeModal] = useState(1);
 
   const handleToggleModal = () => {
-    setExpertFileModal((modal) => !modal);
+    setShowModal((modal) => !modal);
   };
   const handleSubmitForm = async () => {};
   const hadleClickOnGoesBack = () => {
@@ -100,13 +94,6 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
     setDataForm3((prev) => ({
       ...prev,
       [field]: value,
-    }));
-  };
-
-  const handleUpload = (type, file) => {
-    setDataForm3((prev) => ({
-      ...prev,
-      [type]: [...(prev[type] || []), file],
     }));
   };
 
@@ -148,9 +135,61 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
     }));
   };
 
+  const addToTable = () => {
+    if (
+      !dataform3.CustomerStatements.trim() ||
+      dataform3.ExpertStatements === ""
+    ) {
+      errorMessage("لطفاً اظهارات مشتری و کارشناس را وارد کنید.");
+      return;
+    }
+
+    if (
+      !dataform3.invoiceItems.length ||
+      dataform3.invoiceItems.some(
+        (item) =>
+          item.wages === "" || item.price === "" || item.repairman === ""
+      )
+    ) {
+      errorMessage(
+        "لطفاً تمام فیلدهای آیتم‌های فاکتور را به‌طور کامل پر کنید."
+      );
+      return;
+    }
+
+    const newTableRow = {
+      CustomerStatements: dataform3.CustomerStatements,
+      CustomerFile: dataform3.CustomerFile,
+      CustomerVoice: dataform3.CustomerVoice,
+      ExpertStatements: dataform3.ExpertStatements,
+      ExpertFile: dataform3.ExpertFile,
+      ExpertVoice: dataform3.ExpertVoice,
+      invoiceItems: dataform3.invoiceItems,
+    };
+
+    setSelectedData((prev) => ({
+      ...prev,
+      tableForm: [...prev.tableForm, newTableRow],
+    }));
+
+    setDataForm3({
+      CustomerStatements: "",
+      CustomerFile: [],
+      CustomerVoice: [],
+      ExpertStatements: "",
+      ExpertFile: [],
+      ExpertVoice: [],
+      invoiceItems: [{ wages: "", price: "", repairman: "" }],
+    });
+
+    successMessage("اطلاعات با موفقیت اضافه شد.");
+  };
+
   useEffect(() => {
     setContent("اظهارات مشتری:");
   }, []);
+
+  console.log(dataform3);
 
   return (
     <Grid
@@ -163,10 +202,38 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
         gap: ".5rem",
       }}
     >
-      <Modal
-        showModal={expertFileModal}
-        setShowModal={handleToggleModal}
-      ></Modal>
+      <Modal showModal={showModal} setShowModal={handleToggleModal}>
+        <div className={styles.top_modal}>
+          <FontAwesomeIcon
+            icon={faXmark}
+            onClick={() => setShowModal(false)}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
+        {typeModal === 1 ? (
+          <MediaModal
+            text={"افزودن عکس"}
+            type={"image"}
+            files={dataform3.CustomerFile}
+            setFiles={(val) =>
+              setDataForm3((prev) => ({ ...prev, CustomerFile: val }))
+            }
+          />
+        ) : typeModal === 2 ? (
+          <>
+            <MediaModal
+              text={"افزودن صدا"}
+              type={"voice"}
+              files={dataform3.CustomerVoice}
+              setFiles={(val) =>
+                setDataForm3((prev) => ({ ...prev, CustomerVoice: val }))
+              }
+            />
+          </>
+        ) : (
+          <></>
+        )}
+      </Modal>
 
       <Typography
         display={{ xs: "block", md: "none" }}
@@ -249,33 +316,28 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
                     { value_id: "اظهارات مشتری 2", value: "اظهارات مشتری 2" },
                   ]}
                   name="CustomerStatements"
-                  placeHolder={"اظهارات مشتری را انتخاب یا وارد کنید."}
+                  placeHolder={"اظهارات مشتری را انتخاب  کنید."}
                   isDesirableValue={true}
                   key={724}
                   onChange={handleChange}
+                  value={dataform3.CustomerStatements}
                 />
-                {/* {errors.customer_statements_text && (
-                  <Typography
-                    className={styles.error_subtitle_form3}
-                    sx={{ marginTop: { xs: "4px" } }}
-                  >
-                    {errors.customer_statements_text}
-                  </Typography>
-                )} */}
               </Grid>
 
               <UploaderButton
                 imageCount={dataform3.CustomerFile.length}
                 voiceCount={0}
                 type="CustomerFile"
-                onUpload={(file, type) => handleUpload(type, file)}
+                setShowModal={setShowModal}
+                setTypeModal={setTypeModal}
               />
 
               <UploaderButton
                 imageCount={0}
                 voiceCount={dataform3.CustomerVoice.length}
                 type="CustomerVoice"
-                onUpload={(file, type) => handleUpload(type, file)}
+                setShowModal={setShowModal}
+                setTypeModal={setTypeModal}
               />
             </Grid>
             <Grid
@@ -286,7 +348,7 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
                 alignItems: { xs: "flex-end", sm: "flex-start" },
                 justifyContent: { xs: "center", lg: "flex-start" },
                 width: "100%",
-                gap: { xs: ".5rem", lg: "0" },
+                gap: { xs: ".5rem" },
               }}
             >
               <Grid
@@ -301,7 +363,7 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
               >
                 <SelectDropDown
                   icon={faAngleDown}
-                  label={"اظهارات کارشناس:"}
+                  label={"اظهارات کارشناس"}
                   items={[
                     { value_id: 1, value: "اظهارات کارشناس 1" },
                     { value_id: 2, value: "اظهارات کارشناس 2" },
@@ -310,6 +372,7 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
                   placeHolder={"اظهار کارشناس را انتخاب کنید."}
                   isDesirableValue={false}
                   onChange={handleChange}
+                  value={dataform3.ExpertStatements}
                 />
                 {/* {errors.expert_statements_text && (
                   <Typography
@@ -324,14 +387,16 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
                 imageCount={dataform3.ExpertFile.length}
                 voiceCount={0}
                 type="ExpertFile"
-                onUpload={(file, type) => handleUpload(type, file)}
+                setShowModal={setShowModal}
+                setTypeModal={setTypeModal}
               />
 
               <UploaderButton
                 imageCount={0}
                 voiceCount={dataform3.ExpertVoice.length}
                 type="ExpertVoice"
-                onUpload={(file, type) => handleUpload(type, file)}
+                setShowModal={setShowModal}
+                setTypeModal={setTypeModal}
               />
             </Grid>
           </Grid>
@@ -371,7 +436,7 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
                 index={index}
               />
             ))}
-            <div ref={endRef} />
+            {/* <div ref={endRef} /> */}
           </Grid>
           <Grid
             size={12}
@@ -398,7 +463,7 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
                 className={styles.label_input_form3}
                 sx={{ marginBottom: { xs: "5px" } }}
               >
-                {"تخمین زمان تعمیرکار:"}
+                {"تخمین زمان تعمیرکار"}
               </Typography>
 
               <DataInput
@@ -406,14 +471,6 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
                 value={dataform3.EstimatedRepairTime}
                 onChange={handleRepairTimeChange}
               />
-              {/* {errors.estimated_repair_time && (
-                <Typography
-                  className={styles.error_subtitle_form3}
-                  sx={{ marginTop: { xs: "4px" } }}
-                >
-                  {errors.estimated_repair_time}
-                </Typography>
-              )} */}
             </Grid>
             <Button2
               key={814}
@@ -439,11 +496,16 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
               type="button"
               variant="contained"
               icon={faCheck}
-              onClick={""}
+              onClick={addToTable}
             >
               تایید
             </Button2>
           </Grid>
+          {selectedData.tableForm.length > 0 && (
+            <Grid size={12}>
+              <TableForm3 data={selectedData.tableForm} />
+            </Grid>
+          )}
           <Grid
             size={12}
             sx={{
@@ -515,7 +577,6 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
           </Grid>
         </Box>
       </Grid>
-
       {loading.page && <LoadingForm />}
     </Grid>
   );
@@ -543,6 +604,8 @@ const PayRowComponent = ({
         alignItems: "center",
         flexDirection: { xs: "column", md: "row" },
         width: "100%",
+        position: "relative",
+        marginTop: "15px",
       }}
       className={styles.payComponent}
     >
@@ -559,7 +622,7 @@ const PayRowComponent = ({
       >
         <SelectDropDown
           icon={faAngleDown}
-          label={"اجرت:"}
+          label={"اجرت"}
           items={payItems}
           name="pay"
           disable={disable}
@@ -633,7 +696,7 @@ const PayRowComponent = ({
       >
         <SelectDropDown
           icon={faAngleDown}
-          label={"تعمیرکار:"}
+          label={"تعمیرکار"}
           items={repairManItems}
           name="repairman"
           disable={disable}
@@ -652,49 +715,27 @@ const PayRowComponent = ({
         )} */}
       </Grid>
       {index > 0 && (
-        <FontAwesomeIcon
-          icon={faTrash}
-          onClick={onRemove}
-          className={"deleteIcon"}
-        />
+        <div className={styles.deleteIconWrapper}>
+          <FontAwesomeIcon
+            icon={faTrash}
+            onClick={onRemove}
+            className={"deleteIcon"}
+          />
+        </div>
       )}
     </Grid>
   );
 };
 
-const UploaderButton = ({ imageCount, voiceCount, onUpload, type }) => {
-  const MAX_FILES = 3;
-  const MAX_FILE_SIZE_MB = 5;
-
-  const fileInputRef = useRef();
+const UploaderButton = ({
+  imageCount,
+  voiceCount,
+  type,
+  setShowModal,
+  setTypeModal,
+}) => {
   const isVoice = type.toLowerCase().includes("voice");
   const isFile = type.toLowerCase().includes("file");
-
-  const acceptedTypes = isVoice ? "audio/*" : "application/pdf,image/*";
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const currentCount = isVoice ? voiceCount : imageCount;
-
-    if (currentCount >= MAX_FILES) {
-      toast.error(
-        `شما نمی‌توانید بیش از ${MAX_FILES} ${
-          isVoice ? "صوت" : "فایل"
-        } بارگذاری کنید.`
-      );
-      return;
-    }
-
-    const fileSizeMB = file.size / (1024 * 1024);
-    if (fileSizeMB > MAX_FILE_SIZE_MB) {
-      toast.error("حجم فایل نباید بیشتر از ۵ مگابایت باشد.");
-      return;
-    }
-
-    onUpload(file, type);
-  };
 
   return (
     <Box
@@ -706,32 +747,35 @@ const UploaderButton = ({ imageCount, voiceCount, onUpload, type }) => {
         gap: ".5rem",
       }}
     >
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept={acceptedTypes}
-        onChange={handleFileChange}
-        style={{ display: "none" }}
-      />
-      <Box
-        onClick={() => fileInputRef.current.click()}
-        sx={{ display: "flex", alignItems: "center" }}
-      >
+      <Box sx={{ display: "flex", alignItems: "center" }}>
         {isVoice && (
-          <Typography className={styles.uploadIcon}>
+          <Typography
+            className={styles.uploadIcon}
+            onClick={() => {
+              setTypeModal(2);
+              setShowModal(true);
+            }}
+          >
             {`(${voiceCount}) `}
             <FontAwesomeIcon icon={faFileAudio} />
           </Typography>
         )}
         {isFile && (
-          <Typography className={styles.uploadIcon}>
+          <Typography
+            className={styles.uploadIcon}
+            onClick={() => {
+              setTypeModal(1);
+              setShowModal(true);
+            }}
+          >
             {`(${imageCount}) `}
             <FontAwesomeIcon icon={faFileImage} />
           </Typography>
         )}
       </Box>
-      <ToastContainer position="top-left" />
     </Box>
   );
 };
 export default AcceptenceForm3;
+
+// onUpload={(file, type) => handleUpload(type, file)}

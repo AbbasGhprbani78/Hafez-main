@@ -1,0 +1,20 @@
+.table {
+  font-family: "iranYekan", sans-serif !important;
+}
+
+.icon {
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.wrapper_icon {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  justify-content: center;
+}
+
+.icon_attch {
+  color: var(--color-3);
+}

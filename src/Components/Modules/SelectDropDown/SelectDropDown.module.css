@@ -55,6 +55,12 @@
   color: #fff;
 }
 
+.input_cars::placeholder {
+  color: var(--color-21);
+  opacity: 1;
+  font-size: 0.7rem;
+  font-family: "iranYekan", sans-serif !important;
+}
 @media (max-width: 768px) {
   .select_car_wrapper {
     width: 100%;
