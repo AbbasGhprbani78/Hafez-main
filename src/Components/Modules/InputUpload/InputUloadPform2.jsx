@@ -1,5 +1,7 @@
 import { useState } from "react";
+import Resizer from "react-image-file-resizer";
 import styles from "./InputUpload.module.css";
+import { isValidFileSize } from "../../../utils/helper";
 
 export default function InputUloadPform2({
   label,
@@ -21,6 +23,11 @@ export default function InputUloadPform2({
     e.stopPropagation();
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const file = e.dataTransfer.files[0];
+
+      if (!isValidFileSize(file)) {
+        return;
+      }
+
       setDefaultImg(URL.createObjectURL(file));
       handleFileUpload(file);
     }
@@ -29,24 +36,40 @@ export default function InputUloadPform2({
   const handleChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
+
+      if (!isValidFileSize(file)) {
+        return;
+      }
+
       setDefaultImg(URL.createObjectURL(file));
       handleFileUpload(file);
     }
   };
 
   const handleFileUpload = (file) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setForm2((prevForm) => ({
-        ...prevForm,
-        customer_secend_form: {
-          ...prevForm.customer_secend_form,
-          [name]: reader.result,
+    try {
+      Resizer.imageFileResizer(
+        file,
+        800,
+        800,
+        "JPEG",
+        70,
+        0,
+        (uri) => {
+          setForm2((prevForm) => ({
+            ...prevForm,
+            customer_secend_form: {
+              ...prevForm.customer_secend_form,
+              [name]: uri,
+            },
+          }));
+          setIsEdit(true);
         },
-      }));
-    };
-    reader.readAsDataURL(file);
-    setIsEdit(true);
+        "base64"
+      );
+    } catch (err) {
+      console.error("Error resizing image:", err);
+    }
   };
 
   return (

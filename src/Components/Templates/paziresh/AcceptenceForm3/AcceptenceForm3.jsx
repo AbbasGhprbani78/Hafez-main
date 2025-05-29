@@ -37,7 +37,7 @@ import TableForm3 from "../../../Modules/TableForm3/TableForm3";
 import MediaModal from "../../../Modules/MediaModal/MediaModal";
 import InputPrice from "../../../Modules/InputPrice/InputPrice";
 import { MyContext } from "../../../../context/context";
-import SearchableSelect from "../../../Modules/SearchableSelect/SearchableSelect";
+import SearchAndSelectDropDwon from "../../../Modules/SearchAndSelectDropDwon/SearchAndSelectDropDwon";
 
 function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
   const { dataForm, idForm, setDataForm } = useContext(MyContext);
@@ -278,21 +278,34 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
   };
 
   const postForm3Data = async () => {
-    if (!selectedData.tableForm.length) {
+    if (!selectedData.tableForm.length || !dataform3.ExpertStatements) {
       errorMessage("لطفا فرم را تکمیل کنید");
       return;
-    } else {
-      try {
-        const response = await apiClient.post(
-          "http://5.9.108.174:8500/app/submit-repair-form/",
-          selectedData
-        );
-        if (response.status === 200) {
-          console.log(response.data);
-        }
-      } catch (error) {
-        errorMessage(error.response.message);
+    }
+
+    const filteredForm3 = {
+      ...dataform3,
+      CustomerFile: dataform3.CustomerFile.map((file) => file.base64),
+      ExpertFile: dataform3.ExpertFile.map((file) => file.base64),
+      CustomerVoice: dataform3.CustomerVoice.map((file) => file.base64),
+      ExpertVoice: dataform3.ExpertVoice.map((file) => file.base64),
+    };
+
+    const payload = {
+      ...selectedData,
+      tableForm: filteredForm3,
+    };
+
+    try {
+      const response = await apiClient.post(
+        "http://5.9.108.174:8500/app/submit-repair-form/",
+        payload
+      );
+      if (response.status === 200) {
+        console.log(response.data);
       }
+    } catch (error) {
+      errorMessage(error?.response?.message || "خطا در ارسال داده‌ها");
     }
   };
 
@@ -339,6 +352,8 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
     getCustomerStatements();
     getExpertStatements();
   }, []);
+
+  console.log("dataform3", dataform3);
 
   return (
     <Grid
@@ -473,26 +488,17 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
                 }}
                 size={{ xs: 12, sm: 11, md: 10, lg: 7 }}
               >
-                {/* <SearchableSelect
+                {/* <SelectDropDown
                   icon={faAngleDown}
                   label={"اظهارات مشتری"}
-                  placeHolder={"اظهارات مشتری را انتخاب  کنید."}
                   items={customerTexts}
-                  value={dataform3.CustomerStatements}
-                  onChange={handleChange}
                   name="CustomerStatements"
+                  placeHolder={"اظهارات مشتری را انتخاب  کنید."}
                   isDesirableValue={true}
+                  onChange={handleChange}
+                  value={dataform3.CustomerStatements}
                 /> */}
-                <SelectDropDown
-                  icon={faAngleDown}
-                  label={"اظهارات مشتری"}
-                  items={customerTexts}
-                  name="CustomerStatements"
-                  placeHolder={"اظهارات مشتری را انتخاب  کنید."}
-                  isDesirableValue={true}
-                  onChange={handleChange}
-                  value={dataform3.CustomerStatements}
-                />
+                <SearchAndSelectDropDwon />
               </Grid>
 
               <div style={{ display: "flex", gap: ".5rem" }}>

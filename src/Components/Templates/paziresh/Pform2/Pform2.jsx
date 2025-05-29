@@ -506,6 +506,8 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
     }));
   }, [dataForm, carParts]);
 
+  console.log("form2", form2);
+
   return (
     <>
       <CarModal
