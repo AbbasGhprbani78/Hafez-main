@@ -1,8 +1,8 @@
 .estimate_input {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
-.rmdp-input:focus{
-    box-shadow: none !important;
+.rmdp-input:focus {
+  box-shadow: none !important;
 }

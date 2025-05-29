@@ -16,9 +16,9 @@ export default function TableForm({ columns, children }) {
           aria-label="dynamic table"
           stickyHeader
           sx={{
-            minWidth: "max-content",
             typography: "inherit",
             border: "1px solid #f2f2f2",
+            minWidth: 750,
           }}
         >
           <TableHead>
@@ -26,7 +26,11 @@ export default function TableForm({ columns, children }) {
               {columns?.map((column, index) => (
                 <TableCell
                   key={index}
-                  sx={{ background: "#f7f4eb", fontFamily: "iranYekan" }}
+                  sx={{
+                    background: "#f7f4eb",
+                    fontFamily: "iranYekan",
+                    textAlign: "center",
+                  }}
                 >
                   {column}
                 </TableCell>

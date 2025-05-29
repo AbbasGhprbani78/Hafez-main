@@ -22,7 +22,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toFarsiNumber } from "../../../utils/helper";
 
-function Row({ row }) {
+function Row({ row, deleteRow, index, editRow }) {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -36,26 +36,44 @@ function Row({ row }) {
         </TableCell>
         <TableCell align="center" className={styles.table}>
           <div className={styles.wrapper_icon}>
-            <FontAwesomeIcon
-              icon={faFileImage}
-              className={`${styles.icon} ${styles.icon_attch}`}
-            />
-            <FontAwesomeIcon
-              icon={faFileAudio}
-              className={`${styles.icon} ${styles.icon_attch}`}
-            />
+            {row?.CustomerFile.length > 0 && (
+              <FontAwesomeIcon
+                icon={faFileImage}
+                className={`${styles.icon} ${styles.icon_attch}`}
+              />
+            )}
+
+            {row?.CustomerVoice.length > 0 && (
+              <FontAwesomeIcon
+                icon={faFileAudio}
+                className={`${styles.icon} ${styles.icon_attch}`}
+              />
+            )}
+
+            {row?.CustomerFile.length === 0 &&
+              row?.CustomerVoice.length === 0 && (
+                <span className={styles.icon_attch_text_empty}>بدون پیوست</span>
+              )}
           </div>
         </TableCell>
         <TableCell align="center" className={styles.table}>
           <div className={styles.wrapper_icon}>
-            <FontAwesomeIcon
-              icon={faFileImage}
-              className={`${styles.icon} ${styles.icon_attch}`}
-            />
-            <FontAwesomeIcon
-              icon={faFileAudio}
-              className={`${styles.icon} ${styles.icon_attch}`}
-            />
+            {row?.ExpertFile.length > 0 && (
+              <FontAwesomeIcon
+                icon={faFileImage}
+                className={`${styles.icon} ${styles.icon_attch}`}
+              />
+            )}
+
+            {row?.ExpertVoice.length > 0 && (
+              <FontAwesomeIcon
+                icon={faFileAudio}
+                className={`${styles.icon} ${styles.icon_attch}`}
+              />
+            )}
+            {row?.ExpertFile.length === 0 && row?.ExpertVoice.length === 0 && (
+              <span className={styles.icon_attch_text_empty}>بدون پیوست</span>
+            )}
           </div>
         </TableCell>
         <TableCell align="center" className={styles.table}>
@@ -63,10 +81,12 @@ function Row({ row }) {
             <FontAwesomeIcon
               icon={faPen}
               className={`${styles.icon} ${styles.icon_attch}`}
+              onClick={() => editRow(index, row)}
             />
             <FontAwesomeIcon
               icon={faTrash}
               className={`${styles.icon} deleteIcon`}
+              onClick={() => deleteRow(index)}
             />
           </div>
         </TableCell>
@@ -133,10 +153,10 @@ function Row({ row }) {
   );
 }
 
-export default function TableForm3({ data = [] }) {
+export default function TableForm3({ data = [], deleteRow, editRow }) {
   return (
     <TableContainer component={Paper} dir="rtl">
-      <Table aria-label="collapsible table">
+      <Table aria-label="collapsible table" sx={{ minWidth: 750 }}>
         <TableHead>
           <TableRow>
             <TableCell align="center" className={styles.table}>
@@ -158,7 +178,16 @@ export default function TableForm3({ data = [] }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.length > 0 && data.map((row, i) => <Row key={i} row={row} />)}
+          {data.length > 0 &&
+            data.map((row, i) => (
+              <Row
+                key={i}
+                row={row}
+                deleteRow={deleteRow}
+                index={i}
+                editRow={editRow}
+              />
+            ))}
         </TableBody>
       </Table>
     </TableContainer>

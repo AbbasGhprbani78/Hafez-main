@@ -46,11 +46,50 @@
 
 .deleteIconWrapper {
   position: absolute;
-  left: 0;
+  left: 0px;
   top: 50%;
 }
 
 .top_modal {
   padding: 15px 20px 5px 20px;
   border-bottom: 1px solid var(--color-22);
+}
+
+.scrollable {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.input_container {
+  width: 198px;
+}
+
+@media (max-width: 800px) {
+  .deleteIconWrapper {
+    position: absolute;
+    left: -10px;
+    top: 50%;
+  }
+}
+
+@media (max-width: 723px) {
+  .input_container {
+    width: 180px;
+  }
+}
+
+@media (max-width: 600px) {
+  .input_container {
+    width: 100%;
+  }
+  .payComponent {
+    box-shadow: var(--box-shadow-1);
+    padding: 30px 0;
+    border-radius: var(--border-radius-1);
+  }
+
+  .deleteIconWrapper {
+    top: 10px;
+    right: 10px;
+  }
 }

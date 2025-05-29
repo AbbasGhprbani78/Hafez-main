@@ -20,7 +20,6 @@
     "@mui/material": "^6.4.5",
     "axios": "^1.6.8",
     "formik": "^2.4.6",
-    "jalaali-js": "^1.2.7",
     "jalali-moment": "^3.3.11",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.10",

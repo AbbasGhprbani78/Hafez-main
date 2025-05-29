@@ -2,6 +2,9 @@ import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import DateObject from "react-date-object";
+import TimePicker from "react-multi-date-picker/plugins/time_picker";
+
+import "./DataInput.css";
 
 export default function DataInput({
   value,
@@ -23,8 +26,10 @@ export default function DataInput({
           placeholder={placeHolder}
           calendar={persian}
           locale={persian_fa}
+          format="YYYY/MM/DD HH:mm"
           calendarPosition="bottom-right"
           value={displayValue}
+          plugins={[<TimePicker key={1} position="bottom" />]}
           onChange={(dateObject) => {
             const gregorianDate = dateObject?.toDate();
             onChange(gregorianDate);

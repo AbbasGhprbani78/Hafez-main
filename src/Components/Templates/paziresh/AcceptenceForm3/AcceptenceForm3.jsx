@@ -1,12 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import styles from "./AcceptenceForm3.module.css";
-import moment from "jalali-moment";
 //Other Components
 import {
   errorMessage,
   successMessage,
-  warningMessage,
-  infoMessage,
 } from "../../../Modules/Toast/ToastCustom";
 import LoadingForm from "../../../Modules/Loading/LoadingForm";
 import Modal from "../../../Modules/Modal/Modal";
@@ -36,15 +33,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../../../config/axiosConfig";
 
-import {
-  formatWithThousandSeparators,
-  toEnglishNumber,
-  toFarsiNumber,
-} from "../../../../utils/helper";
 import TableForm3 from "../../../Modules/TableForm3/TableForm3";
 import MediaModal from "../../../Modules/MediaModal/MediaModal";
+import InputPrice from "../../../Modules/InputPrice/InputPrice";
+import { MyContext } from "../../../../context/context";
+import SearchableSelect from "../../../Modules/SearchableSelect/SearchableSelect";
 
 function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
+  const { dataForm, idForm, setDataForm } = useContext(MyContext);
   const endRef = useRef(null);
 
   const [dataform3, setDataForm3] = useState({
@@ -55,26 +51,34 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
     ExpertFile: [],
     ExpertVoice: [],
     invoiceItems: [{ wages: "", price: "", repairman: "" }],
-    EstimatedRepairTime: "",
   });
 
   const [selectedData, setSelectedData] = useState({
+    customer: 40,
     tableForm: [],
     EstimatedRepairTime: "",
   });
 
   const [loading, setLoading] = useState({ page: false, finalForm: false });
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const [typeModal, setTypeModal] = useState(1);
+  const [typeuser, setTypeUser] = useState("");
+  const [editMode, setEditMode] = useState(false);
+  const [indexToEdit, setIndexToEdit] = useState(null);
+  const [customerTexts, setCustomerTexts] = useState([]);
+  const [expertTexts, setExpertTexts] = useState([]);
+  const [wages, setWages] = useState([]);
+  const [prices, setPrices] = useState();
+  const [repairmen, setRepairmen] = useState([]);
 
   const handleToggleModal = () => {
     setShowModal((modal) => !modal);
   };
-  const handleSubmitForm = async () => {};
   const hadleClickOnGoesBack = () => {
     prevTab();
   };
   const handleClickOnSendToExperts = () => {};
+
   const handleCliclOnRepairmanSchedule = () => {};
 
   const handleAddInvoiceItem = () => {
@@ -98,7 +102,7 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
   };
 
   const handleRepairTimeChange = (newDate) => {
-    setDataForm3((prev) => ({
+    setSelectedData((prev) => ({
       ...prev,
       EstimatedRepairTime: newDate,
     }));
@@ -119,7 +123,17 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
   };
 
   const handlePayChange = (index) => (name, value) => {
-    handleInvoiceItemChange(index, "wages", value);
+    const selectedPriceItem = prices.find((item) => item.value_id === value);
+
+    setDataForm3((prev) => {
+      const newItems = [...prev.invoiceItems];
+      newItems[index].wages = value;
+      newItems[index].price = selectedPriceItem?.value || "";
+      return {
+        ...prev,
+        invoiceItems: newItems,
+      };
+    });
   };
 
   const handleRepairmanChange = (index) => (name, value) => {
@@ -157,20 +171,42 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
       return;
     }
 
-    const newTableRow = {
-      CustomerStatements: dataform3.CustomerStatements,
-      CustomerFile: dataform3.CustomerFile,
-      CustomerVoice: dataform3.CustomerVoice,
-      ExpertStatements: dataform3.ExpertStatements,
-      ExpertFile: dataform3.ExpertFile,
-      ExpertVoice: dataform3.ExpertVoice,
-      invoiceItems: dataform3.invoiceItems,
-    };
+    if (editMode) {
+      setSelectedData((prev) => {
+        const updatedTableForm = [...prev.tableForm];
+        updatedTableForm[indexToEdit] = {
+          CustomerStatements: dataform3.CustomerStatements,
+          CustomerFile: dataform3.CustomerFile,
+          CustomerVoice: dataform3.CustomerVoice,
+          ExpertStatements: dataform3.ExpertStatements,
+          ExpertFile: dataform3.ExpertFile,
+          ExpertVoice: dataform3.ExpertVoice,
+          invoiceItems: dataform3.invoiceItems,
+        };
+        return {
+          ...prev,
+          tableForm: updatedTableForm,
+        };
+      });
+      setEditMode(false);
+      successMessage("اطلاعات با موفقیت تغییر کرد.");
+    } else {
+      const newTableRow = {
+        CustomerStatements: dataform3.CustomerStatements,
+        CustomerFile: dataform3.CustomerFile,
+        CustomerVoice: dataform3.CustomerVoice,
+        ExpertStatements: dataform3.ExpertStatements,
+        ExpertFile: dataform3.ExpertFile,
+        ExpertVoice: dataform3.ExpertVoice,
+        invoiceItems: dataform3.invoiceItems,
+      };
 
-    setSelectedData((prev) => ({
-      ...prev,
-      tableForm: [...prev.tableForm, newTableRow],
-    }));
+      setSelectedData((prev) => ({
+        ...prev,
+        tableForm: [...prev.tableForm, newTableRow],
+      }));
+      successMessage("اطلاعات با موفقیت به جدول اضافه شد.");
+    }
 
     setDataForm3({
       CustomerStatements: "",
@@ -181,15 +217,128 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
       ExpertVoice: [],
       invoiceItems: [{ wages: "", price: "", repairman: "" }],
     });
+  };
 
-    successMessage("اطلاعات با موفقیت اضافه شد.");
+  const deleteRow = (index) => {
+    setSelectedData((prev) => ({
+      ...prev,
+      tableForm: prev.tableForm.filter((_, i) => i !== index),
+    }));
+    successMessage("ردیف با موفقیت حذف شد.");
+  };
+
+  const editRow = (index, updatedRow) => {
+    setEditMode(true);
+    setDataForm3({
+      CustomerStatements: updatedRow.CustomerStatements,
+      CustomerFile: updatedRow.CustomerFile,
+      CustomerVoice: updatedRow.CustomerVoice,
+      ExpertStatements: updatedRow.ExpertStatements,
+      ExpertFile: updatedRow.ExpertFile,
+      ExpertVoice: updatedRow.ExpertVoice,
+      invoiceItems: updatedRow.invoiceItems,
+    });
+    setIndexToEdit(index);
+  };
+
+  const getCustomerStatements = async () => {
+    try {
+      const response = await apiClient.get(
+        "http://5.9.108.174:8500/app/customer-statements/"
+      );
+      if (response.status === 200) {
+        setCustomerTexts(
+          response.data.map((item) => ({
+            value_id: item?.description,
+            value: item?.description,
+          }))
+        );
+      }
+    } catch (error) {
+      errorMessage(error.response.message);
+    }
+  };
+
+  const getExpertStatements = async () => {
+    try {
+      const response = await apiClient.get(
+        "http://5.9.108.174:8500/app/get-all-statement-code/"
+      );
+      if (response.status === 200) {
+        setExpertTexts(
+          response.data.map((item) => ({
+            value_id: item?.id,
+            value: item?.descriptions,
+          }))
+        );
+      }
+    } catch (error) {
+      errorMessage(error.response.message);
+    }
+  };
+
+  const postForm3Data = async () => {
+    if (!selectedData.tableForm.length) {
+      errorMessage("لطفا فرم را تکمیل کنید");
+      return;
+    } else {
+      try {
+        const response = await apiClient.post(
+          "http://5.9.108.174:8500/app/submit-repair-form/",
+          selectedData
+        );
+        if (response.status === 200) {
+          console.log(response.data);
+        }
+      } catch (error) {
+        errorMessage(error.response.message);
+      }
+    }
+  };
+
+  const getWagesPricerepairman = async () => {
+    try {
+      const response = await apiClient.get(
+        `http://5.9.108.174:8500/app/get-statement/${dataform3.ExpertStatements}`
+      );
+      if (response.status === 200) {
+        console.log(response.data);
+        setRepairmen(
+          response.data.repairmen.map((item) => ({
+            value_id: item.id,
+            value: item.full_name,
+          }))
+        );
+        setWages(
+          response.data.statements.map((item) => ({
+            value_id: item.id,
+            value: item.descriptions,
+          }))
+        );
+
+        setPrices(
+          response.data.statements.map((item) => ({
+            value_id: item.id,
+            value: item.price,
+          }))
+        );
+      }
+    } catch (error) {
+      errorMessage(error.response.message);
+    }
   };
 
   useEffect(() => {
-    setContent("اظهارات مشتری:");
-  }, []);
+    if (dataform3.ExpertStatements) {
+      getWagesPricerepairman();
+    }
+  }, [dataform3.ExpertStatements]);
 
-  console.log(dataform3);
+  useEffect(() => {
+    setContent("اظهارات مشتری:");
+    getCustomerStatements();
+    getExpertStatements();
+  }, []);
 
   return (
     <Grid
@@ -214,9 +363,17 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
           <MediaModal
             text={"افزودن عکس"}
             type={"image"}
-            files={dataform3.CustomerFile}
-            setFiles={(val) =>
-              setDataForm3((prev) => ({ ...prev, CustomerFile: val }))
+            files={
+              typeuser == "CustomerFile"
+                ? dataform3.CustomerFile
+                : dataform3.ExpertFile
+            }
+            setFiles={
+              typeuser === "CustomerFile"
+                ? (val) =>
+                    setDataForm3((prev) => ({ ...prev, CustomerFile: val }))
+                : (val) =>
+                    setDataForm3((prev) => ({ ...prev, ExpertFile: val }))
             }
           />
         ) : typeModal === 2 ? (
@@ -224,9 +381,17 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
             <MediaModal
               text={"افزودن صدا"}
               type={"voice"}
-              files={dataform3.CustomerVoice}
-              setFiles={(val) =>
-                setDataForm3((prev) => ({ ...prev, CustomerVoice: val }))
+              files={
+                typeuser == "CustomerVoice"
+                  ? dataform3.CustomerVoice
+                  : dataform3.ExpertVoice
+              }
+              setFiles={
+                typeuser === "CustomerVoice"
+                  ? (val) =>
+                      setDataForm3((prev) => ({ ...prev, CustomerVoice: val }))
+                  : (val) =>
+                      setDataForm3((prev) => ({ ...prev, ExpertVoice: val }))
               }
             />
           </>
@@ -291,7 +456,7 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
               size={{ xs: 12, sm: 6 }}
               sx={{
                 display: "flex",
-                flexDirection: { xs: "column", lg: "row" },
+                flexDirection: { xs: "column", sm: "row", lg: "row" },
                 alignItems: { xs: "flex-end", sm: "flex-start" },
                 justifyContent: { xs: "center", lg: "flex-start" },
                 width: "100%",
@@ -308,43 +473,53 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
                 }}
                 size={{ xs: 12, sm: 11, md: 10, lg: 7 }}
               >
+                {/* <SearchableSelect
+                  icon={faAngleDown}
+                  label={"اظهارات مشتری"}
+                  placeHolder={"اظهارات مشتری را انتخاب  کنید."}
+                  items={customerTexts}
+                  value={dataform3.CustomerStatements}
+                  onChange={handleChange}
+                  name="CustomerStatements"
+                  isDesirableValue={true}
+                /> */}
                 <SelectDropDown
                   icon={faAngleDown}
                   label={"اظهارات مشتری"}
-                  items={[
-                    { value_id: "اظهارات مشتری 1", value: "اظهارات مشتری 1" },
-                    { value_id: "اظهارات مشتری 2", value: "اظهارات مشتری 2" },
-                  ]}
+                  items={customerTexts}
                   name="CustomerStatements"
                   placeHolder={"اظهارات مشتری را انتخاب  کنید."}
                   isDesirableValue={true}
-                  key={724}
                   onChange={handleChange}
                   value={dataform3.CustomerStatements}
                 />
               </Grid>
 
-              <UploaderButton
-                imageCount={dataform3.CustomerFile.length}
-                voiceCount={0}
-                type="CustomerFile"
-                setShowModal={setShowModal}
-                setTypeModal={setTypeModal}
-              />
+              <div style={{ display: "flex", gap: ".5rem" }}>
+                <UploaderButton
+                  imageCount={dataform3.CustomerFile.length}
+                  voiceCount={0}
+                  type="CustomerFile"
+                  setShowModal={setShowModal}
+                  setTypeModal={setTypeModal}
+                  setTypeUser={setTypeUser}
+                />
 
-              <UploaderButton
-                imageCount={0}
-                voiceCount={dataform3.CustomerVoice.length}
-                type="CustomerVoice"
-                setShowModal={setShowModal}
-                setTypeModal={setTypeModal}
-              />
+                <UploaderButton
+                  imageCount={0}
+                  voiceCount={dataform3.CustomerVoice.length}
+                  type="CustomerVoice"
+                  setShowModal={setShowModal}
+                  setTypeModal={setTypeModal}
+                  setTypeUser={setTypeUser}
+                />
+              </div>
             </Grid>
             <Grid
               size={{ xs: 12, sm: 6 }}
               sx={{
                 display: "flex",
-                flexDirection: { xs: "column", lg: "row" },
+                flexDirection: { xs: "column", sm: "row", lg: "row" },
                 alignItems: { xs: "flex-end", sm: "flex-start" },
                 justifyContent: { xs: "center", lg: "flex-start" },
                 width: "100%",
@@ -364,40 +539,34 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
                 <SelectDropDown
                   icon={faAngleDown}
                   label={"اظهارات کارشناس"}
-                  items={[
-                    { value_id: 1, value: "اظهارات کارشناس 1" },
-                    { value_id: 2, value: "اظهارات کارشناس 2" },
-                  ]}
+                  items={expertTexts}
                   name="ExpertStatements"
                   placeHolder={"اظهار کارشناس را انتخاب کنید."}
-                  isDesirableValue={false}
+                  isDesirableValue={true}
                   onChange={handleChange}
                   value={dataform3.ExpertStatements}
                 />
-                {/* {errors.expert_statements_text && (
-                  <Typography
-                    className={styles.error_subtitle_form3}
-                    sx={{ marginTop: { xs: "4px" } }}
-                  >
-                    {errors.expert_statements_text}
-                  </Typography>
-                )} */}
               </Grid>
-              <UploaderButton
-                imageCount={dataform3.ExpertFile.length}
-                voiceCount={0}
-                type="ExpertFile"
-                setShowModal={setShowModal}
-                setTypeModal={setTypeModal}
-              />
 
-              <UploaderButton
-                imageCount={0}
-                voiceCount={dataform3.ExpertVoice.length}
-                type="ExpertVoice"
-                setShowModal={setShowModal}
-                setTypeModal={setTypeModal}
-              />
+              <div style={{ display: "flex", gap: ".5rem" }}>
+                <UploaderButton
+                  imageCount={dataform3.ExpertFile.length}
+                  voiceCount={0}
+                  type="ExpertFile"
+                  setShowModal={setShowModal}
+                  setTypeModal={setTypeModal}
+                  setTypeUser={setTypeUser}
+                />
+
+                <UploaderButton
+                  imageCount={0}
+                  voiceCount={dataform3.ExpertVoice.length}
+                  type="ExpertVoice"
+                  setShowModal={setShowModal}
+                  setTypeModal={setTypeModal}
+                  setTypeUser={setTypeUser}
+                />
+              </div>
             </Grid>
           </Grid>
           <Grid size={12} sx={{ marginTop: "2rem" }}>
@@ -411,24 +580,23 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
               افزودن اجرت جدید
             </Button2>
           </Grid>
-          <Grid size={12} className={styles.payComponent_wrapper}>
+          <Grid
+            size={12}
+            className={`${styles.payComponent_wrapper} ${
+              dataform3.invoiceItems.length > 3 ? styles.scrollable : ""
+            }`}
+          >
             {dataform3.invoiceItems.map((item, index) => (
               <PayRowComponent
                 key={index}
-                payItems={[
-                  { value_id: 1, value: "اجرت 1" },
-                  { value_id: 2, value: "اجرت 2" },
-                ]}
+                payItems={wages}
                 payValue={item.wages}
                 paySet={handlePayChange(index)}
                 priceValue={item.price}
                 priceSet={(value) =>
                   handleInvoiceItemChange(index, "price", value)
                 }
-                repairManItems={[
-                  { value_id: 1, value: "تعمیرکار 1" },
-                  { value_id: 2, value: "تعمیرکار 2" },
-                ]}
+                repairManItems={repairmen}
                 repairManValue={item.repairman}
                 repairManSet={handleRepairmanChange(index)}
                 disable={""}
@@ -436,50 +604,7 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
                 index={index}
               />
             ))}
-            {/* <div ref={endRef} /> */}
-          </Grid>
-          <Grid
-            size={12}
-            sx={{
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: { xs: "flex-start", sm: "center" },
-              width: "100%",
-              flexDirection: { xs: "column", sm: "row" },
-              gap: { xs: "0.5rem" },
-            }}
-          >
-            <Grid
-              size={{ xs: 12, sm: 5, md: 4, lg: 3, xxl: 2 }}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "flex-start",
-                width: "100%",
-                flexDirection: "column",
-              }}
-            >
-              <Typography
-                className={styles.label_input_form3}
-                sx={{ marginBottom: { xs: "5px" } }}
-              >
-                {"تخمین زمان تعمیرکار"}
-              </Typography>
-
-              <DataInput
-                placeHolder="تخمین زمان تعمیر را انتخاب نمایید!"
-                value={dataform3.EstimatedRepairTime}
-                onChange={handleRepairTimeChange}
-              />
-            </Grid>
-            <Button2
-              key={814}
-              type="button"
-              variant="contained"
-              onClick={handleCliclOnRepairmanSchedule}
-            >
-              {"برنامه‌ریزی تعمیرکار"}
-            </Button2>
+            <div ref={endRef} style={{ height: "100px" }} />
           </Grid>
           <Grid
             size={12}
@@ -501,79 +626,104 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
               تایید
             </Button2>
           </Grid>
+          <Grid
+            size={12}
+            sx={{
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: { xs: "flex-start", sm: "end" },
+              width: "100%",
+              flexDirection: { xs: "column", sm: "row" },
+              gap: { xs: "1.3rem" },
+            }}
+          >
+            <Grid
+              size={{ xs: 12, sm: 5, md: 4, lg: 3, xxl: 2 }}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-start",
+                width: "100%",
+                flexDirection: "column",
+              }}
+            >
+              <Typography
+                className={styles.label_input_form3}
+                sx={{ marginBottom: { xs: "5px" } }}
+              >
+                {"تخمین زمان تعمیرکار"}
+              </Typography>
+
+              <DataInput
+                placeHolder="تخمین زمان تعمیر را انتخاب نمایید!"
+                value={selectedData.EstimatedRepairTime}
+                onChange={handleRepairTimeChange}
+              />
+            </Grid>
+            <Button2
+              key={814}
+              type="button"
+              variant="contained"
+              onClick={handleCliclOnRepairmanSchedule}
+            >
+              {"برنامه‌ریزی تعمیرکار"}
+            </Button2>
+          </Grid>
           {selectedData.tableForm.length > 0 && (
             <Grid size={12}>
-              <TableForm3 data={selectedData.tableForm} />
+              <TableForm3
+                data={selectedData.tableForm}
+                deleteRow={deleteRow}
+                editRow={editRow}
+              />
             </Grid>
           )}
           <Grid
             size={12}
             sx={{
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "end",
               alignItems: "center",
               width: "100%",
               flexDirection: { xs: "column", sm: "row" },
-              gap: { xs: "0.5rem", sm: "0" },
+              gap: { xs: "0.5rem" },
             }}
           >
-            <Grid
-              order={{ xs: 1, sm: 2 }}
-              size={{ xs: 12, sm: 6, md: 2, xxl: 3 }}
-              sx={{
-                display: "flex",
-                justifyContent: { xs: "center", sm: "flex-start" },
-                alignItems: "center",
-                gap: { xs: "1rem", sm: ".5rem" },
-              }}
+            <Button2
+              key={813}
+              type="button"
+              variant="contained"
+              icon={faUserTie}
+              style={"width"}
+              onClick={handleClickOnSendToExperts}
             >
-              <Button2
-                key={812}
-                type="button"
-                variant="outlined"
-                icon={faPen}
-                onClick={hadleClickOnGoesBack}
-                style={"outline_btn"}
-              >
-                {"قبل"}
-              </Button2>
-              <Button2
-                key={811}
-                type="button"
-                variant="contained"
-                icon={loading.finalForm ? "" : faCheck}
-                onClick={handleSubmitForm}
-                disable={loading.finalForm}
-                style={"add_btn"}
-              >
-                {loading.finalForm ? (
-                  <CircularProgress size={"25.2px"} color="success" />
-                ) : (
-                  "تایید"
-                )}
-              </Button2>
-            </Grid>
-            <Grid
-              order={{ xs: 2, sm: 1 }}
-              size={{ xs: 12, sm: 6, md: 5, lg: 7, xl: 8, xxl: 9 }}
-              sx={{
-                display: "flex",
-                justifyContent: { xs: "center", sm: "flex-end" },
-                alignItems: "center",
-                paddingLeft: { xs: "0", sm: ".5rem" },
-              }}
+              {"ارجاع به کارشناس"}
+            </Button2>
+            <Button2
+              key={812}
+              type="button"
+              variant="outlined"
+              icon={faPen}
+              onClick={hadleClickOnGoesBack}
+              style={"width"}
             >
-              <Button2
-                key={813}
-                type="button"
-                variant="contained"
-                icon={faUserTie}
-                style={"add_btn"}
-                onClick={handleClickOnSendToExperts}
-              >
-                {"ارجاع به کارشناس"}
-              </Button2>
-            </Grid>
+              {"قبل"}
+            </Button2>
+            <Button2
+              key={811}
+              type="button"
+              variant="contained"
+              icon={loading.finalForm ? "" : faCheck}
+              onClick={postForm3Data}
+              disable={loading.finalForm}
+              style={"width"}
+            >
+              {loading.finalForm ? (
+                <CircularProgress size={"25.2px"} color="success" />
+              ) : (
+                "تایید"
+              )}
+            </Button2>
           </Grid>
         </Box>
       </Grid>
@@ -598,19 +748,22 @@ const PayRowComponent = ({
   return (
     <Grid
       size={12}
+      container
+      rowSpacing={2}
+      columnSpacing={4}
       sx={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        flexDirection: { xs: "column", md: "row" },
+        flexDirection: { xs: "column", sm: "row", md: "row" },
         width: "100%",
         position: "relative",
         marginTop: "15px",
       }}
-      className={styles.payComponent}
+      className={`${styles.payComponent}`}
     >
       <Grid
-        size={{ xs: 12, sm: 8, md: 4 }}
+        size={{ xs: 12, sm: 4, md: 4 }}
         sx={{
           display: "flex",
           justifyContent: "flex-start",
@@ -631,17 +784,9 @@ const PayRowComponent = ({
           value={payValue}
           key={721}
         />
-        {/* {payError && (
-          <Typography
-            className={styles.error_subtitle_form3}
-            sx={{ marginTop: { xs: "4px" } }}
-          >
-            {payError}
-          </Typography>
-        )} */}
       </Grid>
       <Grid
-        size={{ xs: 12, sm: 8, md: 4 }}
+        size={{ xs: 12, sm: 4, md: 4 }}
         sx={{
           display: "flex",
           justifyContent: "flex-start",
@@ -651,40 +796,18 @@ const PayRowComponent = ({
           padding: { xs: "0 5px" },
         }}
       >
-        <div className={`input-container`} style={{ width: "198px" }}>
-          <label htmlFor={"تخمین قیمت"} className="label_input ">
-            تخمین قیمت
-          </label>
-          <div className="input_content_wrapper" style={{ marginTop: ".5rem" }}>
-            <input
-              name={"price"}
-              type={"text"}
-              placeholder={" قیمت"}
-              value={toFarsiNumber(formatWithThousandSeparators(priceValue))}
-              onChange={(e) => {
-                const englishNumber = toEnglishNumber(
-                  e.target.value.replace(/,/g, "")
-                );
-
-                priceSet(englishNumber);
-              }}
-              className="input_form"
-              autoComplete="off"
-              maxLength={30}
-            />
-          </div>
+        <div className={styles.input_container}>
+          <InputPrice
+            label="قیمت محصول"
+            value={priceValue}
+            onChange={priceSet}
+            name="price"
+            maxLength={30}
+          />
         </div>
-        {/* {priceError && (
-          <Typography
-            className={styles.error_subtitle_form3}
-            sx={{ marginTop: { xs: "4px" } }}
-          >
-            {priceError}
-          </Typography>
-        )} */}
       </Grid>
       <Grid
-        size={{ xs: 12, sm: 8, md: 4 }}
+        size={{ xs: 12, sm: 4, md: 4 }}
         sx={{
           display: "flex",
           justifyContent: "flex-start",
@@ -705,14 +828,6 @@ const PayRowComponent = ({
           value={repairManValue}
           key={723}
         />
-        {/* {repairManError && (
-          <Typography
-            className={styles.error_subtitle_form3}
-            sx={{ marginTop: { xs: "4px" } }}
-          >
-            {repairManError}
-          </Typography>
-        )} */}
       </Grid>
       {index > 0 && (
         <div className={styles.deleteIconWrapper}>
@@ -733,6 +848,7 @@ const UploaderButton = ({
   type,
   setShowModal,
   setTypeModal,
+  setTypeUser,
 }) => {
   const isVoice = type.toLowerCase().includes("voice");
   const isFile = type.toLowerCase().includes("file");
@@ -754,6 +870,7 @@ const UploaderButton = ({
             onClick={() => {
               setTypeModal(2);
               setShowModal(true);
+              setTypeUser(type);
             }}
           >
             {`(${voiceCount}) `}
@@ -766,6 +883,7 @@ const UploaderButton = ({
             onClick={() => {
               setTypeModal(1);
               setShowModal(true);
+              setTypeUser(type);
             }}
           >
             {`(${imageCount}) `}
@@ -776,6 +894,5 @@ const UploaderButton = ({
     </Box>
   );
 };
-export default AcceptenceForm3;
 
-// onUpload={(file, type) => handleUpload(type, file)}
+export default AcceptenceForm3;

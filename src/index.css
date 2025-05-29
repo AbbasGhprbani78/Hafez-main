@@ -141,6 +141,11 @@ body {
   font-size: 1.1rem;
   cursor: pointer;
 }
+
+.wrap_button_repairs {
+  margin: 1.8rem 0 10px 0;
+}
+
 @media (max-width: 600px) {
 }
 

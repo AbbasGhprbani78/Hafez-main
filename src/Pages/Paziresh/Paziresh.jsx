@@ -8,7 +8,6 @@ import Pform4 from "../../Components/Templates/paziresh/Pform4/Pform4";
 import Header from "../../Components/Modules/Header/Header";
 import { ToastContainerCustom } from "../../Components/Modules/Toast/ToastCustom";
 
-//MUI Components
 import Grid from "@mui/material/Grid2";
 
 export default function Paziresh() {

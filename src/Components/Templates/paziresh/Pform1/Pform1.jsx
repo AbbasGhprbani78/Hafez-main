@@ -76,7 +76,6 @@ export default function Pform1({ nextTab, setContent, setCoustomer }) {
       const res = await apiClient.get(`/app/get-form/${id}`);
       if (res.status === 200) {
         setDataForm(res.data);
-        console.log(res.data);
       }
     } catch (error) {
       console.log(error);

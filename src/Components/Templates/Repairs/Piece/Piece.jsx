@@ -8,7 +8,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import TableForm from "../../../Modules/Table/TableForm";
-import { TableCell, TableRow } from "@mui/material";
+import { Box, TableCell, TableRow } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Modal from "../../../Modules/Modal/Modal";
 import { Col, Row } from "react-bootstrap";
@@ -16,8 +16,17 @@ import { formatWithThousandSeparators } from "../../../../utils/helper";
 import ConfirmBtn from "../../../Modules/ConfirmBtn/ConfirmBtn";
 import { toFarsiNumber } from "../../../../utils/helper";
 import Input from "../../../Modules/Input/Input";
+import styles2 from "../../../../Pages/Repairs/Repairs.module.css";
 export default function Piece() {
-  const columns = ["نام قطعه", "مارک قطعه", "قیمت", "تعمیرکار", "تعداد"];
+  const columns = [
+    "نام قطعه",
+    "مارک قطعه",
+    "قیمت",
+    "تعمیرکار",
+    "تعداد",
+    "گارانتی",
+    "عملیات",
+  ];
   const [showModal, setShowModal] = useState(false);
   return (
     <>
@@ -45,7 +54,10 @@ export default function Piece() {
             </div>
             <div className="mt-3">
               <label className={`label_input mb-2 `}>تعمیرکار</label>
-              <SelectDropDown2 text={"تعمیرکار"} styleList={"positionlisttop"} />
+              <SelectDropDown2
+                text={"تعمیرکار"}
+                styleList={"positionlisttop"}
+              />
             </div>
             <Row className="mt-3 mb-3 d-flex gx-3">
               <Col xs={12} md={6}>
@@ -89,17 +101,28 @@ export default function Piece() {
       </Modal>
       <div className={`${styles.box}`}>
         <span className={`${styles.box_title} subtitle-project`}>قطعه :</span>
-        <div className={`${styles.wrap_drop} mt-3`}>
-          <span className={styles.text_drop}>تامین کننده :</span>
-          <SelectDropDown2
-            text={"خدمات دهنده"}
-            style={"width"}
-            styleList={"positionlist"}
-          />
-        </div>
-        <div className={`${styles.wrap_actions} mt-4`}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div className={`${styles.wrap_drop} `}>
+            <span className={styles.text_drop}>تامین کننده :</span>
+            <SelectDropDown2
+              text={"خدمات دهنده"}
+              style={"width"}
+              styleList={"positionlist"}
+            />
+          </div>
+          <Button2 onClick={""}>مشاهده جزئیات گارانتی</Button2>
+        </Box>
+        <div className={`${styles.wrap_actions} wrap_button_repairs`}>
           <Button2 onClick={() => setShowModal(true)}>{"افزودن قطعه"}</Button2>
-          <Button2 onClick={""} icon={faEnvelope}>{"ارسال پیامک"}</Button2>
+          <Button2 onClick={""} icon={faEnvelope}>
+            {"ارسال پیامک"}
+          </Button2>
         </div>
         <div className="mt-3">
           <TableForm columns={columns}>
@@ -107,20 +130,30 @@ export default function Piece() {
               <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
               <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
               <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
-              <div className="wrap-trash-table">
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  onClick={() => { }}
-                  className="trash-row-table"
-                />
-              </div>
-              <div className="wrap-edit-table">
-                <FontAwesomeIcon
-                  icon={faPenToSquare}
-                  onClick={() => { }}
-                  className="edit-row-table"
-                />
-              </div>
+              <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
+              <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
+              <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
+              <TableCell sx={{ fontFamily: "iranYekan" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "15px",
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    onClick={() => {}}
+                    className={`${styles2.trash_row_table}`}
+                  />
+                  <FontAwesomeIcon
+                    icon={faPenToSquare}
+                    onClick={() => {}}
+                    className={styles2.edit_row_table}
+                  />
+                </Box>
+              </TableCell>
             </TableRow>
           </TableForm>
         </div>

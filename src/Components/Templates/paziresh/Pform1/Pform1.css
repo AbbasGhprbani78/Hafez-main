@@ -14,6 +14,7 @@
   width: 92%;
   max-height: 70vh;
   overflow-y: scroll;
+  font-family: "iranYekan", sans-serif !important;
 }
 
 .inputwidth,
@@ -98,6 +99,7 @@
   width: 92%;
   max-height: 70vh;
   overflow-y: scroll;
+  font-family: "iranYekan", sans-serif !important;
 }
 
 .p-form1-contant-tab2-left {

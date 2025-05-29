@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import TableForm from "../../../Modules/Table/TableForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { TableCell, TableRow } from "@mui/material";
+import { Box, TableCell, TableRow } from "@mui/material";
 import InputRadio from "../../../Modules/InputRadio/InputRadio";
 import Modal from "../../../Modules/Modal/Modal";
 import { Col, Row } from "react-bootstrap";
@@ -18,7 +18,7 @@ import ConfirmBtn from "../../../Modules/ConfirmBtn/ConfirmBtn";
 import Textarea from "../../../Modules/Texteara/Textarea";
 import Input from "../../../Modules/Input/Input";
 import DataInput from "../../../Modules/DataInput/DataInput";
-
+import styles2 from "../../../../Pages/Repairs/Repairs.module.css";
 export default function OutWork() {
   const columns = [
     "عمل",
@@ -28,6 +28,7 @@ export default function OutWork() {
     "کیلومتر ورود",
     "زمان ورود",
     "توضیحات",
+    "عملیات",
   ];
   const [showModal, setShowModal] = useState(false);
   return (
@@ -118,9 +119,11 @@ export default function OutWork() {
         <span className={`${styles.box_title} subtitle-project`}>
           افزودن کار خارج :
         </span>
-        <div className={`${styles.wrap_actions} mt-4`}>
-          <Button2 onClick={() => setShowModal(true)} >{"افزودن اجرت"}</Button2>
-          <Button2 onClick={""} icon={faEnvelope} >{"ارسال پیامک"}</Button2>
+        <div className={`${styles.wrap_actions} wrap_button_repairs`}>
+          <Button2 onClick={() => setShowModal(true)}>{"افزودن اجرت"}</Button2>
+          <Button2 onClick={""} icon={faEnvelope}>
+            {"ارسال پیامک"}
+          </Button2>
         </div>
         <div className="mt-3">
           <TableForm columns={columns}>
@@ -132,20 +135,27 @@ export default function OutWork() {
               <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
               <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
               <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
-              <div className="wrap-trash-table">
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  onClick={() => { }}
-                  className="trash-row-table"
-                />
-              </div>
-              <div className="wrap-edit-table">
-                <FontAwesomeIcon
-                  icon={faPenToSquare}
-                  onClick={() => { }}
-                  className="edit-row-table"
-                />
-              </div>
+              <TableCell sx={{ fontFamily: "iranYekan" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "15px",
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    onClick={() => {}}
+                    className={`${styles2.trash_row_table}`}
+                  />
+                  <FontAwesomeIcon
+                    icon={faPenToSquare}
+                    onClick={() => {}}
+                    className={styles2.edit_row_table}
+                  />
+                </Box>
+              </TableCell>
             </TableRow>
           </TableForm>
         </div>
