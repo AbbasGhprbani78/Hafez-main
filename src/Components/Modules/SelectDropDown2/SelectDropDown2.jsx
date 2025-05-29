@@ -1,71 +1,147 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import CreatableSelect from "react-select/creatable";
 import styles from "./SelectDropDown2.module.css";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import { components } from "react-select";
 
-export default function SelectDropDown2({ text, style, styleList }) {
-  const [showOptions, setShowOptions] = useState(false);
-  const [searchText, setSearchText] = useState("");
-  const [selectedValue, setSelectedValue] = useState(text);
+const CustomDropdownIndicator = (props) => {
+  return (
+    <components.DropdownIndicator {...props}>
+      <FontAwesomeIcon icon={faAngleDown} style={{ color: "var(--color-3)" }} />
+    </components.DropdownIndicator>
+  );
+};
 
-  const options = [text, "2", "3", "4"];
+const CustomNoOptionsMessage = (props) => {
+  return (
+    <components.NoOptionsMessage {...props}>
+      <span style={{ color: "var(--color-21)" }}>موردی یافت نشد !</span>
+    </components.NoOptionsMessage>
+  );
+};
+const options = [
+  { value: "apple", label: "سیب" },
+  { value: "banana", label: "موز" },
+  { value: "orange", label: "پرتقال" },
+];
 
-  const handleInputFocus = () => {
-    setShowOptions(true);
+const customStyles = {
+  control: (provided, state) => ({
+    ...provided,
+    backgroundColor: "var(--color-20)",
+    border: "1px solid var(--color-8)",
+    borderRadius: "var(--border-radius-1)",
+    height: "44px",
+    padding: "0 10px",
+    boxShadow: "none",
+    cursor: "pointer",
+    direction: "rtl",
+    fontFamily: "iranYekan, sans-serif",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    outline: "none",
+    marginTop: ".5rem",
+    width: "100%",
+    minWidth: "198px",
+    borderColor: "var(--color-8)",
+    "&:hover": {
+      borderColor: "var(--color-8)",
+    },
+  }),
+
+  indicatorSeparator: () => ({
+    display: "none",
+  }),
+  input: (provided) => ({
+    ...provided,
+    color: "var(--color-3)",
+    fontFamily: "iranYekan, sans-serif",
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+    color: "var(--color-21)",
+    fontSize: "0.7rem",
+    fontFamily: "iranYekan, sans-serif",
+  }),
+  singleValue: (provided) => ({
+    ...provided,
+    color: "var(--color-3)",
+  }),
+  menu: (provided) => ({
+    ...provided,
+    backgroundColor: "var(--color-20)",
+    border: "1px solid var(--color-8)",
+    borderRadius: "var(--border-radius-1)",
+    marginTop: "5px",
+    zIndex: 99,
+    maxHeight: "220px",
+    overflowY: "auto",
+    width: "100%",
+    minWidth: "198px",
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    padding: "10px",
+    marginTop: "10px",
+    backgroundColor: state.isFocused ? "#a8a4a4d1" : "transparent",
+    color: state.isFocused ? "#fff" : "var(--color-3)",
+    cursor: "pointer",
+  }),
+};
+
+export default function SelectDropDown2({ label, name }) {
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [inputValue, setInputValue] = useState("");
+
+  const handleChange = (newValue) => {
+    setSelectedOption(newValue);
+    setInputValue(newValue ? newValue.label : "");
   };
 
-  const handleInputBlur = () => {
-    setTimeout(() => setShowOptions(false), 200);
+  const handleInputChange = (newInputValue) => {
+    setInputValue(newInputValue);
   };
 
-  const handleSearch = (e) => {
-    setSearchText(e.target.value);
-  };
+  console.log(selectedOption);
 
-  const handleSelect = (value) => {
-    if (value !== text) {
-      setSelectedValue(value);
-      setShowOptions(false);
+  const handleBlur = () => {
+    if (
+      !selectedOption ||
+      selectedOption.label.toLowerCase() !== inputValue.toLowerCase()
+    ) {
+      if (inputValue.trim() !== "") {
+        setSelectedOption({ label: inputValue, value: inputValue });
+      } else {
+        setSelectedOption(null);
+      }
     }
   };
 
-  const filteredOptions = options.filter((option) =>
-    option?.toLowerCase().includes(searchText.toLowerCase())
-  );
-
   return (
-    <div className={`${styles.selectDropDown_container} ${styles[style]}`}>
-      <div className={styles.input_container}>
-        <input
-          type="text"
-          autoComplete="off"
-          value={searchText}
-          placeholder={selectedValue}
-          onChange={handleSearch}
-          className={styles.input_dropdown}
-          onFocus={handleInputFocus}
-          onBlur={handleInputBlur}
-        />
-        <FontAwesomeIcon icon={faChevronDown} className={styles.arrow_icon} />
-      </div>
-      {showOptions && (
-        <ul className={`${styles.list_dropdwon} ${styles[styleList]}`}>
-          {filteredOptions.length > 0 ? (
-            filteredOptions.map((option, index) => (
-              <li
-                key={index}
-                className={`${styles.item_dropdown} ${option === text ? styles.disabled_item : ""
-                  }`}
-                onClick={() => handleSelect(option)}
-              >
-                {option}
-              </li>
-            ))
-          ) : (
-            <li className={styles.item_dropdown}>موردی یافت نشد</li>
-          )}
-        </ul>
+    <div className={styles.select_car_wrapper}>
+      {label && (
+        <label htmlFor={`${name}-select`} className="label_input">
+          {label}
+        </label>
       )}
+      <CreatableSelect
+        isClearable
+        onChange={handleChange}
+        onInputChange={handleInputChange}
+        onBlur={handleBlur}
+        options={options}
+        value={selectedOption}
+        inputValue={inputValue}
+        placeholder="جستجو یا وارد کردن گزینه"
+        styles={customStyles}
+        components={{
+          DropdownIndicator: CustomDropdownIndicator,
+          NoOptionsMessage: CustomNoOptionsMessage,
+        }}
+        name={name}
+      />
     </div>
   );
 }

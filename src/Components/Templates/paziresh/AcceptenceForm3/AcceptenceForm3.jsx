@@ -38,6 +38,7 @@ import MediaModal from "../../../Modules/MediaModal/MediaModal";
 import InputPrice from "../../../Modules/InputPrice/InputPrice";
 import { MyContext } from "../../../../context/context";
 import SearchAndSelectDropDwon from "../../../Modules/SearchAndSelectDropDwon/SearchAndSelectDropDwon";
+import SelectDropDown2 from "../../../Modules/SelectDropDown2/SelectDropDown2";
 
 function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
   const { dataForm, idForm, setDataForm } = useContext(MyContext);
@@ -283,23 +284,10 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
       return;
     }
 
-    const filteredForm3 = {
-      ...dataform3,
-      CustomerFile: dataform3.CustomerFile.map((file) => file.base64),
-      ExpertFile: dataform3.ExpertFile.map((file) => file.base64),
-      CustomerVoice: dataform3.CustomerVoice.map((file) => file.base64),
-      ExpertVoice: dataform3.ExpertVoice.map((file) => file.base64),
-    };
-
-    const payload = {
-      ...selectedData,
-      tableForm: filteredForm3,
-    };
-
     try {
       const response = await apiClient.post(
         "http://5.9.108.174:8500/app/submit-repair-form/",
-        payload
+        selectedData
       );
       if (response.status === 200) {
         console.log(response.data);
@@ -488,7 +476,18 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
                 }}
                 size={{ xs: 12, sm: 11, md: 10, lg: 7 }}
               >
-                {/* <SelectDropDown
+                <SelectDropDown
+                  icon={faAngleDown}
+                  label={"اظهارات مشتری"}
+                  items={customerTexts}
+                  name="CustomerStatements"
+                  placeHolder={"اظهارات مشتری را انتخاب  کنید."}
+                  isDesirableValue={true}
+                  onChange={handleChange}
+                  value={dataform3.CustomerStatements}
+                />
+                {/* <SelectDropDown2 /> */}
+                {/* <SearchAndSelectDropDwon
                   icon={faAngleDown}
                   label={"اظهارات مشتری"}
                   items={customerTexts}
@@ -498,7 +497,6 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
                   onChange={handleChange}
                   value={dataform3.CustomerStatements}
                 /> */}
-                <SearchAndSelectDropDwon />
               </Grid>
 
               <div style={{ display: "flex", gap: ".5rem" }}>

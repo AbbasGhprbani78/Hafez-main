@@ -1,32 +1,27 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import Select, { components } from "react-select";
 import styles from "./SearchAndSelectDropDwon.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
 const CustomDropdownIndicator = (props) => {
   return (
     <components.DropdownIndicator {...props}>
-      <svg
-        height="20"
-        width="20"
-        viewBox="0 0 20 20"
-        aria-hidden="true"
-        focusable="false"
-        style={{ color: "var(--color-2)" }}
-      >
-        <path d="M7 7l5 5 5-5H7z" fill="currentColor" />
-      </svg>
+      <FontAwesomeIcon icon={faAngleDown} style={{ color: "var(--color-3)" }} />
     </components.DropdownIndicator>
   );
 };
 
-const options = [
-  { value: "benz", label: "بنز" },
-  { value: "bmw", label: "بی‌ام‌و" },
-  { value: "peugeot", label: "پژو" },
-];
+const CustomNoOptionsMessage = (props) => {
+  return (
+    <components.NoOptionsMessage {...props}>
+      <span style={{ color: "var(--color-21)" }}>موردی یافت نشد !</span>
+    </components.NoOptionsMessage>
+  );
+};
 
 const customStyles = {
-  control: (provided) => ({
+  control: (provided, state) => ({
     ...provided,
     backgroundColor: "var(--color-20)",
     border: "1px solid var(--color-8)",
@@ -40,9 +35,18 @@ const customStyles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
+    outline: "none",
+    marginTop: ".5rem",
+    width: "100%",
+    minWidth: "198px",
+    borderColor: "var(--color-8)",
+    "&:hover": {
+      borderColor: "var(--color-8)",
+    },
   }),
+
   indicatorSeparator: () => ({
-    display: "none", // حذف خط بین آیکن و input
+    display: "none",
   }),
   input: (provided) => ({
     ...provided,
@@ -68,6 +72,8 @@ const customStyles = {
     zIndex: 99,
     maxHeight: "220px",
     overflowY: "auto",
+    width: "100%",
+    minWidth: "198px",
   }),
   option: (provided, state) => ({
     ...provided,
@@ -79,24 +85,93 @@ const customStyles = {
   }),
 };
 
-const CustomStyledSelect = () => {
-  const handleChange = (selectedOption) => {
-    console.log("انتخاب شد:", selectedOption);
+export default function CustomStyledSelect({
+  icon,
+  label,
+  items,
+  name,
+  setother,
+  value,
+  onChange,
+  material,
+  placeHolder,
+  disable = false,
+  isDesirableValue = false,
+}) {
+  const [options, setOptions] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  useEffect(() => {
+    if (items && items.length > 0) {
+      const formattedOptions = items.map((item) => ({
+        value: item.value_id,
+        label: item.value,
+      }));
+      setOptions(formattedOptions);
+    }
+  }, [items]);
+
+  useEffect(() => {
+    if (material && options.length > 0) {
+      const matched = options.find((opt) => opt.value === material);
+      if (matched) {
+        setSelectedOption(matched);
+        return;
+      }
+    }
+
+    if (value && options.length > 0) {
+      const matched = options.find((opt) =>
+        isDesirableValue ? opt.label === value : opt.value === value
+      );
+      if (matched) {
+        setSelectedOption(matched);
+      } else {
+        setSelectedOption(null);
+      }
+    } else {
+      setSelectedOption(null);
+    }
+  }, [value, material, options, isDesirableValue]);
+
+  const handleChange = (selected) => {
+    setSelectedOption(selected);
+
+    if (setother) {
+      setother(selected?.label === "سایر");
+    }
+
+    if (selected) {
+      onChange(name, selected.value);
+    } else {
+      onChange(name, null);
+    }
   };
 
   return (
     <div className={styles.select_car_wrapper}>
+      {label && (
+        <label htmlFor={`${name}-select`} className="label_input">
+          {label}
+        </label>
+      )}
       <Select
+        name={name}
         options={options}
+        value={selectedOption}
         onChange={handleChange}
         isSearchable
-        placeholder="نام خودرو را وارد کنید"
+        placeholder={placeHolder}
         styles={customStyles}
         classNamePrefix="input_cars"
-        components={{ DropdownIndicator: CustomDropdownIndicator }}
+        components={{
+          DropdownIndicator: CustomDropdownIndicator,
+          NoOptionsMessage: CustomNoOptionsMessage,
+        }}
+        isDisabled={disable}
+        menuPlacement="auto"
+        menuShouldScrollIntoView={false}
       />
     </div>
   );
-};
-
-export default CustomStyledSelect;
+}

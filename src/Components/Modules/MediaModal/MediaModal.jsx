@@ -148,18 +148,14 @@ export default function MediaModal({ text, type, files, setFiles }) {
       if (type === "image") {
         try {
           const base64 = await resizeImage(file);
-          newFiles.push({ preview: URL.createObjectURL(file), base64 });
+          newFiles.push(base64);
         } catch (error) {
           console.error("Error resizing image:", error);
         }
       } else if (type === "voice") {
         try {
           const base64 = await fileToBase64(file);
-          newFiles.push({
-            preview: URL.createObjectURL(file),
-            base64,
-            type: file.type,
-          });
+          newFiles.push(base64);
         } catch (error) {
           console.error("Error reading audio file:", error);
         }
@@ -209,15 +205,11 @@ export default function MediaModal({ text, type, files, setFiles }) {
         {displayFiles.map((file, i) => (
           <div
             className={styles.wrap_image}
-            key={file ? file.preview + i : `placeholder-${i}`}
+            key={file ? file + i : `placeholder-${i}`}
           >
             {type === "image" ? (
               file ? (
-                <img
-                  src={file.preview}
-                  alt={`media-${i}`}
-                  className={styles.image}
-                />
+                <img src={file} alt={`media-${i}`} className={styles.image} />
               ) : (
                 <img
                   src={"/image/2.svg"}
@@ -232,11 +224,8 @@ export default function MediaModal({ text, type, files, setFiles }) {
                     <AudioFileIcon
                       style={{ fontSize: "4rem", color: "#666" }}
                     />
-                    <audio
-                      style={{ width: "100%", marginTop: "0.5rem" }}
-                      controls
-                    >
-                      <source src={file.preview} type={file.type} />
+                    <audio style={{ width: "100%", marginTop: "0.5rem" }}>
+                      <source src={file} type={file.type} />
                       مرورگر شما از پخش فایل صوتی پشتیبانی نمی‌کند.
                     </audio>
                   </>
