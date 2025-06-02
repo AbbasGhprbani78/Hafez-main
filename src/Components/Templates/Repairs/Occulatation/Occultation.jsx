@@ -13,14 +13,19 @@ import {
 import ConfirmBtn from "../../../Modules/ConfirmBtn/ConfirmBtn";
 import Modal from "../../../Modules/Modal/Modal";
 import Texteara from "../../../Modules/Texteara/Textarea";
-import SelectDropDown2 from "../../../Modules/SelectDropDown2/SelectDropDown2";
 import { Box } from "@mui/material";
 import styles2 from "../../../../Pages/Repairs/Repairs.module.css";
 import SelectDropDown from "../../../Modules/SelectDropDown/SelectDropDown";
 
 export default function Occultation() {
-  const columns = [" اظهار", "توضیحات کارشناس", "توضیحات مشتری", "عملیات"];
+  const columns = ["کد اظهار", "توضیحات کارشناس", "توضیحات مشتری", "عملیات"];
   const [showModal, setShowModal] = useState(false);
+
+  const [accultationModalDate, setAccultationModalDate] = useState({
+    CustomerStatements: "",
+    ExpertStatements: "",
+    ExpertStatementsCode: "",
+  });
 
   const handleToggleModal = () => {
     setShowModal((modal) => !modal);
@@ -37,26 +42,25 @@ export default function Occultation() {
               text={"اظهارات مشتری"}
               value={""}
               onChange={""}
-              name={""}
+              name={"CustomerStatements"}
             />
             <Box sx={{ marginY: "20px" }}>
               <Texteara
                 text={"اظهارات کارشناس"}
-                value={""}
+                value={"ExpertStatements"}
                 onChange={""}
                 name={""}
               />
             </Box>
             <Box sx={{ marginBottom: "20px" }}>
-              <SelectDropDown
+              <SelectD
                 icon={faAngleDown}
                 label={"کد اظهار"}
                 items={[]}
-                name="declarationcode"
+                name="ExpertStatementsCode"
                 placeHolder={"کد اظهار را انتخاب کنید"}
                 onChange={""}
                 value={""}
-                key={721}
               />
             </Box>
             <div className="d-flex justify-content-end">

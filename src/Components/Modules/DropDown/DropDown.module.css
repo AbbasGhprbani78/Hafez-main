@@ -19,6 +19,7 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   width: 100%;
+  font-family: "iranYekan", sans-serif !important;
 }
 
 .dropdown_wrapper::after {

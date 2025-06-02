@@ -21,7 +21,7 @@ export default function MapCar({ selectPart, selectParts, fillForm }) {
           }`}
           onClick={() => handleItemClick(1)}
         >
-          1<div className={`${styles.path} ${styles.path_1}`}></div>
+          ۱<div className={`${styles.path} ${styles.path_1}`}></div>
         </div>
         <div
           className={`${styles.item} ${styles.item2} ${
@@ -29,7 +29,7 @@ export default function MapCar({ selectPart, selectParts, fillForm }) {
           }`}
           onClick={() => handleItemClick(2)}
         >
-          2
+          ۲
         </div>
         <div
           className={`${styles.item} ${styles.item3} ${
@@ -37,7 +37,7 @@ export default function MapCar({ selectPart, selectParts, fillForm }) {
           }`}
           onClick={() => handleItemClick(3)}
         >
-          3
+          ۳
         </div>
         <div
           className={`${styles.item} ${styles.item4} ${
@@ -45,7 +45,7 @@ export default function MapCar({ selectPart, selectParts, fillForm }) {
           }`}
           onClick={() => handleItemClick(4)}
         >
-          4<div className={`${styles.path} ${styles.path_2}`}></div>
+          ۴<div className={`${styles.path} ${styles.path_2}`}></div>
         </div>
       </div>
       <div className={styles.wrapper_top_row}>
@@ -55,7 +55,7 @@ export default function MapCar({ selectPart, selectParts, fillForm }) {
           }`}
           onClick={() => handleItemClick(5)}
         >
-          5
+          ۵
         </div>
         <div
           className={`${styles.item} ${styles.item6} ${
@@ -63,7 +63,7 @@ export default function MapCar({ selectPart, selectParts, fillForm }) {
           }`}
           onClick={() => handleItemClick(6)}
         >
-          6
+          ۶
         </div>
         <div
           className={`${styles.item} ${styles.item7} ${
@@ -71,7 +71,7 @@ export default function MapCar({ selectPart, selectParts, fillForm }) {
           }`}
           onClick={() => handleItemClick(7)}
         >
-          7
+          ۷
         </div>
       </div>
       <div className={styles.wrapper_top_row}>
@@ -81,7 +81,7 @@ export default function MapCar({ selectPart, selectParts, fillForm }) {
           }`}
           onClick={() => handleItemClick(8)}
         >
-          8<div className={`${styles.path} ${styles.path_3}`}></div>
+          ۸<div className={`${styles.path} ${styles.path_3}`}></div>
         </div>
         <div
           className={`${styles.item} ${styles.item9} ${
@@ -89,7 +89,7 @@ export default function MapCar({ selectPart, selectParts, fillForm }) {
           }`}
           onClick={() => handleItemClick(9)}
         >
-          9
+          ۹
         </div>
         <div
           className={`${styles.item} ${styles.item10} ${
@@ -97,7 +97,7 @@ export default function MapCar({ selectPart, selectParts, fillForm }) {
           }`}
           onClick={() => handleItemClick(10)}
         >
-          10
+          ۱۰
         </div>
         <div
           className={`${styles.item} ${styles.item11} ${
@@ -105,7 +105,7 @@ export default function MapCar({ selectPart, selectParts, fillForm }) {
           }`}
           onClick={() => handleItemClick(11)}
         >
-          11<div className={`${styles.path} ${styles.path_4}`}></div>
+          ۱۱<div className={`${styles.path} ${styles.path_4}`}></div>
         </div>
       </div>
     </div>

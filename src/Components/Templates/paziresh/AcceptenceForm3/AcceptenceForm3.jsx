@@ -9,7 +9,6 @@ import LoadingForm from "../../../Modules/Loading/LoadingForm";
 import Modal from "../../../Modules/Modal/Modal";
 import Button2 from "../../../Modules/Button2/Button2";
 import DataInput from "../../../Modules/DataInput/DataInput";
-import SelectDropDown from "../../../Modules/SelectDropDown/SelectDropDown";
 
 //Mui Components
 import Grid from "@mui/material/Grid2";
@@ -55,12 +54,12 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
   });
 
   const [selectedData, setSelectedData] = useState({
-    customer: 40,
+    customer: idForm ? idForm : customer,
     tableForm: [],
     EstimatedRepairTime: "",
   });
 
-  const [loading, setLoading] = useState({ page: false, finalForm: false });
+  const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [typeModal, setTypeModal] = useState(1);
   const [typeuser, setTypeUser] = useState("");
@@ -75,9 +74,11 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
   const handleToggleModal = () => {
     setShowModal((modal) => !modal);
   };
+
   const hadleClickOnGoesBack = () => {
     prevTab();
   };
+
   const handleClickOnSendToExperts = () => {};
 
   const handleCliclOnRepairmanSchedule = () => {};
@@ -279,21 +280,24 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
   };
 
   const postForm3Data = async () => {
-    if (!selectedData.tableForm.length || !dataform3.ExpertStatements) {
+    if (!selectedData.tableForm.length || !selectedData.EstimatedRepairTime) {
       errorMessage("لطفا فرم را تکمیل کنید");
       return;
     }
 
+    setLoading(true);
     try {
       const response = await apiClient.post(
         "http://5.9.108.174:8500/app/submit-repair-form/",
         selectedData
       );
       if (response.status === 200) {
-        console.log(response.data);
+        nextTab(4);
       }
     } catch (error) {
       errorMessage(error?.response?.message || "خطا در ارسال داده‌ها");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -329,6 +333,19 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
     }
   };
 
+  const getForm3Data = async () => {
+    try {
+      const response = await apiClient.get(
+        `http://5.9.108.174:8500/app/submit-repair-form/${39}`
+      );
+      if (response.status === 200) {
+        console.log("response =>", response.data);
+      }
+    } catch (error) {
+      errorMessage(error?.response?.message || "خطا در دریافت داده‌ها");
+    }
+  };
+
   useEffect(() => {
     if (dataform3.ExpertStatements) {
       getWagesPricerepairman();
@@ -339,9 +356,10 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
     setContent("اظهارات مشتری:");
     getCustomerStatements();
     getExpertStatements();
+    getForm3Data();
   }, []);
 
-  console.log("dataform3", dataform3);
+  console.log(dataform3);
 
   return (
     <Grid
@@ -476,27 +494,16 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
                 }}
                 size={{ xs: 12, sm: 11, md: 10, lg: 7 }}
               >
-                <SelectDropDown
+                <SelectDropDown2
                   icon={faAngleDown}
                   label={"اظهارات مشتری"}
                   items={customerTexts}
                   name="CustomerStatements"
                   placeHolder={"اظهارات مشتری را انتخاب  کنید."}
-                  isDesirableValue={true}
+                  isDesirableValue={false}
                   onChange={handleChange}
                   value={dataform3.CustomerStatements}
                 />
-                {/* <SelectDropDown2 /> */}
-                {/* <SearchAndSelectDropDwon
-                  icon={faAngleDown}
-                  label={"اظهارات مشتری"}
-                  items={customerTexts}
-                  name="CustomerStatements"
-                  placeHolder={"اظهارات مشتری را انتخاب  کنید."}
-                  isDesirableValue={true}
-                  onChange={handleChange}
-                  value={dataform3.CustomerStatements}
-                /> */}
               </Grid>
 
               <div style={{ display: "flex", gap: ".5rem" }}>
@@ -540,13 +547,13 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
                   width: "100%",
                 }}
               >
-                <SelectDropDown
+                <SearchAndSelectDropDwon
                   icon={faAngleDown}
                   label={"اظهارات کارشناس"}
                   items={expertTexts}
                   name="ExpertStatements"
                   placeHolder={"اظهار کارشناس را انتخاب کنید."}
-                  isDesirableValue={true}
+                  isDesirableValue={false}
                   onChange={handleChange}
                   value={dataform3.ExpertStatements}
                 />
@@ -717,12 +724,12 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
               key={811}
               type="button"
               variant="contained"
-              icon={loading.finalForm ? "" : faCheck}
+              icon={loading ? "" : faCheck}
               onClick={postForm3Data}
-              disable={loading.finalForm}
+              disable={loading}
               style={"width"}
             >
-              {loading.finalForm ? (
+              {loading ? (
                 <CircularProgress size={"25.2px"} color="success" />
               ) : (
                 "تایید"
@@ -777,16 +784,15 @@ const PayRowComponent = ({
           padding: { xs: "0 5px" },
         }}
       >
-        <SelectDropDown
+        <SearchAndSelectDropDwon
           icon={faAngleDown}
           label={"اجرت"}
           items={payItems}
           name="pay"
-          disable={disable}
           placeHolder={"اجرت مدنظر را انتخاب نمایید!"}
+          isDesirableValue={false}
           onChange={paySet}
           value={payValue}
-          key={721}
         />
       </Grid>
       <Grid
@@ -821,16 +827,15 @@ const PayRowComponent = ({
           padding: { xs: "0 5px" },
         }}
       >
-        <SelectDropDown
+        <SearchAndSelectDropDwon
           icon={faAngleDown}
           label={"تعمیرکار"}
           items={repairManItems}
           name="repairman"
-          disable={disable}
           placeHolder={"تعمیرکار مدنظر را انتخاب کنید!"}
+          isDesirableValue={false}
           onChange={repairManSet}
           value={repairManValue}
-          key={723}
         />
       </Grid>
       {index > 0 && (

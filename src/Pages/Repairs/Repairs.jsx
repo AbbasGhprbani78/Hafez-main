@@ -19,7 +19,7 @@ export default function Repairs() {
         <div className="">
           <AboutCar />
           <Occultation />
-          <Geret />
+          {/* <Geret /> */}
           {/*  <Piece />
           <OutWork />
           <Attaches />

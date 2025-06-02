@@ -70,7 +70,7 @@ const customStyles = {
     borderRadius: "var(--border-radius-1)",
     marginTop: "5px",
     zIndex: 99,
-    maxHeight: "220px",
+    maxHeight: "500px",
     overflowY: "auto",
     width: "100%",
     minWidth: "198px",

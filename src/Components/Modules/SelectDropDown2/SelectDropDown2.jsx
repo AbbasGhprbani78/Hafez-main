@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CreatableSelect from "react-select/creatable";
 import styles from "./SelectDropDown2.module.css";
@@ -20,11 +20,6 @@ const CustomNoOptionsMessage = (props) => {
     </components.NoOptionsMessage>
   );
 };
-const options = [
-  { value: "apple", label: "سیب" },
-  { value: "banana", label: "موز" },
-  { value: "orange", label: "پرتقال" },
-];
 
 const customStyles = {
   control: (provided, state) => ({
@@ -76,7 +71,7 @@ const customStyles = {
     borderRadius: "var(--border-radius-1)",
     marginTop: "5px",
     zIndex: 99,
-    maxHeight: "220px",
+    maxHeight: "500px",
     overflowY: "auto",
     width: "100%",
     minWidth: "198px",
@@ -91,20 +86,54 @@ const customStyles = {
   }),
 };
 
-export default function SelectDropDown2({ label, name }) {
+export default function SelectDropDown2({
+  icon,
+  label,
+  items,
+  name,
+  placeHolder,
+  isDesirableValue = false,
+  onChange,
+  value,
+}) {
   const [selectedOption, setSelectedOption] = useState(null);
+  const [options, setOptions] = useState([]);
   const [inputValue, setInputValue] = useState("");
 
-  const handleChange = (newValue) => {
-    setSelectedOption(newValue);
-    setInputValue(newValue ? newValue.label : "");
+  useEffect(() => {
+    const newOptions =
+      items?.map((item) => ({
+        value: item.value_id,
+        label: item.value,
+      })) || [];
+    setOptions(newOptions);
+  }, [items]);
+
+  useEffect(() => {
+    if (value && options.length > 0) {
+      const matched = options.find((opt) =>
+        isDesirableValue ? opt.label === value : opt.value === value
+      );
+      setSelectedOption(matched || null);
+    } else {
+      setSelectedOption(null);
+    }
+  }, [value, options, isDesirableValue]);
+
+  const handleChange = (selected) => {
+    setSelectedOption(selected);
+    setInputValue(selected ? selected.label : "");
+
+    if (selected) {
+      onChange(name, selected.value);
+    } else {
+      onChange(name, null);
+    }
   };
 
   const handleInputChange = (newInputValue) => {
     setInputValue(newInputValue);
   };
-
-  console.log(selectedOption);
 
   const handleBlur = () => {
     if (
@@ -112,9 +141,18 @@ export default function SelectDropDown2({ label, name }) {
       selectedOption.label.toLowerCase() !== inputValue.toLowerCase()
     ) {
       if (inputValue.trim() !== "") {
-        setSelectedOption({ label: inputValue, value: inputValue });
+        const customValue = { label: inputValue, value: inputValue };
+
+        const exists = options.find((opt) => opt.value === inputValue);
+        if (!exists) {
+          setOptions((prev) => [...prev, customValue]);
+        }
+
+        setSelectedOption(customValue);
+        onChange(name, inputValue);
       } else {
         setSelectedOption(null);
+        onChange(name, null);
       }
     }
   };
@@ -133,8 +171,7 @@ export default function SelectDropDown2({ label, name }) {
         onBlur={handleBlur}
         options={options}
         value={selectedOption}
-        inputValue={inputValue}
-        placeholder="جستجو یا وارد کردن گزینه"
+        placeholder={placeHolder || "جستجو یا وارد کردن گزینه"}
         styles={customStyles}
         components={{
           DropdownIndicator: CustomDropdownIndicator,

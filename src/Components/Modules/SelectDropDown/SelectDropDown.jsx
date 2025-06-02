@@ -14,7 +14,6 @@ export default function SelectDropDown({
   material,
   placeHolder,
   disable = false,
-  isDesirableValue = false,
 }) {
   const [options, setOptions] = useState([]);
   const [filteredOptions, setFilteredOptions] = useState([]);
@@ -37,16 +36,11 @@ export default function SelectDropDown({
   const handleInputChange = (e) => {
     const value = e.target.value;
     setDisplayedValue(value);
-
     setFilteredOptions(
       options.filter((option) =>
         option.value.toLowerCase().includes(value.toLowerCase())
       )
     );
-    if ((options.length === 0) & isDesirableValue) {
-      onChange(name, value);
-      setShowOptions(false);
-    } else setShowOptions(true);
   };
 
   const handleOptionClick = (value, id) => {
@@ -77,8 +71,17 @@ export default function SelectDropDown({
   }, []);
 
   useEffect(() => {
-    setDisplayedValue(value || "");
-  }, [value]);
+    if (value && options.length > 0) {
+      const selectedItem = options.find((item) => item.value_id === value);
+      if (selectedItem) {
+        setDisplayedValue(selectedItem.value);
+      } else {
+        setDisplayedValue(value);
+      }
+    } else {
+      setDisplayedValue("");
+    }
+  }, [value, options]);
 
   return (
     <div className={styles.select_car_wrapper} ref={dropdownRef}>

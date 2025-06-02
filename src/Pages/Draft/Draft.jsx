@@ -13,7 +13,9 @@ export default function Draft() {
 
   const getAllDataForm = async (id) => {
     try {
-      const res = await apiClient.get(`/app/get-form/${id}`);
+      const res = await apiClient.get(
+        `http://localhost:5.9.108.174:8500/app/get-form/${id}`
+      );
       if (res.status === 200) {
         setDataForm(res.data);
         setEditMode(true);

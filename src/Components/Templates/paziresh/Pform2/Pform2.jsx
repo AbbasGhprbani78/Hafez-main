@@ -367,7 +367,9 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
 
   const getAllParts = async () => {
     try {
-      const res = await apiClient.get(`/app/parts-detail/`);
+      const res = await apiClient.get(
+        `http://5.9.108.174:8500/app/parts-detail/`
+      );
       if (res.status === 200) {
         setAllTips(res.data.car_tips);
         setAllAccessories(res.data.car_tips[0].car_accessories);
@@ -379,7 +381,7 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
 
   const getMaterial = async () => {
     try {
-      const res = await apiClient.get(`/app/materials/`);
+      const res = await apiClient.get(`http://5.9.108.174:8500/app/materials/`);
       if (res.status === 200) {
         setAllCar(res.data[0].values);
         setAllColor(res.data[1].values);
@@ -391,7 +393,9 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
 
   const getAllDataForm = async (id) => {
     try {
-      const res = await apiClient.get(`/app/get-form/${id}`);
+      const res = await apiClient.get(
+        `http://5.9.108.174:8500/app/get-form/${id}`
+      );
       if (res.status === 200) {
         setDataForm(res.data);
       }
@@ -536,6 +540,7 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
                   setother={setotherCar}
                   value={form2?.customer_secend_form?.material}
                   onChange={handleSelectChange}
+                  isDesirableValue={false}
                   material={dataForm?.customer_form_two?.material}
                 />
                 {errors.material && (
@@ -762,9 +767,22 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
                       form2?.customer_secend_form?.number_punctured_tires
                     )}
                     onChange={(e) => {
-                      const value = e.target.value;
-                      const englishNumber = toEnglishNumber(value);
-                      handleInputChange(e, englishNumber);
+                      const { name, value } = e.target;
+                      const digitRegex = /^[0-4]?$/;
+
+                      if (digitRegex.test(value)) {
+                        const englishValue = toEnglishNumber(value);
+
+                        setForm2((prevState) => ({
+                          ...prevState,
+                          customer_secend_form: {
+                            ...prevState.customer_secend_form,
+                            [name]: englishValue,
+                          },
+                        }));
+
+                        setIsEdited(true);
+                      }
                     }}
                   />
                   {errors.number_punctured_tires && (
