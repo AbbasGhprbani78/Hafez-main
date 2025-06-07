@@ -31,7 +31,6 @@ import {
   faAngleDown,
 } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../../../config/axiosConfig";
-
 import TableForm3 from "../../../Modules/TableForm3/TableForm3";
 import MediaModal from "../../../Modules/MediaModal/MediaModal";
 import InputPrice from "../../../Modules/InputPrice/InputPrice";
@@ -286,11 +285,19 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
     }
 
     setLoading(true);
+    let response;
     try {
-      const response = await apiClient.post(
-        "http://5.9.108.174:8500/app/submit-repair-form/",
-        selectedData
-      );
+      if (selectedData.tableForm[0]?.third_form_id) {
+        response = await apiClient.put(
+          `http://5.9.108.174:8500/app/submit-repair-form/${selectedData.tableForm[0]?.third_form_id}`
+        );
+      } else {
+        response = await apiClient.post(
+          "http://5.9.108.174:8500/app/submit-repair-form/",
+          selectedData
+        );
+      }
+
       if (response.status === 200) {
         nextTab(4);
       }
@@ -340,6 +347,11 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
       );
       if (response.status === 200) {
         console.log("response =>", response.data);
+        setSelectedData({
+          customer: response.data.customer,
+          tableForm: [...response.data.tableForm],
+          EstimatedRepairTime: response.data.EstimatedRepairTime,
+        });
       }
     } catch (error) {
       errorMessage(error?.response?.message || "خطا در دریافت داده‌ها");
@@ -359,7 +371,7 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
     getForm3Data();
   }, []);
 
-  console.log(dataform3);
+  console.log(selectedData);
 
   return (
     <Grid
@@ -494,16 +506,18 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
                 }}
                 size={{ xs: 12, sm: 11, md: 10, lg: 7 }}
               >
-                <SelectDropDown2
-                  icon={faAngleDown}
-                  label={"اظهارات مشتری"}
-                  items={customerTexts}
-                  name="CustomerStatements"
-                  placeHolder={"اظهارات مشتری را انتخاب  کنید."}
-                  isDesirableValue={false}
-                  onChange={handleChange}
-                  value={dataform3.CustomerStatements}
-                />
+                <div className={styles.select_car_wrapper}>
+                  <SelectDropDown2
+                    icon={faAngleDown}
+                    label={"اظهارات مشتری"}
+                    items={customerTexts}
+                    name="CustomerStatements"
+                    placeHolder={"اظهارات مشتری را انتخاب  کنید."}
+                    isDesirableValue={false}
+                    onChange={handleChange}
+                    value={dataform3.CustomerStatements}
+                  />
+                </div>
               </Grid>
 
               <div style={{ display: "flex", gap: ".5rem" }}>

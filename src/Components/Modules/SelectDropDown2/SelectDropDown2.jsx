@@ -158,7 +158,7 @@ export default function SelectDropDown2({
   };
 
   return (
-    <div className={styles.select_car_wrapper}>
+    <>
       {label && (
         <label htmlFor={`${name}-select`} className="label_input">
           {label}
@@ -179,6 +179,6 @@ export default function SelectDropDown2({
         }}
         name={name}
       />
-    </div>
+    </>
   );
 }

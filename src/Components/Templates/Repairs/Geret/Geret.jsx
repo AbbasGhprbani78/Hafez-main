@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Geret.module.css";
 import Button2 from "../../../Modules/Button2/Button2";
 import {
@@ -13,21 +13,85 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Box, TableCell, TableRow } from "@mui/material";
 import ConfirmBtn from "../../../Modules/ConfirmBtn/ConfirmBtn";
 import Modal from "../../../Modules/Modal/Modal";
-import Input from "../../../Modules/Input/Input";
-import { toFarsiNumber } from "../../../../utils/helper";
-import { formatWithThousandSeparators } from "../../../../utils/helper";
-import Textarea from "../../../Modules/Texteara/Textarea";
 import OccultationItem from "../../../Modules/OccultationItem/OccultationItem";
 import styles2 from "../../../../Pages/Repairs/Repairs.module.css";
 import Grid from "@mui/material/Grid2";
-import SelectDropDown from "../../../Modules/SelectDropDown/SelectDropDown";
+import InputPrice from "../../../Modules/InputPrice/InputPrice";
+import apiClient from "../../../../config/axiosConfig";
+import { errorMessage } from "../../../Modules/Toast/ToastCustom";
+import "react-toastify/dist/ReactToastify.css";
+import SearchAndSelectDropDwon from "../../../Modules/SearchAndSelectDropDwon/SearchAndSelectDropDwon";
 export default function Geret() {
-  const columns = ["عیب فنی", "تعمیرکار", "اجرت", "قیمت", "عملیات"];
+  const columns = ["کد اظهار", "عیب فنی", "تعمیرکار", "اجرت", "قیمت", "عملیات"];
   const [showModal, setShowModal] = useState(false);
 
   const handleToggleModal = () => {
     setShowModal((modal) => !modal);
   };
+  const [expertTexts, setExpertTexts] = useState([]);
+
+  const [geretModalData, setGeretModalData] = useState({
+    ExpertStatementsCode: "",
+    technicalIssueCode: "",
+    technicalIssueText: "",
+    repairmanCode: "",
+    repairmanText: "",
+    wageCode: "",
+    WageText: "",
+    price: "",
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (field, value, label) => {
+    setGeretModalData((prev) => {
+      return {
+        ...prev,
+        [field]: value,
+        [`${field.replace(/Code$/, "Text")}`]: label || "",
+      };
+    });
+
+    setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+
+  const handlePriceChange = (value) => {
+    setGeretModalData((prev) => ({
+      ...prev,
+      price: value,
+    }));
+
+    setErrors((prev) => ({ ...prev, price: "" }));
+  };
+
+  const deleteRow = (index) => {};
+
+  const showEditModal = (index) => {};
+
+  const addToTable = () => {};
+
+  const getExpertStatements = async () => {
+    try {
+      const response = await apiClient.get(
+        "http://5.9.108.174:8500/app/get-all-statement-code/"
+      );
+      if (response.status === 200) {
+        setExpertTexts(
+          response.data.map((item) => ({
+            value_id: item?.id,
+            value: item?.descriptions,
+          }))
+        );
+      }
+    } catch (error) {
+      errorMessage(error.response.message);
+    }
+  };
+
+  useEffect(() => {
+    getExpertStatements();
+  }, []);
+
   return (
     <>
       <Modal showModal={showModal} setShowModal={handleToggleModal}>
@@ -36,82 +100,84 @@ export default function Geret() {
             <span className="titel_top">افزودن اجرت جدید</span>
           </div>
           <div className="modal_bottom">
-            <Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                  width: "100%",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
-                  <SelectDropDown
-                    icon={faAngleDown}
-                    label={"کد اظهار"}
-                    items={[]}
-                    name="declarationcode"
-                    placeHolder={"کد اظهار را انتخاب کنید"}
-                    onChange={""}
-                    value={""}
-                    key={721}
-                  />
-                </Grid>
-                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
-                  <SelectDropDown
-                    icon={faAngleDown}
-                    label={"عیب فنی"}
-                    items={[]}
-                    name="declarationcode"
-                    placeHolder={"عیب فنی را انتخاب کنید"}
-                    onChange={""}
-                    value={""}
-                    key={721}
-                  />
-                </Grid>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                  width: "100%",
-                  justifyContent: "space-between",
-                  margin: "20px 0",
-                }}
-              >
-                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
-                  <SelectDropDown
-                    icon={faAngleDown}
-                    label={"تعمیرکار"}
-                    items={[]}
-                    name="declarationcode"
-                    placeHolder={"تعمیرکار را انتخاب کنید"}
-                    onChange={""}
-                    value={""}
-                    key={721}
-                  />
-                </Grid>
-                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
-                  <SelectDropDown
-                    icon={faAngleDown}
-                    label={"اجرت"}
-                    items={[]}
-                    name="declarationcode"
-                    placeHolder={" اجرت را انتخاب کنید"}
-                    onChange={""}
-                    value={""}
-                    key={721}
-                  />
-                </Grid>
-              </Box>
-              <Box sx={{ marginBottom: "20px" }}>
-                <Grid size={{ xs: 12 }}></Grid>
-              </Box>
-            </Box>
+            <Grid
+              container
+              rowSpacing={2}
+              columnSpacing={4}
+              className={"distancerow"}
+            >
+              <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                <SearchAndSelectDropDwon
+                  icon={faAngleDown}
+                  label={"کد اظهار"}
+                  items={expertTexts}
+                  name="ExpertStatementsCode"
+                  placeHolder={"کد اظهار را انتخاب کنید"}
+                  onChange={handleChange}
+                  value={geretModalData.ExpertStatementsCode}
+                />
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                <SearchAndSelectDropDwon
+                  icon={faAngleDown}
+                  label={"عیب فنی"}
+                  items={[]}
+                  name="technicalIssueCode"
+                  placeHolder={"عیب فنی را انتخاب کنید"}
+                  onChange={handleChange}
+                  value={geretModalData.technicalIssueCode}
+                />
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              rowSpacing={2}
+              columnSpacing={4}
+              className={"distancerow"}
+            >
+              <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                <SearchAndSelectDropDwon
+                  icon={faAngleDown}
+                  label={"تعمیرکار"}
+                  items={[]}
+                  name="repairmanCode"
+                  placeHolder={"تعمیرکار را انتخاب کنید"}
+                  onChange={handleChange}
+                  value={geretModalData.repairmanCode}
+                  key={721}
+                />
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                <SearchAndSelectDropDwon
+                  icon={faAngleDown}
+                  label={"اجرت"}
+                  items={[]}
+                  name="wageCode"
+                  placeHolder={" اجرت را انتخاب کنید"}
+                  onChange={handleChange}
+                  value={geretModalData.wageCode}
+                  key={721}
+                />
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              rowSpacing={2}
+              columnSpacing={4}
+              className={"distancerow"}
+            >
+              <Grid size={{ xs: 12 }} sx={{ width: "100%" }}>
+                <InputPrice
+                  label="قیمت محصول"
+                  value={geretModalData.price}
+                  onChange={handlePriceChange}
+                  name="price"
+                  maxLength={30}
+                />
+              </Grid>
+            </Grid>
             <Box sx={{ display: "flex", justifyContent: "end" }}>
-              <ConfirmBtn />
+              <Button2 onClick={addToTable}>تایید</Button2>
             </Box>
           </div>
         </div>
@@ -127,6 +193,7 @@ export default function Geret() {
         <div>
           <TableForm columns={columns}>
             <TableRow className="statment-row-table">
+              <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
               <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
               <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
               <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
@@ -166,13 +233,19 @@ export default function Geret() {
           columnSpacing={4}
         >
           <Grid sx={{ xs: 12, sm: 5, md: 3 }} xs={12} sm={5} md={3}>
-            <OccultationItem text1={"مکانیک"} text2={"تعمیرکار مکانیک"} />
+            <OccultationItem
+              text={"تعمیرکار مکانیک"}
+              placeHolder={"نام مکانیک"}
+            />
           </Grid>
           <Grid sx={{ xs: 12, sm: 5, md: 3 }} xs={12} sm={5} md={3}>
-            <OccultationItem text1={"صافکاری"} text2={"تعمیرکار صافکار"} />
+            <OccultationItem
+              text={"تعمیرکار صافکار"}
+              placeHolder={"نام صافکار"}
+            />
           </Grid>
           <Grid sx={{ xs: 12, sm: 5, md: 3 }} xs={12} sm={5} md={3}>
-            <OccultationItem text1={"نقاشی"} text2={"تعمیرکار نقاش"} />
+            <OccultationItem text={"تعمیرکار نقاش"} placeHolder={"نام نقاش"} />
           </Grid>
         </Grid>
         <div className={styles.wrap_contract}>

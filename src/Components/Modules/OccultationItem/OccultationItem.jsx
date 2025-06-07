@@ -1,12 +1,19 @@
-import React from "react";
 import styles from "./OccultationItem.module.css";
-import SelectDropDown2 from "../SelectDropDown2/SelectDropDown2";
-export default function OccultationItem({ text }) {
+import SearchAndSelectDropDwon from "../SearchAndSelectDropDwon/SearchAndSelectDropDwon";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+export default function OccultationItem({ text, placeHolder }) {
   return (
     <div className={styles.occultationItem_wrapper}>
-      <p className={styles.title}>{text}</p>
-      <span className={styles.subtitle}>تعمیرکار مکانیک</span>
-      <SelectDropDown2 text={"نام تعمیرکار"} styleList={"positionlist"} />
+      <span className={styles.subtitle}>{text}</span>
+      <SearchAndSelectDropDwon
+        icon={faAngleDown}
+        label={"کد اظهار"}
+        items={[]}
+        name=""
+        placeHolder={placeHolder}
+        onChange={""}
+        value={""}
+      />
     </div>
   );
 }

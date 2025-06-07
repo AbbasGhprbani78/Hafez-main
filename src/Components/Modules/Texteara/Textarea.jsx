@@ -10,6 +10,7 @@ export default function Textarea({ styled, value, onChange, name, text }) {
         onChange={onChange}
         placeholder={text}
         name={name}
+        maxLength={1000}
       />
     </div>
   );

@@ -31,9 +31,15 @@ export default function OutWork() {
     "عملیات",
   ];
   const [showModal, setShowModal] = useState(false);
+  const [outOfworkModaldata, setOutOfworkModalData] = useState({});
+
+  const handleToggleModal = () => {
+    setShowModal((modal) => !modal);
+  };
+
   return (
     <>
-      <Modal showModal={showModal} setShowModal={setShowModal}>
+      <Modal showModal={showModal} setShowModal={handleToggleModal}>
         <div className="modal_content">
           <div className="modal_top">
             <span className="titel_top">افزودن اجرت جدید</span>

@@ -78,6 +78,12 @@
   }
 }
 
+@media (min-width: 600px) {
+  .select_car_wrapper {
+    max-width: 215.18px;
+  }
+}
+
 @media (max-width: 600px) {
   .input_container {
     width: 100%;
@@ -91,5 +97,9 @@
   .deleteIconWrapper {
     top: 10px;
     right: 10px;
+  }
+
+  .select_car_wrapper {
+    width: 100%;
   }
 }

@@ -136,13 +136,8 @@ export default function CustomStyledSelect({
 
   const handleChange = (selected) => {
     setSelectedOption(selected);
-
-    if (setother) {
-      setother(selected?.label === "سایر");
-    }
-
     if (selected) {
-      onChange(name, selected.value);
+      onChange(name, selected.value, selected.label);
     } else {
       onChange(name, null);
     }

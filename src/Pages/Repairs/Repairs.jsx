@@ -9,6 +9,7 @@ import Attaches from "../../Components/Templates/Repairs/Attaches/Attaches";
 import Button2 from "../../Components/Modules/Button2/Button2";
 import { faCheck, faPrint } from "@fortawesome/free-solid-svg-icons";
 import Header from "../../Components/Modules/Header/Header";
+import { ToastContainerCustom } from "../../Components/Modules/Toast/ToastCustom";
 
 export default function Repairs() {
   return (
@@ -17,12 +18,13 @@ export default function Repairs() {
       <div className={`space-content ${styles.wrap_repairs}`}>
         <Header title={"کارت تعمیر :"} />
         <div className="">
-          <AboutCar />
-          <Occultation />
+          {/* <AboutCar />*/}
+          {/* <Occultation /> */}
+
           {/* <Geret /> */}
-          {/*  <Piece />
+          {/* <Piece /> */}
           <OutWork />
-          <Attaches />
+          {/*<Attaches />
           <div className={styles.wrap_actions_repairs}>
             <Button2 onClick={""} icon={faPrint} style={"width"}>
               {"پرینت"}
@@ -33,6 +35,7 @@ export default function Repairs() {
           </div> */}
         </div>
       </div>
+      <ToastContainerCustom />
     </div>
   );
 }
