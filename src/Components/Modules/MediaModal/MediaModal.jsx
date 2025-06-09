@@ -1,122 +1,3 @@
-// import { useRef } from "react";
-// import styles from "./MediaModal.module.css";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
-// import { isValidFileSize } from "../../../utils/helper";
-// import AudioFileIcon from "@mui/icons-material/AudioFile";
-// import AudioFileOutlinedIcon from "@mui/icons-material/AudioFileOutlined";
-
-// export default function MediaModal({ text, type, files, setFiles }) {
-//   const inputRefs = useRef([]);
-
-//   const handleUploadClick = (index) => {
-//     if (inputRefs.current[index]) {
-//       inputRefs.current[index].click();
-//     }
-//   };
-
-//   const handleFileChange = (e) => {
-//     const selectedFiles = Array.from(e.target.files);
-//     if (!selectedFiles.length) return;
-
-//     const validFiles = selectedFiles.filter(isValidFileSize);
-
-//     let newFiles = [...files];
-
-//     for (let i = 0; i < validFiles.length && newFiles.length < 3; i++) {
-//       newFiles.push(validFiles[i]);
-//     }
-
-//     setFiles(newFiles);
-//   };
-
-//   const handleRemove = (index) => {
-//     let newFiles = [...files];
-//     newFiles.splice(index, 1);
-//     setFiles(newFiles);
-//   };
-
-//   const displayFiles = [...files];
-//   while (displayFiles.length < 3) {
-//     displayFiles.push(null);
-//   }
-
-//   return (
-//     <div className={styles.container_modal}>
-//       <p className={styles.text_modal}>{text}</p>
-//       <div className={styles.wrap_image_modal}>
-//         {displayFiles.map((file, i) => (
-//           <div
-//             className={styles.wrap_image}
-//             key={file ? file.name + i : `placeholder-${i}`}
-//           >
-//             {type === "image" ? (
-//               file ? (
-//                 <img
-//                   src={URL.createObjectURL(file)}
-//                   alt={`media-${i}`}
-//                   className={styles.image}
-//                 />
-//               ) : (
-//                 <img
-//                   src={"/image/2.svg"}
-//                   alt="media placeholder"
-//                   className={styles.image}
-//                 />
-//               )
-//             ) : (
-//               <div className={styles.audio_container}>
-//                 {file ? (
-//                   <>
-//                     <AudioFileIcon
-//                       style={{ fontSize: "4rem", color: "#666" }}
-//                     />
-//                     <audio style={{ width: "100%", marginTop: "0.5rem" }}>
-//                       <source
-//                         src={URL.createObjectURL(file)}
-//                         type={file.type}
-//                       />
-//                       مرورگر شما از پخش فایل صوتی پشتیبانی نمی‌کند.
-//                     </audio>
-//                   </>
-//                 ) : (
-//                   <AudioFileOutlinedIcon
-//                     style={{ fontSize: "4rem", color: "#aaa" }}
-//                   />
-//                 )}
-//               </div>
-//             )}
-
-//             <input
-//               type="file"
-//               accept={type === "image" ? "image/*" : "audio/*"}
-//               multiple
-//               style={{ display: "none" }}
-//               ref={(el) => (inputRefs.current[i] = el)}
-//               onChange={handleFileChange}
-//             />
-
-//             <div className={styles.wrap_icons}>
-//               {file && (
-//                 <FontAwesomeIcon
-//                   icon={faTrash}
-//                   className="deleteIcon"
-//                   onClick={() => handleRemove(i)}
-//                 />
-//               )}
-//               <FontAwesomeIcon
-//                 icon={faUpload}
-//                 className={styles.upload_icon}
-//                 onClick={() => handleUploadClick(i)}
-//               />
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
-
 import { useRef } from "react";
 import styles from "./MediaModal.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -125,6 +6,7 @@ import { isValidFileSize } from "../../../utils/helper";
 import AudioFileIcon from "@mui/icons-material/AudioFile";
 import AudioFileOutlinedIcon from "@mui/icons-material/AudioFileOutlined";
 import Resizer from "react-image-file-resizer";
+import apiClient from "../../../config/axiosConfig";
 
 export default function MediaModal({ text, type, files, setFiles }) {
   const inputRefs = useRef([]);
@@ -209,7 +91,11 @@ export default function MediaModal({ text, type, files, setFiles }) {
           >
             {type === "image" ? (
               file ? (
-                <img src={file} alt={`media-${i}`} className={styles.image} />
+                <img
+                  src={file?.startsWith("data:") ? file : `${apiClient}${file}`}
+                  alt={`media-${i}`}
+                  className={styles.image}
+                />
               ) : (
                 <img
                   src={"/image/2.svg"}
@@ -225,7 +111,14 @@ export default function MediaModal({ text, type, files, setFiles }) {
                       style={{ fontSize: "4rem", color: "#666" }}
                     />
                     <audio style={{ width: "100%", marginTop: "0.5rem" }}>
-                      <source src={file} type={file.type} />
+                      <source
+                        src={
+                          file?.startsWith("data:")
+                            ? file
+                            : `${apiClient}${file}`
+                        }
+                        type={file.type}
+                      />
                       مرورگر شما از پخش فایل صوتی پشتیبانی نمی‌کند.
                     </audio>
                   </>

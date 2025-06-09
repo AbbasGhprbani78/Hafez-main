@@ -77,7 +77,7 @@ export default function Occultation() {
         const updateTable = [...prev];
         updateTable[indexToEdit] = {
           CustomerStatements: accultationModalData.CustomerStatements,
-          ExpertStatements: accultationModalData.ExpertStatements,
+          ExpertStatmentsText: accultationModalData.ExpertStatmentsText,
           ExpertStatementsCode: accultationModalData.ExpertStatementsCode,
         };
         return updateTable;
@@ -87,7 +87,7 @@ export default function Occultation() {
     } else {
       const newTableRow = {
         CustomerStatements: accultationModalData.CustomerStatements,
-        ExpertStatements: accultationModalData.ExpertStatements,
+        ExpertStatmentsText: accultationModalData.ExpertStatmentsText,
         ExpertStatementsCode: accultationModalData.ExpertStatementsCode,
       };
 
@@ -118,7 +118,7 @@ export default function Occultation() {
     const mainEditRow = [...accultationDataTable].filter((_, i) => i === index);
     setAccultationModalData({
       CustomerStatements: mainEditRow[0]?.CustomerStatements,
-      ExpertStatements: mainEditRow[0]?.ExpertStatements,
+      ExpertStatmentsText: mainEditRow[0]?.ExpertStatmentsText,
       ExpertStatementsCode: mainEditRow[0]?.ExpertStatementsCode,
     });
 
@@ -128,7 +128,7 @@ export default function Occultation() {
   const getCustomerStatements = async () => {
     try {
       const response = await apiClient.get(
-        "http://5.9.108.174:8500/app/customer-statements/"
+        `${apiClient}/app/customer-statements/`
       );
       if (response.status === 200) {
         setCustomerTexts(
@@ -146,7 +146,7 @@ export default function Occultation() {
   const getExpertStatements = async () => {
     try {
       const response = await apiClient.get(
-        "http://5.9.108.174:8500/app/get-all-statement-code/"
+        `${apiClient}/app/get-all-statement-code/`
       );
       if (response.status === 200) {
         setExpertTexts(

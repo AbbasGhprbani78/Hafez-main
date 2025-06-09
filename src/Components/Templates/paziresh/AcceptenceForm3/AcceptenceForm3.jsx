@@ -17,6 +17,9 @@ import { Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import "react-toastify/dist/ReactToastify.css";
+import DateObject from "react-date-object";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
 
 //Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -244,9 +247,7 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
 
   const getCustomerStatements = async () => {
     try {
-      const response = await apiClient.get(
-        "http://5.9.108.174:8500/app/customer-statements/"
-      );
+      const response = await apiClient.get("/app/customer-statements/");
       if (response.status === 200) {
         setCustomerTexts(
           response.data.map((item) => ({
@@ -262,9 +263,7 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
 
   const getExpertStatements = async () => {
     try {
-      const response = await apiClient.get(
-        "http://5.9.108.174:8500/app/get-all-statement-code/"
-      );
+      const response = await apiClient.get("/app/get-all-statement-code/");
       if (response.status === 200) {
         setExpertTexts(
           response.data.map((item) => ({
@@ -287,16 +286,21 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
     setLoading(true);
     let response;
     try {
-      if (selectedData.tableForm[0]?.third_form_id) {
-        response = await apiClient.put(
-          `http://5.9.108.174:8500/app/submit-repair-form/${selectedData.tableForm[0]?.third_form_id}`
-        );
-      } else {
-        response = await apiClient.post(
-          "http://5.9.108.174:8500/app/submit-repair-form/",
-          selectedData
-        );
-      }
+      const thirdFormId = selectedData.tableForm[0]?.third_form_id;
+
+      const payload = {
+        ...selectedData,
+        third_form_id: thirdFormId,
+      };
+
+      // if (thirdFormId) {
+      //   response = await apiClient.put(
+      //     `/app/submit-repair-form/${39}`,
+      //     payload
+      //   );
+      // } else {
+      response = await apiClient.post("/app/submit-repair-form/", selectedData);
+      // }
 
       if (response.status === 200) {
         nextTab(4);
@@ -311,7 +315,7 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
   const getWagesPricerepairman = async () => {
     try {
       const response = await apiClient.get(
-        `http://5.9.108.174:8500/app/get-statement/${dataform3.ExpertStatements}`
+        `/app/get-statement/${dataform3.ExpertStatements}`
       );
       if (response.status === 200) {
         console.log(response.data);
@@ -342,15 +346,25 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
 
   const getForm3Data = async () => {
     try {
-      const response = await apiClient.get(
-        `http://5.9.108.174:8500/app/submit-repair-form/${39}`
-      );
+      const response = await apiClient.get(`/app/submit-repair-form/${39}`);
+
       if (response.status === 200) {
-        console.log("response =>", response.data);
+        const { EstimatedRepairTime, ...rest } = response.data;
+
+        const miladiDate = EstimatedRepairTime
+          ? new DateObject({
+              date: EstimatedRepairTime,
+              format: "YYYY/MM/DD HH:mm",
+              calendar: persian,
+              locale: persian_fa,
+            })
+              .convert("gregorian")
+              .toDate()
+          : "";
+
         setSelectedData({
-          customer: response.data.customer,
-          tableForm: [...response.data.tableForm],
-          EstimatedRepairTime: response.data.EstimatedRepairTime,
+          ...rest,
+          EstimatedRepairTime: miladiDate,
         });
       }
     } catch (error) {
@@ -372,7 +386,6 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
   }, []);
 
   console.log(selectedData);
-
   return (
     <Grid
       size={12}
@@ -678,7 +691,6 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
               >
                 {"تخمین زمان تعمیرکار"}
               </Typography>
-
               <DataInput
                 placeHolder="تخمین زمان تعمیر را انتخاب نمایید!"
                 value={selectedData.EstimatedRepairTime}

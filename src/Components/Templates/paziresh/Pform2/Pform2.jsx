@@ -367,9 +367,7 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
 
   const getAllParts = async () => {
     try {
-      const res = await apiClient.get(
-        `http://5.9.108.174:8500/app/parts-detail/`
-      );
+      const res = await apiClient.get(`${apiClient}/app/parts-detail/`);
       if (res.status === 200) {
         setAllTips(res.data.car_tips);
         setAllAccessories(res.data.car_tips[0].car_accessories);
@@ -381,7 +379,7 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
 
   const getMaterial = async () => {
     try {
-      const res = await apiClient.get(`http://5.9.108.174:8500/app/materials/`);
+      const res = await apiClient.get(`${apiClient}/app/materials/`);
       if (res.status === 200) {
         setAllCar(res.data[0].values);
         setAllColor(res.data[1].values);
@@ -393,9 +391,7 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
 
   const getAllDataForm = async (id) => {
     try {
-      const res = await apiClient.get(
-        `http://5.9.108.174:8500/app/get-form/${id}`
-      );
+      const res = await apiClient.get(`${apiClient}/app/get-form/${id}`);
       if (res.status === 200) {
         setDataForm(res.data);
       }

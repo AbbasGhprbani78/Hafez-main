@@ -38,6 +38,7 @@ export default function DataInput({
             border: "none",
             background: "transparent",
             outline: "none",
+            fontFamily: "iranYekan",
           }}
         />
       </div>

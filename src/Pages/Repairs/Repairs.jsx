@@ -20,12 +20,11 @@ export default function Repairs() {
         <div className="">
           {/* <AboutCar />*/}
           {/* <Occultation /> */}
-
           {/* <Geret /> */}
           {/* <Piece /> */}
-          <OutWork />
-          {/*<Attaches />
-          <div className={styles.wrap_actions_repairs}>
+          {/* <OutWork /> */}
+          <Attaches />
+          {/*<div className={styles.wrap_actions_repairs}>
             <Button2 onClick={""} icon={faPrint} style={"width"}>
               {"پرینت"}
             </Button2>

@@ -103,7 +103,7 @@
 }
 
 .error {
-  font-size: clamp(0.8rem, 0.9vw, 1rem) !important;
+  font-size: 0.9rem !important;
   color: var(--color-17);
   font-weight: normal;
   margin-top: 5px;

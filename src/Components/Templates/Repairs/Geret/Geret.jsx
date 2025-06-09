@@ -73,7 +73,7 @@ export default function Geret() {
   const getExpertStatements = async () => {
     try {
       const response = await apiClient.get(
-        "http://5.9.108.174:8500/app/get-all-statement-code/"
+        `${apiClient}/app/get-all-statement-code/`
       );
       if (response.status === 200) {
         setExpertTexts(
