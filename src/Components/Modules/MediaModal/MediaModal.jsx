@@ -6,7 +6,7 @@ import { isValidFileSize } from "../../../utils/helper";
 import AudioFileIcon from "@mui/icons-material/AudioFile";
 import AudioFileOutlinedIcon from "@mui/icons-material/AudioFileOutlined";
 import Resizer from "react-image-file-resizer";
-import apiClient from "../../../config/axiosConfig";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function MediaModal({ text, type, files, setFiles }) {
   const inputRefs = useRef([]);
@@ -92,7 +92,7 @@ export default function MediaModal({ text, type, files, setFiles }) {
             {type === "image" ? (
               file ? (
                 <img
-                  src={file?.startsWith("data:") ? file : `${apiClient}${file}`}
+                  src={file?.startsWith("data:") ? file : `${apiUrl}${file}`}
                   alt={`media-${i}`}
                   className={styles.image}
                 />
@@ -113,9 +113,7 @@ export default function MediaModal({ text, type, files, setFiles }) {
                     <audio style={{ width: "100%", marginTop: "0.5rem" }}>
                       <source
                         src={
-                          file?.startsWith("data:")
-                            ? file
-                            : `${apiClient}${file}`
+                          file?.startsWith("data:") ? file : `${apiUrl}${file}`
                         }
                         type={file.type}
                       />

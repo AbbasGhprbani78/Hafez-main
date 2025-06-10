@@ -18,9 +18,16 @@ import styles2 from "../../../../Pages/Repairs/Repairs.module.css";
 import Grid from "@mui/material/Grid2";
 import InputPrice from "../../../Modules/InputPrice/InputPrice";
 import apiClient from "../../../../config/axiosConfig";
-import { errorMessage } from "../../../Modules/Toast/ToastCustom";
+import {
+  errorMessage,
+  successMessage,
+} from "../../../Modules/Toast/ToastCustom";
 import "react-toastify/dist/ReactToastify.css";
 import SearchAndSelectDropDwon from "../../../Modules/SearchAndSelectDropDwon/SearchAndSelectDropDwon";
+import {
+  formatWithThousandSeparators,
+  toFarsiNumber,
+} from "../../../../utils/helper";
 export default function Geret() {
   const columns = ["کد اظهار", "عیب فنی", "تعمیرکار", "اجرت", "قیمت", "عملیات"];
   const [showModal, setShowModal] = useState(false);
@@ -28,7 +35,54 @@ export default function Geret() {
   const handleToggleModal = () => {
     setShowModal((modal) => !modal);
   };
+  const [editMode, setEditMode] = useState(false);
+  const [indexToEdit, setIndexToEdit] = useState(null);
   const [expertTexts, setExpertTexts] = useState([]);
+
+  const data = {
+    data1: [
+      {
+        value_id: 1,
+        value: "خاموش شدن موتور",
+      },
+      {
+        value_id: 2,
+        value: "روشن نشدن چراغ",
+      },
+      {
+        value_id: 3,
+        value: "کارنکردن برف پاک کن",
+      },
+    ],
+    data2: [
+      {
+        value_id: 1,
+        value: "عباس قربانی",
+      },
+      {
+        value_id: 2,
+        value: "احمد اسماعیلی",
+      },
+      {
+        value_id: 3,
+        value: "مهدی توسلی",
+      },
+    ],
+    data3: [
+      {
+        value_id: 1,
+        value: "اجرت 1",
+      },
+      {
+        value_id: 2,
+        value: "اجرت 2",
+      },
+      {
+        value_id: 3,
+        value: "اجرت 3",
+      },
+    ],
+  };
 
   const [geretModalData, setGeretModalData] = useState({
     ExpertStatementsCode: "",
@@ -37,9 +91,11 @@ export default function Geret() {
     repairmanCode: "",
     repairmanText: "",
     wageCode: "",
-    WageText: "",
+    wageText: "",
     price: "",
   });
+
+  const [geretDataTable, setGeretDataTable] = useState([]);
 
   const [errors, setErrors] = useState({});
 
@@ -64,17 +120,107 @@ export default function Geret() {
     setErrors((prev) => ({ ...prev, price: "" }));
   };
 
-  const deleteRow = (index) => {};
+  const addToTable = () => {
+    const newErrors = {};
+    if (!geretModalData.ExpertStatementsCode) {
+      newErrors.ExpertStatementsCode = "کد اظهار الزامی است";
+    }
+    if (!geretModalData.technicalIssueCode) {
+      newErrors.technicalIssueCode = " کد عیب فنی الزامی است";
+    }
+    if (!geretModalData.repairmanCode) {
+      newErrors.repairmanCode = "کد تعمیرکار الزامی است";
+    }
+    if (!geretModalData.wageCode) {
+      newErrors.wageCode = "کد اجرت الزامی است";
+    }
+    if (!geretModalData.price) {
+      newErrors.price = "وارد کردن قیمت الزامی است";
+    } else if (
+      isNaN(Number(geretModalData.price)) ||
+      Number(geretModalData.price) < 0
+    ) {
+      newErrors.price = "قیمت باید عددی و غیر منفی باشد";
+    }
 
-  const showEditModal = (index) => {};
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
 
-  const addToTable = () => {};
+    if (editMode) {
+      setGeretDataTable((prev) => {
+        const updateTable = [...prev];
+        updateTable[indexToEdit] = {
+          ExpertStatementsCode: geretModalData.ExpertStatementsCode,
+          technicalIssueCode: geretModalData.technicalIssueCode,
+          technicalIssueText: geretModalData.technicalIssueText,
+          repairmanCode: geretModalData.repairmanCode,
+          repairmanText: geretModalData.repairmanText,
+          wageCode: geretModalData.wageCode,
+          wageText: geretModalData.wageText,
+          price: geretModalData.price,
+        };
+        return updateTable;
+      });
+      setEditMode(false);
+      successMessage("اطلاعات با موفقیت تغییر کرد.");
+    } else {
+      const newTableRow = {
+        ExpertStatementsCode: geretModalData.ExpertStatementsCode,
+        technicalIssueCode: geretModalData.technicalIssueCode,
+        technicalIssueText: geretModalData.technicalIssueText,
+        repairmanCode: geretModalData.repairmanCode,
+        repairmanText: geretModalData.repairmanText,
+        wageCode: geretModalData.wageCode,
+        wageText: geretModalData.wageText,
+        price: geretModalData.price,
+      };
+
+      setGeretDataTable((prev) => [...prev, newTableRow]);
+    }
+
+    setShowModal(false);
+    setGeretModalData({
+      ExpertStatementsCode: "",
+      technicalIssueCode: "",
+      technicalIssueText: "",
+      repairmanCode: "",
+      repairmanText: "",
+      wageCode: "",
+      wageText: "",
+      price: "",
+    });
+    setErrors({});
+    successMessage("اطلاعات با موفقیت به جدول اضافه شد.");
+  };
+
+  const deleteRow = (index) => {
+    setGeretDataTable((prev) => prev.filter((_, i) => i !== index));
+    successMessage("ردیف با موفقیت حذف شد.");
+  };
+
+  const showEditModal = (index) => {
+    setEditMode(true);
+    setShowModal(true);
+    const mainEditRow = [...geretDataTable].filter((_, i) => i === index);
+    setGeretModalData({
+      ExpertStatementsCode: mainEditRow[0]?.ExpertStatementsCode,
+      technicalIssueCode: mainEditRow[0]?.technicalIssueCode,
+      technicalIssueText: mainEditRow[0]?.technicalIssueText,
+      repairmanCode: mainEditRow[0]?.repairmanCode,
+      repairmanText: mainEditRow[0]?.repairmanText,
+      wageCode: mainEditRow[0]?.wageCode,
+      wageText: mainEditRow[0]?.wageText,
+      price: mainEditRow[0]?.price,
+    });
+
+    setIndexToEdit(index);
+  };
 
   const getExpertStatements = async () => {
     try {
-      const response = await apiClient.get(
-        `${apiClient}/app/get-all-statement-code/`
-      );
+      const response = await apiClient.get(`/app/get-all-statement-code/`);
       if (response.status === 200) {
         setExpertTexts(
           response.data.map((item) => ({
@@ -84,13 +230,15 @@ export default function Geret() {
         );
       }
     } catch (error) {
-      errorMessage(error.response.message);
+      errorMessage(error?.response?.message || "خطا در دریافت داده‌ها");
     }
   };
 
   useEffect(() => {
     getExpertStatements();
   }, []);
+
+  console.log(showModal);
 
   return (
     <>
@@ -116,17 +264,23 @@ export default function Geret() {
                   onChange={handleChange}
                   value={geretModalData.ExpertStatementsCode}
                 />
+                {errors.ExpertStatementsCode && (
+                  <p className="error">{errors.ExpertStatementsCode}</p>
+                )}
               </Grid>
               <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
                 <SearchAndSelectDropDwon
                   icon={faAngleDown}
                   label={"عیب فنی"}
-                  items={[]}
+                  items={data.data1}
                   name="technicalIssueCode"
                   placeHolder={"عیب فنی را انتخاب کنید"}
                   onChange={handleChange}
                   value={geretModalData.technicalIssueCode}
                 />
+                {errors.technicalIssueCode && (
+                  <p className="error">{errors.technicalIssueCode}</p>
+                )}
               </Grid>
             </Grid>
             <Grid
@@ -139,25 +293,27 @@ export default function Geret() {
                 <SearchAndSelectDropDwon
                   icon={faAngleDown}
                   label={"تعمیرکار"}
-                  items={[]}
+                  items={data.data2}
                   name="repairmanCode"
                   placeHolder={"تعمیرکار را انتخاب کنید"}
                   onChange={handleChange}
                   value={geretModalData.repairmanCode}
-                  key={721}
                 />
+                {errors.repairmanCode && (
+                  <p className="error">{errors.repairmanCode}</p>
+                )}
               </Grid>
               <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
                 <SearchAndSelectDropDwon
                   icon={faAngleDown}
                   label={"اجرت"}
-                  items={[]}
+                  items={data.data3}
                   name="wageCode"
                   placeHolder={" اجرت را انتخاب کنید"}
                   onChange={handleChange}
                   value={geretModalData.wageCode}
-                  key={721}
                 />
+                {errors.wageCode && <p className="error">{errors.wageCode}</p>}
               </Grid>
             </Grid>
             <Grid
@@ -174,6 +330,7 @@ export default function Geret() {
                   name="price"
                   maxLength={30}
                 />
+                {errors.price && <p className="error">{errors.price}</p>}
               </Grid>
             </Grid>
             <Box sx={{ display: "flex", justifyContent: "end" }}>
@@ -185,41 +342,70 @@ export default function Geret() {
       <div className={styles.box}>
         <span className={`${styles.box_title} subtitle-project`}>اجرت :</span>
         <div className={`${styles.wrap_actions} wrap_button_repairs`}>
-          <Button2 onClick={() => setShowModal(true)}>{"افزودن اجرت"}</Button2>
+          <Button2
+            onClick={() => {
+              handleToggleModal();
+              setGeretModalData({
+                ExpertStatementsCode: "",
+                technicalIssueCode: "",
+                technicalIssueText: "",
+                repairmanCode: "",
+                repairmanText: "",
+                wageCode: "",
+                wageText: "",
+                price: "",
+              });
+            }}
+          >
+            {"افزودن اجرت"}
+          </Button2>
           <Button2 onClick={""} icon={faEnvelope}>
             {"ارسال پیامک"}
           </Button2>
         </div>
         <div>
           <TableForm columns={columns}>
-            <TableRow className="statment-row-table">
-              <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
-              <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
-              <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
-              <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
-              <TableCell sx={{ fontFamily: "iranYekan" }}></TableCell>
-              <TableCell sx={{ fontFamily: "iranYekan" }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    gap: "15px",
-                  }}
-                >
-                  <FontAwesomeIcon
-                    icon={faTrash}
-                    onClick={() => {}}
-                    className={`${styles2.trash_row_table}`}
-                  />
-                  <FontAwesomeIcon
-                    icon={faPenToSquare}
-                    onClick={() => {}}
-                    className={styles2.edit_row_table}
-                  />
-                </Box>
-              </TableCell>
-            </TableRow>
+            {geretDataTable.length > 0 &&
+              geretDataTable.map((item, i) => (
+                <TableRow className="statment-row-table" key={i}>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {toFarsiNumber(item.ExpertStatementsCode)}
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {toFarsiNumber(item.technicalIssueText)}
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {toFarsiNumber(item.repairmanText)}
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {toFarsiNumber(item.wageCode)}
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {toFarsiNumber(formatWithThousandSeparators(item.price))}
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: "15px",
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        icon={faTrash}
+                        onClick={() => deleteRow(i)}
+                        className={`${styles2.trash_row_table}`}
+                      />
+                      <FontAwesomeIcon
+                        icon={faPenToSquare}
+                        onClick={() => showEditModal(i)}
+                        className={styles2.edit_row_table}
+                      />
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableForm>
           <div className="p-form-actions">
             <ConfirmBtn type="submit" isSubmitting={""} />
@@ -232,19 +418,19 @@ export default function Geret() {
           rowSpacing={2}
           columnSpacing={4}
         >
-          <Grid sx={{ xs: 12, sm: 5, md: 3 }} xs={12} sm={5} md={3}>
+          <Grid size={{ xs: 12, sm: 5, md: 3 }}>
             <OccultationItem
               text={"تعمیرکار مکانیک"}
               placeHolder={"نام مکانیک"}
             />
           </Grid>
-          <Grid sx={{ xs: 12, sm: 5, md: 3 }} xs={12} sm={5} md={3}>
+          <Grid size={{ xs: 12, sm: 5, md: 3 }}>
             <OccultationItem
-              text={"تعمیرکار صافکار"}
+              text={"تعمیرکار صافکاری"}
               placeHolder={"نام صافکار"}
             />
           </Grid>
-          <Grid sx={{ xs: 12, sm: 5, md: 3 }} xs={12} sm={5} md={3}>
+          <Grid size={{ xs: 12, sm: 5, md: 3 }}>
             <OccultationItem text={"تعمیرکار نقاش"} placeHolder={"نام نقاش"} />
           </Grid>
         </Grid>

@@ -22,6 +22,7 @@ import Texteara from "../../../Modules/Texteara/Textarea";
 import { successMessage } from "../../../Modules/Toast/ToastCustom";
 import {
   formatWithThousandSeparators,
+  toEnglishNumber,
   toFarsiNumber,
 } from "../../../../utils/helper";
 export default function OutWork() {
@@ -192,6 +193,8 @@ export default function OutWork() {
     setIndexToEdit(index);
   };
 
+  console.log(outOfworkModaldata);
+
   return (
     <>
       <Modal showModal={showModal} setShowModal={handleToggleModal}>
@@ -243,12 +246,23 @@ export default function OutWork() {
               <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
                 <Input
                   label="کیلومتر خروج"
-                  styled={""}
                   placeholder="کیلومتر خروج"
                   icon={""}
                   name="departurekm"
-                  value={outOfworkModaldata.departurekm}
-                  onChange={handleChange}
+                  value={toFarsiNumber(outOfworkModaldata.departurekm)}
+                  onChange={(e) => {
+                    const { name, value } = e.target;
+                    const englishValue = toEnglishNumber(value);
+                    const digitRegex = /^\d*$/;
+
+                    if (digitRegex.test(englishValue)) {
+                      setOutOfworkModalData((prevState) => ({
+                        ...prevState,
+                        [name]: englishValue,
+                      }));
+                      setErrors((prev) => ({ ...prev, [name]: "" }));
+                    }
+                  }}
                 />
                 {errors.departurekm && (
                   <p className="error">{errors.departurekm}</p>
@@ -257,12 +271,23 @@ export default function OutWork() {
               <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
                 <Input
                   label="کیلومتر ورود"
-                  styled={""}
                   placeholder="کیلومتر ورود"
                   icon={""}
                   name="Arrivalkm"
-                  value={outOfworkModaldata.Arrivalkm}
-                  onChange={handleChange}
+                  value={toFarsiNumber(outOfworkModaldata.Arrivalkm)}
+                  onChange={(e) => {
+                    const { name, value } = e.target;
+                    const englishValue = toEnglishNumber(value);
+                    const digitRegex = /^\d*$/;
+
+                    if (digitRegex.test(englishValue)) {
+                      setOutOfworkModalData((prevState) => ({
+                        ...prevState,
+                        [name]: englishValue,
+                      }));
+                      setErrors((prev) => ({ ...prev, [name]: "" }));
+                    }
+                  }}
                 />
                 {errors.Arrivalkm && (
                   <p className="error">{errors.Arrivalkm}</p>
@@ -339,7 +364,15 @@ export default function OutWork() {
           افزودن کار خارج :
         </span>
         <div className={`${styles.wrap_actions} wrap_button_repairs`}>
-          <Button2 onClick={() => setShowModal(true)}>{"افزودن اجرت"}</Button2>
+          <Button2
+            onClick={() => {
+              setErrors({});
+              setOutOfworkModalData("");
+              setShowModal(true);
+            }}
+          >
+            {"افزودن اجرت"}
+          </Button2>
           <Button2 onClick={""} icon={faEnvelope}>
             {"ارسال پیامک"}
           </Button2>

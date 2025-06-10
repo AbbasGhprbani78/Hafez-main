@@ -15,16 +15,17 @@ export default function Repairs() {
   return (
     <div className="content-conatiner">
       <SideBar />
+      <ToastContainerCustom />
       <div className={`space-content ${styles.wrap_repairs}`}>
         <Header title={"کارت تعمیر :"} />
         <div className="">
-          {/* <AboutCar />*/}
+          {/* <AboutCar /> */}
           {/* <Occultation /> */}
           {/* <Geret /> */}
           {/* <Piece /> */}
-          {/* <OutWork /> */}
-          <Attaches />
-          {/*<div className={styles.wrap_actions_repairs}>
+          <OutWork />
+          {/*<Attaches />
+          <div className={styles.wrap_actions_repairs}>
             <Button2 onClick={""} icon={faPrint} style={"width"}>
               {"پرینت"}
             </Button2>
@@ -34,7 +35,6 @@ export default function Repairs() {
           </div> */}
         </div>
       </div>
-      <ToastContainerCustom />
     </div>
   );
 }

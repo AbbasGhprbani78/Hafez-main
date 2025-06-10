@@ -1,36 +1,35 @@
-
-
 .btn_1_wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    cursor: pointer;
-    width: max-content;
-    border: none;
-    outline: none;
-    background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  width: max-content;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-family: "iranYekan", sans-serif !important;
 }
 
 .btn_1_wrapper:hover .btn_1 {
-    background-color: var(--color-1);
+  background-color: var(--color-1);
 }
 
 .btn_1 {
-    all: unset;
-    background-color: var(--color-3);
-    border-radius: 0 20px 20px 0;
-    padding: 9px 55px 9px 45px;
-    transition: all .4s ease;
+  all: unset;
+  background-color: var(--color-3);
+  border-radius: 0 20px 20px 0;
+  padding: 9px 55px 9px 45px;
+  transition: all 0.4s ease;
 }
 
 .btn_arrow_wrapper {
-    background: rgba(62, 132, 107, 0.2);
-    border-radius: 20px 0px 0px 20px;
-    padding: 9px 13px;
+  background: rgba(62, 132, 107, 0.2);
+  border-radius: 20px 0px 0px 20px;
+  padding: 9px 13px;
 }
 
 .disbtn {
-    cursor: not-allowed;
-    opacity: .5;
+  cursor: not-allowed;
+  opacity: 0.5;
 }

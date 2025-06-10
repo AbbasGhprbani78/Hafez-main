@@ -20,7 +20,10 @@ import {
   faFileAudio,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { toFarsiNumber } from "../../../utils/helper";
+import {
+  formatWithThousandSeparators,
+  toFarsiNumber,
+} from "../../../utils/helper";
 
 function Row({ row, deleteRow, index, editRow }) {
   const [open, setOpen] = React.useState(false);
@@ -136,7 +139,9 @@ function Row({ row, deleteRow, index, editRow }) {
                           {toFarsiNumber(item?.wages)}
                         </TableCell>
                         <TableCell align="center" className={styles.table}>
-                          {toFarsiNumber(item?.price)}
+                          {toFarsiNumber(
+                            formatWithThousandSeparators(item?.price)
+                          )}
                         </TableCell>
                         <TableCell align="center" className={styles.table}>
                           {toFarsiNumber(item?.repairman)}

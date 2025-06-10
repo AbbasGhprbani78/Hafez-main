@@ -367,7 +367,7 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
 
   const getAllParts = async () => {
     try {
-      const res = await apiClient.get(`${apiClient}/app/parts-detail/`);
+      const res = await apiClient.get(`/app/parts-detail/`);
       if (res.status === 200) {
         setAllTips(res.data.car_tips);
         setAllAccessories(res.data.car_tips[0].car_accessories);
@@ -379,7 +379,7 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
 
   const getMaterial = async () => {
     try {
-      const res = await apiClient.get(`${apiClient}/app/materials/`);
+      const res = await apiClient.get(`/app/materials/`);
       if (res.status === 200) {
         setAllCar(res.data[0].values);
         setAllColor(res.data[1].values);
@@ -391,7 +391,7 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
 
   const getAllDataForm = async (id) => {
     try {
-      const res = await apiClient.get(`${apiClient}/app/get-form/${id}`);
+      const res = await apiClient.get(`/app/get-form/${id}`);
       if (res.status === 200) {
         setDataForm(res.data);
       }
@@ -618,7 +618,22 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
                   value={toFarsiNumber(
                     form2?.customer_secend_form?.car_operation
                   )}
-                  onChange={handleInputChange}
+                  // onChange={handleInputChange}
+                  onChange={(e) => {
+                    const { name, value } = e.target;
+                    const englishValue = toEnglishNumber(value);
+                    const digitRegex = /^\d*$/;
+
+                    if (digitRegex.test(englishValue)) {
+                      setForm2((prevState) => ({
+                        ...prevState,
+                        customer_secend_form: {
+                          ...prevState.customer_secend_form,
+                          [name]: englishValue,
+                        },
+                      }));
+                    }
+                  }}
                 />
 
                 {errors.car_operation && (
@@ -660,15 +675,15 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
                                 form2?.customer_secend_form?.amount_fuel ==
                                 value
                               }
-                              onChange={() =>
+                              onChange={() => {
                                 setForm2((prev) => ({
                                   ...prev,
                                   customer_secend_form: {
                                     ...prev.customer_secend_form,
                                     amount_fuel: value,
                                   },
-                                }))
-                              }
+                                }));
+                              }}
                               marginRight="input-amount"
                             />
                           </div>
@@ -1070,7 +1085,6 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
                 </p>
               </Grid>
             </Grid>
-
             <Grid
               container
               rowSpacing={2}

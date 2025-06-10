@@ -23,11 +23,6 @@
   margin-top: 1.5rem;
 }
 
-.modal_content {
-  min-width: 30vw;
-  padding: 20px;
-}
-
 .modal_top {
   border-bottom: 1px solid #9f9f9f;
   padding-bottom: 3px;

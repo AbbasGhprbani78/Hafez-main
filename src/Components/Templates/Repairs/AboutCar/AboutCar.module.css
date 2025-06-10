@@ -27,6 +27,11 @@
   display: inline-block;
 }
 
+.title_info_car,
+.text_info_car {
+  font-size: 0.9rem;
+}
+
 @media (max-width: 768px) {
   .wrap_colums {
     justify-content: start;

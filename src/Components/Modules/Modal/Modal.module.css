@@ -1,38 +1,46 @@
 .modal_container,
 .closemodal {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    top: 0;
-    min-height: 100vh;
-    width: 100%;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    backdrop-filter: blur(5px);
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  top: 0;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  backdrop-filter: blur(5px);
 }
 
 .modal_container {
-    opacity: 0;
-    visibility: hidden;
-    transition: all .3s ease;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: -10;
 }
 
 .showmodal {
-    opacity: 1;
-    visibility: visible;
+  opacity: 1;
+  visibility: visible;
+  z-index: 10;
 }
 
 .closemodal {
-    z-index: 11;
+  z-index: 11;
 }
 
 .modal_contant {
-    box-shadow: 0px 4px 4px 0px #00000040;
-    border-radius: var(--border-radius-1);
-    background-color: #fff;
-    z-index: 12;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  border-radius: var(--border-radius-1);
+  background-color: #fff;
+  z-index: 12;
+  padding: 20px;
+}
+
+@media (max-width: 600px) {
+  .modal_contant {
+    width: 95%;
+  }
 }

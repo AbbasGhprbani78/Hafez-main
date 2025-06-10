@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import styles from "./AcceptenceForm3.module.css";
-//Other Components
 import {
   errorMessage,
   successMessage,
@@ -42,6 +41,7 @@ import SearchAndSelectDropDwon from "../../../Modules/SearchAndSelectDropDwon/Se
 import SelectDropDown2 from "../../../Modules/SelectDropDown2/SelectDropDown2";
 
 function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const { dataForm, idForm, setDataForm } = useContext(MyContext);
   const endRef = useRef(null);
 
@@ -164,13 +164,19 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
 
     if (
       !dataform3.invoiceItems.length ||
-      dataform3.invoiceItems.some(
-        (item) =>
-          item.wages === "" || item.price === "" || item.repairman === ""
-      )
+      dataform3.invoiceItems.some((item) => {
+        const price = Number(item.price);
+        return (
+          item.wages === "" ||
+          item.price === "" ||
+          item.repairman === "" ||
+          isNaN(price) ||
+          price < 0
+        );
+      })
     ) {
       errorMessage(
-        "لطفاً تمام فیلدهای آیتم‌های فاکتور را به‌طور کامل پر کنید."
+        "لطفاً تمام فیلدهای آیتم‌های فاکتور را به‌درستی وارد کنید (قیمت نباید منفی باشد)."
       );
       return;
     }
@@ -257,7 +263,7 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
         );
       }
     } catch (error) {
-      errorMessage(error.response.message);
+      errorMessage(error?.response?.message || "خطا در دریافت داده‌ها");
     }
   };
 
@@ -273,7 +279,7 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
         );
       }
     } catch (error) {
-      errorMessage(error.response.message);
+      errorMessage(error?.response?.message || "خطا در دریافت داده‌ها");
     }
   };
 
@@ -284,23 +290,12 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
     }
 
     setLoading(true);
-    let response;
+
     try {
-      const thirdFormId = selectedData.tableForm[0]?.third_form_id;
-
-      const payload = {
-        ...selectedData,
-        third_form_id: thirdFormId,
-      };
-
-      // if (thirdFormId) {
-      //   response = await apiClient.put(
-      //     `/app/submit-repair-form/${39}`,
-      //     payload
-      //   );
-      // } else {
-      response = await apiClient.post("/app/submit-repair-form/", selectedData);
-      // }
+      const response = await apiClient.post(
+        `/app/submit-repair-form/${39}`,
+        selectedData
+      );
 
       if (response.status === 200) {
         nextTab(4);
@@ -340,16 +335,39 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
         );
       }
     } catch (error) {
-      errorMessage(error.response.message);
+      errorMessage(error?.response?.message || "خطا در دریافت داده‌ها");
+    }
+  };
+
+  const urlToBase64 = async (url) => {
+    try {
+      const fullUrl = url.startsWith("http") ? url : `${apiUrl}${url}`;
+
+      const response = await fetch(fullUrl);
+      const blob = await response.blob();
+
+      return await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          resolve(reader.result);
+        };
+        reader.onerror = () => {
+          reject("Error reading blob as base64");
+        };
+        reader.readAsDataURL(blob);
+      });
+    } catch (error) {
+      console.error("Error in urlToBase64:", error);
+      return null;
     }
   };
 
   const getForm3Data = async () => {
     try {
-      const response = await apiClient.get(`/app/submit-repair-form/${39}`);
+      const response = await apiClient.get(`/app/submit-repair-form/39`);
 
       if (response.status === 200) {
-        const { EstimatedRepairTime, ...rest } = response.data;
+        const { EstimatedRepairTime, tableForm = [], ...rest } = response.data;
 
         const miladiDate = EstimatedRepairTime
           ? new DateObject({
@@ -362,8 +380,45 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
               .toDate()
           : "";
 
+        const newTableForm = await Promise.all(
+          tableForm.map(async (item) => {
+            const CustomerFile = await Promise.all(
+              item.CustomerFile.map(async (file) =>
+                file.startsWith("data:image") ? file : await urlToBase64(file)
+              )
+            );
+
+            const ExpertFile = await Promise.all(
+              item.ExpertFile.map(async (file) =>
+                file.startsWith("data:image") ? file : await urlToBase64(file)
+              )
+            );
+
+            const CustomerVoice = await Promise.all(
+              item.CustomerVoice.map(async (file) =>
+                file.startsWith("data:audio") ? file : await urlToBase64(file)
+              )
+            );
+
+            const ExpertVoice = await Promise.all(
+              item.ExpertVoice.map(async (file) =>
+                file.startsWith("data:audio") ? file : await urlToBase64(file)
+              )
+            );
+
+            return {
+              ...item,
+              CustomerFile,
+              ExpertFile,
+              CustomerVoice,
+              ExpertVoice,
+            };
+          })
+        );
+
         setSelectedData({
           ...rest,
+          tableForm: newTableForm,
           EstimatedRepairTime: miladiDate,
         });
       }
@@ -385,7 +440,6 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
     getForm3Data();
   }, []);
 
-  console.log(selectedData);
   return (
     <Grid
       size={12}
@@ -931,3 +985,32 @@ const UploaderButton = ({
 };
 
 export default AcceptenceForm3;
+
+// const getForm3Data = async () => {
+//   try {
+//     const response = await apiClient.get(`/app/submit-repair-form/${39}`);
+
+//     if (response.status === 200) {
+//       console.log(response.data);
+//       const { EstimatedRepairTime, ...rest } = response.data;
+
+//       const miladiDate = EstimatedRepairTime
+//         ? new DateObject({
+//             date: EstimatedRepairTime,
+//             format: "YYYY/MM/DD HH:mm",
+//             calendar: persian,
+//             locale: persian_fa,
+//           })
+//             .convert("gregorian")
+//             .toDate()
+//         : "";
+
+//       setSelectedData({
+//         ...rest,
+//         EstimatedRepairTime: miladiDate,
+//       });
+//     }
+//   } catch (error) {
+//     errorMessage(error?.response?.message || "خطا در دریافت داده‌ها");
+//   }
+// };

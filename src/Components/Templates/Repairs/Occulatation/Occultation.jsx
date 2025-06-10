@@ -127,9 +127,7 @@ export default function Occultation() {
 
   const getCustomerStatements = async () => {
     try {
-      const response = await apiClient.get(
-        `${apiClient}/app/customer-statements/`
-      );
+      const response = await apiClient.get(`/app/customer-statements/`);
       if (response.status === 200) {
         setCustomerTexts(
           response.data.map((item) => ({
@@ -139,15 +137,13 @@ export default function Occultation() {
         );
       }
     } catch (error) {
-      errorMessage(error.response.message);
+      errorMessage(error?.response?.message || "خطا در دریافت داده‌ها");
     }
   };
 
   const getExpertStatements = async () => {
     try {
-      const response = await apiClient.get(
-        `${apiClient}/app/get-all-statement-code/`
-      );
+      const response = await apiClient.get(`/app/get-all-statement-code/`);
       if (response.status === 200) {
         setExpertTexts(
           response.data.map((item) => ({
@@ -157,7 +153,7 @@ export default function Occultation() {
         );
       }
     } catch (error) {
-      errorMessage(error.response.message);
+      errorMessage(error?.response?.message || "خطا در دریافت داده‌ها");
     }
   };
 
@@ -165,6 +161,19 @@ export default function Occultation() {
     getCustomerStatements();
     getExpertStatements();
   }, []);
+
+  const postDataTable = async () => {
+    try {
+      const response = await apiClient.post("", accultationDataTable);
+      if (response.status === 201) {
+        successMessage("با موفقیت ارسال شد");
+      }
+    } catch (error) {
+      errorMessage(error.response.message);
+    }
+  };
+
+  console.log(accultationDataTable);
 
   return (
     <>
@@ -215,7 +224,16 @@ export default function Occultation() {
         </span>
         <div className={` ${styles.occultation_content}`}>
           <div className="wrap_button_repairs">
-            <Button2 onClick={() => setShowModal(true)}>
+            <Button2
+              onClick={() => {
+                setAccultationModalData({
+                  CustomerStatements: "",
+                  ExpertStatementsCode: "",
+                  ExpertStatmentsText: "",
+                });
+                setShowModal(true);
+              }}
+            >
               {"افزودن اظهار"}
             </Button2>
           </div>
@@ -228,10 +246,10 @@ export default function Occultation() {
                       {toFarsiNumber(item.ExpertStatementsCode)}
                     </TableCell>
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {item.CustomerStatements}
+                      {toFarsiNumber(item.ExpertStatmentsText)}
                     </TableCell>
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {item.ExpertStatements}
+                      {toFarsiNumber(item.CustomerStatements)}
                     </TableCell>
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                       <Box
@@ -268,31 +286,4 @@ export default function Occultation() {
       </div>
     </>
   );
-}
-
-// const changeHandler = (e) => {
-//   const { name, value } = e.target;
-//   setAccultationModalData((prev) => ({
-//     ...prev,
-//     [name]: value,
-//   }));
-//   setErrors((prev) => ({ ...prev, [name]: "" }));
-// };
-
-{
-  /* <Texteara
-                text={"اظهارات کارشناس"}
-                value={accultationModalData.ExpertStatements}
-                onChange={changeHandler}
-                name={"ExpertStatements"}
-              /> */
-}
-
-{
-  /* <Texteara
-              text={"اظهارات مشتری"}
-              value={accultationModalData.CustomerStatements}
-              onChange={changeHandler}
-              name={"CustomerStatements"}
-            /> */
 }

@@ -10,6 +10,7 @@
   color: #fff;
   background-color: var(--color-3);
   min-width: 120px;
+  font-family: "iranYekan", sans-serif !important;
 }
 
 .ckeckicon {

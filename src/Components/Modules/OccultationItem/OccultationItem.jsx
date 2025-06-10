@@ -7,7 +7,7 @@ export default function OccultationItem({ text, placeHolder }) {
       <span className={styles.subtitle}>{text}</span>
       <SearchAndSelectDropDwon
         icon={faAngleDown}
-        label={"کد اظهار"}
+        label={""}
         items={[]}
         name=""
         placeHolder={placeHolder}
