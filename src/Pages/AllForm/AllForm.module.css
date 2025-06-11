@@ -1,89 +1,87 @@
-.manual_btn{
-    font-size: 0.9rem !important;
-    font-weight: 500 !important;
-    color: #FFFFFF !important;
-    background-color:  #C3C3C3 !important;
-    border-radius: 100px !important;
-    border: none !important;
-    outline: none !important;
-    font-family: 'iranYekan', sans-serif !important;
-    line-height: 20px !important;
-    font-weight: 500;
-    padding: 9px 20px !important;
-    /* box-shadow: none !important; */
- }
- .active_btn{
-    font-family: 'iranYekan', sans-serif !important;
-    font-size: 1rem !important;
-    font-weight: 600 !important;
-    line-height: 20px !important;
-    color: #FFFFFF !important;
-    background-color:  var(--color-3) !important;
-    border-radius: 100px !important;
-    border: none !important;
-    outline: none !important;
-    padding: 9px 20px !important;
- }
- .label_dropdown {
-    font-family: 'iranYekan', sans-serif !important;
-    color: var(--color-1) !important;
-    margin-right: 8px !important;
-    font-size: clamp(.8rem, .9vw, 1rem) !important;
-    font-weight: bold !important;
+.manual_btn {
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  color: #ffffff !important;
+  background-color: #c3c3c3 !important;
+  border-radius: 100px !important;
+  border: none !important;
+  outline: none !important;
+  font-family: "iranYekan", sans-serif !important;
+  line-height: 20px !important;
+  font-weight: 500;
+  padding: 9px 20px !important;
+  /* box-shadow: none !important; */
 }
-.border_bottom{
-    border-bottom: 1px solid var(--color-21);
+.active_btn {
+  font-family: "iranYekan", sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  line-height: 20px !important;
+  color: #ffffff !important;
+  background-color: var(--color-3) !important;
+  border-radius: 100px !important;
+  border: none !important;
+  outline: none !important;
+  padding: 9px 20px !important;
+}
+.label_dropdown {
+  font-family: "iranYekan", sans-serif !important;
+  color: var(--color-1) !important;
+  margin-right: 8px !important;
+  font-size: clamp(0.8rem, 0.9vw, 1rem) !important;
+  font-weight: bold !important;
+}
+.border_bottom {
+  border-bottom: 1px solid var(--color-21);
 }
 
 .status_btn {
-    padding: 5px;
-    border-radius: 100px;
-    min-width: 100px;
+  padding: 5px;
+  border-radius: 100px;
+  min-width: 100px;
 }
 .status_btn_halls {
-    padding: 5px;
-    border-radius: 100px;
-    min-width: 100px;
- }
+  padding: 5px;
+  border-radius: 100px;
+  min-width: 100px;
+}
 
 .status_two {
-    background-color: #fcdada;
-    color: var(--color-18);
+  background-color: #fcdada;
+  color: var(--color-18);
 }
 
 .status_one {
-    background-color: #fdf1c2;
-    color: #f7c300;
+  background-color: #fdf1c2;
+  color: #f7c300;
 }
 
 .status_none {
-    background-color: #ccf3ea;
-    color: #3e846b;
+  background-color: #ccf3ea;
+  color: #3e846b;
 }
 
 .status_three {
-    background-color: #a5b6ff;
-    color: #4c6fff;
+  background-color: #a5b6ff;
+  color: #4c6fff;
 }
 
-
 .wrap_button {
-    width: max-content;
+  width: max-content;
 }
 
 .btn_m {
-    border: none;
-    outline: none;
-    border-radius: 50%;
-    background-color: var(--color-3);
-    color: #fff;
-    width: 35px;
-    height: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    display: none;
-    object-fit: cover;
-    padding-top: 3px;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+  background-color: var(--color-3);
+  color: #fff;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: none;
+  object-fit: cover;
+  padding-top: 3px;
 }
-

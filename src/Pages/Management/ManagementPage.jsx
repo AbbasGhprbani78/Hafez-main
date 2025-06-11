@@ -657,16 +657,26 @@ function ManagementPage() {
                             fontFamily: "iranYekan",
                           }}
                         >
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align="center"
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {row.code}
                           </TableCell>
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align="center"
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {row.name}
                           </TableCell>
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align="center"
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {row.salon?.name}
                           </TableCell>
                           <TableCell
+                            align="center"
                             sx={{
                               display: "flex",
                               justifyContent: "center",
@@ -691,10 +701,14 @@ function ManagementPage() {
                             </div>
                           </TableCell>
 
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align="center"
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {row.descriptions}
                           </TableCell>
                           <TableCell
+                            align="center"
                             sx={{
                               display: "flex",
                               alignItems: "center",
@@ -750,21 +764,34 @@ function ManagementPage() {
                             fontFamily: "iranYekan",
                           }}
                         >
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align="center"
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {++index}
                           </TableCell>
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align="center"
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {row.full_name}
                           </TableCell>
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align="center"
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {Array.isArray(row.type) && row.type.length > 0
                               ? row.type.map((t) => t.type).join(" / ")
                               : "Invalid data"}
                           </TableCell>
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align="center"
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {row.national_code}
                           </TableCell>
                           <TableCell
+                            align="center"
                             sx={{
                               display: "flex",
                               justifyContent: "center",
@@ -789,10 +816,14 @@ function ManagementPage() {
                             </div>
                           </TableCell>
 
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align="center"
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {row.phone_number}
                           </TableCell>
                           <TableCell
+                            align="center"
                             sx={{
                               display: "flex",
                               alignItems: "center",

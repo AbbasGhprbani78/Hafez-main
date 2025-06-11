@@ -618,7 +618,6 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
                   value={toFarsiNumber(
                     form2?.customer_secend_form?.car_operation
                   )}
-                  // onChange={handleInputChange}
                   onChange={(e) => {
                     const { name, value } = e.target;
                     const englishValue = toEnglishNumber(value);
@@ -1235,6 +1234,7 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
                     name="other_accessories"
                     value={form2?.customer_secend_form?.other_accessories}
                     onChange={handleInputChange}
+                    maxLength={300}
                   />
                 </div>
               </Grid>

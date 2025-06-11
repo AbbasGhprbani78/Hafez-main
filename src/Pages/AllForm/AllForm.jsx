@@ -106,7 +106,7 @@ export default function AllForm() {
         fetchCommonData();
       }, 500);
 
-      return () => clearTimeout(delayFetch); // Cleanup on each keystroke
+      return () => clearTimeout(delayFetch);
     }
   }, [page, admissionNumber, filter]);
 
@@ -189,7 +189,8 @@ export default function AllForm() {
             paddingRight={{ xs: "0", sm: "1rem", md: "0" }}
           >
             <Typography
-              className={`mb-2 ${styles.label_dropdown}`}
+              sx={{ marginBottom: ".5rem" }}
+              className={`${styles.label_dropdown}`}
               variant="body2"
             >
               فیلتر براساس:
@@ -260,24 +261,25 @@ export default function AllForm() {
                       fontFamily: "iranYekan",
                     }}
                   >
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                       {row.admission_number}
                     </TableCell>
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                       {row.pyramid_number}
                     </TableCell>
 
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                       {row.car_model}
                     </TableCell>
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                       {row.chassis_number}
                     </TableCell>
                     <ShowConvertedData date={row.admission_date} />
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                       {row.license_plate_number}
                     </TableCell>
                     <TableCell
+                      align="center"
                       sx={{
                         display: "flex",
                         justifyContent: "center",
@@ -321,30 +323,7 @@ export default function AllForm() {
     </Grid>
   );
 }
-// admission_date
-// :
-// "2025-03-17T11:58:56Z"
-// admission_number
-// :
-// "519846895165489"
-// car_model
-// :
-// "سایر"
-// chassis_number
-// :
-// "1HGCM82633A123456"
-// engine_number
-// :
-// "12ش45345"
-// id
-// :
-// 43
-// pyramid_number
-// :
-// "123"
-// step
-// :
-// "three"
+
 const columnsAcceptance = [
   "شماره پذیرش",
   "شماره هرم",

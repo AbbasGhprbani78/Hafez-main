@@ -251,7 +251,7 @@ export default function Fund() {
       <div className="space-content">
         <Header title={"کارتابل صندوق پذیرش :"} />
         <div className={styles.wrapper}>
-          <Grid container className={`${styles.wrap_filters}`}>
+          <Grid container className={`${styles.wrap_filters}`} rowSpacing={2}>
             <Grid size={{ xs: 12, md: 4 }}>
               <Input
                 label={"شماره پذیرش"}
@@ -263,15 +263,31 @@ export default function Fund() {
               />
             </Grid>
             <Grid size={{ xs: 12, md: 8 }}>
-              <Grid container>
+              <Grid container alignItems={"end"}>
                 <Grid size={{ xs: 12, sm: 9, md: 8 }}>
-                  <Grid container>
+                  <Grid container spacing={4}>
                     <Grid size={{ xs: 12, sm: 6 }}>
-                      <label className={`label_input `}>از تاریخ فاکتور</label>
+                      <label
+                        className={`label_input`}
+                        style={{
+                          marginBottom: ".5rem",
+                          display: "inline-block",
+                        }}
+                      >
+                        از تاریخ فاکتور
+                      </label>
                       <DataInput value={dateStart} onChange={setDateStart} />
                     </Grid>
-                    <Grid ize={{ xs: 12, sm: 6 }}>
-                      <label className={`label_input `}>تا تاریخ فاکتور</label>
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                      <label
+                        className={`label_input`}
+                        style={{
+                          marginBottom: ".5rem",
+                          display: "inline-block",
+                        }}
+                      >
+                        تا تاریخ فاکتور
+                      </label>
                       <DataInput value={dateEnd} onChange={setDateEnd} />
                     </Grid>
                   </Grid>
@@ -287,7 +303,7 @@ export default function Fund() {
               </Grid>
             </Grid>
           </Grid>
-          {/* <div className={styles.wrap_table}>
+          <div className={styles.wrap_table}>
             <TableStatus
               columns={columns}
               rows={rows}
@@ -334,7 +350,7 @@ export default function Fund() {
                   </TableRow>
                 ))}
             </TableStatus>
-          </div> */}
+          </div>
         </div>
       </div>
     </div>
