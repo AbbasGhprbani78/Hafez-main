@@ -12,7 +12,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Box, TableCell, TableRow } from "@mui/material";
 import InputRadio from "../../../Modules/InputRadio/InputRadio";
 import Modal from "../../../Modules/Modal/Modal";
-import ConfirmBtn from "../../../Modules/ConfirmBtn/ConfirmBtn";
 import Input from "../../../Modules/Input/Input";
 import DataInput from "../../../Modules/DataInput/DataInput";
 import styles2 from "../../../../Pages/Repairs/Repairs.module.css";

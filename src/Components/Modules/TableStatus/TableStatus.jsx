@@ -10,20 +10,23 @@ import {
 
 export default function TableStatus({
   children,
-  columns,
+  Gridumns = [],
   rows,
   page,
   onChange,
   rowsPerPage = 8,
+  notPagination,
 }) {
   return (
     <>
-      <TableContainer style={{
-        maxHeight: 500,
-        direction: "rtl",
-        borderTopLeftRadius: "10px",
-        borderTopRightRadius: "10px"
-      }}>
+      <TableContainer
+        style={{
+          maxHeight: 500,
+          direction: "rtl",
+          borderTopLeftRadius: "10px",
+          borderTopRightRadius: "10px",
+        }}
+      >
         <Table
           stickyHeader
           sx={{
@@ -32,10 +35,16 @@ export default function TableStatus({
         >
           <TableHead sx={{ background: "#f4f1e8" }}>
             <TableRow>
-              {columns.map((item, i) => (
+              {Gridumns.map((item, i) => (
                 <TableCell
                   key={i}
-                  sx={{ background: "#f4f1e8", fontFamily: "iranYekan" }}
+                  sx={{
+                    background: "#f4f1e8",
+                    fontFamily: "iranYekan",
+                    color: "var(--color-3)",
+                    fontWeight: "bold",
+                  }}
+                  align="center"
                 >
                   {item}
                 </TableCell>
@@ -45,19 +54,20 @@ export default function TableStatus({
           <TableBody>{children}</TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[]}
-        component="div"
-        count={rows?.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={onChange}
-
-        sx={{
-          direction: "ltr",
-          alignItems: "flex-start"
-        }}
-      />
+      {!notPagination && (
+        <TablePagination
+          rowsPerPageOptions={[]}
+          component="div"
+          count={rows?.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={onChange}
+          sx={{
+            direction: "ltr",
+            alignItems: "flex-start",
+          }}
+        />
+      )}
     </>
   );
 }

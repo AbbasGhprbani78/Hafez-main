@@ -1,6 +1,5 @@
-
-import styles from './SideBar.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styles from "./SideBar.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
   faAlignRight,
@@ -10,29 +9,28 @@ import {
   faChartPie,
   faRightToBracket,
   faListCheck,
-  faCalendarPlus
-}
-  from '@fortawesome/free-solid-svg-icons';
+  faCalendarPlus,
+} from "@fortawesome/free-solid-svg-icons";
 
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
-import { MyContext } from '../../../context/context';
+import { NavLink, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { MyContext } from "../../../context/context";
 export default function SideBar() {
-
   const navigate = useNavigate();
 
   const logoutHandler = () => {
-    localStorage.removeItem('access')
-    localStorage.removeItem("refresh")
-    navigate("/login")
-  }
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
+    navigate("/login");
+  };
 
-  const { toggleOpen, isOpen } = useContext(MyContext)
+  const { toggleOpen, isOpen } = useContext(MyContext);
 
   return (
     <div
-      className={`${styles.sidebar_container} ${isOpen ? styles.active_sidebar : null
-        } `}
+      className={`${styles.sidebar_container} ${
+        isOpen ? styles.active_sidebar : null
+      } `}
     >
       <ul className={"sidebarlist"}>
         <li
@@ -50,10 +48,7 @@ export default function SideBar() {
           </div>
           <p className={styles.sidebar_item_text}>خانه</p>
         </NavLink>
-        <NavLink
-          to={"/paziresh"}
-          className={`${styles.sidebar_item} navlink`}
-        >
+        <NavLink to={"/paziresh"} className={`${styles.sidebar_item} navlink`}>
           <div className={styles.icon_sidebar_wrapper}>
             <FontAwesomeIcon icon={faNewspaper} />
           </div>
@@ -65,7 +60,7 @@ export default function SideBar() {
           </div>
           <p className={styles.sidebar_item_text}>کارت تعمیر</p>
         </NavLink>
-        <NavLink to={"/h"} className={`${styles.sidebar_item} navlink`}>
+        <NavLink to={"/fund"} className={`${styles.sidebar_item} navlink`}>
           <div className={styles.icon_sidebar_wrapper}>
             <FontAwesomeIcon icon={faLayerGroup} />
           </div>
@@ -77,19 +72,13 @@ export default function SideBar() {
           </div>
           <p className={styles.sidebar_item_text}>گزارشات</p>
         </NavLink>
-        <NavLink
-          to={"/allform"}
-          className={`${styles.sidebar_item} navlink`}
-        >
+        <NavLink to={"/allform"} className={`${styles.sidebar_item} navlink`}>
           <div className={styles.icon_sidebar_wrapper}>
             <FontAwesomeIcon icon={faListCheck} />
           </div>
           <p className={styles.sidebar_item_text}>فرم‌ها</p>
         </NavLink>
-        <NavLink
-          to={"/settings"}
-          className={`${styles.sidebar_item} navlink`}
-        >
+        <NavLink to={"/settings"} className={`${styles.sidebar_item} navlink`}>
           <div className={styles.icon_sidebar_wrapper}>
             <FontAwesomeIcon icon={faCalendarPlus} />
           </div>

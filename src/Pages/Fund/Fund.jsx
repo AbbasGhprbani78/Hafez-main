@@ -1,7 +1,6 @@
 import Header from "../../Components/Modules/Header/Header";
 import SideBar from "../../Components/Modules/SideBar/SideBar";
 import styles from "./Fund.module.css";
-import { Col, Row } from "react-bootstrap";
 import DataInput from "../../Components/Modules/DataInput/DataInput";
 import Button2 from "../../Components/Modules/Button2/Button2";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -9,6 +8,7 @@ import Input from "../../Components/Modules/Input/Input";
 import { TableCell, TableRow } from "@mui/material";
 import TableStatus from "../../Components/Modules/TableStatus/TableStatus";
 import { useState } from "react";
+import Grid from "@mui/material/Grid2";
 
 export default function Fund() {
   const columns = [
@@ -25,7 +25,7 @@ export default function Fund() {
   const [page, setPage] = useState(0);
   const [dateStart, setDateStart] = useState("");
   const [dateEnd, setDateEnd] = useState("");
-  const [inputSearch, setInputSearch] = useState("")
+  const [inputSearch, setInputSearch] = useState("");
   const [rows, setRows] = useState([
     {
       admission_number: "400025152",
@@ -239,8 +239,9 @@ export default function Fund() {
   const handleSerach = (e) => {
     const searchTerm = e.target.value.toLowerCase();
     setInputSearch(searchTerm);
-    const filterProducts = rows.filter(
-      (item) => item.admission_number.includes(searchTerm));
+    const filterProducts = rows.filter((item) =>
+      item.admission_number.includes(searchTerm)
+    );
     setFilterRows(filterProducts);
   };
 
@@ -250,8 +251,8 @@ export default function Fund() {
       <div className="space-content">
         <Header title={"کارتابل صندوق پذیرش :"} />
         <div className={styles.wrapper}>
-          <Row className={`${styles.wrap_filters}`}>
-            <Col xs={12} md={4}>
+          <Grid container className={`${styles.wrap_filters}`}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Input
                 label={"شماره پذیرش"}
                 icon={faMagnifyingGlass}
@@ -260,41 +261,33 @@ export default function Fund() {
                 placeholder={"شماره پذیرش"}
                 styled={"width"}
               />
-            </Col>
-            <Col xs={12} md={8} className="mt-3 mt-md-0">
-              <Row className="align-items-end">
-                <Col xs={12} sm={9} md={8}>
-                  <Row>
-                    <Col xs={12} sm={6} md={6}>
-                      <label className={`label_input mb-2`}>
-                        از تاریخ فاکتور
-                      </label>
+            </Grid>
+            <Grid size={{ xs: 12, md: 8 }}>
+              <Grid container>
+                <Grid size={{ xs: 12, sm: 9, md: 8 }}>
+                  <Grid container>
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                      <label className={`label_input `}>از تاریخ فاکتور</label>
                       <DataInput value={dateStart} onChange={setDateStart} />
-                    </Col>
-                    <Col xs={12} sm={6} md={6} className="mt-3 mt-sm-0">
-                      <label className={`label_input mb-2`}>
-                        تا تاریخ فاکتور
-                      </label>
+                    </Grid>
+                    <Grid ize={{ xs: 12, sm: 6 }}>
+                      <label className={`label_input `}>تا تاریخ فاکتور</label>
                       <DataInput value={dateEnd} onChange={setDateEnd} />
-                    </Col>
-                  </Row>
-                </Col>
-                <Col
-                  xs={12}
-                  sm={3}
-                  md={4}
-                  className={`${styles.wrap_button} mt-4 mt-sm-0`}
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid
+                  size={{ xs: 12, sm: 3, md: 4 }}
+                  className={`${styles.wrap_button} `}
                 >
-                  <Button2
-
-                    icon={faMagnifyingGlass}
-                    onClick={""}
-                  >{"جستجو"}</Button2>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-          <div className={styles.wrap_table}>
+                  <Button2 icon={faMagnifyingGlass} onClick={""}>
+                    {"جستجو"}
+                  </Button2>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          {/* <div className={styles.wrap_table}>
             <TableStatus
               columns={columns}
               rows={rows}
@@ -312,13 +305,27 @@ export default function Fund() {
                       fontFamily: "iranYekan",
                     }}
                   >
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>{row.admission_number}</TableCell>
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>{row.invoice_number}</TableCell>
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>{row.invoice_date}</TableCell>
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>{row.date_of_admission}</TableCell>
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>{row.chassis_number}</TableCell>
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>{row.national_code}</TableCell>
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>{row.fullname}</TableCell>
+                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                      {row.admission_number}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                      {row.invoice_number}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                      {row.invoice_date}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                      {row.date_of_admission}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                      {row.chassis_number}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                      {row.national_code}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                      {row.fullname}
+                    </TableCell>
                     <TableCell sx={{ fontFamily: "iranYekan" }}>
                       <div className={styles.wrap_btn}>
                         <button className={styles.btn}>مشاهده</button>
@@ -327,7 +334,7 @@ export default function Fund() {
                   </TableRow>
                 ))}
             </TableStatus>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

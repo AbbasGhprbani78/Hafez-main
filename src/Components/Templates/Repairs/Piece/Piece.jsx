@@ -376,6 +376,8 @@ export default function Piece() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            flexWrap: "wrap",
+            rowGap: "1rem",
           }}
         >
           <div className={`${styles.wrap_drop} `}>

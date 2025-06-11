@@ -19,7 +19,8 @@ export default function Accardion({ title }) {
           sx={{
             color: "#15616d",
             fontWeight: "600",
-            fontSize: "17px",
+            fontSize: "1rem",
+            fontFamily: "iranYekan, sans-serif !important;",
           }}
         >
           {title}

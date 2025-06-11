@@ -20,9 +20,9 @@ export default function Repairs() {
         <Header title={"کارت تعمیر :"} />
         <div className="">
           {/* <AboutCar /> */}
-          {/* <Occultation /> */}
+          <Occultation />
           {/* <Geret /> */}
-          {/* <Piece /> */}
+          <Piece />
           <OutWork />
           {/*<Attaches />
           <div className={styles.wrap_actions_repairs}>

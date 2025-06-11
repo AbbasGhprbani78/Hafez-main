@@ -10,7 +10,10 @@ export function toEnglishNumber(number) {
 }
 
 export function formatWithThousandSeparators(number) {
-  return number?.replace(/[^\d]/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return number
+    ?.toString()
+    .replace(/[^\d]/g, "")
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 export const MAX_FILE_SIZE_MB = 5;
