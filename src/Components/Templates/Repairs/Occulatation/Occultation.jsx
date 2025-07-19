@@ -9,8 +9,8 @@ import {
   faPenToSquare,
   faTrash,
   faAngleDown,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
-import ConfirmBtn from "../../../Modules/ConfirmBtn/ConfirmBtn";
 import Modal from "../../../Modules/Modal/Modal";
 import { Box } from "@mui/material";
 import styles2 from "../../../../Pages/Repairs/Repairs.module.css";
@@ -24,11 +24,12 @@ import { toFarsiNumber } from "../../../../utils/helper";
 import SelectDropDown2 from "../../../Modules/SelectDropDown2/SelectDropDown2";
 import apiClient from "../../../../config/axiosConfig";
 
-export default function Occultation() {
+export default function Occultation({ data }) {
   const columns = ["کد اظهار", "اظهارات کارشناس", "اظهارات مشتری", "عملیات"];
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [indexToEdit, setIndexToEdit] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [accultationModalData, setAccultationModalData] = useState({
     CustomerStatements: "",
     ExpertStatementsCode: "",
@@ -92,6 +93,7 @@ export default function Occultation() {
       };
 
       setAccultationDataTable((prev) => [...prev, newTableRow]);
+      successMessage("اطلاعات با موفقیت به جدول اضافه شد.");
     }
     setShowModal(false);
     setAccultationModalData({
@@ -100,7 +102,6 @@ export default function Occultation() {
       ExpertStatementsCode: "",
     });
     setErrors({});
-    successMessage("اطلاعات با موفقیت به جدول اضافه شد.");
   };
 
   const handleToggleModal = () => {
@@ -116,10 +117,11 @@ export default function Occultation() {
     setEditMode(true);
     setShowModal(true);
     const mainEditRow = [...accultationDataTable].filter((_, i) => i === index);
+
     setAccultationModalData({
       CustomerStatements: mainEditRow[0]?.CustomerStatements,
       ExpertStatmentsText: mainEditRow[0]?.ExpertStatmentsText,
-      ExpertStatementsCode: mainEditRow[0]?.ExpertStatementsCode,
+      ExpertStatementsCode: Number(mainEditRow[0]?.ExpertStatementsCode),
     });
 
     setIndexToEdit(index);
@@ -157,23 +159,40 @@ export default function Occultation() {
     }
   };
 
+  const postDataTable = async () => {
+    if (accultationDataTable.length === 0) {
+      errorMessage("جدول حداقل باید یک ردیف داشته باشد");
+      return;
+    }
+
+    const payload = {
+      table: accultationDataTable,
+      form_id: 39,
+    };
+    setLoading(true);
+    try {
+      const response = await apiClient.post("app/technical-defects/", payload);
+
+      if (response.status === 201 || response.status === 200) {
+        successMessage("با موفقیت ارسال شد");
+      }
+    } catch (error) {
+      errorMessage(error?.response?.data?.message || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getCustomerStatements();
     getExpertStatements();
   }, []);
 
-  const postDataTable = async () => {
-    try {
-      const response = await apiClient.post("", accultationDataTable);
-      if (response.status === 201) {
-        successMessage("با موفقیت ارسال شد");
-      }
-    } catch (error) {
-      errorMessage(error.response.message);
+  useEffect(() => {
+    if (data?.table) {
+      setAccultationDataTable(data?.table);
     }
-  };
-
-  console.log(accultationDataTable);
+  }, [data]);
 
   return (
     <>
@@ -234,12 +253,12 @@ export default function Occultation() {
                 setShowModal(true);
               }}
             >
-              {"افزودن اظهار"}
+              عیب یابی جدید
             </Button2>
           </div>
           <div>
             <TableForm columns={columns}>
-              {accultationDataTable.length > 0 &&
+              {accultationDataTable?.length > 0 &&
                 accultationDataTable.map((item, i) => (
                   <TableRow className="statment-row-table" key={i}>
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
@@ -279,7 +298,10 @@ export default function Occultation() {
 
           <div className="p-form-actions">
             <div className="p-form-actions">
-              <ConfirmBtn type="submit" isSubmitting={""} />
+              <Button2 onClick={postDataTable} disable={loading}>
+                تایید
+                <FontAwesomeIcon icon={faCheck} />
+              </Button2>
             </div>
           </div>
         </div>

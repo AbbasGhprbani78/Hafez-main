@@ -1,0 +1,20 @@
+.wrapper {
+  direction: rtl;
+  padding: 1.2rem 1.2rem 5px 1.2rem;
+}
+
+.title {
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+}
+
+.status {
+  border-radius: 100px;
+  padding: 10px 7px;
+  background-color: #f9efc8;
+  color: #ffc900;
+  min-width: 120px;
+}

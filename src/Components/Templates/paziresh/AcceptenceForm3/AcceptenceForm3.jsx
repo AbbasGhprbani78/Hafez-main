@@ -313,7 +313,6 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
         `/app/get-statement/${dataform3.ExpertStatements}`
       );
       if (response.status === 200) {
-        console.log(response.data);
         setRepairmen(
           response.data.repairmen.map((item) => ({
             value_id: item.id,
@@ -367,6 +366,7 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
       const response = await apiClient.get(`/app/submit-repair-form/39`);
 
       if (response.status === 200) {
+        console.log(response.data);
         const { EstimatedRepairTime, tableForm = [], ...rest } = response.data;
 
         const miladiDate = EstimatedRepairTime

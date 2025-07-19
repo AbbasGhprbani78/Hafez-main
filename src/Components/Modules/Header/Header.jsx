@@ -5,12 +5,7 @@ import { useState } from "react";
 import ResponsiveExample from "../Offcanvas/OffcanvasMenu";
 import Button2 from "../Button2/Button2";
 import { Typography } from "@mui/material";
-export default function Header({
-  title,
-  disabledButton = false,
-  handleClick,
-  disableBottomTitle = false,
-}) {
+export default function Header({ title, isPanel }) {
   const [isShowSideBar, setIsShowSideBar] = useState(false);
 
   return (
@@ -38,17 +33,28 @@ export default function Header({
           <div className={styles.logo_wrapper}>
             <img src="/image/1.svg" alt="logo" />
           </div>
-          {disabledButton ? (
-            <></>
+          {isPanel ? (
+            <div className={styles.profile_header}>
+              <div className={styles.profile_image_wrapper}>
+                <img src="/public/image/4.png" alt="image profile" />
+              </div>
+              <span className={styles.name_porfile}>عباس قربانی</span>
+            </div>
           ) : (
             <div className={styles.header_btn_wrapper}>
-              <Button2 style="search_btn" onClick={handleClick} icon={faPlus}>
+              <Button2 style="search_btn" icon={faPlus}>
                 {"پذیرش جدید"}
               </Button2>
             </div>
           )}
         </div>
-        {!disableBottomTitle && (
+      </header>
+    </>
+  );
+}
+
+{
+  /* {!disableBottomTitle && (
           <Typography
             display={{ xs: "block", md: "none" }}
             marginTop={{ xs: ".4rem", sm: ".5rem", md: ".6rem" }}
@@ -58,8 +64,5 @@ export default function Header({
           >
             {title}
           </Typography>
-        )}
-      </header>
-    </>
-  );
+        )} */
 }

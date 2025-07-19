@@ -24,6 +24,7 @@ import {
   toEnglishNumber,
   toFarsiNumber,
 } from "../../../../utils/helper";
+import InputCheckBox from "../../../Modules/InputChekBox/InputCheckBox";
 export default function OutWork() {
   const columns = [
     "عمل",
@@ -39,7 +40,8 @@ export default function OutWork() {
   const [errors, setErrors] = useState({});
   const [editMode, setEditMode] = useState(false);
   const [indexToEdit, setIndexToEdit] = useState(null);
-  const [isOutCarPiece, setIsOutCarPiece] = useState(null);
+  const [isOutCar, setIsOutCar] = useState(false);
+  const [isOutPiece, setIsOutPiece] = useState(false);
   const [outOfworkModaldata, setOutOfworkModalData] = useState({
     action: "",
     price: "",
@@ -191,8 +193,6 @@ export default function OutWork() {
 
     setIndexToEdit(index);
   };
-
-  console.log(outOfworkModaldata);
 
   return (
     <>
@@ -430,17 +430,19 @@ export default function OutWork() {
             ))}
         </TableForm>
         <div className={styles.wrap_radio}>
-          <InputRadio
+          <InputCheckBox
             text="خروج ماشین"
-            onChange={() => setIsOutCarPiece(1)}
-            value={isOutCarPiece}
-            checked={isOutCarPiece === 1}
+            onChange={() => setIsOutCar((prev) => !prev)}
+            value={isOutCar}
+            checked={isOutCar}
+            name={"isOutCar"}
           />
-          <InputRadio
+          <InputCheckBox
             text="خروج قطعه"
-            onChange={() => setIsOutCarPiece(2)}
-            value={isOutCarPiece}
-            checked={isOutCarPiece === 2}
+            onChange={() => setIsOutPiece((prev) => !prev)}
+            checked={isOutPiece}
+            name={"isOutPiece"}
+            value={isOutPiece}
           />
         </div>
       </div>

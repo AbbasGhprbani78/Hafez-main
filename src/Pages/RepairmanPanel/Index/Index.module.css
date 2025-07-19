@@ -1,0 +1,32 @@
+.parent {
+  direction: ltr;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+  gap: 1rem;
+  padding: 2rem 0 1rem 0;
+}
+
+.div1 {
+  grid-area: 1 / 1 / 6 / 7;
+}
+.div2 {
+  grid-area: 6 / 5 / 13 / 7;
+}
+.div3 {
+  grid-area: 6 / 3 / 10 / 5;
+  background-color: green;
+}
+.div4 {
+  grid-area: 6 / 1 / 10 / 3;
+  background-color: black;
+}
+.div5 {
+  grid-area: 10 / 1 / 13 / 5;
+  background-color: yellow;
+}
+
+.box {
+  border-radius: var(--border-radius-1);
+  box-shadow: 0px 2px 15px 0px #e5e5e5;
+}

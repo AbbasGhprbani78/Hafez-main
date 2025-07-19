@@ -6,7 +6,7 @@
 
 :root {
   --color-1: #15616d;
-  --color-3: rgb(62, 132, 107);
+  --color-3: #3e846b;
   --color-5: #02a47b;
   --color-6: #00c494;
   --color-7: #9f9f9f;
@@ -144,6 +144,11 @@ body {
 
 .wrap_button_repairs {
   margin: 1.8rem 0 10px 0;
+}
+
+button {
+  border: none;
+  outline: none;
 }
 
 @media (max-width: 600px) {

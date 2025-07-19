@@ -404,7 +404,7 @@ function InfoTabel({
               }}
             >
               <Button
-                className={`${styles.view_btn}`}
+                className={`view_btn`}
                 variant="contained"
                 onClick={() => handleClickOnView(row.action)}
               >

@@ -32,6 +32,7 @@ import {
   faPencil,
 } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../config/axiosConfig";
+import Button3 from "../../Components/Modules/Button3/Button3";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -460,7 +461,7 @@ function ManagementPage() {
                             fontFamily: "iranYekan",
                           }}
                         >
-                          <TableCell sx={{ fontFamily: "poppins" }}>
+                          <TableCell sx={{ fontFamily: "iranYekan" }}>
                             {row.code}
                           </TableCell>
                           <TableCell sx={{ fontFamily: "iranYekan" }}>
@@ -718,16 +719,12 @@ function ManagementPage() {
                               padding: "18px 10px",
                             }}
                           >
-                            <Button2
+                            <Button3
                               icon={faPencil}
-                              variant="contained"
-                              style={"edit_delete_btn"}
                               onClick={() => handleOpenModal(row, "edit")}
                             />
-                            <Button2
+                            <Button3
                               icon={faTrashCan}
-                              variant="contained"
-                              style={"edit_delete_btn"}
                               onClick={() => handleOpenModal(row, "delete")}
                             />
                           </TableCell>
@@ -833,16 +830,12 @@ function ManagementPage() {
                               padding: "18px 10px",
                             }}
                           >
-                            <Button2
+                            <Button3
                               icon={faPencil}
-                              variant="contained"
-                              style={"edit_delete_btn"}
                               onClick={() => handleOpenModal(row, "edit")}
                             />
-                            <Button2
+                            <Button3
                               icon={faTrashCan}
-                              variant="contained"
-                              style={"edit_delete_btn"}
                               onClick={() => handleOpenModal(row, "delete")}
                             />
                           </TableCell>

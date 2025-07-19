@@ -9,18 +9,22 @@ export default function AboutCar() {
 
   const getDataCar = async () => {
     try {
-      const response = await apiClient.get("");
-      if (response.status == 200) {
+      const response = await apiClient.get("/app/car-specs/", {
+        params: { form_id: 39 },
+      });
+      if (response.status === 200) {
         console.log(response.data);
+        setDataCar(response.data);
       }
     } catch (error) {
-      errorMessage(error.message.error);
+      errorMessage(error?.response?.data?.message || error.message);
     }
   };
 
   useEffect(() => {
     getDataCar();
   }, []);
+
   return (
     <>
       <div className={styles.car_onfo_box}>
@@ -36,7 +40,9 @@ export default function AboutCar() {
         >
           <Grid size={{ xs: 12, sm: 6, md: 4 }}>
             <span className={styles.title_info_car}>شماره شاسی : </span>
-            <span className={styles.text_info_car}>dsfdg518h4956f</span>
+            <span className={styles.text_info_car}>
+              {dataCar?.chassis_number}
+            </span>
           </Grid>
           <Grid size={{ xs: 12, sm: 6, md: 4 }}>
             <span className={styles.title_info_car}>مدل خودرو : </span>
