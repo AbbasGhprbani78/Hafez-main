@@ -1,0 +1,22 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.notif_header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.notif_title {
+}
+
+.notif_text {
+  font-size: 0.9rem;
+}
+.wrapper:hover {
+  background-color: #8080801a;
+}

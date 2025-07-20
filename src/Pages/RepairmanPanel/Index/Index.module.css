@@ -5,28 +5,90 @@
   grid-template-rows: repeat(12, 1fr);
   gap: 1rem;
   padding: 2rem 0 1rem 0;
+  height: 120vh;
 }
-
 .div1 {
   grid-area: 1 / 1 / 6 / 7;
+  min-width: 0;
 }
 .div2 {
   grid-area: 6 / 5 / 13 / 7;
 }
 .div3 {
   grid-area: 6 / 3 / 10 / 5;
-  background-color: green;
 }
 .div4 {
   grid-area: 6 / 1 / 10 / 3;
-  background-color: black;
 }
 .div5 {
   grid-area: 10 / 1 / 13 / 5;
-  background-color: yellow;
 }
 
 .box {
   border-radius: var(--border-radius-1);
   box-shadow: 0px 2px 15px 0px #e5e5e5;
+}
+
+@media (max-width: 1024px) {
+  .parent {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    height: auto;
+  }
+
+  .div1 {
+    grid-column: 1 / -1;
+  }
+
+  .div4 {
+    grid-column: 1 / 2;
+    height: 300px; /* یا هر عددی که مناسب طراحی‌ته */
+  }
+
+  .div3 {
+    grid-column: 2 / 3;
+    height: 300px;
+  }
+
+  .div2 {
+    grid-column: 3 / 4;
+    height: 300px;
+  }
+
+  .div5 {
+    grid-column: 1 / -1;
+    height: 350px; /* یا auto یا هر چیزی که می‌خوای */
+  }
+}
+
+/* @media (max-width: 992px) {
+  .parent {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .div1,
+  .div2,
+  .div3,
+  .div4,
+  .div5 {
+    grid-area: auto;
+    width: 100%;
+  }
+} */
+
+@media (max-width: 768px) {
+  .parent {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .div2,
+  .div3,
+  .div4,
+  .div5 {
+    grid-area: auto;
+    width: 100%;
+    height: 300px;
+  }
 }

@@ -13,6 +13,7 @@ import ManagementPage from "./Pages/Management/ManagementPage";
 import PRepairmanPrivate from "./Components/Modules/Privates/PRepairmanPrivate";
 import RepairManPanel from "./Pages/RepairmanPanel/index";
 import PRepairIndex from "./Pages/RepairmanPanel/Index/Index";
+import RunningTasks from "./Pages/RepairmanPanel/RunningTasks/RunningTasks";
 
 const routes = [
   { path: "/", element: <Home /> },
@@ -37,7 +38,7 @@ const routes = [
     ),
     children: [
       { path: "", element: <PRepairIndex /> },
-      // { path: "users", element: <Users /> },
+      { path: "tasks", element: <RunningTasks /> },
       // { path: "courses", element: <AdminCourses /> },
     ],
   },

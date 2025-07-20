@@ -57,6 +57,7 @@ export default function SideBar({
             key={item.path}
             to={item.path}
             className={`${styles.sidebar_item} navlink`}
+            end
           >
             <div className={styles.icon_sidebar_wrapper}>
               <FontAwesomeIcon icon={item.icon} />

@@ -5,7 +5,7 @@ import { useState } from "react";
 import ResponsiveExample from "../Offcanvas/OffcanvasMenu";
 import Button2 from "../Button2/Button2";
 import { Typography } from "@mui/material";
-export default function Header({ title, isPanel }) {
+export default function Header({ title, isPanel, routes }) {
   const [isShowSideBar, setIsShowSideBar] = useState(false);
 
   return (
@@ -13,6 +13,7 @@ export default function Header({ title, isPanel }) {
       <ResponsiveExample
         show={isShowSideBar}
         setIsShowSideBar={setIsShowSideBar}
+        routes={routes}
       />
       <header className={`${styles.header}`} style={{ width: "100%" }}>
         <div className={styles.header_content}>
@@ -30,9 +31,9 @@ export default function Header({ title, isPanel }) {
           >
             {title}
           </Typography>
-          <div className={styles.logo_wrapper}>
+          {/* <div className={styles.logo_wrapper}>
             <img src="/image/1.svg" alt="logo" />
-          </div>
+          </div> */}
           {isPanel ? (
             <div className={styles.profile_header}>
               <div className={styles.profile_image_wrapper}>

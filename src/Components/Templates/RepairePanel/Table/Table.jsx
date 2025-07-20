@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./Table.module.css";
 import { faBoxArchive, faComments } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -67,8 +66,14 @@ export default function Table() {
         <span>تسک‌های در حال اجرا</span>
       </div>
 
-      <TableContainer component={Paper} style={{ maxHeight: 300 }}>
-        <MuiTable stickyHeader aria-label="sticky table">
+      <TableContainer component={Paper} style={{ height: "100%" }}>
+        <MuiTable
+          stickyHeader
+          aria-label="sticky table"
+          sx={{
+            minWidth: "max-content",
+          }}
+        >
           <TableHead>
             <TableRow>
               <TableCell

@@ -1,6 +1,9 @@
 .wrapper {
   direction: rtl;
   padding: 1.2rem 1.2rem 5px 1.2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .title {

@@ -15,7 +15,8 @@
   flex-shrink: 0;
 }
 
-.notifications_wrapper {
+.chartContainer {
+  width: 100%;
   flex-grow: 1;
-  overflow-y: auto;
+  height: max-content;
 }

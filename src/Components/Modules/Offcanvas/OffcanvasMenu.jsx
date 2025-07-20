@@ -132,7 +132,19 @@ import {
 import styles from "./Offcanvas.module.css";
 import { NavLink } from "react-router-dom";
 
-function ResponsiveDrawer({ show, setIsShowSideBar }) {
+function ResponsiveDrawer({
+  show,
+  setIsShowSideBar,
+  routes = [
+    { path: "/", label: "خانه", icon: faHome },
+    { path: "/paziresh", label: "پذیرش", icon: faNewspaper },
+    { path: "/repairs", label: "کارت تعمیر", icon: faScrewdriverWrench },
+    { path: "/fund", label: "حسابداری", icon: faLayerGroup },
+    { path: "/g", label: "گزارشات", icon: faChartPie },
+    { path: "/allform", label: "فرم‌ها", icon: faListCheck },
+    { path: "/settings", label: "مدیریت", icon: faCalendarPlus },
+  ],
+}) {
   return (
     <Drawer
       anchor="right"
@@ -149,72 +161,20 @@ function ResponsiveDrawer({ show, setIsShowSideBar }) {
       </div>
 
       <List className="content-offcanvas ">
-        <NavLink to="/" className={styles.canvasitem}>
-          <div className={styles.icon_offcanvas_wrapper}>
-            <FontAwesomeIcon icon={faHome} className={styles.icon_offcanvas} />
-          </div>
-          <p className={styles.canvas_item_text}>خانه</p>
-        </NavLink>
-
-        <NavLink to="/paziresh" className={styles.canvasitem}>
-          <div className={styles.icon_offcanvas_wrapper}>
-            <FontAwesomeIcon
-              icon={faNewspaper}
-              className={styles.icon_offcanvas}
-            />
-          </div>
-          <p className={styles.canvas_item_text}>پذیرش</p>
-        </NavLink>
-
-        <NavLink to="/repairs" className={styles.canvasitem}>
-          <div className={styles.icon_offcanvas_wrapper}>
-            <FontAwesomeIcon
-              icon={faScrewdriverWrench}
-              className={styles.icon_offcanvas}
-            />
-          </div>
-          <p className={styles.canvas_item_text}>کارت تعمیر</p>
-        </NavLink>
-
-        <NavLink to="/h" className={styles.canvasitem}>
-          <div className={styles.icon_offcanvas_wrapper}>
-            <FontAwesomeIcon
-              icon={faLayerGroup}
-              className={styles.icon_offcanvas}
-            />
-          </div>
-          <p className={styles.canvas_item_text}>حسابداری</p>
-        </NavLink>
-
-        <NavLink to="/g" className={styles.canvasitem}>
-          <div className={styles.icon_offcanvas_wrapper}>
-            <FontAwesomeIcon
-              icon={faChartPie}
-              className={styles.icon_offcanvas}
-            />
-          </div>
-          <p className={styles.canvas_item_text}>گزارشات</p>
-        </NavLink>
-
-        <NavLink to="/allform" className={styles.canvasitem}>
-          <div className={styles.icon_offcanvas_wrapper}>
-            <FontAwesomeIcon
-              icon={faListCheck}
-              className={styles.icon_offcanvas}
-            />
-          </div>
-          <p className={styles.canvas_item_text}>فرم‌ها</p>
-        </NavLink>
-
-        <NavLink to="/settings" className={styles.canvasitem}>
-          <div className={styles.icon_offcanvas_wrapper}>
-            <FontAwesomeIcon
-              icon={faCalendarPlus}
-              className={styles.icon_offcanvas}
-            />
-          </div>
-          <p className={styles.canvas_item_text}>مدیریت</p>
-        </NavLink>
+        {routes.map(({ path, label, icon }) => (
+          <NavLink
+            key={path}
+            to={path}
+            className={styles.canvasitem}
+            onClick={() => setIsShowSideBar(false)}
+            end
+          >
+            <div className={styles.icon_offcanvas_wrapper}>
+              <FontAwesomeIcon icon={icon} className={styles.icon_offcanvas} />
+            </div>
+            <p className={styles.canvas_item_text}>{label}</p>
+          </NavLink>
+        ))}
 
         <ListItem
           button

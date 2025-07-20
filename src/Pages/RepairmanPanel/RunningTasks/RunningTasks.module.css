@@ -1,0 +1,17 @@
+.status_btn {
+  border-radius: 100px;
+  width: 102px;
+  padding: 8px;
+}
+.status_one {
+  color: #28b2c8;
+  background-color: #d5f0f4;
+}
+.status_two {
+  color: #ffc900;
+  background-color: #f5eac2;
+}
+.status_three {
+  color: #629d89;
+  background-color: #e0ebe7;
+}
