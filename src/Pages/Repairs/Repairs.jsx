@@ -41,12 +41,12 @@ export default function Repairs() {
       <div className={`space-content ${styles.wrap_repairs}`}>
         <Header title={"کارت تعمیر :"} />
         <div className="">
-          {/* <AboutCar /> */}
+          <AboutCar />
           <Occultation data={data} />
           <Geret data={data} />
-          {/* <Piece /> */}
-          {/* <OutWork /> */}
-          {/*<Attaches />
+          <Piece />
+          <OutWork />
+          <Attaches />
           <div className={styles.wrap_actions_repairs}>
             <Button2 onClick={""} icon={faPrint} style={"width"}>
               {"پرینت"}
@@ -54,7 +54,7 @@ export default function Repairs() {
             <Button2 onClick={""} icon={faCheck} style={"width"}>
               {"بستن کارت تعمیر"}
             </Button2>
-          </div> */}
+          </div>
         </div>
       </div>
     </div>

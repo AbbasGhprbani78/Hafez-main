@@ -14,7 +14,7 @@ import PRepairmanPrivate from "./Components/Modules/Privates/PRepairmanPrivate";
 import RepairManPanel from "./Pages/RepairmanPanel/index";
 import PRepairIndex from "./Pages/RepairmanPanel/Index/Index";
 import RunningTasks from "./Pages/RepairmanPanel/RunningTasks/RunningTasks";
-
+import History from "./Pages/RepairmanPanel/History/History";
 const routes = [
   { path: "/", element: <Home /> },
   { path: "/draft", element: <Draft /> },
@@ -39,6 +39,7 @@ const routes = [
     children: [
       { path: "", element: <PRepairIndex /> },
       { path: "tasks", element: <RunningTasks /> },
+      { path: "history", element: <History /> },
       // { path: "courses", element: <AdminCourses /> },
     ],
   },

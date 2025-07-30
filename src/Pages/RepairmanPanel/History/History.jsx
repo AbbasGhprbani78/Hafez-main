@@ -1,10 +1,9 @@
-import TitleWithSearch from "../../../Components/Modules/TitleWithSearch/TitleWithSearch";
-import TableCustom from "../../../Components/Modules/TableCustom/TableCustom";
-import { TableCell, TableRow } from "@mui/material";
 import { useState } from "react";
-import styles from "./RunningTasks.module.css";
+import TitleWithSearch from "../../../Components/Modules/TitleWithSearch/TitleWithSearch";
 import Button2 from "../../../Components/Modules/Button2/Button2";
-
+import { TableCell, TableRow } from "@mui/material";
+import TableCustom from "../../../Components/Modules/TableCustom/TableCustom";
+import styles from "../RunningTasks/RunningTasks.module.css";
 const fakeRows = [
   {
     code: "X123",
@@ -61,8 +60,7 @@ const fakeRows = [
     acceptDate: "1403/04/04",
   },
 ];
-
-export default function RunningTasks() {
+export default function History() {
   const columns = [
     "مدل ماشین",
     "تاریخ شروع",
@@ -98,8 +96,9 @@ export default function RunningTasks() {
       <TitleWithSearch
         searchInput={searchInput}
         onChange={handleChangeSearchField}
-        title={"تسک های درحال اجرا"}
+        title={"سوابق"}
       />
+
       <TableCustom
         rows={filterRows}
         columns={columns}

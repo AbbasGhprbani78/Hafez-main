@@ -293,7 +293,7 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
 
     try {
       const response = await apiClient.post(
-        `/app/submit-repair-form/${39}`,
+        `/app/submit-repair-form/${customer}`,
         selectedData
       );
 
@@ -363,7 +363,9 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
 
   const getForm3Data = async () => {
     try {
-      const response = await apiClient.get(`/app/submit-repair-form/39`);
+      const response = await apiClient.get(
+        `/app/submit-repair-form/${customer}`
+      );
 
       if (response.status === 200) {
         console.log(response.data);
