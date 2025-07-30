@@ -67,7 +67,9 @@ export default function Paziresh() {
               customer={customer}
             />
           )}
-          {currentTab === 4 && <Pform4 prevTab={handlePrevTab} />}
+          {currentTab === 4 && (
+            <Pform4 prevTab={handlePrevTab} customer={customer} />
+          )}
         </Grid>
       </div>
     </Grid>

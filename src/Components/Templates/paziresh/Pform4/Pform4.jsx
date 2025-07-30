@@ -1,15 +1,27 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./Pform4.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faPrint } from "@fortawesome/free-solid-svg-icons";
 import { useReactToPrint } from "react-to-print";
-import { MyContext } from "../../../../context/context";
 import apiClient from "../../../../config/axiosConfig";
 
-export default function Pform4({ prevTab }) {
+export default function Pform4({ prevTab, customer }) {
   const contentRef = useRef(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
 
+  const getDataAllForm = async () => {
+    try {
+      const response = await apiClient.get("/app/get-complated-form/39");
+      if (response.status === 200) {
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getDataAllForm();
+  }, []);
   return (
     <div className="confirmation-form-wrapper">
       <div className="hlep-texts-content-bottom">

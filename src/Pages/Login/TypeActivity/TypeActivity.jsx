@@ -297,9 +297,22 @@ export default function TypeActivity() {
                 value={value}
                 onChange={handleChange}
                 aria-label="simple tabs example"
+                TabIndicatorProps={{
+                  style: {
+                    backgroundColor: "#15616d",
+                  },
+                }}
               >
-                <CustomTab label="شخصی" {...a11yProps(0)} />
-                <CustomTab label="شرکتی" {...a11yProps(1)} />
+                <CustomTab
+                  label="شخصی"
+                  {...a11yProps(0)}
+                  style={{ color: "#15616d" }}
+                />
+                <CustomTab
+                  label="شرکتی"
+                  {...a11yProps(1)}
+                  style={{ color: "#15616d" }}
+                />
               </Tabs>
               <TabPanel value={value} index={0}>
                 <Formik
@@ -771,15 +784,16 @@ export default function TypeActivity() {
                               className="add-signature-title"
                               onClick={handlerAddinputssignatureTrue}
                             >
-                              <>
-                                <p className="d-flex align-items-center">
-                                  <FontAwesomeIcon
-                                    icon={faPlus}
-                                    className="mx-2"
-                                  />
-                                  افزودن صاحب امضا جدید
-                                </p>
-                              </>
+                              <p
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "5px",
+                                }}
+                              >
+                                <FontAwesomeIcon icon={faPlus} />
+                                افزودن صاحب امضا جدید
+                              </p>
                             </p>
                           </>
                         ) : (
@@ -930,15 +944,19 @@ export default function TypeActivity() {
                                 className="add-signature-title"
                                 onClick={handlerAddinputssignatureFalse}
                               >
-                                <>
-                                  <p className="d-flex align-items-center">
-                                    <FontAwesomeIcon
-                                      icon={faPlus}
-                                      className="mx-2"
-                                    />
-                                    افزودن صاحب امضا جدید
-                                  </p>
-                                </>
+                                <p
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "5px",
+                                  }}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faPlus}
+                                    className="mx-2"
+                                  />
+                                  افزودن صاحب امضا جدید
+                                </p>
                               </p>
                             </>
                           )

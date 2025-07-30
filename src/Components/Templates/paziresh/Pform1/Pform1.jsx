@@ -344,9 +344,22 @@ export default function Pform1({ nextTab, setContent, setCoustomer }) {
             value={value}
             onChange={handleChangetab}
             aria-label="simple tabs example"
+            TabIndicatorProps={{
+              style: {
+                backgroundColor: "#15616d",
+              },
+            }}
           >
-            <CustomTab label="شخصی" {...a11yProps(0)} />
-            <CustomTab label="شرکتی" {...a11yProps(1)} />
+            <CustomTab
+              label="شخصی"
+              {...a11yProps(0)}
+              style={{ color: "#15616d" }}
+            />
+            <CustomTab
+              label="شرکتی"
+              {...a11yProps(1)}
+              style={{ color: "#15616d" }}
+            />
           </Tabs>
           <TabPanel value={value} index={0} className={"tab1-pform1"}>
             <form onSubmit={formik.handleSubmit}>

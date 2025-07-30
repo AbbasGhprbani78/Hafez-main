@@ -21,7 +21,7 @@ export default function Login() {
 
   return (
     <>
-      {isShowActivityForm === "one" ? (
+      {isShowActivityForm === "one" || !isShowActivityForm ? (
         <TypeActivity />
       ) : (
         <div className="loginpage">

@@ -50,7 +50,7 @@ export default function InputUpload({ label, name, onChange }) {
 
   return (
     <div className={styles.uploadInput_container}>
-      <p className={`${styles.uploadInput_title} mb-2`}>{label}</p>
+      <p className={`${styles.uploadInput_title}`}>{label}</p>
       <div
         className={styles.uploadInput_wrapper}
         onDragOver={handleDragOver}
