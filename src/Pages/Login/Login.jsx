@@ -172,5 +172,3 @@ export default function Login() {
     </>
   );
 }
-
-// token/refresh
