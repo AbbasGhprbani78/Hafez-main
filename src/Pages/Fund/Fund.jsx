@@ -305,7 +305,7 @@ export default function Fund() {
           </Grid>
           <div className={styles.wrap_table}>
             <TableStatus
-              columns={columns}
+              Gridumns={columns}
               rows={rows}
               page={page}
               onChange={handleChangePage}
@@ -321,28 +321,56 @@ export default function Fund() {
                       fontFamily: "iranYekan",
                     }}
                   >
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                    <TableCell
+                      ali
+                      align="center"
+                      sx={{ fontFamily: "iranYekan" }}
+                    >
                       {row.admission_number}
                     </TableCell>
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                       {row.invoice_number}
                     </TableCell>
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                    <TableCell
+                      ali
+                      align="center"
+                      sx={{ fontFamily: "iranYekan" }}
+                    >
                       {row.invoice_date}
                     </TableCell>
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                    <TableCell
+                      ali
+                      align="center"
+                      sx={{ fontFamily: "iranYekan" }}
+                    >
                       {row.date_of_admission}
                     </TableCell>
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                    <TableCell
+                      ali
+                      align="center"
+                      sx={{ fontFamily: "iranYekan" }}
+                    >
                       {row.chassis_number}
                     </TableCell>
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                    <TableCell
+                      ali
+                      align="center"
+                      sx={{ fontFamily: "iranYekan" }}
+                    >
                       {row.national_code}
                     </TableCell>
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                    <TableCell
+                      ali
+                      align="center"
+                      sx={{ fontFamily: "iranYekan" }}
+                    >
                       {row.fullname}
                     </TableCell>
-                    <TableCell sx={{ fontFamily: "iranYekan" }}>
+                    <TableCell
+                      ali
+                      align="center"
+                      sx={{ fontFamily: "iranYekan" }}
+                    >
                       <div className={styles.wrap_btn}>
                         <button className={styles.btn}>مشاهده</button>
                       </div>
