@@ -66,7 +66,7 @@ export default function Pform1({ nextTab, setContent, setCoustomer }) {
   const postalCodeRegex = /^[0-9]{10}$/;
   const economicCodeRegex = /^[0-9]{12}$/;
   const [loading, setLoading] = useState(false);
-  const { dataForm, idForm, editMode, setDataForm, setIdForm } =
+  const { dataForm, idForm, editMode, setDataForm, setIdForm, isOpen } =
     useContext(MyContext);
   const [isEdited, setIsEdited] = useState(false);
   const [isEdited2, setIsEdited2] = useState(false);
@@ -336,6 +336,13 @@ export default function Pform1({ nextTab, setContent, setCoustomer }) {
     }
   }, [formik2.dirty]);
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      window.dispatchEvent(new Event("resize"));
+    }, 200);
+
+    return () => clearTimeout(timeout);
+  }, [isOpen]);
   return (
     <>
       <div className="form1-container">
