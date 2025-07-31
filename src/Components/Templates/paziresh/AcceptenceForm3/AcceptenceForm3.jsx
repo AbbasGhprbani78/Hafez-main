@@ -40,9 +40,14 @@ import { MyContext } from "../../../../context/context";
 import SearchAndSelectDropDwon from "../../../Modules/SearchAndSelectDropDwon/SearchAndSelectDropDwon";
 import SelectDropDown2 from "../../../Modules/SelectDropDown2/SelectDropDown2";
 
-function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
+function AcceptenceForm3({
+  nextTab = () => {},
+  setContent = () => {},
+  prevTab = () => {},
+  formId = "",
+}) {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const { dataForm, idForm, setDataForm } = useContext(MyContext);
+  const { dataForm, setDataForm } = useContext(MyContext);
   const endRef = useRef(null);
 
   const [dataform3, setDataForm3] = useState({
@@ -56,7 +61,7 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
   });
 
   const [selectedData, setSelectedData] = useState({
-    customer: idForm ? idForm : customer,
+    customer: formId,
     tableForm: [],
     EstimatedRepairTime: "",
   });
@@ -293,12 +298,12 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
 
     try {
       const response = await apiClient.post(
-        `/app/submit-repair-form/${customer}`,
+        `/app/submit-repair-form/${formId}`,
         selectedData
       );
 
       if (response.status === 200) {
-        nextTab(4);
+        nextTab();
       }
     } catch (error) {
       errorMessage(error?.response?.message || "خطا در ارسال داده‌ها");
@@ -363,12 +368,9 @@ function AcceptenceForm3({ nextTab, prevTab, setContent, customer }) {
 
   const getForm3Data = async () => {
     try {
-      const response = await apiClient.get(
-        `/app/submit-repair-form/${customer}`
-      );
+      const response = await apiClient.get(`/app/submit-repair-form/${formId}`);
 
       if (response.status === 200) {
-        console.log(response.data);
         const { EstimatedRepairTime, tableForm = [], ...rest } = response.data;
 
         const miladiDate = EstimatedRepairTime

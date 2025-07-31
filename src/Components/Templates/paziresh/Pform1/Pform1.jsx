@@ -13,7 +13,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import DropDown from "../../../Modules/DropDown/DropDown";
 import InputRadio from "../../../Modules/InputRadio/InputRadio";
-
 import ConfirmBtn from "../../../Modules/ConfirmBtn/ConfirmBtn";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
@@ -58,7 +57,12 @@ function a11yProps(index) {
   };
 }
 
-export default function Pform1({ nextTab, setContent, setCoustomer }) {
+export default function Pform1({
+  nextTab = () => {},
+  setContent = () => {},
+  setFormId = () => {},
+  formId = "",
+}) {
   const [value, setValue] = useState(0);
   const phoneNumberRegex =
     /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
@@ -66,10 +70,7 @@ export default function Pform1({ nextTab, setContent, setCoustomer }) {
   const postalCodeRegex = /^[0-9]{10}$/;
   const economicCodeRegex = /^[0-9]{12}$/;
   const [loading, setLoading] = useState(false);
-  const { dataForm, idForm, editMode, setDataForm, setIdForm, isOpen } =
-    useContext(MyContext);
-  const [isEdited, setIsEdited] = useState(false);
-  const [isEdited2, setIsEdited2] = useState(false);
+  const { dataForm, editMode, setDataForm, isOpen } = useContext(MyContext);
 
   const getAllDataForm = async (id) => {
     try {
@@ -146,34 +147,27 @@ export default function Pform1({ nextTab, setContent, setCoustomer }) {
     validationSchema,
     validateOnChange: false,
     onSubmit: async (values) => {
-      if (isEdited) {
-        setLoading(true);
-        try {
-          let response;
-          if (idForm) {
-            response = await apiClient.put(
-              `/app/fill-customer-form/${idForm}`,
-              values
-            );
-          } else {
-            response = await apiClient.post(`/app/fill-customer-form/`, values);
-          }
-
-          if (response.status === 200 || response.status === 201) {
-            console.log("Form submitted successfully:", response.data);
-            getAllDataForm(response.data.id);
-            setCoustomer(response.data.id);
-            setIdForm(response.data.id);
-            nextTab();
-          }
-        } catch (error) {
-          console.error("Error submitting form:", error);
-        } finally {
-          setLoading(false);
-          setIsEdited(false);
+      setLoading(true);
+      try {
+        let response;
+        if (editMode) {
+          response = await apiClient.put(
+            `/app/fill-customer-form/${formId}`,
+            values
+          );
+        } else {
+          response = await apiClient.post(`/app/fill-customer-form/`, values);
         }
-      } else {
-        nextTab();
+
+        if (response.status === 200 || response.status === 201) {
+          getAllDataForm(response.data.id);
+          setFormId(response.data.id);
+          nextTab();
+        }
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -260,33 +254,27 @@ export default function Pform1({ nextTab, setContent, setCoustomer }) {
     }),
 
     onSubmit: async (values) => {
-      if (isEdited2) {
-        setLoading(true);
-        try {
-          let response;
-          if (editMode) {
-            response = await apiClient.put(
-              `/app/fill-customer-form/${idForm}`,
-              values
-            );
-          } else {
-            response = await apiClient.post(`/app/fill-customer-form/`, values);
-          }
-
-          if (response.status === 200 || response.status === 201) {
-            getAllDataForm(response.data.id);
-            setCoustomer(response.data.id);
-            setIdForm(response.data.id);
-            nextTab();
-          }
-        } catch (error) {
-          console.error("Error submitting form:", error);
-        } finally {
-          setLoading(false);
-          setIsEdited2(false);
+      setLoading(true);
+      try {
+        let response;
+        if (editMode) {
+          response = await apiClient.put(
+            `/app/fill-customer-form/${formId}`,
+            values
+          );
+        } else {
+          response = await apiClient.post(`/app/fill-customer-form/`, values);
         }
-      } else {
-        nextTab();
+
+        if (response.status === 200 || response.status === 201) {
+          getAllDataForm(response.data.id);
+          setFormId(response.data.id);
+          nextTab();
+        }
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -323,18 +311,6 @@ export default function Pform1({ nextTab, setContent, setCoustomer }) {
   useEffect(() => {
     setContent("اطلاعات اولیه مشتری :");
   }, [setContent]);
-
-  useEffect(() => {
-    if (formik.dirty) {
-      setIsEdited(true);
-    }
-  }, [formik.dirty]);
-
-  useEffect(() => {
-    if (formik2.dirty) {
-      setIsEdited2(true);
-    }
-  }, [formik2.dirty]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -1104,3 +1080,15 @@ export default function Pform1({ nextTab, setContent, setCoustomer }) {
     </>
   );
 }
+
+// useEffect(() => {
+//   if (formik.dirty) {
+//     setIsEdited(true);
+//   }
+// }, [formik.dirty]);
+
+// useEffect(() => {
+//   if (formik2.dirty) {
+//     setIsEdited2(true);
+//   }
+// }, [formik2.dirty]);

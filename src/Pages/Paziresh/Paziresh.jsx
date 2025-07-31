@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import SideBar from "../../Components/Modules/SideBar/SideBar";
 import MuiStepper from "../../Components/Modules/MuiStepper/MuiStepper";
 import Pform1 from "../../Components/Templates/paziresh/Pform1/Pform1";
@@ -7,19 +7,23 @@ import AcceptenceForm3 from "../../Components/Templates/paziresh/AcceptenceForm3
 import Pform4 from "../../Components/Templates/paziresh/Pform4/Pform4";
 import Header from "../../Components/Modules/Header/Header";
 import { ToastContainerCustom } from "../../Components/Modules/Toast/ToastCustom";
-
 import Grid from "@mui/material/Grid2";
+import { MyContext } from "../../context/context";
 
 export default function Paziresh() {
   const [content, setContent] = useState("اطلاعات اولیه مشتری:");
   const [currentTab, setCurrentTab] = useState(1);
-  const [customer, setCustomer] = useState("");
+  const [formId, setFormId] = useState("");
+  const { editMode, setEditMode } = useContext(MyContext);
 
   const handleNextTab = () => {
     if (currentTab === 4) {
       return false;
     } else {
       setCurrentTab((prevTab) => prevTab + 1);
+      if (editMode) {
+        setEditMode(false);
+      }
     }
   };
 
@@ -28,6 +32,9 @@ export default function Paziresh() {
       return false;
     } else {
       setCurrentTab((prevTab) => prevTab - 1);
+      if (!editMode) {
+        setEditMode(true);
+      }
     }
   };
 
@@ -42,34 +49,58 @@ export default function Paziresh() {
           key={999}
           disableBottomTitle={true}
         />
-        <Grid container size={12}>
+        <Grid container size={12} spacing={4}>
           <MuiStepper activeStep={currentTab} />
-          {currentTab === 1 && (
+          <div
+            style={{
+              display: currentTab === 1 || currentTab === 4 ? "block" : "none",
+              width: "100%",
+            }}
+          >
             <Pform1
               nextTab={handleNextTab}
               setContent={setContent}
-              setCoustomer={setCustomer}
+              setFormId={setFormId}
+              formId={formId}
             />
-          )}
-          {currentTab === 2 && (
+          </div>
+
+          <div
+            style={{
+              display: currentTab === 2 || currentTab === 4 ? "block" : "none",
+              width: "100%",
+            }}
+          >
             <Pform2
               nextTab={handleNextTab}
               prevTab={handlePrevTab}
               setContent={setContent}
-              coustomer={customer}
+              formId={formId}
             />
-          )}
-          {currentTab === 3 && (
+          </div>
+
+          <div
+            style={{
+              display: currentTab === 3 || currentTab === 4 ? "block" : "none",
+              width: "100%",
+            }}
+          >
             <AcceptenceForm3
               nextTab={handleNextTab}
               prevTab={handlePrevTab}
               setContent={setContent}
-              customer={customer}
+              formId={formId}
             />
-          )}
-          {currentTab === 4 && (
-            <Pform4 prevTab={handlePrevTab} customer={customer} />
-          )}
+          </div>
+
+          <div
+            style={{
+              display: currentTab === 4 ? "block" : "none",
+              width: "100%",
+            }}
+          >
+            <Pform4 prevTab={handlePrevTab} formId={formId} />
+          </div>
         </Grid>
       </div>
     </Grid>

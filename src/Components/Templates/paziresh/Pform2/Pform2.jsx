@@ -27,12 +27,17 @@ import { toFarsiNumber, toEnglishNumber } from "../../../../utils/helper";
 import apiClient from "../../../../config/axiosConfig";
 import Grid from "@mui/material/Grid2";
 
-export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
+export default function Pform2({
+  nextTab = () => {},
+  prevTab = () => {},
+  setContent = () => {},
+  formId = "",
+}) {
   const [otherCar, setotherCar] = useState(false);
   const [otherColor, setotherColor] = useState(false);
   const [allCar, setAllCar] = useState([]);
   const [allColor, setAllColor] = useState([]);
-  const { isOpen, dataForm, idForm, setDataForm } = useContext(MyContext);
+  const { isOpen, dataForm, setDataForm, editMode } = useContext(MyContext);
   const [opneModal, setOpenModal] = useState(false);
   const [imgImModal, setImgModal] = useState("");
   const [modalText, setModalText] = useState("");
@@ -47,7 +52,7 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
   const [isEdited, setIsEdited] = useState(false);
   const [form2, setForm2] = useState({
     customer_secend_form: {
-      customer: idForm ? idForm : coustomer,
+      customer: formId,
       material: dataForm.customer_form_two
         ? dataForm.customer_form_two.material
         : "",
@@ -402,58 +407,52 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isEdited) {
-      setErrors({});
-      const validationErrors = validateFields(form2, otherCar, otherColor);
-      if (Object.keys(validationErrors).length > 0) {
-        setErrors(validationErrors);
-        return;
+
+    setErrors({});
+    const validationErrors = validateFields(form2, otherCar, otherColor);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    let sanitizedForm = { ...form2 };
+    const imageFields = [
+      "front_car_image",
+      "behind_car_image",
+      "right_side_image",
+      "left_side_image",
+      "car_km_image",
+      "engine_door_open_image",
+    ];
+
+    imageFields.forEach((field) => {
+      if (sanitizedForm.customer_secend_form[field]?.startsWith("/media")) {
+        delete sanitizedForm.customer_secend_form[field];
       }
-      let sanitizedForm = { ...form2 };
-      const imageFields = [
-        "front_car_image",
-        "behind_car_image",
-        "right_side_image",
-        "left_side_image",
-        "car_km_image",
-        "engine_door_open_image",
-      ];
+    });
 
-      imageFields.forEach((field) => {
-        if (sanitizedForm.customer_secend_form[field]?.startsWith("/media")) {
-          delete sanitizedForm.customer_secend_form[field];
-        }
-      });
-
-      try {
-        setLoading(true);
-        let response;
-        if (dataForm.customer_form_two.id) {
-          response = await apiClient.put(
-            `/app/fill-customer-and-parts/${dataForm.customer_form_two.id}`,
-            sanitizedForm
-          );
-        } else {
-          response = await apiClient.post(
-            `/app/fill-customer-and-parts/`,
-            form2
-          );
-        }
-
-        if (response.status === 201 || response.status === 200) {
-          getAllDataForm(coustomer);
-          nextTab();
-        }
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Error submitting form:", error);
-        setLoading(false);
-      } finally {
-        setIsEdited(false);
+    try {
+      setLoading(true);
+      let response;
+      if (editMode) {
+        response = await apiClient.put(
+          `/app/fill-customer-and-parts/${formId}`,
+          sanitizedForm
+        );
+      } else {
+        response = await apiClient.post(`/app/fill-customer-and-parts/`, form2);
       }
-    } else {
-      nextTab();
+
+      if (response.status === 201 || response.status === 200) {
+        getAllDataForm(formId);
+        nextTab();
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setLoading(false);
+    } finally {
+      setIsEdited(false);
     }
   };
 
@@ -1260,3 +1259,55 @@ export default function Pform2({ nextTab, prevTab, setContent, coustomer }) {
     </>
   );
 }
+
+// const handleSubmit = async (e) => {
+//   e.preventDefault();
+//   if (isEdited) {
+//     setErrors({});
+//     const validationErrors = validateFields(form2, otherCar, otherColor);
+//     if (Object.keys(validationErrors).length > 0) {
+//       setErrors(validationErrors);
+//       return;
+//     }
+//     let sanitizedForm = { ...form2 };
+//     const imageFields = [
+//       "front_car_image",
+//       "behind_car_image",
+//       "right_side_image",
+//       "left_side_image",
+//       "car_km_image",
+//       "engine_door_open_image",
+//     ];
+
+//     imageFields.forEach((field) => {
+//       if (sanitizedForm.customer_secend_form[field]?.startsWith("/media")) {
+//         delete sanitizedForm.customer_secend_form[field];
+//       }
+//     });
+
+//     try {
+//       setLoading(true);
+//       let response;
+//       // if (dataForm?.customer_form_two?.id) {
+//       //   response = await apiClient.put(
+//       //     `/app/fill-customer-and-parts/${dataForm.customer_form_two.id}`,
+//       //     sanitizedForm
+//       //   );
+//       // } else {
+//       response = await apiClient.post(`/app/fill-customer-and-parts/`, form2);
+//       // }
+
+//       if (response.status === 201 || response.status === 200) {
+//         getAllDataForm(formId);
+//         nextTab();
+//       }
+
+//       setLoading(false);
+//     } catch (error) {
+//       console.error("Error submitting form:", error);
+//       setLoading(false);
+//     } finally {
+//       setIsEdited(false);
+//     }
+//   }
+// };
