@@ -11,6 +11,20 @@ export default function Pform4({ prevTab, formId }) {
   const contentRef = useRef(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
 
+  const getDataAllForm = async () => {
+    try {
+      const response = await apiClient.get(`/app/get-complated-form/${formId}`);
+      if (response.status === 200) {
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getDataAllForm();
+  }, []);
+
   return (
     <>
       <div className="confirmation-form-wrapper">
@@ -55,17 +69,3 @@ export default function Pform4({ prevTab, formId }) {
     </>
   );
 }
-
-// const getDataAllForm = async () => {
-//   try {
-//     const response = await apiClient.get("/app/get-complated-form/39");
-//     if (response.status === 200) {
-//       console.log(response.data);
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-// useEffect(() => {
-//   getDataAllForm();
-// }, []);

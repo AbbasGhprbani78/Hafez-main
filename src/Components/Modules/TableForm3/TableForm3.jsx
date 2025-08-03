@@ -25,7 +25,7 @@ import {
   toFarsiNumber,
 } from "../../../utils/helper";
 
-function Row({ row, deleteRow, index, editRow }) {
+function Row({ row, deleteRow, index, editRow, currentTab }) {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -81,16 +81,21 @@ function Row({ row, deleteRow, index, editRow }) {
         </TableCell>
         <TableCell align="center" className={styles.table}>
           <div className={styles.wrapper_icon}>
-            <FontAwesomeIcon
-              icon={faPen}
-              className={`${styles.icon} ${styles.icon_attch}`}
-              onClick={() => editRow(index, row)}
-            />
-            <FontAwesomeIcon
-              icon={faTrash}
-              className={`${styles.icon} deleteIcon`}
-              onClick={() => deleteRow(index)}
-            />
+            <button disabled={currentTab === 4}>
+              <FontAwesomeIcon
+                icon={faPen}
+                className={`${styles.icon} ${styles.icon_attch}`}
+                onClick={() => editRow(index, row)}
+              />
+            </button>
+
+            <button disabled={currentTab === 4}>
+              <FontAwesomeIcon
+                icon={faTrash}
+                className={`${styles.icon} deleteIcon`}
+                onClick={() => deleteRow(index)}
+              />
+            </button>
           </div>
         </TableCell>
         <TableCell>
@@ -158,7 +163,12 @@ function Row({ row, deleteRow, index, editRow }) {
   );
 }
 
-export default function TableForm3({ data = [], deleteRow, editRow }) {
+export default function TableForm3({
+  data = [],
+  deleteRow,
+  editRow,
+  currentTab,
+}) {
   return (
     <TableContainer component={Paper} dir="rtl">
       <Table aria-label="collapsible table" sx={{ minWidth: 750 }}>
@@ -191,6 +201,7 @@ export default function TableForm3({ data = [], deleteRow, editRow }) {
                 deleteRow={deleteRow}
                 index={i}
                 editRow={editRow}
+                currentTab={currentTab}
               />
             ))}
         </TableBody>

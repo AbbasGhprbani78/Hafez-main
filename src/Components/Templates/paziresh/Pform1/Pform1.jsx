@@ -62,6 +62,7 @@ export default function Pform1({
   setContent = () => {},
   setFormId = () => {},
   formId = "",
+  currentTab,
 }) {
   const [value, setValue] = useState(0);
   const phoneNumberRegex =
@@ -346,7 +347,11 @@ export default function Pform1({
           </Tabs>
           <TabPanel value={value} index={0} className={"tab1-pform1"}>
             <form onSubmit={formik.handleSubmit}>
-              <div className="p-form1-contant">
+              <fieldset
+                className="p-form1-contant"
+                disabled={currentTab === 4}
+                style={{ border: "none", padding: "0", margin: "0" }}
+              >
                 <Grid
                   container
                   rowSpacing={2}
@@ -666,16 +671,21 @@ export default function Pform1({
                       )}
                   </Grid>
                 </Grid>
-                <div className="p-form-actions">
-                  <ConfirmBtn type="submit" isSubmitting={loading} />
-                </div>
-              </div>
+                {currentTab !== 4 && (
+                  <div className="p-form-actions">
+                    <ConfirmBtn type="submit" isSubmitting={loading} />
+                  </div>
+                )}
+              </fieldset>
             </form>
           </TabPanel>
 
           <TabPanel value={value} index={1} className={"tab1-pform1"}>
             <form onSubmit={formik2.handleSubmit}>
-              <div className="p-fomrm1-tab2-wrapper">
+              <fieldset
+                className="p-fomrm1-tab2-wrapper"
+                disabled={currentTab === 4}
+              >
                 <Grid
                   container
                   rowSpacing={2}
@@ -1065,13 +1075,15 @@ export default function Pform1({
                   </Grid>
                 </Grid>
 
-                <div className="p-form-actions">
-                  <ConfirmBtn
-                    type="submit"
-                    isSubmitting={formik.isSubmitting}
-                  />
-                </div>
-              </div>
+                {currentTab !== 4 && (
+                  <div className="p-form-actions">
+                    <ConfirmBtn
+                      type="submit"
+                      isSubmitting={formik.isSubmitting}
+                    />
+                  </div>
+                )}
+              </fieldset>
             </form>
           </TabPanel>
         </Box>

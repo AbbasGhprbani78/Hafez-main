@@ -461,14 +461,23 @@ function ManagementPage() {
                             fontFamily: "iranYekan",
                           }}
                         >
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align={"center"}
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {row.code}
                           </TableCell>
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align={"center"}
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {row.name}
                           </TableCell>
 
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align={"center"}
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {`${row.remaining_capacity} ساعت`}
                           </TableCell>
 
@@ -497,7 +506,10 @@ function ManagementPage() {
                             </div>
                           </TableCell>
 
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align={"center"}
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {row.descriptions}
                           </TableCell>
 
@@ -557,21 +569,34 @@ function ManagementPage() {
                             fontFamily: "iranYekan",
                           }}
                         >
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align="center"
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {row.id}
                           </TableCell>
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align="center"
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {row.full_name}
                           </TableCell>
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align="center"
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {Array.isArray(row.type) && row.type.length > 0
                               ? row.type.map((t) => t.type).join(" / ")
                               : "Invalid data"}
                           </TableCell>
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align="center"
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {`${row.work_time} ساعت کار در روز`}
                           </TableCell>
                           <TableCell
+                            align="center"
                             sx={{
                               display: "flex",
                               justifyContent: "center",
@@ -596,13 +621,17 @@ function ManagementPage() {
                             </div>
                           </TableCell>
 
-                          <TableCell sx={{ fontFamily: "iranYekan" }}>
+                          <TableCell
+                            align="center"
+                            sx={{ fontFamily: "iranYekan" }}
+                          >
                             {Array.isArray(row.salon) && row.salon.length > 0
                               ? row.salon.map((s) => s.name).join(" / ")
                               : "No data"}
                           </TableCell>
 
                           <TableCell
+                            align="center"
                             sx={{
                               display: "flex",
                               alignItems: "center",

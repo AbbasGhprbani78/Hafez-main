@@ -1,122 +1,119 @@
 .confirmation-form-wrapper {
-    margin: 1.5rem auto 0 auto;
-    width: 95%;
+  margin: 1.5rem auto 0 auto;
+  width: 95%;
 }
 
 .confirmation-form {
-    background-color: #fff;
-    border-radius: var(--border-radius-1);
-    box-shadow: var(--box-shadow-2);
-    padding: 24px;
+  background-color: #fff;
+  border-radius: var(--border-radius-1);
+  box-shadow: var(--box-shadow-2);
+  padding: 24px;
 }
 
 .amission-number-wrapper {
-    color: var(--color-15);
-    display: flex;
-    align-items: center;
+  color: var(--color-15);
+  display: flex;
+  align-items: center;
 }
 
 .amission-number {
-    margin-right: 30px;
+  margin-right: 30px;
 }
 
-
 .help-text-list {
-    list-style: none;
-    color: var(--color-15);
+  list-style: none;
+  color: var(--color-15);
 }
 
 .help-text-item {
-    margin-bottom: 1rem;
-    font-weight: 400;
+  margin-bottom: 1rem;
+  font-weight: 400;
 }
 
 .dot-item {
-    display: inline-block;
-    margin-left: 10px;
-    height: 5px;
-    width: 5px;
-    border-radius: 50%;
-    background-color: var(--color-15);
+  display: inline-block;
+  margin-left: 10px;
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+  background-color: var(--color-15);
 }
 
 .signature-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 3rem;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 3rem;
+  flex-wrap: wrap;
 }
 
 .signature-text {
-    color: var(--color-15);
-    font-weight: bold;
+  color: var(--color-15);
+  font-weight: bold;
 }
 
 .location-of-signatures {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    color: var(--color-15);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  color: var(--color-15);
 }
 
-
 .confirmation-btns {
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    margin: 1.3rem 0;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin: 1.3rem 0;
+  gap: 20px;
 }
 
 .print-btn {
-    color: #fff;
-    background-color: var(--color-3);
-    border: none;
+  color: #fff;
+  background-color: var(--color-3);
+  border: none;
 }
 
 .confirmation-btn {
-    border-radius: 100px;
-    padding: 9px 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    min-width: 116.36px;
-    outline: none;
+  border-radius: 100px;
+  padding: 9px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 116.36px;
+  outline: none;
 }
 
 .edit-btn {
-    color: var(--color-15);
-    border-color: var(--color-15);
-    background-color: #fff;
+  color: var(--color-15);
+  border: 1px solid var(--color-15);
+  background-color: #fff;
 }
 
 .hlep-texts-content-bottom {
-    padding: 24px;
-    background-color: var(--color-15);
-    border-radius: var(--border-radius-1);
+  padding: 24px;
+  background-color: var(--color-15);
+  border-radius: var(--border-radius-1);
 }
 
-.hlep-texts-content-bottom>.help-text-list {
-    color: #fff;
+.hlep-texts-content-bottom > .help-text-list {
+  color: #fff;
 }
 
 .hlep-texts-content-bottom .dot-item {
-    background-color: #fff;
+  background-color: #fff;
 }
 
+@media (max-width: 600px) {
+  .location-of-signatures {
+    margin-top: 2rem;
+  }
 
-@media (max-width:600px) {
-    .location-of-signatures {
-        margin-top: 2rem;
-    }
+  .confirmation-btns {
+    flex-direction: column;
+  }
 
-    .confirmation-btns {
-        flex-direction: column;
-    }
-
-    .confirmation-btn {
-        width: 100%;
-    }
+  .confirmation-btn {
+    width: 100%;
+  }
 }

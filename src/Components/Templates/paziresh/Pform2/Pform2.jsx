@@ -32,6 +32,7 @@ export default function Pform2({
   prevTab = () => {},
   setContent = () => {},
   formId = "",
+  currentTab,
 }) {
   const [otherCar, setotherCar] = useState(false);
   const [otherColor, setotherColor] = useState(false);
@@ -505,6 +506,18 @@ export default function Pform2({
     }));
   }, [dataForm, carParts]);
 
+  useEffect(() => {
+    if (formId) {
+      setForm2((prev) => ({
+        ...prev,
+        customer_secend_form: {
+          ...prev.customer_secend_form,
+          customer: formId,
+        },
+      }));
+    }
+  }, [formId]);
+
   return (
     <>
       <CarModal
@@ -517,7 +530,11 @@ export default function Pform2({
       />
       <div className={`form2-container ${isOpen ? "wide" : ""}`}>
         <form onSubmit={handleSubmit}>
-          <div className="p-form2-content">
+          <fieldset
+            className="p-form2-content"
+            disabled={currentTab === 4}
+            style={{ border: "none ", padding: 0, margin: 0 }}
+          >
             <Grid
               container
               rowSpacing={2}
@@ -1241,18 +1258,20 @@ export default function Pform2({
               <span className="error">{errors.accessories}</span>
             )}
 
-            <div className="p-form-actions">
+            {currentTab !== 4 && (
               <div className="p-form-actions">
-                <EditBtn
-                  text={"قبل"}
-                  onClick={() => {
-                    prevTab();
-                  }}
-                />
-                <ConfirmBtn type="submit" isSubmitting={loading} />
+                <div className="p-form-actions">
+                  <EditBtn
+                    text={"قبل"}
+                    onClick={() => {
+                      prevTab();
+                    }}
+                  />
+                  <ConfirmBtn type="submit" isSubmitting={loading} />
+                </div>
               </div>
-            </div>
-          </div>
+            )}
+          </fieldset>
         </form>
       </div>
       {loading && <LoadingForm />}

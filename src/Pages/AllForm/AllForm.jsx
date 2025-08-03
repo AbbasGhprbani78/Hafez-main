@@ -274,7 +274,11 @@ export default function AllForm() {
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                       {row.chassis_number}
                     </TableCell>
-                    <ShowConvertedData date={row.admission_date} />
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {/* <ShowConvertedData date={row.admission_date} /> */}
+                      {/* {row.admission_date} */}
+                      123
+                    </TableCell>
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                       {row.license_plate_number}
                     </TableCell>

@@ -29,7 +29,7 @@ import {
   formatWithThousandSeparators,
   toFarsiNumber,
 } from "../../../../utils/helper";
-export default function Geret({ data }) {
+export default function Geret({ data, id }) {
   const columns = ["عیب فنی", "تعمیرکار", "اجرت", "قیمت", "عملیات"];
   const [showModal, setShowModal] = useState(false);
 
@@ -259,9 +259,16 @@ export default function Geret({ data }) {
 
   const getDataTable = async () => {
     try {
-      const response = await apiClient.get("/app/api/car-defects/");
+      const response = await apiClient.get("/app/api/car-defects/", {
+        params: {
+          statementcode: "",
+          repairman: "",
+          third_form: id,
+          status: "",
+        },
+      });
       if (response.status === 200) {
-        console.log(response.data);
+        // console.log(response.data);
         // setGeretDataTable(response.data?.table);
       }
     } catch (error) {
@@ -291,9 +298,6 @@ export default function Geret({ data }) {
       console.warn("data is not an array:", data);
     }
   }, [data]);
-
-  console.log(geretModalData);
-  console.log(data?.table);
 
   return (
     <>

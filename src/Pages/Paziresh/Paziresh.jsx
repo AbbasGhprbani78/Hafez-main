@@ -12,7 +12,7 @@ import { MyContext } from "../../context/context";
 
 export default function Paziresh() {
   const [content, setContent] = useState("اطلاعات اولیه مشتری:");
-  const [currentTab, setCurrentTab] = useState(1);
+  const [currentTab, setCurrentTab] = useState(4);
   const [formId, setFormId] = useState("");
   const { editMode, setEditMode } = useContext(MyContext);
 
@@ -62,6 +62,7 @@ export default function Paziresh() {
               setContent={setContent}
               setFormId={setFormId}
               formId={formId}
+              currentTab={currentTab}
             />
           </div>
 
@@ -76,6 +77,7 @@ export default function Paziresh() {
               prevTab={handlePrevTab}
               setContent={setContent}
               formId={formId}
+              currentTab={currentTab}
             />
           </div>
 
@@ -90,6 +92,7 @@ export default function Paziresh() {
               prevTab={handlePrevTab}
               setContent={setContent}
               formId={formId}
+              currentTab={currentTab}
             />
           </div>
 

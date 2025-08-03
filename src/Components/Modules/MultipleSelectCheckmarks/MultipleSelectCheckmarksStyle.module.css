@@ -1,51 +1,49 @@
-.label_input{
-    font-family: 'iranYekan', sans-serif !important;
-    color:#15616D;
-    font-weight: 600 !important;
-    font-size: 0.9rem !important;
-
+.label_input {
+  font-family: "iranYekan", sans-serif !important;
+  color: #15616d;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
 }
-.helper_text_input{
-    font-family: 'iranYekan', sans-serif !important;
-    font-size: clamp(.6rem, .7vw, 0.8rem) !important;
-    color: var(--color-17);
-    font-weight: normal;
-    padding-right: .5rem;
-
+.helper_text_input {
+  font-family: "iranYekan", sans-serif !important;
+  font-size: clamp(0.6rem, 0.7vw, 0.8rem) !important;
+  color: var(--color-17);
+  font-weight: normal;
+  padding-right: 0.5rem;
 }
-.multiple_checkbox_styles div:first-child{
+.multiple_checkbox_styles div:first-child {
+  padding: 11px 10px 11px 0 !important;
+  max-width: 160px;
+}
+@media (min-width: 1024px) {
+  .multiple_checkbox_styles div:first-child {
     padding: 11px 10px 11px 0 !important;
-    max-width: 160px;
-}
-@media (min-width:1024px) {
-    .multiple_checkbox_styles div:first-child{
-        padding: 11px 10px 11px 0 !important;
-        max-width: 180px;
-    }
+    max-width: 180px;
+  }
 }
 
-fieldset{
-    border: 1px solid var(--color-8) !important;
-    border-radius: var(--border-radius-1) !important;
-    padding: 10px 9px 10px 15px;
-  
+fieldset {
+  border: 1px solid var(--color-8);
+  border-radius: var(--border-radius-1) !important;
+  padding: 10px 9px 10px 15px;
 }
-.multiple_checkbox_styles{
-    font-size: clamp(.9rem, .9vw, 1rem);
-    font-weight: 600;
-    font-family: 'iranYekan', sans-serif !important;
-    background-color: var(--color-20);
-    border-radius: var(--border-radius-1) !important;
+.multiple_checkbox_styles {
+  font-size: clamp(0.9rem, 0.9vw, 1rem);
+  font-weight: 600;
+  font-family: "iranYekan", sans-serif !important;
+  background-color: var(--color-20);
+  border-radius: var(--border-radius-1) !important;
 }
-.multiple_checkbox_styles svg{
-    left: 7px !important;
-    right: auto;
+.multiple_checkbox_styles svg {
+  left: 7px !important;
+  right: auto;
 }
 
-.menu_item_custom div span ,.menu_item_all div span {
-    font-family: 'iranYekan', sans-serif !important;
-    font-weight: 500;
+.menu_item_custom div span,
+.menu_item_all div span {
+  font-family: "iranYekan", sans-serif !important;
+  font-weight: 500;
 }
 .menu_item_all {
-    background-color: var(--color-20) !important; 
+  background-color: var(--color-20) !important;
 }

@@ -242,7 +242,6 @@ export default function Piece() {
 
   const sendSms = () => {};
 
-  console.log(piceModalData);
   return (
     <>
       <Modal showModal={showModal} setShowModal={handleToggleModal}>

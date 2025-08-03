@@ -325,8 +325,10 @@ function InfoTabel({
     "نام و نام‌خانوادگی مشتری",
     "عملیات",
   ];
-  const handleClickOnView = (link) => {
-    window.location.href = link;
+
+  const navigate = useNavigate();
+  const handleClickOnView = (id) => {
+    navigate(`/repairs/${id}`);
   };
 
   return (
@@ -406,7 +408,7 @@ function InfoTabel({
               <Button
                 className={`view_btn`}
                 variant="contained"
-                onClick={() => handleClickOnView(row.action)}
+                onClick={() => handleClickOnView(row.form_id)}
               >
                 مشاهده
               </Button>

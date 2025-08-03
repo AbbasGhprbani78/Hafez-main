@@ -24,7 +24,7 @@ import { toFarsiNumber } from "../../../../utils/helper";
 import SelectDropDown2 from "../../../Modules/SelectDropDown2/SelectDropDown2";
 import apiClient from "../../../../config/axiosConfig";
 
-export default function Occultation({ data }) {
+export default function Occultation({ data, id }) {
   const columns = ["کد اظهار", "اظهارات کارشناس", "اظهارات مشتری", "عملیات"];
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -167,7 +167,7 @@ export default function Occultation({ data }) {
 
     const payload = {
       table: accultationDataTable,
-      form_id: 39,
+      form_id: id,
     };
     setLoading(true);
     try {
