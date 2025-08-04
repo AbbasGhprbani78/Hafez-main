@@ -1,15 +1,11 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect } from "react";
 import "./Pform4.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faPrint } from "@fortawesome/free-solid-svg-icons";
-import { useReactToPrint } from "react-to-print";
+
 import apiClient from "../../../../config/axiosConfig";
 import { MyContext } from "../../../../context/context";
 
-export default function Pform4({ prevTab, formId }) {
+export default function Pform4({ formId }) {
   const { editMode } = useContext(MyContext);
-  const contentRef = useRef(null);
-  const reactToPrintFn = useReactToPrint({ contentRef });
 
   const getDataAllForm = async () => {
     try {
@@ -50,20 +46,6 @@ export default function Pform4({ prevTab, formId }) {
               صورت جداگانه می بایست توسط مالک/آورنده خودرو تصفیه/پرداخت شود.
             </li>
           </ul>
-        </div>
-
-        <div className="confirmation-btns">
-          <button className="edit-btn confirmation-btn " onClick={prevTab}>
-            قبلی
-            <FontAwesomeIcon icon={faPen} className={`penicon`} />
-          </button>
-          <button
-            className="print-btn confirmation-btn"
-            onClick={reactToPrintFn}
-          >
-            پرینت
-            <FontAwesomeIcon icon={faPrint} />
-          </button>
         </div>
       </div>
     </>

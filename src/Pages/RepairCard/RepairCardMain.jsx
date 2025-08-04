@@ -30,6 +30,7 @@ import {
   faCalendarXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../config/axiosConfig";
+import { toFarsiNumber } from "../../utils/helper";
 
 function RepairCardMain() {
   const [page, setPage] = useState(0);
@@ -381,21 +382,21 @@ function InfoTabel({
               fontFamily: "iranYekan",
             }}
           >
-            <TableCell sx={{ fontFamily: "iranYekan" }}>
-              {row.admission_number}
+            <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+              {toFarsiNumber(row.admission_number)}
             </TableCell>
-            <TableCell sx={{ fontFamily: "iranYekan" }}>
-              {row.invoice_number}
+            <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+              {toFarsiNumber(row.invoice_number)}
             </TableCell>
             <ShowConvertedData date={row.invoice_date} />
             <ShowConvertedData date={row.admission_date} />
-            <TableCell sx={{ fontFamily: "iranYekan" }}>
+            <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
               {row.chassis_number}
             </TableCell>
-            <TableCell sx={{ fontFamily: "iranYekan" }}>
-              {row.national_code_owner}
+            <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+              {toFarsiNumber(row.national_code_owner)}
             </TableCell>
-            <TableCell sx={{ fontFamily: "iranYekan" }}>
+            <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
               {`${row.owner_first_name} ${row.owner_last_name}`}
             </TableCell>
             <TableCell
@@ -426,7 +427,11 @@ export function ShowConvertedData({ date }) {
     const convert = convertGregorianToPersian(gregorianDate);
     setPersianDate(convert);
   }, [date]);
-  return <TableCell sx={{ fontFamily: "iranYekan" }}>{persianDate}</TableCell>;
+  return (
+    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+      {toFarsiNumber(persianDate)}
+    </TableCell>
+  );
 }
 
 export default RepairCardMain;

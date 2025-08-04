@@ -23,8 +23,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { toFarsiNumber } from "../../../../utils/helper";
 import SelectDropDown2 from "../../../Modules/SelectDropDown2/SelectDropDown2";
 import apiClient from "../../../../config/axiosConfig";
+import DeleContent from "../../../Modules/DeleteContent/DeleContent";
 
-export default function Occultation({ data, id }) {
+export default function Occultation({ data, id, getDataTable }) {
   const columns = ["کد اظهار", "اظهارات کارشناس", "اظهارات مشتری", "عملیات"];
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -34,12 +35,15 @@ export default function Occultation({ data, id }) {
     CustomerStatements: "",
     ExpertStatementsCode: "",
     ExpertStatmentsText: "",
+    id: "",
   });
 
   const [accultationDataTable, setAccultationDataTable] = useState([]);
   const [errors, setErrors] = useState({});
   const [customerTexts, setCustomerTexts] = useState([]);
   const [expertTexts, setExpertTexts] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [indexId, setIndexId] = useState({ id: "", index: "" });
 
   const handleChange = (field, value, label) => {
     setAccultationModalData((prev) => {
@@ -84,7 +88,6 @@ export default function Occultation({ data, id }) {
         return updateTable;
       });
       setEditMode(false);
-      successMessage("اطلاعات با موفقیت تغییر کرد.");
     } else {
       const newTableRow = {
         CustomerStatements: accultationModalData.CustomerStatements,
@@ -108,9 +111,33 @@ export default function Occultation({ data, id }) {
     setShowModal((modal) => !modal);
   };
 
-  const deleteRow = (index) => {
-    setAccultationDataTable((prev) => prev.filter((_, i) => i !== index));
-    successMessage("ردیف با موفقیت حذف شد.");
+  const deleteRow = async () => {
+    if (indexId.id) {
+      try {
+        const response = await apiClient.delete("app/technical-defects/", {
+          params: {
+            form_id: indexId.id,
+          },
+        });
+        if (response.status === 200) {
+          successMessage("با موفقیت حذف شد");
+          setAccultationDataTable((prev) =>
+            prev.filter((_, i) => i !== indexId.index)
+          );
+          getDataTable();
+        }
+      } catch (error) {
+        errorMessage(error?.response?.data?.message || error.message);
+      }
+    } else {
+      setAccultationDataTable((prev) =>
+        prev.filter((_, i) => i !== indexId.index)
+      );
+      successMessage(" با موفقیت حذف شد");
+    }
+
+    setShowModal(false);
+    setShowDeleteModal(false);
   };
 
   const showEditModal = (index) => {
@@ -170,12 +197,14 @@ export default function Occultation({ data, id }) {
       form_id: id,
     };
     setLoading(true);
+    console.log(JSON.stringify(payload));
     try {
       const response = await apiClient.post("app/technical-defects/", payload);
 
       if (response.status === 201 || response.status === 200) {
         successMessage("با موفقیت ارسال شد");
       }
+      getDataTable();
     } catch (error) {
       errorMessage(error?.response?.data?.message || error.message);
     } finally {
@@ -189,53 +218,71 @@ export default function Occultation({ data, id }) {
   }, []);
 
   useEffect(() => {
-    if (data?.table) {
-      setAccultationDataTable(data?.table);
+    if (data) {
+      const formattedData = data?.map((item) => ({
+        CustomerStatements: item.customer_statement?.description || "",
+        ExpertStatementsCode: item.expert_statement?.code || "",
+        ExpertStatmentsText:
+          item.expert_statement?.expert_statements_text || "",
+        id: item.id,
+      }));
+
+      setAccultationDataTable(formattedData);
     }
   }, [data]);
 
   return (
     <>
       <Modal showModal={showModal} setShowModal={handleToggleModal}>
-        <div className="modal_content">
-          <div className="modal_top">
-            <span className="titel_top">عیب یابی جدید</span>
-          </div>
-          <div className="modal_bottom">
-            <SelectDropDown2
-              icon={faAngleDown}
-              label={"اظهارات مشتری"}
-              items={customerTexts}
-              name="CustomerStatements"
-              placeHolder={"اظهارات مشتری را انتخاب  کنید."}
-              isDesirableValue={false}
-              onChange={handleChange}
-              value={accultationModalData.CustomerStatements}
+        {showDeleteModal ? (
+          <>
+            <DeleContent
+              text={"آیا از حذف ردیف اطمینان دارید ؟"}
+              close={handleToggleModal}
+              onClick={deleteRow}
             />
-            {errors.CustomerStatements && (
-              <p className="error">{errors.CustomerStatements}</p>
-            )}
-
-            <Box sx={{ marginY: "20px" }}>
-              <SearchAndSelectDropDwon
+          </>
+        ) : (
+          <div className="modal_content">
+            <div className="modal_top">
+              <span className="titel_top">عیب یابی جدید</span>
+            </div>
+            <div className="modal_bottom">
+              <SelectDropDown2
                 icon={faAngleDown}
-                label={"اظهارات کارشناس"}
-                items={expertTexts}
-                name="ExpertStatementsCode"
-                placeHolder={"اظهار کارشناس را انتخاب کنید."}
+                label={"اظهارات مشتری"}
+                items={customerTexts}
+                name="CustomerStatements"
+                placeHolder={"اظهارات مشتری را انتخاب  کنید."}
                 isDesirableValue={false}
                 onChange={handleChange}
-                value={accultationModalData.ExpertStatementsCode}
+                value={accultationModalData.CustomerStatements}
               />
-              {errors.ExpertStatementsCode && (
-                <p className="error">{errors.ExpertStatementsCode}</p>
+              {errors.CustomerStatements && (
+                <p className="error">{errors.CustomerStatements}</p>
               )}
-            </Box>
-            <Box sx={{ display: "flex", justifyContent: "end" }}>
-              <Button2 onClick={addToTable}>تایید</Button2>
-            </Box>
+
+              <Box sx={{ marginY: "20px" }}>
+                <SearchAndSelectDropDwon
+                  icon={faAngleDown}
+                  label={"اظهارات کارشناس"}
+                  items={expertTexts}
+                  name="ExpertStatementsCode"
+                  placeHolder={"اظهار کارشناس را انتخاب کنید."}
+                  isDesirableValue={false}
+                  onChange={handleChange}
+                  value={accultationModalData.ExpertStatementsCode}
+                />
+                {errors.ExpertStatementsCode && (
+                  <p className="error">{errors.ExpertStatementsCode}</p>
+                )}
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: "end" }}>
+                <Button2 onClick={addToTable}>تایید</Button2>
+              </Box>
+            </div>
           </div>
-        </div>
+        )}
       </Modal>
       <div className={`${styles.box}`}>
         <span className={`${styles.box_title} subtitle-project`}>
@@ -281,12 +328,22 @@ export default function Occultation({ data, id }) {
                       >
                         <FontAwesomeIcon
                           icon={faTrash}
-                          onClick={() => deleteRow(i)}
+                          onClick={() => {
+                            setShowDeleteModal(true);
+                            setShowModal(true);
+                            setIndexId({
+                              index: i,
+                              id: item.id ? item.id : "",
+                            });
+                          }}
                           className={`${styles2.trash_row_table}`}
                         />
                         <FontAwesomeIcon
                           icon={faPenToSquare}
-                          onClick={() => showEditModal(i)}
+                          onClick={() => {
+                            setShowDeleteModal(false);
+                            showEditModal(i);
+                          }}
                           className={styles2.edit_row_table}
                         />
                       </Box>

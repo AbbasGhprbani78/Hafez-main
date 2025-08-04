@@ -9,6 +9,7 @@ import { TableCell, TableRow } from "@mui/material";
 import TableStatus from "../../Components/Modules/TableStatus/TableStatus";
 import { useState } from "react";
 import Grid from "@mui/material/Grid2";
+import { toFarsiNumber } from "../../utils/helper";
 
 export default function Fund() {
   const columns = [
@@ -326,24 +327,24 @@ export default function Fund() {
                       align="center"
                       sx={{ fontFamily: "iranYekan" }}
                     >
-                      {row.admission_number}
+                      {toFarsiNumber(row.admission_number)}
                     </TableCell>
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {row.invoice_number}
+                      {toFarsiNumber(row.invoice_number)}
                     </TableCell>
                     <TableCell
                       ali
                       align="center"
                       sx={{ fontFamily: "iranYekan" }}
                     >
-                      {row.invoice_date}
+                      {toFarsiNumber(row.invoice_date)}
                     </TableCell>
                     <TableCell
                       ali
                       align="center"
                       sx={{ fontFamily: "iranYekan" }}
                     >
-                      {row.date_of_admission}
+                      {toFarsiNumber(row.date_of_admission)}
                     </TableCell>
                     <TableCell
                       ali
@@ -357,7 +358,7 @@ export default function Fund() {
                       align="center"
                       sx={{ fontFamily: "iranYekan" }}
                     >
-                      {row.national_code}
+                      {toFarsiNumber(row.national_code)}
                     </TableCell>
                     <TableCell
                       ali

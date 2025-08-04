@@ -12,9 +12,12 @@
 
 .p-form1-contant {
   width: 92%;
+  font-family: "iranYekan", sans-serif !important;
+}
+
+.scroll-form {
   max-height: 70vh;
   overflow-y: scroll;
-  font-family: "iranYekan", sans-serif !important;
 }
 
 .inputwidth,
@@ -97,8 +100,6 @@
 
 .p-fomrm1-tab2-wrapper {
   width: 92%;
-  max-height: 70vh;
-  overflow-y: scroll;
   font-family: "iranYekan", sans-serif !important;
 }
 

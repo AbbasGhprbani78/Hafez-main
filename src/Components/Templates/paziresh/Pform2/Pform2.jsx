@@ -531,7 +531,7 @@ export default function Pform2({
       <div className={`form2-container ${isOpen ? "wide" : ""}`}>
         <form onSubmit={handleSubmit}>
           <fieldset
-            className="p-form2-content"
+            className={`${currentTab !== 4 && "p-form2-content"}`}
             disabled={currentTab === 4}
             style={{ border: "none ", padding: 0, margin: 0 }}
           >

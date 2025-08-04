@@ -29,6 +29,7 @@ import { Button, TableCell, TableRow, Typography } from "@mui/material";
 //Icons
 import { faHashtag } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../config/axiosConfig";
+import { toFarsiNumber } from "../../utils/helper";
 
 export default function AllForm() {
   const [information, setInformation] = useState(undefined);
@@ -262,25 +263,23 @@ export default function AllForm() {
                     }}
                   >
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {row.admission_number}
+                      {toFarsiNumber(row.admission_number)}
                     </TableCell>
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {row.pyramid_number}
+                      {toFarsiNumber(row.pyramid_number)}
                     </TableCell>
 
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {row.car_model}
+                      {toFarsiNumber(row.car_model)}
                     </TableCell>
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                       {row.chassis_number}
                     </TableCell>
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {/* <ShowConvertedData date={row.admission_date} /> */}
-                      {/* {row.admission_date} */}
-                      123
+                      <ShowConvertedData date={row.admission_date} />
                     </TableCell>
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {row.license_plate_number}
+                      {toFarsiNumber(row.license_plate_number)}
                     </TableCell>
                     <TableCell
                       align="center"

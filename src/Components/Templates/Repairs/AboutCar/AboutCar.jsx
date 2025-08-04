@@ -14,7 +14,6 @@ export default function AboutCar({ id }) {
         params: { form_id: id },
       });
       if (response.status === 200) {
-        console.log(response.data);
         setDataCar(response.data);
       }
     } catch (error) {

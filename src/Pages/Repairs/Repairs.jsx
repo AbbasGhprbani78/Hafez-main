@@ -19,14 +19,25 @@ import { useParams } from "react-router-dom";
 export default function Repairs() {
   const { id } = useParams();
   const [data, setData] = useState("");
+  const [expertStatements, setExpertStatements] = useState([]);
 
   const getDataTable = async () => {
     try {
-      const response = await apiClient.get("app/technical-defects/", {
-        params: { form_id: id },
-      });
+      const response = await apiClient.get(`app/api/unified-repair/${id}`);
       if (response.status === 200) {
-        setData(response.data);
+        const rawData = response.data;
+        setData(rawData);
+
+        const expertStatements = Array.isArray(rawData)
+          ? rawData
+              .map((item) => item.expert_statement)
+              .filter(
+                (value, index, self) =>
+                  value && self.findIndex((v) => v.id === value.id) === index
+              )
+          : [];
+
+        setExpertStatements(expertStatements);
       }
     } catch (error) {
       errorMessage(error?.response?.data?.message || error.message);
@@ -45,8 +56,8 @@ export default function Repairs() {
         <Header title={"کارت تعمیر :"} />
         <div className="">
           <AboutCar id={id} />
-          <Occultation data={data} id={id} />
-          <Geret data={data} id={id} />
+          <Occultation data={data} id={id} getDataTable={getDataTable} />
+          <Geret data={data} id={id} expertStatements={expertStatements} />
           {/* <Piece />
           <OutWork />
           <Attaches />

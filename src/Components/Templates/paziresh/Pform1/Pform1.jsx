@@ -348,9 +348,11 @@ export default function Pform1({
           <TabPanel value={value} index={0} className={"tab1-pform1"}>
             <form onSubmit={formik.handleSubmit}>
               <fieldset
-                className="p-form1-contant"
+                className={`p-form1-contant ${
+                  currentTab !== 4 && "scroll-form"
+                }`}
                 disabled={currentTab === 4}
-                style={{ border: "none", padding: "0", margin: "0" }}
+                style={{ border: "none ", padding: 0, margin: 0 }}
               >
                 <Grid
                   container
@@ -683,8 +685,11 @@ export default function Pform1({
           <TabPanel value={value} index={1} className={"tab1-pform1"}>
             <form onSubmit={formik2.handleSubmit}>
               <fieldset
-                className="p-fomrm1-tab2-wrapper"
+                className={`p-fomrm1-tab2-wrapper ${
+                  currentTab !== 4 && "scroll-form"
+                }`}
                 disabled={currentTab === 4}
+                style={{ border: "none ", padding: 0, margin: 0 }}
               >
                 <Grid
                   container

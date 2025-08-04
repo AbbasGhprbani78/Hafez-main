@@ -29,7 +29,8 @@ import {
   formatWithThousandSeparators,
   toFarsiNumber,
 } from "../../../../utils/helper";
-export default function Geret({ data, id }) {
+import DeleContent from "../../../Modules/DeleteContent/DeleContent";
+export default function Geret({ data, id, expertStatements }) {
   const columns = ["عیب فنی", "تعمیرکار", "اجرت", "قیمت", "عملیات"];
   const [showModal, setShowModal] = useState(false);
 
@@ -48,6 +49,7 @@ export default function Geret({ data, id }) {
     wageText: "",
     price: "",
     third_form: "",
+    id: "",
   });
 
   const [wages, setWages] = useState([]);
@@ -56,6 +58,8 @@ export default function Geret({ data, id }) {
   const [loading, setLoading] = useState(false);
   const [geretDataTable, setGeretDataTable] = useState([]);
   const [errors, setErrors] = useState({});
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [indexId, setIndexId] = useState({ id: "0", index: "" });
 
   const handleChange = (field, value, label) => {
     let updatedFields = {
@@ -63,12 +67,13 @@ export default function Geret({ data, id }) {
       [`${field.replace(/Code$/, "Text")}`]: label || "",
     };
 
-    if (field === "ExpertStatementsCode" && Array.isArray(data?.table)) {
-      const matchedItem = data.table.find(
-        (item) => item.ExpertStatementsCode === value
+    if (field === "ExpertStatementsCode" && Array.isArray(data)) {
+      const matchedItem = data.find(
+        (item) => item.expert_statement.code == value
       );
+
       if (matchedItem) {
-        updatedFields.third_form = matchedItem.third_form_id || "";
+        updatedFields.third_form = matchedItem.id || "";
       }
     }
 
@@ -171,15 +176,41 @@ export default function Geret({ data, id }) {
     successMessage("اطلاعات با موفقیت به جدول اضافه شد.");
   };
 
-  const deleteRow = (index) => {
-    setGeretDataTable((prev) => prev.filter((_, i) => i !== index));
-    successMessage("ردیف با موفقیت حذف شد.");
+  const deleteRow = async () => {
+    console.log(indexId);
+    if (indexId.id) {
+      console.log(indexId);
+      try {
+        const response = await apiClient.delete("/app/api/car-defects/", {
+          params: {
+            form_id: indexId.id,
+          },
+        });
+        if (response.status === 200) {
+          setGeretDataTable((prev) =>
+            prev.filter((_, i) => i !== indexId.index)
+          );
+          successMessage(" با موفقیت حذف شد");
+        }
+      } catch (error) {
+        errorMessage(error?.response?.data?.message || error.message);
+      }
+    }
+    // else {
+    //   setGeretDataTable((prev) => prev.filter((_, i) => i !== indexId.index));
+    //   successMessage(" با موفقیت حذف شد");
+    // }
+
+    setShowDeleteModal(false);
+    setShowModal(false);
   };
 
   const showEditModal = (index) => {
     setEditMode(true);
     setShowModal(true);
     const mainEditRow = [...geretDataTable].filter((_, i) => i === index);
+    console.log(mainEditRow);
+
     setGeretModalData({
       ExpertStatementsCode: mainEditRow[0]?.ExpertStatementsCode,
       ExpertStatementsText: mainEditRow[0]?.ExpertStatementsText,
@@ -188,39 +219,43 @@ export default function Geret({ data, id }) {
       wageCode: mainEditRow[0]?.wageCode,
       wageText: mainEditRow[0]?.wageText,
       price: mainEditRow[0]?.price,
+      third_form: mainEditRow[0].third_form,
     });
 
     setIndexToEdit(index);
   };
 
   const getWagesPricerepairman = async () => {
-    try {
-      const response = await apiClient.get(
-        `/app/get-statement/${geretModalData.ExpertStatementsCode}`
-      );
-      if (response.status === 200) {
-        setRepairmen(
-          response.data.repairmen.map((item) => ({
-            value_id: item.id,
-            value: item.full_name,
-          }))
+    if (geretModalData.ExpertStatementsCode) {
+      try {
+        const response = await apiClient.get(
+          `/app/get-statement/${geretModalData.ExpertStatementsCode}`
         );
-        setWages(
-          response.data.statements.map((item) => ({
-            value_id: item.id,
-            value: item.descriptions,
-          }))
-        );
+        if (response.status === 200) {
+          console.log(response.data);
+          setRepairmen(
+            response.data.repairmen.map((item) => ({
+              value_id: item.id,
+              value: item.full_name,
+            }))
+          );
+          setWages(
+            response.data.statements.map((item) => ({
+              value_id: item.id,
+              value: item.descriptions,
+            }))
+          );
 
-        setPrices(
-          response.data.statements.map((item) => ({
-            value_id: item.id,
-            value: item.price,
-          }))
-        );
+          setPrices(
+            response.data.statements.map((item) => ({
+              value_id: item.id,
+              value: item.price,
+            }))
+          );
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      errorMessage(error?.response?.message || "خطا در دریافت داده‌ها");
     }
   };
 
@@ -231,7 +266,7 @@ export default function Geret({ data, id }) {
     }
 
     const filteredTable = geretDataTable.map((item) => ({
-      statement: item.wageCode,
+      statementcode: item.wageCode,
       repairman: item.repairmanCode,
       price: String(item.price),
       third_form: item.third_form,
@@ -241,38 +276,20 @@ export default function Geret({ data, id }) {
       table: filteredTable,
     };
 
-    console.log(JSON.stringify(payload));
     setLoading(true);
+
     try {
       const response = await apiClient.post("/app/api/car-defects/", payload);
 
       if (response.status === 201 || response.status === 200) {
         successMessage("با موفقیت ارسال شد");
+        setGeretModalData({});
       }
     } catch (error) {
       errorMessage(error?.response?.data?.message || error.message);
       console.log(error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const getDataTable = async () => {
-    try {
-      const response = await apiClient.get("/app/api/car-defects/", {
-        params: {
-          statementcode: "",
-          repairman: "",
-          third_form: id,
-          status: "",
-        },
-      });
-      if (response.status === 200) {
-        // console.log(response.data);
-        // setGeretDataTable(response.data?.table);
-      }
-    } catch (error) {
-      errorMessage(error?.response?.data?.message || error.message);
     }
   };
 
@@ -283,103 +300,134 @@ export default function Geret({ data, id }) {
   }, [geretModalData.ExpertStatementsCode]);
 
   useEffect(() => {
-    getDataTable();
-  }, []);
-
-  useEffect(() => {
-    if (Array.isArray(data?.table)) {
+    if (Array.isArray(data)) {
       setExpertTexts(
-        data?.table?.map((item) => ({
-          value_id: item?.ExpertStatementsCode,
-          value: item?.ExpertStatmentsText,
+        expertStatements?.map((item) => ({
+          value_id: item?.code,
+          value: item?.expert_statements_text,
         }))
       );
     } else {
       console.warn("data is not an array:", data);
     }
+  }, [expertStatements]);
+
+  useEffect(() => {
+    if (!Array.isArray(data)) return;
+
+    const allDefects = data.flatMap((item) =>
+      (item.defects || []).map((defect) => ({
+        ExpertStatementsCode: item.expert_statement?.code || "",
+        ExpertStatementsText:
+          item.expert_statement?.expert_statements_text || "",
+        repairmanCode: defect.repairman || "",
+        repairmanText: defect.repairman_full_name || "",
+        wageCode: defect.statementcode?.id || "",
+        wageText: defect.statementcode?.descriptions || "",
+        price: defect.price || "",
+        third_form: item.id || "",
+        id: "", //item.defect.id
+      }))
+    );
+
+    setGeretDataTable(allDefects);
   }, [data]);
+
+  console.log(data);
 
   return (
     <>
       <Modal showModal={showModal} setShowModal={handleToggleModal}>
-        <div className="modal_content">
-          <div className="modal_top">
-            <span className="titel_top">افزودن اجرت جدید</span>
+        {showDeleteModal ? (
+          <>
+            <DeleContent
+              text={"آیا از حذف ردیف اطمینان دارید ؟"}
+              close={handleToggleModal}
+              onClick={deleteRow}
+            />
+          </>
+        ) : (
+          <div className="modal_content">
+            <div className="modal_top">
+              <span className="titel_top">افزودن اجرت جدید</span>
+            </div>
+            <div className="modal_bottom">
+              <Grid
+                container
+                rowSpacing={2}
+                columnSpacing={4}
+                className={"distancerow"}
+              >
+                <Grid size={{ xs: 12 }} sx={{ width: "100%" }}>
+                  <SearchAndSelectDropDwon
+                    icon={faAngleDown}
+                    label={"اظهار کارشناس"}
+                    items={expertTexts}
+                    name="ExpertStatementsCode"
+                    placeHolder={"اظهار کارشناس را انتخاب کنید"}
+                    onChange={handleChange}
+                    value={geretModalData.ExpertStatementsCode}
+                  />
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                rowSpacing={2}
+                columnSpacing={4}
+                className={"distancerow"}
+              >
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <SearchAndSelectDropDwon
+                    icon={faAngleDown}
+                    label={"اجرت"}
+                    items={wages}
+                    name="wageCode"
+                    placeHolder={" اجرت را انتخاب کنید"}
+                    onChange={handleChangeWage}
+                    value={geretModalData.wageCode}
+                  />
+                  {errors.wageCode && (
+                    <p className="error">{errors.wageCode}</p>
+                  )}
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <InputPrice
+                    label="قیمت محصول"
+                    value={geretModalData.price}
+                    onChange={handlePriceChange}
+                    name="price"
+                    maxLength={30}
+                  />
+                  {errors.price && <p className="error">{errors.price}</p>}
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                rowSpacing={2}
+                columnSpacing={4}
+                className={"distancerow"}
+              >
+                <Grid size={{ xs: 12 }} sx={{ width: "100%" }}>
+                  <SearchAndSelectDropDwon
+                    icon={faAngleDown}
+                    label={"تعمیرکار"}
+                    items={repairmen}
+                    name="repairmanCode"
+                    placeHolder={"تعمیرکار را انتخاب کنید"}
+                    onChange={handleChange}
+                    value={geretModalData.repairmanCode}
+                  />
+                  {errors.repairmanCode && (
+                    <p className="error">{errors.repairmanCode}</p>
+                  )}
+                </Grid>
+              </Grid>
+              <Box sx={{ display: "flex", justifyContent: "end" }}>
+                <Button2 onClick={addToTable}>تایید</Button2>
+              </Box>
+            </div>
           </div>
-          <div className="modal_bottom">
-            <Grid
-              container
-              rowSpacing={2}
-              columnSpacing={4}
-              className={"distancerow"}
-            >
-              <Grid size={{ xs: 12 }} sx={{ width: "100%" }}>
-                <SearchAndSelectDropDwon
-                  icon={faAngleDown}
-                  label={"اظهار کارشناس"}
-                  items={expertTexts}
-                  name="ExpertStatementsCode"
-                  placeHolder={"اظهار کارشناس را انتخاب کنید"}
-                  onChange={handleChange}
-                  value={geretModalData.ExpertStatementsCode}
-                />
-              </Grid>
-            </Grid>
-            <Grid
-              container
-              rowSpacing={2}
-              columnSpacing={4}
-              className={"distancerow"}
-            >
-              <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
-                <SearchAndSelectDropDwon
-                  icon={faAngleDown}
-                  label={"اجرت"}
-                  items={wages}
-                  name="wageCode"
-                  placeHolder={" اجرت را انتخاب کنید"}
-                  onChange={handleChangeWage}
-                  value={geretModalData.wageCode}
-                />
-                {errors.wageCode && <p className="error">{errors.wageCode}</p>}
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
-                <InputPrice
-                  label="قیمت محصول"
-                  value={geretModalData.price}
-                  onChange={handlePriceChange}
-                  name="price"
-                  maxLength={30}
-                />
-                {errors.price && <p className="error">{errors.price}</p>}
-              </Grid>
-            </Grid>
-            <Grid
-              container
-              rowSpacing={2}
-              columnSpacing={4}
-              className={"distancerow"}
-            >
-              <Grid size={{ xs: 12 }} sx={{ width: "100%" }}>
-                <SearchAndSelectDropDwon
-                  icon={faAngleDown}
-                  label={"تعمیرکار"}
-                  items={repairmen}
-                  name="repairmanCode"
-                  placeHolder={"تعمیرکار را انتخاب کنید"}
-                  onChange={handleChange}
-                  value={geretModalData.repairmanCode}
-                />
-                {errors.repairmanCode && (
-                  <p className="error">{errors.repairmanCode}</p>
-                )}
-              </Grid>
-            </Grid>
-            <Box sx={{ display: "flex", justifyContent: "end" }}>
-              <Button2 onClick={addToTable}>تایید</Button2>
-            </Box>
-          </div>
-        </div>
+        )}
       </Modal>
       <div className={styles.box}>
         <span className={`${styles.box_title} subtitle-project`}>اجرت :</span>
@@ -432,12 +480,23 @@ export default function Geret({ data, id }) {
                     >
                       <FontAwesomeIcon
                         icon={faTrash}
-                        onClick={() => deleteRow(i)}
+                        onClick={() => {
+                          setShowDeleteModal(true);
+                          setShowModal(true);
+                          setIndexId({
+                            index: i,
+                            id: item.id ? item.id : "",
+                          });
+                        }}
                         className={`${styles2.trash_row_table}`}
                       />
                       <FontAwesomeIcon
                         icon={faPenToSquare}
-                        onClick={() => showEditModal(i)}
+                        onClick={async () => {
+                          setShowDeleteModal(false);
+                          await getWagesPricerepairman();
+                          showEditModal(i);
+                        }}
                         className={styles2.edit_row_table}
                       />
                     </Box>
@@ -475,28 +534,16 @@ export default function Geret({ data, id }) {
             <OccultationItem text={"تعمیرکار نقاش"} placeHolder={"نام نقاش"} />
           </Grid>
         </Grid>
-        <div className={styles.wrap_contract}>
+        {/* <div className={styles.wrap_contract}>
           <FontAwesomeIcon icon={faNewspaper} />
           <p className={styles.contract_text}>قرارداد صافکاری - نقاشی</p>
-        </div>
-        <div className="p-form-actions">
+        </div> */}
+        {/* <div className="p-form-actions">
           <div className="p-form-actions">
             <ConfirmBtn type="submit" isSubmitting={""} />
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );
 }
-
-// {"table":[
-//   {"statement":2,
-//     "repairman":26,
-//     "price":"580000",
-//     "third_form":176
-//   },
-//   {"statement":3,
-//     "repairman":34,
-//     "price":"400000",
-//     "third_form":177}
-//   ]}
