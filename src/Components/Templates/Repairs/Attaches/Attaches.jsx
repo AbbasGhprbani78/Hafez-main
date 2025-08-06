@@ -2,19 +2,27 @@ import styles from "./Attaches.module.css";
 import Button2 from "../../../Modules/Button2/Button2";
 import Texteara from "../../../Modules/Texteara/Textarea";
 import Grid from "@mui/material/Grid2";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Resizer from "react-image-file-resizer";
 import { isValidFileSize } from "../../../../utils/helper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import apiClient from "../../../../config/axiosConfig";
+import {
+  errorMessage,
+  successMessage,
+} from "../../../Modules/Toast/ToastCustom";
 
-export default function Attaches() {
+export default function Attaches({ id }) {
   const [openModalAttaches, setOpenModalAttaches] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [attachesData, setAttachesData] = useState({
     media: [],
     discription: "",
   });
+
+  const MAX_UPLOAD_LIMIT = 6;
 
   const resizeImage = (file) =>
     new Promise((resolve, reject) => {
@@ -35,23 +43,47 @@ export default function Attaches() {
     if (!selectedFiles.length) return;
 
     const validFiles = selectedFiles.filter(isValidFileSize);
-    let newFiles = [...attachesData.media];
 
-    for (let i = 0; i < validFiles.length && newFiles.length < 6; i++) {
-      const file = validFiles[i];
+    // گرفتن مقدار فعلی media
+    const currentMedia = Array.isArray(attachesData.media)
+      ? [...attachesData.media]
+      : [];
 
-      try {
-        const base64 = await resizeImage(file);
-        newFiles.push(base64);
-      } catch (error) {
-        console.error("Error resizing image:", error);
-      }
+    const remainingSlots = MAX_UPLOAD_LIMIT - currentMedia.length;
+
+    if (remainingSlots <= 0) {
+      errorMessage(`حداکثر ${MAX_UPLOAD_LIMIT} فایل مجاز است.`);
+      return;
     }
+
+    if (validFiles.length > remainingSlots) {
+      errorMessage(`حداکثر ${MAX_UPLOAD_LIMIT} فایل مجاز است.`);
+    }
+
+    const filesToAdd = validFiles.slice(0, remainingSlots);
+
+    const resizedFiles = await Promise.all(
+      filesToAdd.map(async (file) => {
+        try {
+          return await resizeImage(file);
+        } catch (error) {
+          console.error("Error resizing image:", error);
+          return null;
+        }
+      })
+    );
+
+    const filteredFiles = resizedFiles.filter(Boolean);
 
     setAttachesData((prev) => ({
       ...prev,
-      media: [...newFiles],
+      media: [
+        ...(Array.isArray(prev.media) ? prev.media : []),
+        ...filteredFiles,
+      ],
     }));
+
+    e.target.value = "";
   };
 
   const handleChangeText = (e) => {
@@ -71,14 +103,50 @@ export default function Attaches() {
     }));
   };
 
+  const postData = async () => {
+    const payload = {
+      form: id,
+      descriptions: attachesData.discription,
+      files: attachesData.media,
+    };
+    setLoading(true);
+    try {
+      const response = await apiClient.post(
+        "app/api/attachments/create/",
+        payload
+      );
+      if (response.status === 201) {
+        successMessage("پیوست ها با موفقیت ارسال شد .");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getData = async () => {
+    try {
+      const response = await apiClient.get(`app/api/attachments/${id}/`);
+      if (response.status === 200) {
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <div className={styles.box}>
-      <span className={`${styles.box_title} subtitle-project`}>
+      {/* <span className={`${styles.box_title} subtitle-project`}>
         پیوستها:
         <Button2 onClick={""}>{"تاریخچه پیوست‌ها"}</Button2>
-      </span>
+      </span> */}
       <Grid container spacing={4} sx={{ marginTop: "2rem" }}>
-        <Grid size={{ xs: 12, md: 5 }}>
+        <Grid size={{ xs: 12, sm: 6, lg: 5 }}>
           <Box
             sx={{
               display: "flex",
@@ -97,14 +165,15 @@ export default function Attaches() {
                 style={{ display: "none" }}
                 onChange={handleFileChange}
                 accept="image/*,video/*"
+                multiple
               />
             </label>
           </Box>
-          {attachesData.media.length > 0 && (
+          {attachesData?.media?.length > 0 && (
             <Grid container spacing={4} sx={{ marginTop: "1.7rem" }}>
-              {attachesData.media.map((item, i) => (
+              {attachesData?.media?.map((item, i) => (
                 <Grid
-                  size={{ xs: 12, sm: 6, md: 4 }}
+                  size={{ xs: 6, sm: 4, xl: 4 }}
                   className={styles.imageWrap}
                   key={i}
                 >
@@ -121,7 +190,7 @@ export default function Attaches() {
             </Grid>
           )}
         </Grid>
-        <Grid size={{ xs: 12, md: 7 }}>
+        <Grid size={{ xs: 12, sm: 6, lg: 7 }}>
           <Texteara
             value={attachesData.discription}
             onChange={handleChangeText}
@@ -130,6 +199,14 @@ export default function Attaches() {
           />
         </Grid>
       </Grid>
+      <div className="p-form-actions">
+        <div className="p-form-actions">
+          <Button2 onClick={postData} disable={loading}>
+            تایید
+            <FontAwesomeIcon icon={faCheck} />
+          </Button2>
+        </div>
+      </div>
     </div>
   );
 }

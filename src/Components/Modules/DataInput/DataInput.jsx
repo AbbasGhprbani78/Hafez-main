@@ -13,7 +13,7 @@ export default function DataInput({
 }) {
   const displayValue = value
     ? new DateObject({
-        date: value,
+        date: new Date(value),
         calendar: persian,
         locale: persian_fa,
       })

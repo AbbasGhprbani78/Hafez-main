@@ -111,8 +111,6 @@ export default function AllForm() {
     }
   }, [page, admissionNumber, filter]);
 
-  console.log(information);
-
   return (
     <Grid className="content-conatiner">
       <SideBar />

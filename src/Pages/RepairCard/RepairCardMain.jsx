@@ -92,11 +92,9 @@ function RepairCardMain() {
       en_end_date = "";
     if (startDate !== "") {
       en_start_date = convertPersianToGregorian(startDate);
-      console.log(en_start_date);
     }
     if (endDate !== "") {
       en_end_date = convertPersianToGregorian(endDate);
-      console.log(en_end_date);
     }
     setInformation(undefined);
     try {
@@ -128,11 +126,9 @@ function RepairCardMain() {
       en_end_date = "";
     if (startDate !== "") {
       en_start_date = convertPersianToGregorian(startDate);
-      console.log(en_start_date);
     }
     if (endDate !== "") {
       en_end_date = convertPersianToGregorian(endDate);
-      console.log(en_end_date);
     }
     setLoading(true);
     try {

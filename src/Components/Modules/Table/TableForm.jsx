@@ -18,7 +18,7 @@ export default function TableForm({ columns, children }) {
           sx={{
             typography: "inherit",
             border: "1px solid #f2f2f2",
-            minWidth: 750,
+            minWidth: "max-content",
           }}
         >
           <TableHead>

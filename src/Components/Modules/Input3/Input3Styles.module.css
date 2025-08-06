@@ -59,7 +59,7 @@ textarea {
   resize: none !important;
   font-size: clamp(0.9rem, 0.9vw, 1rem);
   font-family: "iranYekan", sans-serif !important;
-  font-weight: 600;
+  /* font-weight: 600; */
   min-height: 80px;
 }
 textarea:focus-visible {

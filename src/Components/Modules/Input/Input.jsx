@@ -11,6 +11,7 @@ const Input = ({
   value,
   onChange,
   styled,
+  disabled = false,
 }) => {
   return (
     <div
@@ -32,6 +33,7 @@ const Input = ({
           className={styles.input_form}
           autoComplete="off"
           maxLength={70}
+          disabled={disabled}
         />
         {icon && <FontAwesomeIcon icon={icon} className={styles.icon_input} />}
       </div>

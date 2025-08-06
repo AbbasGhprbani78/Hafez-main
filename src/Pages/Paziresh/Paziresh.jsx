@@ -59,7 +59,7 @@ export default function Paziresh() {
           <MuiStepper activeStep={currentTab} />
           <div
             style={{
-              // display: currentTab === 1 || currentTab === 4 ? "block" : "none",
+              display: currentTab === 1 || currentTab === 4 ? "block" : "none",
               width: "100%",
             }}
           >
@@ -74,7 +74,7 @@ export default function Paziresh() {
 
           <div
             style={{
-              // display: currentTab === 2 || currentTab === 4 ? "block" : "none",
+              display: currentTab === 2 || currentTab === 4 ? "block" : "none",
               width: "100%",
             }}
           >
@@ -89,7 +89,7 @@ export default function Paziresh() {
 
           <div
             style={{
-              // display: currentTab === 3 || currentTab === 4 ? "block" : "none",
+              display: currentTab === 3 || currentTab === 4 ? "block" : "none",
               width: "100%",
             }}
           >
@@ -104,7 +104,7 @@ export default function Paziresh() {
 
           <div
             style={{
-              // display: currentTab === 4 ? "block" : "none",
+              display: currentTab === 4 ? "block" : "none",
               width: "100%",
             }}
           >

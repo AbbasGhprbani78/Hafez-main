@@ -37,6 +37,7 @@
   background-color: #fff;
   z-index: 12;
   padding: 20px;
+  min-width: 30vw;
 }
 
 @media (max-width: 600px) {

@@ -5,16 +5,13 @@ import {
   faEnvelope,
   faPenToSquare,
   faTrash,
-  faNewspaper,
   faAngleDown,
-  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import TableForm from "../../../Modules/Table/TableForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Box, TableCell, TableRow } from "@mui/material";
-import ConfirmBtn from "../../../Modules/ConfirmBtn/ConfirmBtn";
 import Modal from "../../../Modules/Modal/Modal";
-import OccultationItem from "../../../Modules/OccultationItem/OccultationItem";
+
 import styles2 from "../../../../Pages/Repairs/Repairs.module.css";
 import Grid from "@mui/material/Grid2";
 import InputPrice from "../../../Modules/InputPrice/InputPrice";
@@ -30,6 +27,7 @@ import {
   toFarsiNumber,
 } from "../../../../utils/helper";
 import DeleContent from "../../../Modules/DeleteContent/DeleContent";
+import Input from "../../../Modules/Input/Input";
 export default function Geret({ data, id, expertStatements }) {
   const columns = ["عیب فنی", "تعمیرکار", "اجرت", "قیمت", "عملیات"];
   const [showModal, setShowModal] = useState(false);
@@ -141,11 +139,12 @@ export default function Geret({ data, id, expertStatements }) {
           wageText: geretModalData.wageText,
           price: geretModalData.price,
           third_form: geretModalData.third_form,
+          id: geretModalData.id,
         };
         return updateTable;
       });
+      putDataTable();
       setEditMode(false);
-      successMessage("اطلاعات با موفقیت تغییر کرد.");
     } else {
       const newTableRow = {
         ExpertStatementsCode: geretModalData.ExpertStatementsCode,
@@ -156,9 +155,23 @@ export default function Geret({ data, id, expertStatements }) {
         wageText: geretModalData.wageText,
         price: geretModalData.price,
         third_form: geretModalData.third_form,
+        id: geretModalData.id,
       };
 
+      const payload = {
+        table: [
+          {
+            statementcode: geretModalData.wageCode,
+            repairman: geretModalData.repairmanCode,
+            price: String(geretModalData.price),
+            third_form: geretModalData.third_form,
+          },
+        ],
+      };
+
+      postTableData(payload);
       setGeretDataTable((prev) => [...prev, newTableRow]);
+      successMessage("اطلاعات با موفقیت به جدول اضافه شد.");
     }
 
     setShowModal(false);
@@ -173,33 +186,32 @@ export default function Geret({ data, id, expertStatements }) {
       third_form: "",
     });
     setErrors({});
-    successMessage("اطلاعات با موفقیت به جدول اضافه شد.");
   };
 
   const deleteRow = async () => {
-    console.log(indexId);
     if (indexId.id) {
-      console.log(indexId);
+      setLoading(true);
       try {
         const response = await apiClient.delete("/app/api/car-defects/", {
           params: {
-            form_id: indexId.id,
+            id: indexId.id,
           },
         });
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 204) {
           setGeretDataTable((prev) =>
             prev.filter((_, i) => i !== indexId.index)
           );
           successMessage(" با موفقیت حذف شد");
         }
       } catch (error) {
-        errorMessage(error?.response?.data?.message || error.message);
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
+    } else {
+      setGeretDataTable((prev) => prev.filter((_, i) => i !== indexId.index));
+      successMessage(" با موفقیت حذف شد");
     }
-    // else {
-    //   setGeretDataTable((prev) => prev.filter((_, i) => i !== indexId.index));
-    //   successMessage(" با موفقیت حذف شد");
-    // }
 
     setShowDeleteModal(false);
     setShowModal(false);
@@ -209,7 +221,6 @@ export default function Geret({ data, id, expertStatements }) {
     setEditMode(true);
     setShowModal(true);
     const mainEditRow = [...geretDataTable].filter((_, i) => i === index);
-    console.log(mainEditRow);
 
     setGeretModalData({
       ExpertStatementsCode: mainEditRow[0]?.ExpertStatementsCode,
@@ -220,6 +231,7 @@ export default function Geret({ data, id, expertStatements }) {
       wageText: mainEditRow[0]?.wageText,
       price: mainEditRow[0]?.price,
       third_form: mainEditRow[0].third_form,
+      id: mainEditRow[0]?.id,
     });
 
     setIndexToEdit(index);
@@ -232,7 +244,6 @@ export default function Geret({ data, id, expertStatements }) {
           `/app/get-statement/${geretModalData.ExpertStatementsCode}`
         );
         if (response.status === 200) {
-          console.log(response.data);
           setRepairmen(
             response.data.repairmen.map((item) => ({
               value_id: item.id,
@@ -259,34 +270,41 @@ export default function Geret({ data, id, expertStatements }) {
     }
   };
 
-  const postTableData = async () => {
-    if (geretDataTable.length === 0) {
-      errorMessage("جدول حداقل باید یک ردیف داشته باشد");
-      return;
-    }
-
-    const filteredTable = geretDataTable.map((item) => ({
-      statementcode: item.wageCode,
-      repairman: item.repairmanCode,
-      price: String(item.price),
-      third_form: item.third_form,
-    }));
-
-    const payload = {
-      table: filteredTable,
-    };
-
+  const postTableData = async (data) => {
     setLoading(true);
 
     try {
-      const response = await apiClient.post("/app/api/car-defects/", payload);
+      const response = await apiClient.post("/app/api/car-defects/", data);
 
       if (response.status === 201 || response.status === 200) {
         successMessage("با موفقیت ارسال شد");
         setGeretModalData({});
       }
     } catch (error) {
-      errorMessage(error?.response?.data?.message || error.message);
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const putDataTable = async () => {
+    const payload = [
+      {
+        statement: +geretModalData.wageCode,
+        repairman: +geretModalData.repairmanCode,
+        price: String(geretModalData.price),
+        third_form: +geretModalData.third_form,
+        id: indexId.id,
+      },
+    ];
+
+    try {
+      const response = await apiClient.put(`/app/api/car-defects/`, payload);
+
+      if (response.status === 201 || response.status === 200) {
+        successMessage("با موفقیت ویرایش شد");
+      }
+    } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
@@ -326,14 +344,12 @@ export default function Geret({ data, id, expertStatements }) {
         wageText: defect.statementcode?.descriptions || "",
         price: defect.price || "",
         third_form: item.id || "",
-        id: "", //item.defect.id
+        id: defect?.id,
       }))
     );
 
     setGeretDataTable(allDefects);
   }, [data]);
-
-  console.log(data);
 
   return (
     <>
@@ -344,6 +360,7 @@ export default function Geret({ data, id, expertStatements }) {
               text={"آیا از حذف ردیف اطمینان دارید ؟"}
               close={handleToggleModal}
               onClick={deleteRow}
+              loading={loading}
             />
           </>
         ) : (
@@ -485,7 +502,7 @@ export default function Geret({ data, id, expertStatements }) {
                           setShowModal(true);
                           setIndexId({
                             index: i,
-                            id: item.id ? item.id : "",
+                            id: item.id,
                           });
                         }}
                         className={`${styles2.trash_row_table}`}
@@ -494,8 +511,22 @@ export default function Geret({ data, id, expertStatements }) {
                         icon={faPenToSquare}
                         onClick={async () => {
                           setShowDeleteModal(false);
-                          await getWagesPricerepairman();
-                          showEditModal(i);
+
+                          try {
+                            await getWagesPricerepairman();
+                            showEditModal(i);
+
+                            setIndexId({
+                              index: i,
+                              id: item.id,
+                            });
+                          } catch (error) {
+                            console.error(
+                              "خطا در دریافت اطلاعات قیمت تعمیرکار:",
+                              error
+                            );
+                            errorMessage("دریافت اطلاعات با خطا مواجه شد.");
+                          }
                         }}
                         className={styles2.edit_row_table}
                       />
@@ -504,12 +535,6 @@ export default function Geret({ data, id, expertStatements }) {
                 </TableRow>
               ))}
           </TableForm>
-          <div className="p-form-actions">
-            <Button2 onClick={postTableData} disable={loading}>
-              تایید
-              <FontAwesomeIcon icon={faCheck} />
-            </Button2>
-          </div>
         </div>
         <p className={styles.sub_title}>نوع خدمات و انتخاب تعمیرکار :</p>
         <Grid
@@ -518,21 +543,11 @@ export default function Geret({ data, id, expertStatements }) {
           rowSpacing={2}
           columnSpacing={4}
         >
-          <Grid size={{ xs: 12, sm: 5, md: 3 }}>
-            <OccultationItem
-              text={"تعمیرکار مکانیک"}
-              placeHolder={"نام مکانیک"}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 5, md: 3 }}>
-            <OccultationItem
-              text={"تعمیرکار صافکاری"}
-              placeHolder={"نام صافکار"}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 5, md: 3 }}>
-            <OccultationItem text={"تعمیرکار نقاش"} placeHolder={"نام نقاش"} />
-          </Grid>
+          {geretDataTable.map((item) => (
+            <Grid size={{ xs: 12, sm: 5, md: 3 }} key={item.id}>
+              <Input value={item.repairmanText} disabled={true} />
+            </Grid>
+          ))}
         </Grid>
         {/* <div className={styles.wrap_contract}>
           <FontAwesomeIcon icon={faNewspaper} />
@@ -546,4 +561,33 @@ export default function Geret({ data, id, expertStatements }) {
       </div>
     </>
   );
+}
+
+{
+  /* <div className="p-form-actions">
+            <Button2 onClick={postTableData} disable={loading}>
+              تایید
+              <FontAwesomeIcon icon={faCheck} />
+            </Button2>
+          </div> */
+}
+
+{
+  /* <OccultationItem
+              text={"تعمیرکار مکانیک"}
+              placeHolder={"نام مکانیک"}
+            /> */
+}
+
+{
+  /* <OccultationItem
+              text={"تعمیرکار صافکاری"}
+              placeHolder={"نام صافکار"}
+            /> */
+}
+
+{
+  /* <Grid size={{ xs: 12, sm: 5, md: 3 }}>
+            <OccultationItem text={"تعمیرکار نقاش"} placeHolder={"نام نقاش"} />
+          </Grid> */
 }

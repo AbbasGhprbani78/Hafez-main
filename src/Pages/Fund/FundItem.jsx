@@ -20,8 +20,6 @@ import { faCheck, faPrint } from "@fortawesome/free-solid-svg-icons";
 export default function FundItem() {
   const { id } = useParams();
 
-  console.log(id);
-
   const Gridumns = ["", "عهده شرکت", "مشتری"];
   const [rows, setRows] = useState([
     {

@@ -9,17 +9,24 @@ import Attaches from "../../Components/Templates/Repairs/Attaches/Attaches";
 import Button2 from "../../Components/Modules/Button2/Button2";
 import { faCheck, faPrint } from "@fortawesome/free-solid-svg-icons";
 import Header from "../../Components/Modules/Header/Header";
-import {
-  errorMessage,
-  ToastContainerCustom,
-} from "../../Components/Modules/Toast/ToastCustom";
-import { useEffect, useState } from "react";
+import { ToastContainerCustom } from "../../Components/Modules/Toast/ToastCustom";
+import { useEffect, useRef, useState } from "react";
 import apiClient from "../../config/axiosConfig";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Modal from "../../Components/Modules/Modal/Modal";
+import DeleContent from "../../Components/Modules/DeleteContent/DeleContent";
+
 export default function Repairs() {
   const { id } = useParams();
   const [data, setData] = useState("");
   const [expertStatements, setExpertStatements] = useState([]);
+  const [pieces, setPieces] = useState([]);
+  const printRef = useRef();
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+  const handleToggleModal = () => {
+    setShowModal((modal) => !modal);
+  };
 
   const getDataTable = async () => {
     try {
@@ -40,37 +47,66 @@ export default function Repairs() {
         setExpertStatements(expertStatements);
       }
     } catch (error) {
-      errorMessage(error?.response?.data?.message || error.message);
+      console.log(error);
+    }
+  };
+
+  const getPieces = async () => {
+    try {
+      const response = await apiClient.get("/app/pieces/");
+      if (response.status === 200) {
+        setPieces(response.data);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   useEffect(() => {
     getDataTable();
+    getPieces();
   }, []);
 
   return (
-    <div className="content-conatiner">
-      <SideBar />
-      <ToastContainerCustom />
-      <div className={`space-content ${styles.wrap_repairs}`}>
-        <Header title={"کارت تعمیر :"} />
-        <div className="">
-          <AboutCar id={id} />
-          <Occultation data={data} id={id} getDataTable={getDataTable} />
-          <Geret data={data} id={id} expertStatements={expertStatements} />
-          {/* <Piece />
-          <OutWork />
-          <Attaches />
-          <div className={styles.wrap_actions_repairs}>
-            <Button2 onClick={""} icon={faPrint} style={"width"}>
-              {"پرینت"}
-            </Button2>
-            <Button2 onClick={""} icon={faCheck} style={"width"}>
-              {"بستن کارت تعمیر"}
-            </Button2>
-          </div> */}
+    <>
+      <Modal showModal={showModal} setShowModal={handleToggleModal}>
+        <DeleContent
+          text={"آیا از بستن کارت اطمینان دارید ؟"}
+          close={handleToggleModal}
+          onClick={() => navigate("/repairsall")}
+        />
+      </Modal>
+      <div className="content-conatiner">
+        <SideBar />
+        <ToastContainerCustom />
+        <div className={`space-content ${styles.wrap_repairs}`} ref={printRef}>
+          <Header title={"کارت تعمیر :"} />
+          <div className="">
+            <AboutCar id={id} />
+            <Occultation data={data} id={id} getDataTable={getDataTable} />
+            <Geret data={data} id={id} expertStatements={expertStatements} />
+            <Piece id={id} pieces={pieces} />
+            <OutWork id={id} pieces={pieces} />
+            <Attaches id={id} />
+            <div className={styles.wrap_actions_repairs}>
+              <Button2
+                onClick={() => window.print()}
+                icon={faPrint}
+                style={"width"}
+              >
+                {"پرینت"}
+              </Button2>
+              <Button2
+                onClick={() => setShowModal(true)}
+                icon={faCheck}
+                style={"width"}
+              >
+                {"بستن کارت تعمیر"}
+              </Button2>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

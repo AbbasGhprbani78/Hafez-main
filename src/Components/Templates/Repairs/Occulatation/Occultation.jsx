@@ -77,27 +77,31 @@ export default function Occultation({ data, id, getDataTable }) {
       return;
     }
 
+    const newTableRow = {
+      CustomerStatements: accultationModalData.CustomerStatements,
+      ExpertStatmentsText: accultationModalData.ExpertStatmentsText,
+      ExpertStatementsCode: accultationModalData.ExpertStatementsCode,
+    };
+
     if (editMode) {
       setAccultationDataTable((prev) => {
         const updateTable = [...prev];
-        updateTable[indexToEdit] = {
-          CustomerStatements: accultationModalData.CustomerStatements,
-          ExpertStatmentsText: accultationModalData.ExpertStatmentsText,
-          ExpertStatementsCode: accultationModalData.ExpertStatementsCode,
-        };
+        updateTable[indexToEdit] = newTableRow;
+        setTimeout(() => postDataTable(updateTable), 0);
+        successMessage("با موفقیت ویرایش شد");
         return updateTable;
       });
       setEditMode(false);
     } else {
-      const newTableRow = {
-        CustomerStatements: accultationModalData.CustomerStatements,
-        ExpertStatmentsText: accultationModalData.ExpertStatmentsText,
-        ExpertStatementsCode: accultationModalData.ExpertStatementsCode,
-      };
+      setAccultationDataTable((prev) => {
+        const updated = [...prev, newTableRow];
 
-      setAccultationDataTable((prev) => [...prev, newTableRow]);
-      successMessage("اطلاعات با موفقیت به جدول اضافه شد.");
+        setTimeout(() => postDataTable(updated), 0);
+        successMessage("اطلاعات با موفقیت به جدول اضافه شد.");
+        return updated;
+      });
     }
+
     setShowModal(false);
     setAccultationModalData({
       CustomerStatements: "",
@@ -113,6 +117,7 @@ export default function Occultation({ data, id, getDataTable }) {
 
   const deleteRow = async () => {
     if (indexId.id) {
+      setLoading(true);
       try {
         const response = await apiClient.delete("app/technical-defects/", {
           params: {
@@ -127,7 +132,9 @@ export default function Occultation({ data, id, getDataTable }) {
           getDataTable();
         }
       } catch (error) {
-        errorMessage(error?.response?.data?.message || error.message);
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
     } else {
       setAccultationDataTable((prev) =>
@@ -166,7 +173,7 @@ export default function Occultation({ data, id, getDataTable }) {
         );
       }
     } catch (error) {
-      errorMessage(error?.response?.message || "خطا در دریافت داده‌ها");
+      console.log(error);
     }
   };
 
@@ -182,22 +189,22 @@ export default function Occultation({ data, id, getDataTable }) {
         );
       }
     } catch (error) {
-      errorMessage(error?.response?.message || "خطا در دریافت داده‌ها");
+      console.log(error);
     }
   };
 
-  const postDataTable = async () => {
-    if (accultationDataTable.length === 0) {
+  const postDataTable = async (dataTable) => {
+    if (!dataTable || dataTable.length === 0) {
       errorMessage("جدول حداقل باید یک ردیف داشته باشد");
       return;
     }
 
     const payload = {
-      table: accultationDataTable,
+      table: dataTable,
       form_id: id,
     };
+
     setLoading(true);
-    console.log(JSON.stringify(payload));
     try {
       const response = await apiClient.post("app/technical-defects/", payload);
 
@@ -240,6 +247,7 @@ export default function Occultation({ data, id, getDataTable }) {
               text={"آیا از حذف ردیف اطمینان دارید ؟"}
               close={handleToggleModal}
               onClick={deleteRow}
+              loading={loading}
             />
           </>
         ) : (
@@ -352,17 +360,19 @@ export default function Occultation({ data, id, getDataTable }) {
                 ))}
             </TableForm>
           </div>
+        </div>
+      </div>
+    </>
+  );
+}
 
-          <div className="p-form-actions">
+{
+  /* <div className="p-form-actions">
             <div className="p-form-actions">
               <Button2 onClick={postDataTable} disable={loading}>
                 تایید
                 <FontAwesomeIcon icon={faCheck} />
               </Button2>
             </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+          </div> */
 }
