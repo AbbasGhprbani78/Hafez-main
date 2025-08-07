@@ -47,6 +47,7 @@
   height: calc(100px + 4vh);
   border: 1px dotted var(--color-8);
   border-radius: var(--border-radius-1);
+  object-fit: cover;
 }
 
 .drag_drop_text {
