@@ -22,7 +22,7 @@ export default function Login() {
   console.log(isShowActivityForm);
   return (
     <>
-      {isShowActivityForm === "one" || !isShowActivityForm ? (
+      {isShowActivityForm !== "two" ? (
         <TypeActivity />
       ) : (
         <div className="loginpage">
