@@ -6,10 +6,7 @@ import Pform2 from "../../Components/Templates/paziresh/Pform2/Pform2";
 import AcceptenceForm3 from "../../Components/Templates/paziresh/AcceptenceForm3/AcceptenceForm3";
 import Pform4 from "../../Components/Templates/paziresh/Pform4/Pform4";
 import Header from "../../Components/Modules/Header/Header";
-import {
-  errorMessage,
-  ToastContainerCustom,
-} from "../../Components/Modules/Toast/ToastCustom";
+import { ToastContainerCustom } from "../../Components/Modules/Toast/ToastCustom";
 import Grid from "@mui/material/Grid2";
 import { MyContext } from "../../context/context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,7 +14,7 @@ import { faPen, faPrint } from "@fortawesome/free-solid-svg-icons";
 
 export default function Paziresh() {
   const [content, setContent] = useState("اطلاعات اولیه مشتری:");
-  const [currentTab, setCurrentTab] = useState(4);
+  const [currentTab, setCurrentTab] = useState(2);
   const [formId, setFormId] = useState("");
   const { editMode, setEditMode } = useContext(MyContext);
   const printRef = useRef();

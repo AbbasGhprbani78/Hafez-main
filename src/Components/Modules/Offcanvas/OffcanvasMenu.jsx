@@ -138,7 +138,7 @@ function ResponsiveDrawer({
   routes = [
     { path: "/", label: "خانه", icon: faHome },
     { path: "/paziresh", label: "پذیرش", icon: faNewspaper },
-    { path: "/repairs", label: "کارت تعمیر", icon: faScrewdriverWrench },
+    { path: "/repairsall", label: "کارت تعمیر", icon: faScrewdriverWrench },
     { path: "/fund", label: "حسابداری", icon: faLayerGroup },
     { path: "/g", label: "گزارشات", icon: faChartPie },
     { path: "/allform", label: "فرم‌ها", icon: faListCheck },
