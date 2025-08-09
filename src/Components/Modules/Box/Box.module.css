@@ -1,0 +1,24 @@
+.wrapper {
+  direction: rtl;
+  padding: 1.2rem 1.2rem 5px 1.2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.btn_wrapper {
+  width: 100%;
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

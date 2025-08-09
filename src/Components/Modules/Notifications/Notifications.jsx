@@ -1,7 +1,7 @@
 import styles from "./Notification.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
-import NotificationItem from "../../../Modules/NotificationItem/NotificationItem";
+import NotificationItem from "../NotificationItem/NotificationItem";
 export default function Notifications() {
   return (
     <div className={styles.wrapper}>

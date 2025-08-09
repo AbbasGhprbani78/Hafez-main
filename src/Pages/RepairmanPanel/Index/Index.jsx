@@ -1,9 +1,11 @@
-import Account from "../../../Components/Templates/RepairePanel/Account/Account";
-import Chart from "../../../Components/Templates/RepairePanel/Chart/Chart";
+import Notifications from "../../../Components/Modules/Notifications/Notifications";
+import Chart from "../../../Components/Modules/Chart/Chart";
 import History from "../../../Components/Templates/RepairePanel/History/History";
-import Notifications from "../../../Components/Templates/RepairePanel/Notifications/Notifications";
 import Table from "../../../Components/Templates/RepairePanel/Table/Table";
 import styles from "./Index.module.css";
+import Button2 from "../../../Components/Modules/Button2/Button2";
+import { faWallet } from "@fortawesome/free-solid-svg-icons";
+import Box from "../../../Components/Modules/Box/Box";
 
 export default function Index() {
   return (
@@ -18,7 +20,9 @@ export default function Index() {
         <History />
       </div>
       <div className={`${styles.div4} ${styles.box}`}>
-        <Account />
+        <Box title={"حساب"} icon={faWallet}>
+          <Button2 onClick={""}>مشاهده حساب شخصی</Button2>
+        </Box>
       </div>
       <div className={`${styles.div5} ${styles.box}`}>
         <Chart />
