@@ -24,7 +24,7 @@ apiClient.interceptors.response.use(
       try {
         const refreshToken = sessionStorage.getItem("refresh");
         if (!refreshToken) {
-          // window.location.href = "/login";
+          window.location.href = "/login";
           return Promise.reject(error);
         }
 
@@ -36,7 +36,7 @@ apiClient.interceptors.response.use(
         sessionStorage.setItem("access", newAccessToken);
         const level = localStorage.getItem("level");
         if (level === "one") {
-          // window.location.href = "/login";
+          window.location.href = "/login";
           return Promise.reject("User level not authorized");
         }
 
@@ -45,7 +45,7 @@ apiClient.interceptors.response.use(
         return apiClient(originalRequest);
       } catch (refreshError) {
         sessionStorage.removeItem("access");
-        // window.location.href = "/login";
+        window.location.href = "/login";
         return Promise.reject(refreshError);
       }
     }
