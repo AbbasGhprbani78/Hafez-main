@@ -59,8 +59,8 @@
 
 .form-content {
   width: 70%;
-  max-height: 58vh;
-  overflow-y: scroll;
+  max-height: 63vh;
+  overflow-y: auto;
 }
 
 .form-content::-webkit-scrollbar {

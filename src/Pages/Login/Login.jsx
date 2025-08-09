@@ -19,10 +19,9 @@ export default function Login() {
     localStorage.getItem("level")
   );
 
-  console.log(isShowActivityForm);
   return (
     <>
-      {isShowActivityForm !== "two" ? (
+      {isShowActivityForm === "one" ? (
         <TypeActivity />
       ) : (
         <div className="loginpage">

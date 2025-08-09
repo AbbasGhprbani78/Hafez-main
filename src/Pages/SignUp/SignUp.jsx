@@ -11,7 +11,7 @@ import { Formik } from "formik";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toEnglishNumber, toFarsiNumber } from "../../utils/helper";
 import Grid from "@mui/material/Grid2";
 export default function SignUp() {
@@ -211,6 +211,13 @@ export default function SignUp() {
                       </div>
                     </div>
                   </div>
+                  <p className="text-tosignup">
+                    قبلا ثبت نام کردید ؟{" "}
+                    <Link to={"/login"} className="link-to-signup">
+                      وارد{" "}
+                    </Link>
+                    شوید
+                  </p>
                   <div className="signin-btn-wrapper">
                     <Button1 type="submit" isSubmitting={isSubmitting} />
                   </div>
