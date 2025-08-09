@@ -111,11 +111,11 @@ export default function SignUp() {
                 isSubmitting,
               }) => (
                 <form className="form-wrapper p-signin" onSubmit={handleSubmit}>
-                  <div className="form-content">
+                  <div className="">
                     <p className="signin-text">
                       اطلاعات حساب کاربری خود را وارد کنید
                     </p>
-                    <div className="form-signin">
+                    <div className="form-content">
                       <div className="signin-basic-info-wrapper margin-buttom">
                         <div className="input-item-wrapper">
                           <Input

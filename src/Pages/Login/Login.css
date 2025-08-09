@@ -24,9 +24,3 @@
     width: 100%;
   }
 }
-
-@media (max-width: 600px) {
-  .text-tosignup {
-    margin-top: 1.4rem;
-  }
-}

@@ -96,7 +96,9 @@
   display: flex;
   justify-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   margin-top: 1.3rem;
+  gap: 1rem;
 }
 
 .error {
@@ -191,7 +193,7 @@
   }
 
   .signin-btn-wrapper {
-    margin-top: 3rem;
+    margin-top: 1.3rem;
     justify-content: center;
   }
 
