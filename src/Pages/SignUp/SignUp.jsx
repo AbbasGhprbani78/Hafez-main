@@ -211,14 +211,15 @@ export default function SignUp() {
                       </div>
                     </div>
                   </div>
-                  <p className="text-tosignup">
-                    قبلا ثبت نام کردید ؟{" "}
-                    <Link to={"/login"} className="link-to-signup">
-                      وارد{" "}
-                    </Link>
-                    شوید
-                  </p>
+
                   <div className="signin-btn-wrapper">
+                    <p className="text-tosignup">
+                      قبلا ثبت نام کردید ؟{" "}
+                      <Link to={"/login"} className="link-to-signup">
+                        وارد{" "}
+                      </Link>
+                      شوید
+                    </p>
                     <Button1 type="submit" isSubmitting={isSubmitting} />
                   </div>
                 </form>

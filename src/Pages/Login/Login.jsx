@@ -152,15 +152,15 @@ export default function Login() {
                       </div>
                     </div>
                     <div className="signin-btn-wrapper">
+                      <p className="text-tosignup">
+                        حساب کاربری ندارید؟{" "}
+                        <Link to={"/signup"} className="link-to-signup">
+                          ثبت نام{" "}
+                        </Link>
+                        کنید
+                      </p>
                       <Button1 type="submit" isSubmitting={isSubmitting} />
                     </div>
-                    <p className="text-tosignup">
-                      حساب کاربری ندارید؟{" "}
-                      <Link to={"/signup"} className="link-to-signup">
-                        ثبت نام{" "}
-                      </Link>
-                      کنید
-                    </p>
                   </form>
                 )}
               </Formik>

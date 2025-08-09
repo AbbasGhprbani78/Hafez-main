@@ -59,7 +59,7 @@
 
 .form-content {
   width: 70%;
-  max-height: 63vh;
+  max-height: 58vh;
   overflow-y: auto;
 }
 
@@ -95,7 +95,8 @@
   width: 100%;
   display: flex;
   justify-items: center;
-  justify-content: end;
+  justify-content: space-between;
+  margin-top: 1.3rem;
 }
 
 .error {
