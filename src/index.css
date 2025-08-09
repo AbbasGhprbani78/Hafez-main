@@ -152,6 +152,7 @@ button {
   outline: none;
   cursor: pointer;
   font-family: "iranYekan", sans-serif !important;
+  background-color: transparent;
 }
 
 ::placeholder {

@@ -195,6 +195,9 @@ export default function OutWork({ id, pieces }) {
     if (!outOfworkModaldata.arrivaltime) {
       newErrors.arrivaltime = "زمان ورود الزامی است";
     }
+    if (!outOfworkModaldata.type) {
+      newErrors.type = "انتخاب نوع خروج الزامی است";
+    }
 
     if (outOfworkModaldata.type === 2 && !outOfworkModaldata.piece) {
       newErrors.piece = "انتخاب قطعه الزامی است";
@@ -234,6 +237,7 @@ export default function OutWork({ id, pieces }) {
         arrivaltime: outOfworkModaldata.arrivaltime,
         description: outOfworkModaldata.description,
         id: outOfworkModaldata.id,
+        type: outOfworkModaldata.type,
       };
 
       setOutOfworkModaldataTable((prev) => [...prev, newTableRow]);
@@ -359,6 +363,8 @@ export default function OutWork({ id, pieces }) {
     getDataTable();
     getTypeExit();
   }, []);
+
+  console.log(outOfworkModaldataTable);
 
   return (
     <>
@@ -562,6 +568,7 @@ export default function OutWork({ id, pieces }) {
                     />
                   ))}
               </div>
+              {errors.type && <p className="error">{errors.type}</p>}
               <Box sx={{ display: "flex", justifyContent: "end" }}>
                 <Button2 onClick={addToTable}>تایید</Button2>
               </Box>
