@@ -41,6 +41,8 @@ export default function Paziresh() {
     }
   };
 
+  console.log(currentTab);
+
   return (
     <Grid size={12} sx={{ display: "flex" }}>
       <SideBar />

@@ -39,7 +39,8 @@ export default function Pform2({
   const [otherColor, setotherColor] = useState(false);
   const [allCar, setAllCar] = useState([]);
   const [allColor, setAllColor] = useState([]);
-  const { isOpen, dataForm, setDataForm, editMode } = useContext(MyContext);
+  const { isOpen, dataForm, setDataForm, editMode, idForm } =
+    useContext(MyContext);
   const [opneModal, setOpenModal] = useState(false);
   const [imgImModal, setImgModal] = useState("");
   const [modalText, setModalText] = useState("");
@@ -54,7 +55,7 @@ export default function Pform2({
   const [isEdited, setIsEdited] = useState(false);
   const [form2, setForm2] = useState({
     customer_secend_form: {
-      customer: formId,
+      customer: idForm ? idForm : formId,
       material: dataForm.customer_form_two
         ? dataForm.customer_form_two.material
         : "",

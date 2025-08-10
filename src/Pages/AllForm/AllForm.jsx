@@ -33,7 +33,7 @@ import Button2 from "../../Components/Modules/Button2/Button2";
 import { MyContext } from "../../context/context";
 
 export default function AllForm() {
-  const { currentTab, setCurrentTab } = useContext(MyContext);
+  const { currentTab, setCurrentTab, setIdForm } = useContext(MyContext);
   const [information, setInformation] = useState(undefined);
   const [admissionNumber, setAdmissionNumber] = useState("");
   const [filter, setFilter] = useState(0);
@@ -70,13 +70,12 @@ export default function AllForm() {
 
   const fetchCommonData = async () => {
     const pageNumber = page + 1;
-    let access = window.localStorage.getItem("access");
 
     const carStep =
       filter === 1
         ? "none"
         : filter === 2
-        ? "one"
+        ? "one,two,three"
         : filter === 3
         ? "two"
         : filter === 4
@@ -104,8 +103,15 @@ export default function AllForm() {
     }
   };
 
-  const openFormHandler = () => {
-    setCurrentTab(4);
+  const openFormHandler = (step, id) => {
+    setIdForm(id);
+    if (step === "one") {
+      setCurrentTab(2);
+    } else if (step === "two") {
+      setCurrentTab(3);
+    } else if (step === "three") {
+      setCurrentTab(4);
+    }
     navigate("/paziresh");
   };
 
@@ -297,30 +303,32 @@ export default function AllForm() {
                     >
                       <div
                         className={`${styles.status_btn} ${
-                          row.step === "none"
+                          row.step === "repair card"
                             ? styles.status_none
-                            : row.step === "one"
+                            : ["one", "two", "three"].includes(row.step)
                             ? styles.status_one
-                            : row.step === "two"
-                            ? styles.status_two
-                            : row.step === "three"
+                            : row.step === "expert confirmation"
                             ? styles.status_three
                             : ""
                         }`}
                       >
-                        {row.step === "none"
+                        {row.step === "repair card"
                           ? "اتمام پذیرش"
-                          : row.step === "one"
+                          : row.step === "one" ||
+                            row.step === "two" ||
+                            row.step === "three"
                           ? "ناتمام"
-                          : row.step === "two"
-                          ? "برگشتی"
-                          : row.step === "three"
+                          : row.step === "expert confirmation"
                           ? "در انتظار تاییدیه کارشناس"
                           : "نامشخص"}
                       </div>
                     </TableCell>
                     <TableCell align="center">
-                      <Button2 onClick={openFormHandler}>مشاهده</Button2>
+                      <Button2
+                        onClick={() => openFormHandler(row.step, row.id)}
+                      >
+                        مشاهده
+                      </Button2>
                     </TableCell>
                   </TableRow>
                 ))
@@ -352,3 +360,6 @@ const filterItems = [
   { value: 3, label: "برگشتی", tabNameEn: "returned" },
   { value: 4, label: "در انتظار تایید کارشناس", tabNameEn: "pending approval" },
 ];
+
+//  styles.status_two
+// styles.status_three

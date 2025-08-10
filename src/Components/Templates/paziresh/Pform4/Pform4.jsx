@@ -5,7 +5,7 @@ import apiClient from "../../../../config/axiosConfig";
 import { MyContext } from "../../../../context/context";
 
 export default function Pform4({ formId }) {
-  const { editMode } = useContext(MyContext);
+  const { idForm, setIdForm } = useContext(MyContext);
 
   const getDataAllForm = async () => {
     try {
