@@ -37,6 +37,7 @@ function Row({ row, deleteRow, index, editRow, currentTab }) {
         <TableCell align="center" className={styles.table}>
           {toFarsiNumber(row?.ExpertStatements)}
         </TableCell>
+
         <TableCell align="center" className={styles.table}>
           <div className={styles.wrapper_icon}>
             {row?.CustomerFile.length > 0 && (
@@ -79,25 +80,27 @@ function Row({ row, deleteRow, index, editRow, currentTab }) {
             )}
           </div>
         </TableCell>
-        <TableCell align="center" className={styles.table}>
-          <div className={styles.wrapper_icon}>
-            <button disabled={currentTab === 4}>
-              <FontAwesomeIcon
-                icon={faPen}
-                className={`${styles.icon} ${styles.icon_attch}`}
-                onClick={() => editRow(index, row)}
-              />
-            </button>
+        {currentTab !== 4 && (
+          <TableCell align="center" className={styles.table}>
+            <div className={styles.wrapper_icon}>
+              <button disabled={currentTab === 4}>
+                <FontAwesomeIcon
+                  icon={faPen}
+                  className={`${styles.icon} ${styles.icon_attch}`}
+                  onClick={() => editRow(index, row)}
+                />
+              </button>
 
-            <button disabled={currentTab === 4}>
-              <FontAwesomeIcon
-                icon={faTrash}
-                className={`${styles.icon} deleteIcon`}
-                onClick={() => deleteRow(index)}
-              />
-            </button>
-          </div>
-        </TableCell>
+              <button disabled={currentTab === 4}>
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  className={`${styles.icon} deleteIcon`}
+                  onClick={() => deleteRow(index)}
+                />
+              </button>
+            </div>
+          </TableCell>
+        )}
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -180,15 +183,18 @@ export default function TableForm3({
             <TableCell align="center" className={styles.table}>
               کد اظهار
             </TableCell>
+
             <TableCell align="center" className={styles.table}>
               پیوست مشتری
             </TableCell>
             <TableCell align="center" className={styles.table}>
               پیوست کارشناس
             </TableCell>
-            <TableCell align="center" className={styles.table}>
-              عملیات
-            </TableCell>
+            {currentTab !== 4 && (
+              <TableCell align="center" className={styles.table}>
+                عملیات
+              </TableCell>
+            )}
             <TableCell />
           </TableRow>
         </TableHead>

@@ -73,11 +73,11 @@ export default function AllForm() {
 
     const carStep =
       filter === 1
-        ? "none"
+        ? "done"
         : filter === 2
         ? "one,two,three"
         : filter === 3
-        ? "two"
+        ? "done"
         : filter === 4
         ? "three"
         : null;
@@ -357,8 +357,8 @@ const filterItems = [
   { value: 0, label: "همه", tabNameEn: "all" },
   { value: 1, label: "فرم‌های تکمیل‌شده", tabNameEn: "completed" },
   { value: 2, label: "فرم‌های ناتمام", tabNameEn: "unfinished" },
-  { value: 3, label: "برگشتی", tabNameEn: "returned" },
-  { value: 4, label: "در انتظار تایید کارشناس", tabNameEn: "pending approval" },
+  // { value: 3, label: "برگشتی", tabNameEn: "returned" },
+  // { value: 4, label: "در انتظار تایید کارشناس", tabNameEn: "pending approval" },
 ];
 
 //  styles.status_two

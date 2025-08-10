@@ -39,7 +39,6 @@ import InputPrice from "../../../Modules/InputPrice/InputPrice";
 import { MyContext } from "../../../../context/context";
 import SearchAndSelectDropDwon from "../../../Modules/SearchAndSelectDropDwon/SearchAndSelectDropDwon";
 import SelectDropDown2 from "../../../Modules/SelectDropDown2/SelectDropDown2";
-import axios from "axios";
 
 function AcceptenceForm3({
   nextTab = () => {},
@@ -47,9 +46,11 @@ function AcceptenceForm3({
   prevTab = () => {},
   formId = "",
   currentTab,
+  form3,
 }) {
+  console.log(form3);
   const apiUrl = import.meta.env.VITE_API_URL;
-  const { dataForm, setDataForm } = useContext(MyContext);
+  const { idForm } = useContext(MyContext);
   const endRef = useRef(null);
 
   const [dataform3, setDataForm3] = useState({
@@ -300,7 +301,7 @@ function AcceptenceForm3({
 
     try {
       const response = await apiClient.post(
-        `/app/submit-repair-form/${formId}`,
+        `/app/submit-repair-form/${idForm ? idForm : formId}`,
         selectedData
       );
 
@@ -370,7 +371,9 @@ function AcceptenceForm3({
 
   const getForm3Data = async () => {
     try {
-      const response = await apiClient.get(`/app/submit-repair-form/${formId}`);
+      const response = await apiClient.get(
+        `/app/submit-repair-form/${idForm ? idForm : formId}`
+      );
 
       if (response.status === 200) {
         const { EstimatedRepairTime, tableForm = [], ...rest } = response.data;
@@ -541,7 +544,6 @@ function AcceptenceForm3({
       >
         <fieldset
           style={{ border: "none ", padding: 0, margin: 0, width: "100%" }}
-          disabled={currentTab === 4}
         >
           <Box
             component="form"

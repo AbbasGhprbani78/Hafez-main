@@ -64,6 +64,7 @@ export default function Pform1({
   setFormId = () => {},
   formId = "",
   currentTab,
+  form1,
 }) {
   const [value, setValue] = useState(0);
   const phoneNumberRegex =
@@ -72,18 +73,18 @@ export default function Pform1({
   const postalCodeRegex = /^[0-9]{10}$/;
   const economicCodeRegex = /^[0-9]{12}$/;
   const [loading, setLoading] = useState(false);
-  const { dataForm, editMode, setDataForm, isOpen } = useContext(MyContext);
+  const { editMode, isOpen } = useContext(MyContext);
 
-  const getAllDataForm = async (id) => {
-    try {
-      const res = await apiClient.get(`/app/get-form/${id}`);
-      if (res.status === 200) {
-        setDataForm(res.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getAllDataForm = async (id) => {
+  //   try {
+  //     const res = await apiClient.get(`/app/get-form/${id}`);
+  //     if (res.status === 200) {
+  //       setDataForm(res.data);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const validationSchema = Yup.object({
     owner_first_name: Yup.string().required("نام مالک را وارد کنید"),
@@ -107,44 +108,29 @@ export default function Pform1({
   });
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       form_type: "personal",
-      owner_first_name: dataForm.customer_form
-        ? dataForm.customer_form.owner_first_name
-        : "",
-      owner_last_name: dataForm.customer_form
-        ? dataForm.customer_form.owner_last_name
-        : "",
-      phone_number: dataForm.customer_form
-        ? dataForm.customer_form.phone_number
-        : "",
-      national_code_owner: dataForm.customer_form
-        ? dataForm.customer_form.national_code_owner
-        : "",
-      pyramid_number: dataForm.customer_form
-        ? dataForm.customer_form.pyramid_number
-        : "",
-      owner_address: dataForm.customer_form
-        ? dataForm.customer_form.owner_address
-        : "",
-      first_name_bearer: dataForm.customer_form
-        ? dataForm.customer_form.first_name_bearer
-        : "",
-      last_name_bearer: dataForm.customer_form
-        ? dataForm.customer_form.last_name_bearer
-        : "",
-      phone_number_bearer: dataForm.customer_form
-        ? dataForm.customer_form.phone_number_bearer
-        : "",
-      how_make_turn: dataForm.customer_form
-        ? dataForm.customer_form.how_make_turn
-        : "",
-      how_to_apply: dataForm.customer_form
-        ? dataForm.customer_form.how_to_apply
-        : "",
-      type_of_service: dataForm.customer_form
-        ? dataForm.customer_form.type_of_service
-        : [],
+      owner_first_name:
+        form1?.form_type === "personal" ? form1.owner_first_name : "",
+      owner_last_name:
+        form1?.form_type === "personal" ? form1.owner_last_name : "",
+      phone_number: form1?.form_type === "personal" ? form1.phone_number : "",
+      national_code_owner:
+        form1?.form_type === "personal" ? form1.national_code_owner : "",
+      pyramid_number:
+        form1?.form_type === "personal" ? form1.pyramid_number : "",
+      owner_address: form1?.form_type === "personal" ? form1.owner_address : "",
+      first_name_bearer:
+        form1?.form_type === "personal" ? form1.first_name_bearer : "",
+      last_name_bearer:
+        form1?.form_type === "personal" ? form1.last_name_bearer : "",
+      phone_number_bearer:
+        form1?.form_type === "personal" ? form1.phone_number_bearer : "",
+      how_make_turn: form1?.form_type === "personal" ? form1.how_make_turn : "",
+      how_to_apply: form1?.form_type === "personal" ? form1.how_to_apply : "",
+      type_of_service:
+        form1?.form_type === "personal" ? form1.type_of_service : [],
     },
     validationSchema,
     validateOnChange: false,
@@ -162,7 +148,7 @@ export default function Pform1({
         }
 
         if (response.status === 200 || response.status === 201) {
-          getAllDataForm(response.data.id);
+          // getAllDataForm(response.data.id);
           setFormId(response.data.id);
           nextTab();
         }
@@ -175,51 +161,34 @@ export default function Pform1({
   });
 
   const formik2 = useFormik({
+    enableReinitialize: true,
     initialValues: {
       form_type: "corporate",
-      company_name: dataForm.customer_form
-        ? dataForm.customer_form.company_name
-        : "",
-      phone_number: dataForm.customer_form
-        ? dataForm.customer_form.phone_number
-        : "",
-      pyramid_number: dataForm.customer_form
-        ? dataForm.customer_form.pyramid_number
-        : "",
-      national_id_corporate: dataForm.customer_form
-        ? dataForm.customer_form.national_id_corporate
-        : "",
-      economic_code: dataForm.customer_form
-        ? dataForm.customer_form.economic_code
-        : "",
-      company_phone_number: dataForm.customer_form
-        ? dataForm.customer_form.company_phone_number
-        : "",
-      postal_code: dataForm.customer_form
-        ? dataForm.customer_form.postal_code
-        : "",
-      how_make_turn: dataForm.customer_form
-        ? dataForm.customer_form.how_make_turn
-        : "",
-      address: dataForm.customer_form ? dataForm.customer_form.address : "",
-      how_to_apply: dataForm.customer_form
-        ? dataForm.customer_form.how_to_apply
-        : "",
-      first_name_bearer: dataForm.customer_form
-        ? dataForm.customer_form.first_name_bearer
-        : "",
-      last_name_bearer: dataForm.customer_form
-        ? dataForm.customer_form.last_name_bearer
-        : "",
-      national_code_bearer: dataForm.customer_form
-        ? dataForm.customer_form.national_code_bearer
-        : "",
-      phone_number_bearer: dataForm.customer_form
-        ? dataForm.customer_form.phone_number_bearer
-        : "",
-      type_of_service: dataForm.customer_form
-        ? dataForm.customer_form.type_of_service
-        : [],
+      company_name: form1?.form_type === "corporate" ? form1.company_name : "",
+      phone_number: form1?.form_type === "corporate" ? form1.phone_number : "",
+      pyramid_number:
+        form1?.form_type === "corporate" ? form1.pyramid_number : "",
+      national_id_corporate:
+        form1?.form_type === "corporate" ? form1.national_id_corporate : "",
+      economic_code:
+        form1?.form_type === "corporate" ? form1.economic_code : "",
+      company_phone_number:
+        form1?.form_type === "corporate" ? form1.company_phone_number : "",
+      postal_code: form1?.form_type === "corporate" ? form1.postal_code : "",
+      how_make_turn:
+        form1?.form_type === "corporate" ? form1.how_make_turn : "",
+      address: form1?.form_type === "corporate" ? form1.address : "",
+      how_to_apply: form1?.form_type === "corporate" ? form1.how_to_apply : "",
+      first_name_bearer:
+        form1?.form_type === "corporate" ? form1.first_name_bearer : "",
+      last_name_bearer:
+        form1?.form_type === "corporate" ? form1.last_name_bearer : "",
+      national_code_bearer:
+        form1?.form_type === "corporate" ? form1.national_code_bearer : "",
+      phone_number_bearer:
+        form1?.form_type === "corporate" ? form1.phone_number_bearer : "",
+      type_of_service:
+        form1?.form_type === "corporate" ? form1.type_of_service : [],
     },
     validationSchema: Yup.object({
       company_name: Yup.string().required("نام شرکت را وارد کنید"),
@@ -269,7 +238,7 @@ export default function Pform1({
         }
 
         if (response.status === 200 || response.status === 201) {
-          getAllDataForm(response.data.id);
+          // getAllDataForm(response.data.id);
           setFormId(response.data.id);
           nextTab();
         }

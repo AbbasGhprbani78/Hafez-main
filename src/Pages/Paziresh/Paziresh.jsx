@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import SideBar from "../../Components/Modules/SideBar/SideBar";
 import MuiStepper from "../../Components/Modules/MuiStepper/MuiStepper";
 import Pform1 from "../../Components/Templates/paziresh/Pform1/Pform1";
@@ -11,12 +11,21 @@ import Grid from "@mui/material/Grid2";
 import { MyContext } from "../../context/context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faPrint } from "@fortawesome/free-solid-svg-icons";
+import apiClient from "../../config/axiosConfig";
 
 export default function Paziresh() {
   const [content, setContent] = useState("اطلاعات اولیه مشتری:");
   const [formId, setFormId] = useState("");
-  const { editMode, setEditMode, currentTab, setCurrentTab } =
-    useContext(MyContext);
+  const [allDataForms, setAllDataForms] = useState({});
+  const {
+    editMode,
+    setEditMode,
+    currentTab,
+    setCurrentTab,
+    idForm,
+    setIdForm,
+  } = useContext(MyContext);
+
   const printRef = useRef();
 
   const handleNextTab = () => {
@@ -41,7 +50,27 @@ export default function Paziresh() {
     }
   };
 
-  console.log(currentTab);
+  const getDataAllForm = async () => {
+    try {
+      const response = await apiClient.get(
+        `/app/get-complated-form/${idForm ? idForm : formId}`
+      );
+      if (response.status === 200) {
+        setAllDataForms(response.data);
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (idForm || formId) {
+      getDataAllForm();
+    }
+  }, [idForm, formId]);
+
+  allDataForms.customer_form;
 
   return (
     <Grid size={12} sx={{ display: "flex" }}>
@@ -68,6 +97,7 @@ export default function Paziresh() {
               setFormId={setFormId}
               formId={formId}
               currentTab={currentTab}
+              form1={allDataForms.customer_form}
             />
           </div>
 
@@ -83,6 +113,7 @@ export default function Paziresh() {
               setContent={setContent}
               formId={formId}
               currentTab={currentTab}
+              form2Data={allDataForms.customer_form_two}
             />
           </div>
 
@@ -98,6 +129,7 @@ export default function Paziresh() {
               setContent={setContent}
               formId={formId}
               currentTab={currentTab}
+              form3={allDataForms.customer_form_three}
             />
           </div>
 
@@ -107,13 +139,16 @@ export default function Paziresh() {
               width: "100%",
             }}
           >
-            <Pform4 formId={formId} />
+            <Pform4 />
           </div>
         </Grid>
 
         {currentTab === 4 && (
           <div className="confirmation-btns">
-            <button className="edit-btn confirmation-btn " onClick={""}>
+            <button
+              className="edit-btn confirmation-btn "
+              onClick={() => setCurrentTab(3)}
+            >
               قبلی
               <FontAwesomeIcon icon={faPen} className={`penicon`} />
             </button>

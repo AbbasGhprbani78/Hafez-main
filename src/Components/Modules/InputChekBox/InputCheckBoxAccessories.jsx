@@ -13,17 +13,13 @@ export default function InputCheckBoxAccessories({
   const [description, setDescription] = useState("");
 
   useEffect(() => {
-    const accessoriesItem = accessoriesFill?.find(
-      (item) => item.parts == value
-    );
-    if (accessoriesItem) {
-      setIsChecked(true);
-      setDescription(accessoriesItem.description || "");
-      // onChange(true);
-      // onDescriptionChange(accessoriesItem.description || '');
+    const matched = accessoriesFill.find((acc) => acc.parts === value);
+    if (matched) {
+      setDescription(matched.description || "");
+    } else {
+      setDescription("");
     }
-  }, [allAccessories]);
-
+  }, [accessoriesFill, value]);
   useEffect(() => {
     setIsChecked(checked);
   }, [checked]);
@@ -52,7 +48,7 @@ export default function InputCheckBoxAccessories({
           className={styles.check_input}
           value={value}
           onChange={handleChange}
-          checked={isChecked}
+          checked={accessoriesFill?.some((acc) => acc.parts === value) || false}
         />
         <label className={styles.label_check}>{name}</label>
       </div>

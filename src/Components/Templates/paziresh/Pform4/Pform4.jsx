@@ -1,26 +1,6 @@
-import { useContext, useEffect } from "react";
 import "./Pform4.css";
 
-import apiClient from "../../../../config/axiosConfig";
-import { MyContext } from "../../../../context/context";
-
-export default function Pform4({ formId }) {
-  const { idForm, setIdForm } = useContext(MyContext);
-
-  const getDataAllForm = async () => {
-    try {
-      const response = await apiClient.get(`/app/get-complated-form/${formId}`);
-      if (response.status === 200) {
-        console.log(response.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getDataAllForm();
-  }, []);
-
+export default function Pform4() {
   return (
     <>
       <div className="confirmation-form-wrapper">

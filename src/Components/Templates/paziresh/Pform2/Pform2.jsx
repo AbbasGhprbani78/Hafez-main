@@ -34,13 +34,13 @@ export default function Pform2({
   setContent = () => {},
   formId = "",
   currentTab,
+  form2Data,
 }) {
   const [otherCar, setotherCar] = useState(false);
   const [otherColor, setotherColor] = useState(false);
   const [allCar, setAllCar] = useState([]);
   const [allColor, setAllColor] = useState([]);
-  const { isOpen, dataForm, setDataForm, editMode, idForm } =
-    useContext(MyContext);
+  const { isOpen, editMode, idForm, dataForm } = useContext(MyContext);
   const [opneModal, setOpenModal] = useState(false);
   const [imgImModal, setImgModal] = useState("");
   const [modalText, setModalText] = useState("");
@@ -55,86 +55,34 @@ export default function Pform2({
   const [isEdited, setIsEdited] = useState(false);
   const [form2, setForm2] = useState({
     customer_secend_form: {
-      customer: idForm ? idForm : formId,
-      material: dataForm.customer_form_two
-        ? dataForm.customer_form_two.material
-        : "",
-      other_car: dataForm.customer_form_two
-        ? dataForm.customer_form_two.other_car
-        : "",
-      chassis_number: dataForm.customer_form_two
-        ? dataForm.customer_form_two.chassis_number
-        : "",
-      color: dataForm.customer_form_two ? dataForm.customer_form_two.color : "",
-      other_color: dataForm.customer_form_two
-        ? dataForm.customer_form_two.other_color
-        : "",
-      car_operation: dataForm.customer_form_two
-        ? dataForm.customer_form_two.car_operation
-        : "",
-      license_plate_number: dataForm.customer_form_two
-        ? dataForm.customer_form_two.license_plate_number
-        : "",
-      amount_fuel: dataForm.customer_form_two
-        ? dataForm.customer_form_two.amount_fuel
-        : "",
-      amount_cng: dataForm.customer_form_two
-        ? dataForm.customer_form_two.amount_cng
-        : "",
-      tire_wear_rate: dataForm.customer_form_two
-        ? dataForm.customer_form_two.tire_wear_rate
-        : "",
-      number_punctured_tires: dataForm.customer_form_two
-        ? dataForm.customer_form_two.number_punctured_tires
-        : "",
-      condition_spare_tire: dataForm.customer_form_two
-        ? dataForm.customer_form_two.condition_spare_tire
-        : false,
-      erosion_rate: dataForm.customer_form_two
-        ? dataForm.customer_form_two.erosion_rate
-        : "",
-      car_cleanliness: dataForm.customer_form_two
-        ? dataForm.customer_form_two.car_cleanliness
-        : 0,
-      front_car_image: dataForm.customer_form_two
-        ? dataForm.customer_form_two.front_car_image
-        : "",
-      front_car_text: dataForm.customer_form_two
-        ? dataForm.customer_form_two.front_car_text
-        : "",
-      behind_car_image: dataForm.customer_form_two
-        ? dataForm.customer_form_two.behind_car_image
-        : "",
-      behind_car_text: dataForm.customer_form_two
-        ? dataForm.customer_form_two.behind_car_text
-        : "",
-      right_side_image: dataForm.customer_form_two
-        ? dataForm.customer_form_two.right_side_image
-        : "",
-      right_side_text: dataForm.customer_form_two
-        ? dataForm.customer_form_two.right_side_text
-        : "",
-      left_side_image: dataForm.customer_form_two
-        ? dataForm.customer_form_two.left_side_image
-        : "",
-      left_side_text: dataForm.customer_form_two
-        ? dataForm.customer_form_two.left_side_text
-        : "",
-      car_km_image: dataForm.customer_form_two
-        ? dataForm.customer_form_two.car_km_image
-        : "",
-      car_km_text: dataForm.customer_form_two
-        ? dataForm.customer_form_two.car_km_text
-        : "",
-      engine_door_open_image: dataForm.customer_form_two
-        ? dataForm.customer_form_two.engine_door_open_image
-        : "",
-      engine_door_open_text: dataForm.customer_form_two
-        ? dataForm.customer_form_two.engine_door_open_text
-        : "",
-      other_accessories: dataForm.customer_form_two
-        ? dataForm.customer_form_two.other_accessories
-        : "",
+      customer: idForm || formId,
+      material: "",
+      other_car: "",
+      chassis_number: "",
+      color: "",
+      other_color: "",
+      car_operation: "",
+      license_plate_number: "",
+      amount_fuel: "",
+      amount_cng: "",
+      tire_wear_rate: "",
+      number_punctured_tires: "",
+      condition_spare_tire: false,
+      erosion_rate: "",
+      car_cleanliness: 0,
+      front_car_image: "",
+      front_car_text: "",
+      behind_car_image: "",
+      behind_car_text: "",
+      right_side_image: "",
+      right_side_text: "",
+      left_side_image: "",
+      left_side_text: "",
+      car_km_image: "",
+      car_km_text: "",
+      engine_door_open_image: "",
+      engine_door_open_text: "",
+      other_accessories: "",
     },
     fill_form: [],
     accessories: [],
@@ -397,17 +345,6 @@ export default function Pform2({
     }
   };
 
-  const getAllDataForm = async (id) => {
-    try {
-      const res = await apiClient.get(`/app/get-form/${id}`);
-      if (res.status === 200) {
-        setDataForm(res.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -449,7 +386,6 @@ export default function Pform2({
       }
 
       if (response.status === 201 || response.status === 200) {
-        getAllDataForm(formId);
         nextTab();
       }
 
@@ -469,22 +405,20 @@ export default function Pform2({
   }, []);
 
   useEffect(() => {
-    if (dataForm?.customer_form_two?.other_car) {
+    if (form2Data?.other_car) {
       setotherCar(true);
     }
-    if (dataForm.customer_form_two?.other_color) {
+    if (form2Data?.other_color) {
       setotherColor(true);
     }
-  }, [dataForm]);
+  }, [form2Data]);
 
   useEffect(() => {
-    if (dataForm?.customer_form_two?.accessories_form) {
-      const newFillForm = dataForm.customer_form_two.accessories_form.map(
-        (item) => ({
-          parts: item.parts_id || "",
-          description: item.descriptions || "",
-        })
-      );
+    if (form2Data?.accessories_form) {
+      const newFillForm = form2Data.accessories_form.map((item) => ({
+        parts: item.parts_id || "",
+        description: item.descriptions || "",
+      }));
       setForm2((prevForm2) => ({
         ...prevForm2,
         accessories: newFillForm,
@@ -492,14 +426,14 @@ export default function Pform2({
     }
 
     const matchedParts = carParts.filter((part) =>
-      dataForm?.customer_form_two?.fill_form?.some(
+      form2Data?.fill_form?.some(
         (item) => item.parts_value_number == part.value_number
       )
     );
 
     setMachineParts(matchedParts);
 
-    const newFillForm = dataForm?.customer_form_two?.fill_form?.map((item) => ({
+    const newFillForm = form2Data?.fill_form?.map((item) => ({
       parts: item.parts_id || "",
       description: item.descriptions || "",
       value_number: item.parts_value_number || "",
@@ -509,7 +443,7 @@ export default function Pform2({
       ...prevForm2,
       fill_form: newFillForm,
     }));
-  }, [dataForm, carParts]);
+  }, [form2Data, carParts]);
 
   useEffect(() => {
     if (formId) {
@@ -522,6 +456,52 @@ export default function Pform2({
       }));
     }
   }, [formId]);
+
+  useEffect(() => {
+    if (form2Data) {
+      setForm2({
+        customer_secend_form: {
+          customer: idForm || formId,
+          material: form2Data.material || "",
+          other_car: form2Data.other_car || "",
+          chassis_number: form2Data.chassis_number || "",
+          color: form2Data.color || "",
+          other_color: form2Data.other_color || "",
+          car_operation: form2Data.car_operation || "",
+          license_plate_number: form2Data.license_plate_number || "",
+          amount_fuel: form2Data.amount_fuel || "",
+          amount_cng: form2Data.amount_cng || "",
+          tire_wear_rate: form2Data.tire_wear_rate || "",
+          number_punctured_tires: form2Data.number_punctured_tires || "",
+          condition_spare_tire: form2Data.condition_spare_tire || false,
+          erosion_rate: form2Data.erosion_rate || "",
+          car_cleanliness: form2Data.car_cleanliness || 0,
+          front_car_image: form2Data.front_car_image || "",
+          front_car_text: form2Data.front_car_text || "",
+          behind_car_image: form2Data.behind_car_image || "",
+          behind_car_text: form2Data.behind_car_text || "",
+          right_side_image: form2Data.right_side_image || "",
+          right_side_text: form2Data.right_side_text || "",
+          left_side_image: form2Data.left_side_image || "",
+          left_side_text: form2Data.left_side_text || "",
+          car_km_image: form2Data.car_km_image || "",
+          car_km_text: form2Data.car_km_text || "",
+          engine_door_open_image: form2Data.engine_door_open_image || "",
+          engine_door_open_text: form2Data.engine_door_open_text || "",
+          other_accessories: form2Data.other_accessories || "",
+        },
+        fill_form: [],
+        accessories: [],
+      });
+    }
+  }, [form2Data]);
+
+  useEffect(() => {
+    console.log(form2.accessories);
+    console.log(form2.fill_form);
+  }, [form2]);
+
+  // console.log(form2.accessories);
 
   return (
     <>
@@ -1199,7 +1179,11 @@ export default function Pform2({
                                     )
                                   }
                                   name={item.name}
-                                  checked={checkAll}
+                                  checked={
+                                    form2?.accessories?.some(
+                                      (acc) => acc.parts === item.id
+                                    ) || checkAll
+                                  }
                                   accessoriesFill={form2?.accessories}
                                   allAccessories={allAccessories}
                                 />
@@ -1224,7 +1208,11 @@ export default function Pform2({
                               onDescriptionChangeAccessory(item.id, description)
                             }
                             name={item.name}
-                            checked={checkAll}
+                            checked={
+                              form2?.accessories?.some(
+                                (acc) => acc.parts === item.id
+                              ) || checkAll
+                            }
                             accessoriesFill={form2?.accessories}
                             allAccessories={allAccessories}
                           />
@@ -1289,54 +1277,14 @@ export default function Pform2({
   );
 }
 
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-//   if (isEdited) {
-//     setErrors({});
-//     const validationErrors = validateFields(form2, otherCar, otherColor);
-//     if (Object.keys(validationErrors).length > 0) {
-//       setErrors(validationErrors);
-//       return;
+// const getAllDataForm = async (id) => {
+//   try {
+//     const res = await apiClient.get(`/app/get-form/${id}`);
+//     if (res.status === 200) {
+//       console.log(res.data);
+//       setDataForm(res.data);
 //     }
-//     let sanitizedForm = { ...form2 };
-//     const imageFields = [
-//       "front_car_image",
-//       "behind_car_image",
-//       "right_side_image",
-//       "left_side_image",
-//       "car_km_image",
-//       "engine_door_open_image",
-//     ];
-
-//     imageFields.forEach((field) => {
-//       if (sanitizedForm.customer_secend_form[field]?.startsWith("/media")) {
-//         delete sanitizedForm.customer_secend_form[field];
-//       }
-//     });
-
-//     try {
-//       setLoading(true);
-//       let response;
-//       // if (dataForm?.customer_form_two?.id) {
-//       //   response = await apiClient.put(
-//       //     `/app/fill-customer-and-parts/${dataForm.customer_form_two.id}`,
-//       //     sanitizedForm
-//       //   );
-//       // } else {
-//       response = await apiClient.post(`/app/fill-customer-and-parts/`, form2);
-//       // }
-
-//       if (response.status === 201 || response.status === 200) {
-//         getAllDataForm(formId);
-//         nextTab();
-//       }
-
-//       setLoading(false);
-//     } catch (error) {
-//       console.error("Error submitting form:", error);
-//       setLoading(false);
-//     } finally {
-//       setIsEdited(false);
-//     }
+//   } catch (error) {
+//     console.log(error);
 //   }
 // };
