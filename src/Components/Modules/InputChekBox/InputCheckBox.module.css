@@ -1,41 +1,41 @@
-
-
 .checkbox_container {
-    display: flex;
-    align-items: center;
-    margin: 10px 0;
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
 }
 
 .checkbox_container label {
-    margin-right: 10px;
-    cursor: pointer;
-    color: var(--color-1);
+  margin-right: 10px;
+  cursor: pointer;
+  color: var(--color-1);
 }
 
 .check_input {
-    accent-color: var(--color-1)
+  accent-color: var(--color-1);
 }
 
-.lable_check {}
+.lable_check {
+}
 
-.wrap_checkbox_dec {}
+.wrap_checkbox_dec {
+}
 
 .wrap_checkbox {
-    width: 200px;
-    max-width: 200px;
-    height: 63px;
-    resize: none;
+  width: 200px;
+  max-width: 200px;
+  height: 63px;
+  resize: none;
 }
 
 .wrap_checkbox.wrap_checkbox::placeholder {
-    font-size: .9rem;
+  font-size: 0.9rem;
 }
 
 .textarea {
-    outline: none;
-    border: 1px solid var(--color-8);
-    border-radius: var(--border-radius-1);
-    padding: 15px;
-    background-color: #f7f7f7;
-    resize: none;
+  outline: none;
+  border: 1px solid var(--color-8);
+  border-radius: var(--border-radius-1);
+  padding: 5px 15px;
+  background-color: #f7f7f7;
+  resize: none;
 }

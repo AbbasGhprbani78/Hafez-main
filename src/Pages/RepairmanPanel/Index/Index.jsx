@@ -5,7 +5,7 @@ import Table from "../../../Components/Templates/RepairePanel/Table/Table";
 import styles from "./Index.module.css";
 import Button2 from "../../../Components/Modules/Button2/Button2";
 import { faWallet } from "@fortawesome/free-solid-svg-icons";
-import Box from "../../../Components/Modules/Box/Box";
+import BoxCard from "../../../Components/Modules/Box/Box";
 
 export default function Index() {
   return (
@@ -20,9 +20,9 @@ export default function Index() {
         <History />
       </div>
       <div className={`${styles.div4} ${styles.box}`}>
-        <Box title={"حساب"} icon={faWallet}>
+        <BoxCard title={"حساب"} icon={faWallet}>
           <Button2 onClick={""}>مشاهده حساب شخصی</Button2>
-        </Box>
+        </BoxCard>
       </div>
       <div className={`${styles.div5} ${styles.box}`}>
         <Chart />

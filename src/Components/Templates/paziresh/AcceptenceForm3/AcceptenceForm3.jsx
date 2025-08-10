@@ -88,10 +88,6 @@ function AcceptenceForm3({
     prevTab();
   };
 
-  const handleClickOnSendToExperts = () => {};
-
-  const handleCliclOnRepairmanSchedule = () => {};
-
   const handleAddInvoiceItem = () => {
     setDataForm3((prev) => ({
       ...prev,
@@ -291,8 +287,12 @@ function AcceptenceForm3({
   };
 
   const postForm3Data = async () => {
-    if (!selectedData.tableForm.length || !selectedData.EstimatedRepairTime) {
+    if (!selectedData.tableForm.length) {
       errorMessage("لطفا فرم را تکمیل کنید");
+      return;
+    }
+    if (!selectedData.EstimatedRepairTime) {
+      errorMessage("لطفا تخمین زمان را وارد کنید");
       return;
     }
 
@@ -434,6 +434,10 @@ function AcceptenceForm3({
     }
   };
 
+  const handleClickOnSendToExperts = () => {};
+
+  const handleCliclOnRepairmanSchedule = () => {};
+
   useEffect(() => {
     if (dataform3.ExpertStatements) {
       getWagesPricerepairman();
@@ -552,227 +556,232 @@ function AcceptenceForm3({
             noValidate
             autoComplete="off"
           >
-            <Grid
-              size={12}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "flex-start",
-                width: "100%",
-                flexDirection: { xs: "column", sm: "row" },
-                gap: { xs: "0.5rem", lg: "0" },
-              }}
-            >
-              <Grid
-                size={{ xs: 12, sm: 6 }}
-                sx={{
-                  display: "flex",
-                  flexDirection: { xs: "column", sm: "row", lg: "row" },
-                  alignItems: { xs: "flex-end", sm: "flex-start" },
-                  justifyContent: { xs: "center", lg: "flex-start" },
-                  width: "100%",
-                  gap: { xs: ".5rem" },
-                }}
-              >
+            {currentTab !== 4 && (
+              <>
                 <Grid
+                  size={12}
                   sx={{
                     display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "flex-start",
+                    justifyContent: "center",
                     alignItems: "flex-start",
                     width: "100%",
+                    flexDirection: { xs: "column", sm: "row" },
+                    gap: { xs: "0.5rem", lg: "0" },
                   }}
-                  size={{ xs: 12, sm: 11, md: 10, lg: 7 }}
                 >
-                  <div className={styles.select_car_wrapper}>
-                    <SelectDropDown2
-                      icon={faAngleDown}
-                      label={"اظهارات مشتری"}
-                      items={customerTexts}
-                      name="CustomerStatements"
-                      placeHolder={"اظهارات مشتری را انتخاب  کنید."}
-                      isDesirableValue={false}
-                      onChange={handleChange}
-                      value={dataform3.CustomerStatements}
+                  <Grid
+                    size={{ xs: 12, sm: 6 }}
+                    sx={{
+                      display: "flex",
+                      flexDirection: { xs: "column", sm: "row", lg: "row" },
+                      alignItems: { xs: "flex-end", sm: "flex-start" },
+                      justifyContent: { xs: "center", lg: "flex-start" },
+                      width: "100%",
+                      gap: { xs: ".5rem" },
+                    }}
+                  >
+                    <Grid
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "flex-start",
+                        alignItems: "flex-start",
+                        width: "100%",
+                      }}
+                      size={{ xs: 12, sm: 11, md: 10, lg: 7 }}
+                    >
+                      <div className={styles.select_car_wrapper}>
+                        <SelectDropDown2
+                          icon={faAngleDown}
+                          label={"اظهارات مشتری"}
+                          items={customerTexts}
+                          name="CustomerStatements"
+                          placeHolder={"اظهارات مشتری را انتخاب  کنید."}
+                          isDesirableValue={false}
+                          onChange={handleChange}
+                          value={dataform3.CustomerStatements}
+                        />
+                      </div>
+                    </Grid>
+
+                    <div style={{ display: "flex", gap: ".5rem" }}>
+                      <UploaderButton
+                        imageCount={dataform3.CustomerFile.length}
+                        voiceCount={0}
+                        type="CustomerFile"
+                        setShowModal={setShowModal}
+                        setTypeModal={setTypeModal}
+                        setTypeUser={setTypeUser}
+                        currentTab={currentTab}
+                      />
+
+                      <UploaderButton
+                        imageCount={0}
+                        voiceCount={dataform3.CustomerVoice.length}
+                        type="CustomerVoice"
+                        setShowModal={setShowModal}
+                        setTypeModal={setTypeModal}
+                        setTypeUser={setTypeUser}
+                        currentTab={currentTab}
+                      />
+                    </div>
+                  </Grid>
+                  <Grid
+                    size={{ xs: 12, sm: 6 }}
+                    sx={{
+                      display: "flex",
+                      flexDirection: { xs: "column", sm: "row", lg: "row" },
+                      alignItems: { xs: "flex-end", sm: "flex-start" },
+                      justifyContent: { xs: "center", lg: "flex-start" },
+                      width: "100%",
+                      gap: { xs: ".5rem" },
+                    }}
+                  >
+                    <Grid
+                      size={{ xs: 12, sm: 11, md: 10, lg: 7 }}
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "flex-start",
+                        alignItems: "flex-start",
+                        width: "100%",
+                      }}
+                    >
+                      <SearchAndSelectDropDwon
+                        icon={faAngleDown}
+                        label={"اظهارات کارشناس"}
+                        items={expertTexts}
+                        name="ExpertStatements"
+                        placeHolder={"اظهار کارشناس را انتخاب کنید."}
+                        isDesirableValue={false}
+                        onChange={handleChange}
+                        value={dataform3.ExpertStatements}
+                      />
+                    </Grid>
+
+                    <div style={{ display: "flex", gap: ".5rem" }}>
+                      <UploaderButton
+                        imageCount={dataform3.ExpertFile.length}
+                        voiceCount={0}
+                        type="ExpertFile"
+                        setShowModal={setShowModal}
+                        setTypeModal={setTypeModal}
+                        setTypeUser={setTypeUser}
+                      />
+
+                      <UploaderButton
+                        imageCount={0}
+                        voiceCount={dataform3.ExpertVoice.length}
+                        type="ExpertVoice"
+                        setShowModal={setShowModal}
+                        setTypeModal={setTypeModal}
+                        setTypeUser={setTypeUser}
+                      />
+                    </div>
+                  </Grid>
+                </Grid>
+                <Grid size={12} sx={{ marginTop: "2rem" }}>
+                  <Button2
+                    key={812}
+                    type="button"
+                    variant="contained"
+                    icon={faPlus}
+                    onClick={handleAddInvoiceItem}
+                  >
+                    افزودن اجرت جدید
+                  </Button2>
+                </Grid>
+                <Grid
+                  size={12}
+                  className={`${styles.payComponent_wrapper} ${
+                    dataform3.invoiceItems.length > 3 ? styles.scrollable : ""
+                  }`}
+                >
+                  {dataform3.invoiceItems.map((item, index) => (
+                    <PayRowComponent
+                      key={index}
+                      payItems={wages}
+                      payValue={item.wages}
+                      paySet={handlePayChange(index)}
+                      priceValue={item.price}
+                      priceSet={(value) =>
+                        handleInvoiceItemChange(index, "price", value)
+                      }
+                      repairManItems={repairmen}
+                      repairManValue={item.repairman}
+                      repairManSet={handleRepairmanChange(index)}
+                      disable={""}
+                      onRemove={() => handleRemoveInvoiceItem(index)}
+                      index={index}
                     />
-                  </div>
+                  ))}
+                  <div ref={endRef} style={{ height: "100px" }} />
                 </Grid>
-
-                <div style={{ display: "flex", gap: ".5rem" }}>
-                  <UploaderButton
-                    imageCount={dataform3.CustomerFile.length}
-                    voiceCount={0}
-                    type="CustomerFile"
-                    setShowModal={setShowModal}
-                    setTypeModal={setTypeModal}
-                    setTypeUser={setTypeUser}
-                    currentTab={currentTab}
-                  />
-
-                  <UploaderButton
-                    imageCount={0}
-                    voiceCount={dataform3.CustomerVoice.length}
-                    type="CustomerVoice"
-                    setShowModal={setShowModal}
-                    setTypeModal={setTypeModal}
-                    setTypeUser={setTypeUser}
-                    currentTab={currentTab}
-                  />
-                </div>
-              </Grid>
-              <Grid
-                size={{ xs: 12, sm: 6 }}
-                sx={{
-                  display: "flex",
-                  flexDirection: { xs: "column", sm: "row", lg: "row" },
-                  alignItems: { xs: "flex-end", sm: "flex-start" },
-                  justifyContent: { xs: "center", lg: "flex-start" },
-                  width: "100%",
-                  gap: { xs: ".5rem" },
-                }}
-              >
                 <Grid
-                  size={{ xs: 12, sm: 11, md: 10, lg: 7 }}
+                  size={12}
                   sx={{
                     display: "flex",
-                    flexDirection: "column",
                     justifyContent: "flex-start",
-                    alignItems: "flex-start",
+                    alignItems: { xs: "flex-start", sm: "center" },
                     width: "100%",
+                    flexDirection: { xs: "column", sm: "row" },
+                    gap: { xs: "0.5rem" },
                   }}
                 >
-                  <SearchAndSelectDropDwon
-                    icon={faAngleDown}
-                    label={"اظهارات کارشناس"}
-                    items={expertTexts}
-                    name="ExpertStatements"
-                    placeHolder={"اظهار کارشناس را انتخاب کنید."}
-                    isDesirableValue={false}
-                    onChange={handleChange}
-                    value={dataform3.ExpertStatements}
-                  />
+                  <Button2
+                    type="button"
+                    variant="contained"
+                    icon={faCheck}
+                    onClick={addToTable}
+                  >
+                    تایید
+                  </Button2>
                 </Grid>
-
-                <div style={{ display: "flex", gap: ".5rem" }}>
-                  <UploaderButton
-                    imageCount={dataform3.ExpertFile.length}
-                    voiceCount={0}
-                    type="ExpertFile"
-                    setShowModal={setShowModal}
-                    setTypeModal={setTypeModal}
-                    setTypeUser={setTypeUser}
-                  />
-
-                  <UploaderButton
-                    imageCount={0}
-                    voiceCount={dataform3.ExpertVoice.length}
-                    type="ExpertVoice"
-                    setShowModal={setShowModal}
-                    setTypeModal={setTypeModal}
-                    setTypeUser={setTypeUser}
-                  />
-                </div>
-              </Grid>
-            </Grid>
-            <Grid size={12} sx={{ marginTop: "2rem" }}>
-              <Button2
-                key={812}
-                type="button"
-                variant="contained"
-                icon={faPlus}
-                onClick={handleAddInvoiceItem}
-              >
-                افزودن اجرت جدید
-              </Button2>
-            </Grid>
-            <Grid
-              size={12}
-              className={`${styles.payComponent_wrapper} ${
-                dataform3.invoiceItems.length > 3 ? styles.scrollable : ""
-              }`}
-            >
-              {dataform3.invoiceItems.map((item, index) => (
-                <PayRowComponent
-                  key={index}
-                  payItems={wages}
-                  payValue={item.wages}
-                  paySet={handlePayChange(index)}
-                  priceValue={item.price}
-                  priceSet={(value) =>
-                    handleInvoiceItemChange(index, "price", value)
-                  }
-                  repairManItems={repairmen}
-                  repairManValue={item.repairman}
-                  repairManSet={handleRepairmanChange(index)}
-                  disable={""}
-                  onRemove={() => handleRemoveInvoiceItem(index)}
-                  index={index}
-                />
-              ))}
-              <div ref={endRef} style={{ height: "100px" }} />
-            </Grid>
-            <Grid
-              size={12}
-              sx={{
-                display: "flex",
-                justifyContent: "flex-start",
-                alignItems: { xs: "flex-start", sm: "center" },
-                width: "100%",
-                flexDirection: { xs: "column", sm: "row" },
-                gap: { xs: "0.5rem" },
-              }}
-            >
-              <Button2
-                type="button"
-                variant="contained"
-                icon={faCheck}
-                onClick={addToTable}
-              >
-                تایید
-              </Button2>
-            </Grid>
-            <Grid
-              size={12}
-              sx={{
-                display: "flex",
-                justifyContent: "flex-start",
-                alignItems: { xs: "flex-start", sm: "end" },
-                width: "100%",
-                flexDirection: { xs: "column", sm: "row" },
-                gap: { xs: "1.3rem" },
-              }}
-            >
-              <Grid
-                size={{ xs: 12, sm: 5, md: 4, lg: 3, xxl: 2 }}
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "flex-start",
-                  width: "100%",
-                  flexDirection: "column",
-                }}
-              >
-                <Typography
-                  className={styles.label_input_form3}
-                  sx={{ marginBottom: { xs: "5px" } }}
+                <Grid
+                  size={12}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: { xs: "flex-start", sm: "end" },
+                    width: "100%",
+                    flexDirection: { xs: "column", sm: "row" },
+                    gap: { xs: "1.3rem" },
+                  }}
                 >
-                  {"تخمین زمان تعمیرکار"}
-                </Typography>
-                <DataInput
-                  placeHolder="تخمین زمان تعمیر را انتخاب نمایید!"
-                  value={selectedData.EstimatedRepairTime}
-                  onChange={handleRepairTimeChange}
-                />
-              </Grid>
-              <Button2
-                key={814}
-                type="button"
-                variant="contained"
-                onClick={handleCliclOnRepairmanSchedule}
-              >
-                {"برنامه‌ریزی تعمیرکار"}
-              </Button2>
-            </Grid>
+                  <Grid
+                    size={{ xs: 12, sm: 5, md: 4, lg: 3, xxl: 2 }}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "flex-start",
+                      width: "100%",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <Typography
+                      className={styles.label_input_form3}
+                      sx={{ marginBottom: { xs: "5px" } }}
+                    >
+                      {"تخمین زمان تعمیرکار"}
+                    </Typography>
+                    <DataInput
+                      placeHolder="تخمین زمان تعمیر را انتخاب نمایید!"
+                      value={selectedData.EstimatedRepairTime}
+                      onChange={handleRepairTimeChange}
+                    />
+                  </Grid>
+                  <Button2
+                    key={814}
+                    type="button"
+                    variant="contained"
+                    onClick={handleCliclOnRepairmanSchedule}
+                  >
+                    {"برنامه‌ریزی تعمیرکار"}
+                  </Button2>
+                </Grid>
+              </>
+            )}
+
             {selectedData.tableForm.length > 0 && (
               <Grid size={12}>
                 <TableForm3

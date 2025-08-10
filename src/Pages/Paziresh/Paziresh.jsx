@@ -14,9 +14,9 @@ import { faPen, faPrint } from "@fortawesome/free-solid-svg-icons";
 
 export default function Paziresh() {
   const [content, setContent] = useState("اطلاعات اولیه مشتری:");
-  const [currentTab, setCurrentTab] = useState(1);
   const [formId, setFormId] = useState("");
-  const { editMode, setEditMode } = useContext(MyContext);
+  const { editMode, setEditMode, currentTab, setCurrentTab } =
+    useContext(MyContext);
   const printRef = useRef();
 
   const handleNextTab = () => {

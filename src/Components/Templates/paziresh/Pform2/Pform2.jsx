@@ -26,6 +26,7 @@ import { validateFields } from "../../../../utils/ValidationForm2";
 import { toFarsiNumber, toEnglishNumber } from "../../../../utils/helper";
 import apiClient from "../../../../config/axiosConfig";
 import Grid from "@mui/material/Grid2";
+import { errorMessage } from "../../../Modules/Toast/ToastCustom";
 
 export default function Pform2({
   nextTab = () => {},
@@ -412,7 +413,10 @@ export default function Pform2({
     setErrors({});
     const validationErrors = validateFields(form2, otherCar, otherColor);
     if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+      Object.values(validationErrors).forEach((errMsg) => {
+        errorMessage(errMsg);
+      });
+
       return;
     }
     let sanitizedForm = { ...form2 };
@@ -1124,7 +1128,12 @@ export default function Pform2({
 
               <Grid
                 size={{ xs: 12, lg: 8, xl: 9 }}
-                sx={{ display: "flex", alignItems: "start", flexWrap: "wrap" }}
+                sx={{
+                  display: "flex",
+                  alignItems: "start",
+                  flexWrap: "wrap",
+                  rowGap: "2rem",
+                }}
               >
                 {machineParts.length > 0 &&
                   machineParts.map((part) => (

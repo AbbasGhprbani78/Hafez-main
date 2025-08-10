@@ -8,10 +8,10 @@ import {
   TableRow,
 } from "@mui/material";
 
-export default function TableForm({ columns, children }) {
+export default function TableForm({ columns, children, maxHeight = 340 }) {
   return (
     <>
-      <TableContainer sx={{ maxHeight: 340 }}>
+      <TableContainer sx={{ maxHeight }}>
         <Table
           aria-label="dynamic table"
           stickyHeader

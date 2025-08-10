@@ -1,5 +1,4 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./AllForm.module.css";
 
@@ -30,8 +29,11 @@ import { Button, TableCell, TableRow, Typography } from "@mui/material";
 import { faHashtag } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../config/axiosConfig";
 import { toFarsiNumber } from "../../utils/helper";
+import Button2 from "../../Components/Modules/Button2/Button2";
+import { MyContext } from "../../context/context";
 
 export default function AllForm() {
+  const { currentTab, setCurrentTab } = useContext(MyContext);
   const [information, setInformation] = useState(undefined);
   const [admissionNumber, setAdmissionNumber] = useState("");
   const [filter, setFilter] = useState(0);
@@ -46,6 +48,7 @@ export default function AllForm() {
   };
 
   const navigate = useNavigate();
+
   const handleGoToPaziresh = () => {
     navigate("/paziresh");
   };
@@ -64,6 +67,7 @@ export default function AllForm() {
       warningMessage("فقط عدد وارد نمایید!");
     }
   };
+
   const fetchCommonData = async () => {
     const pageNumber = page + 1;
     let access = window.localStorage.getItem("access");
@@ -89,6 +93,7 @@ export default function AllForm() {
         },
       });
       if (response.status === 200) {
+        console.log(response.data);
         setInformation(response.data.results);
         setTotalRows(response.data.count);
       }
@@ -97,6 +102,11 @@ export default function AllForm() {
       setInformation([]);
       setTotalRows(0);
     }
+  };
+
+  const openFormHandler = () => {
+    setCurrentTab(4);
+    navigate("/paziresh");
   };
 
   useEffect(() => {
@@ -266,16 +276,13 @@ export default function AllForm() {
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                       {toFarsiNumber(row.pyramid_number)}
                     </TableCell>
-
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                       {toFarsiNumber(row.car_model)}
                     </TableCell>
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                       {row.chassis_number}
                     </TableCell>
-                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      <ShowConvertedData date={row.admission_date} />
-                    </TableCell>
+                    <ShowConvertedData date={row.admission_date} />
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                       {toFarsiNumber(row.license_plate_number)}
                     </TableCell>
@@ -312,6 +319,9 @@ export default function AllForm() {
                           : "نامشخص"}
                       </div>
                     </TableCell>
+                    <TableCell align="center">
+                      <Button2 onClick={openFormHandler}>مشاهده</Button2>
+                    </TableCell>
                   </TableRow>
                 ))
               ) : (
@@ -333,6 +343,7 @@ const columnsAcceptance = [
   "تاریخ پذیرش",
   "پلاک خودرو",
   "وضعیت پذیرش",
+  "",
 ];
 const filterItems = [
   { value: 0, label: "همه", tabNameEn: "all" },

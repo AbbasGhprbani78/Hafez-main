@@ -24,6 +24,7 @@ import * as Yup from "yup";
 import TypeOfService from "../../../Modules/TypeOfService/TypeOfService";
 import apiClient from "../../../../config/axiosConfig";
 import Grid from "@mui/material/Grid2";
+import { errorMessage } from "../../../Modules/Toast/ToastCustom";
 
 const CustomTab = styled(Tab)({
   fontSize: "inherit",
@@ -309,6 +310,30 @@ export default function Pform1({
     }
   };
 
+  const handleSubmitWithToast = async (e) => {
+    e.preventDefault();
+    const errors = await formik.validateForm();
+    if (Object.keys(errors).length > 0) {
+      Object.values(errors).forEach((errMsg) => {
+        errorMessage(errMsg);
+      });
+      return;
+    }
+    formik.handleSubmit();
+  };
+
+  const handleSubmitWithToast2 = async (e) => {
+    e.preventDefault();
+    const errors = await formik.validateForm();
+    if (Object.keys(errors).length > 0) {
+      Object.values(errors).forEach((errMsg) => {
+        errorMessage(errMsg);
+      });
+      return;
+    }
+    formik2.handleSubmit();
+  };
+
   useEffect(() => {
     setContent("اطلاعات اولیه مشتری :");
   }, [setContent]);
@@ -346,7 +371,7 @@ export default function Pform1({
             />
           </Tabs>
           <TabPanel value={value} index={0} className={"tab1-pform1"}>
-            <form onSubmit={formik.handleSubmit}>
+            <form onSubmit={handleSubmitWithToast}>
               <fieldset
                 className={`p-form1-contant ${
                   currentTab !== 4 && "scroll-form"
@@ -683,7 +708,7 @@ export default function Pform1({
           </TabPanel>
 
           <TabPanel value={value} index={1} className={"tab1-pform1"}>
-            <form onSubmit={formik2.handleSubmit}>
+            <form onSubmit={handleSubmitWithToast2}>
               <fieldset
                 className={`p-fomrm1-tab2-wrapper ${
                   currentTab !== 4 && "scroll-form"

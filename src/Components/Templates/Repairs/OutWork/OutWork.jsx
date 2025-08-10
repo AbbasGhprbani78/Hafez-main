@@ -364,8 +364,6 @@ export default function OutWork({ id, pieces }) {
     getTypeExit();
   }, []);
 
-  console.log(outOfworkModaldataTable);
-
   return (
     <>
       <Modal showModal={showModal} setShowModal={handleToggleModal}>

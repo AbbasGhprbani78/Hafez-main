@@ -16,8 +16,8 @@
 }
 
 .scroll-form {
-  max-height: 70vh;
-  overflow-y: scroll;
+  /* max-height: 70vh;
+  overflow-y: scroll; */
 }
 
 .inputwidth,

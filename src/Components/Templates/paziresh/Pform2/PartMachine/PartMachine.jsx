@@ -2,6 +2,7 @@
 
 import "./PartMachine.css";
 import InputCheckBoxPartMachine from "../../../../Modules/InputChekBox/InputCheckBoxPartMachine";
+import { toFarsiNumber } from "../../../../../utils/helper";
 
 export default function PartMachine({
   part,
@@ -11,7 +12,9 @@ export default function PartMachine({
 }) {
   return (
     <div className="partmachine-wrapper">
-      <span className="title-partmachine">{part.name}</span>
+      <span className="title-partmachine">
+        {toFarsiNumber(part.value_number)} {part.name}
+      </span>
       {part?.children?.map((belonging) => (
         <InputCheckBoxPartMachine
           key={belonging.name}

@@ -140,7 +140,7 @@ function ResponsiveDrawer({
     { path: "/paziresh", label: "پذیرش", icon: faNewspaper },
     { path: "/repairsall", label: "کارت تعمیر", icon: faScrewdriverWrench },
     { path: "/fund", label: "حسابداری", icon: faLayerGroup },
-    { path: "/g", label: "گزارشات", icon: faChartPie },
+    // { path: "/g", label: "گزارشات", icon: faChartPie },
     { path: "/allform", label: "فرم‌ها", icon: faListCheck },
     { path: "/settings", label: "مدیریت", icon: faCalendarPlus },
   ],
