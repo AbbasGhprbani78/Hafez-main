@@ -35,12 +35,13 @@ export default function Pform2({
   formId = "",
   currentTab,
   form2Data,
+  editMode,
 }) {
   const [otherCar, setotherCar] = useState(false);
   const [otherColor, setotherColor] = useState(false);
   const [allCar, setAllCar] = useState([]);
   const [allColor, setAllColor] = useState([]);
-  const { isOpen, editMode, idForm, dataForm } = useContext(MyContext);
+  const { isOpen, idForm, dataForm } = useContext(MyContext);
   const [opneModal, setOpenModal] = useState(false);
   const [imgImModal, setImgModal] = useState("");
   const [modalText, setModalText] = useState("");
@@ -376,9 +377,9 @@ export default function Pform2({
     try {
       setLoading(true);
       let response;
-      if (editMode) {
+      if (editMode && form2) {
         response = await apiClient.put(
-          `/app/fill-customer-and-parts/${formId}`,
+          `/app/fill-customer-and-parts/${idForm ? idForm : formId}`,
           sanitizedForm
         );
       } else {
@@ -414,38 +415,6 @@ export default function Pform2({
   }, [form2Data]);
 
   useEffect(() => {
-    if (form2Data?.accessories_form) {
-      const newFillForm = form2Data.accessories_form.map((item) => ({
-        parts: item.parts_id || "",
-        description: item.descriptions || "",
-      }));
-      setForm2((prevForm2) => ({
-        ...prevForm2,
-        accessories: newFillForm,
-      }));
-    }
-
-    const matchedParts = carParts.filter((part) =>
-      form2Data?.fill_form?.some(
-        (item) => item.parts_value_number == part.value_number
-      )
-    );
-
-    setMachineParts(matchedParts);
-
-    const newFillForm = form2Data?.fill_form?.map((item) => ({
-      parts: item.parts_id || "",
-      description: item.descriptions || "",
-      value_number: item.parts_value_number || "",
-    }));
-
-    setForm2((prevForm2) => ({
-      ...prevForm2,
-      fill_form: newFillForm,
-    }));
-  }, [form2Data, carParts]);
-
-  useEffect(() => {
     if (formId) {
       setForm2((prev) => ({
         ...prev,
@@ -458,7 +427,27 @@ export default function Pform2({
   }, [formId]);
 
   useEffect(() => {
-    if (form2Data) {
+    if (form2Data && carParts.length > 0) {
+      const accessoriesData =
+        form2Data?.accessories_form?.map((item) => ({
+          parts: item.parts_id || "",
+          description: item.descriptions || "",
+        })) || [];
+
+      const matchedParts = carParts.filter((part) =>
+        form2Data?.fill_form?.some(
+          (item) => item.parts_value_number == part.value_number
+        )
+      );
+      setMachineParts(matchedParts);
+
+      const fillFormData =
+        form2Data?.fill_form?.map((item) => ({
+          parts: item.parts_id || "",
+          description: item.descriptions || "",
+          value_number: item.parts_value_number || "",
+        })) || [];
+
       setForm2({
         customer_secend_form: {
           customer: idForm || formId,
@@ -490,18 +479,13 @@ export default function Pform2({
           engine_door_open_text: form2Data.engine_door_open_text || "",
           other_accessories: form2Data.other_accessories || "",
         },
-        fill_form: [],
-        accessories: [],
+        fill_form: fillFormData,
+        accessories: accessoriesData,
       });
     }
-  }, [form2Data]);
+  }, [form2Data, carParts]);
 
-  useEffect(() => {
-    console.log(form2.accessories);
-    console.log(form2.fill_form);
-  }, [form2]);
-
-  // console.log(form2.accessories);
+  console.log(machineParts);
 
   return (
     <>
@@ -517,8 +501,12 @@ export default function Pform2({
         <form onSubmit={handleSubmit}>
           <fieldset
             className={`${currentTab !== 4 && "p-form2-content"}`}
-            disabled={currentTab === 4}
-            style={{ border: "none ", padding: 0, margin: 0 }}
+            style={{
+              pointerEvents: currentTab === 4 ? "none" : "auto",
+              border: "none ",
+              padding: 0,
+              margin: 0,
+            }}
           >
             <Grid
               container
@@ -1097,6 +1085,7 @@ export default function Pform2({
                   selectPart={selectPart}
                   selectParts={machineParts}
                   fillForm={dataForm?.customer_form_two?.fill_form}
+                  currentTab={currentTab}
                 />
 
                 <DropDown
@@ -1276,15 +1265,3 @@ export default function Pform2({
     </>
   );
 }
-
-// const getAllDataForm = async (id) => {
-//   try {
-//     const res = await apiClient.get(`/app/get-form/${id}`);
-//     if (res.status === 200) {
-//       console.log(res.data);
-//       setDataForm(res.data);
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };

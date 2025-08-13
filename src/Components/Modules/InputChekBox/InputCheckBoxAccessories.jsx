@@ -65,13 +65,3 @@ export default function InputCheckBoxAccessories({
     </>
   );
 }
-
-// useEffect(() => {
-//     if (selectedAll !== checked) {
-//         setChecked(selectedAll);
-//         if (!selectedAll) {
-//             setDescription('');
-//             onDescriptionChange('');
-//         }
-//     }
-// }, [selectedAll, checked, onDescriptionChange]);

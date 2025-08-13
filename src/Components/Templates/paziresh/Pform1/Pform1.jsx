@@ -65,6 +65,7 @@ export default function Pform1({
   formId = "",
   currentTab,
   form1,
+  editMode,
 }) {
   const [value, setValue] = useState(0);
   const phoneNumberRegex =
@@ -73,18 +74,7 @@ export default function Pform1({
   const postalCodeRegex = /^[0-9]{10}$/;
   const economicCodeRegex = /^[0-9]{12}$/;
   const [loading, setLoading] = useState(false);
-  const { editMode, isOpen } = useContext(MyContext);
-
-  // const getAllDataForm = async (id) => {
-  //   try {
-  //     const res = await apiClient.get(`/app/get-form/${id}`);
-  //     if (res.status === 200) {
-  //       setDataForm(res.data);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const { isOpen, idForm } = useContext(MyContext);
 
   const validationSchema = Yup.object({
     owner_first_name: Yup.string().required("نام مالک را وارد کنید"),
@@ -138,9 +128,9 @@ export default function Pform1({
       setLoading(true);
       try {
         let response;
-        if (editMode) {
+        if (editMode && form1) {
           response = await apiClient.put(
-            `/app/fill-customer-form/${formId}`,
+            `/app/fill-customer-form/${idForm ? idForm : formId}`,
             values
           );
         } else {
@@ -230,7 +220,7 @@ export default function Pform1({
         let response;
         if (editMode) {
           response = await apiClient.put(
-            `/app/fill-customer-form/${formId}`,
+            `/app/fill-customer-form/${idForm ? idForm : formId}`,
             values
           );
         } else {
@@ -238,7 +228,6 @@ export default function Pform1({
         }
 
         if (response.status === 200 || response.status === 201) {
-          // getAllDataForm(response.data.id);
           setFormId(response.data.id);
           nextTab();
         }
@@ -293,13 +282,14 @@ export default function Pform1({
 
   const handleSubmitWithToast2 = async (e) => {
     e.preventDefault();
-    const errors = await formik.validateForm();
+    const errors = await formik2.validateForm();
     if (Object.keys(errors).length > 0) {
       Object.values(errors).forEach((errMsg) => {
         errorMessage(errMsg);
       });
       return;
     }
+    console.log("hello");
     formik2.handleSubmit();
   };
 
@@ -314,6 +304,7 @@ export default function Pform1({
 
     return () => clearTimeout(timeout);
   }, [isOpen]);
+
   return (
     <>
       <div className="form1-container">
@@ -345,8 +336,12 @@ export default function Pform1({
                 className={`p-form1-contant ${
                   currentTab !== 4 && "scroll-form"
                 }`}
-                disabled={currentTab === 4}
-                style={{ border: "none ", padding: 0, margin: 0 }}
+                style={{
+                  pointerEvents: currentTab === 4 ? "none" : "auto",
+                  border: "none ",
+                  padding: 0,
+                  margin: 0,
+                }}
               >
                 <Grid
                   container
@@ -669,21 +664,27 @@ export default function Pform1({
                 </Grid>
                 {currentTab !== 4 && (
                   <div className="p-form-actions">
-                    <ConfirmBtn type="submit" isSubmitting={loading} />
+                    <ConfirmBtn
+                      type="submit"
+                      isSubmitting={formik.isSubmitting}
+                    />
                   </div>
                 )}
               </fieldset>
             </form>
           </TabPanel>
-
           <TabPanel value={value} index={1} className={"tab1-pform1"}>
             <form onSubmit={handleSubmitWithToast2}>
               <fieldset
                 className={`p-fomrm1-tab2-wrapper ${
                   currentTab !== 4 && "scroll-form"
                 }`}
-                disabled={currentTab === 4}
-                style={{ border: "none ", padding: 0, margin: 0 }}
+                style={{
+                  pointerEvents: currentTab === 4 ? "none" : "auto",
+                  border: "none ",
+                  padding: 0,
+                  margin: 0,
+                }}
               >
                 <Grid
                   container
@@ -1078,7 +1079,7 @@ export default function Pform1({
                   <div className="p-form-actions">
                     <ConfirmBtn
                       type="submit"
-                      isSubmitting={formik.isSubmitting}
+                      isSubmitting={formik2.isSubmitting}
                     />
                   </div>
                 )}

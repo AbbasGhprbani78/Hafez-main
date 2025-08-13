@@ -48,7 +48,6 @@ function AcceptenceForm3({
   currentTab,
   form3,
 }) {
-  console.log(form3);
   const apiUrl = import.meta.env.VITE_API_URL;
   const { idForm } = useContext(MyContext);
   const endRef = useRef(null);
@@ -267,7 +266,7 @@ function AcceptenceForm3({
         );
       }
     } catch (error) {
-      errorMessage(error?.response?.message || "خطا در دریافت داده‌ها");
+      console.log(error);
     }
   };
 
@@ -283,7 +282,7 @@ function AcceptenceForm3({
         );
       }
     } catch (error) {
-      errorMessage(error?.response?.message || "خطا در دریافت داده‌ها");
+      console.log(error);
     }
   };
 
@@ -342,7 +341,7 @@ function AcceptenceForm3({
         );
       }
     } catch (error) {
-      errorMessage(error?.response?.message || "خطا در دریافت داده‌ها");
+      console.log(error);
     }
   };
 
@@ -432,7 +431,6 @@ function AcceptenceForm3({
         });
       }
     } catch (error) {
-      // errorMessage(error?.response?.message || "خطا در دریافت داده‌ها");
       console.log(error);
     }
   };
@@ -546,7 +544,6 @@ function AcceptenceForm3({
           style={{ border: "none ", padding: 0, margin: 0, width: "100%" }}
         >
           <Box
-            component="form"
             sx={{
               display: "flex",
               alignItems: "center",

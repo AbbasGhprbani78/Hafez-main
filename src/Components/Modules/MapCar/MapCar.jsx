@@ -1,6 +1,11 @@
 import styles from "./MapCar.module.css";
 
-export default function MapCar({ selectPart, selectParts, fillForm }) {
+export default function MapCar({
+  selectPart,
+  selectParts,
+  fillForm,
+  currentTab,
+}) {
   const handleItemClick = (number) => {
     selectPart(number);
   };

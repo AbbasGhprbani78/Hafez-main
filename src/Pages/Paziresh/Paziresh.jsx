@@ -12,21 +12,17 @@ import { MyContext } from "../../context/context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faPrint } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../config/axiosConfig";
+import { useNavigate } from "react-router-dom";
 
 export default function Paziresh() {
   const [content, setContent] = useState("اطلاعات اولیه مشتری:");
   const [formId, setFormId] = useState("");
+  const [editMode, setEditMode] = useState(false);
   const [allDataForms, setAllDataForms] = useState({});
-  const {
-    editMode,
-    setEditMode,
-    currentTab,
-    setCurrentTab,
-    idForm,
-    setIdForm,
-  } = useContext(MyContext);
+  const { currentTab, setCurrentTab, idForm } = useContext(MyContext);
 
   const printRef = useRef();
+  const navigate = useNavigate();
 
   const handleNextTab = () => {
     if (currentTab === 4) {
@@ -57,7 +53,32 @@ export default function Paziresh() {
       );
       if (response.status === 200) {
         setAllDataForms(response.data);
-        console.log(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getDateEditForms = async () => {
+    try {
+      const response = await apiClient.get(
+        `/app/get-full-complated-form/${idForm ? idForm : formId}`
+      );
+      if (response.status === 200) {
+        setAllDataForms(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const confirmFromHandler = async () => {
+    try {
+      const response = await apiClient.post(
+        `/app/forms-update-step-reception-desk/${idForm ? idForm : formId}`
+      );
+      if (response.status == 200) {
+        navigate("/repairsall");
       }
     } catch (error) {
       console.log(error);
@@ -70,7 +91,11 @@ export default function Paziresh() {
     }
   }, [idForm, formId]);
 
-  allDataForms.customer_form;
+  useEffect(() => {
+    if (editMode) {
+      getDateEditForms();
+    }
+  }, [editMode]);
 
   return (
     <Grid size={12} sx={{ display: "flex" }}>
@@ -98,6 +123,7 @@ export default function Paziresh() {
               formId={formId}
               currentTab={currentTab}
               form1={allDataForms.customer_form}
+              editMode={editMode}
             />
           </div>
 
@@ -114,6 +140,7 @@ export default function Paziresh() {
               formId={formId}
               currentTab={currentTab}
               form2Data={allDataForms.customer_form_two}
+              editMode={editMode}
             />
           </div>
 
@@ -157,6 +184,13 @@ export default function Paziresh() {
               onClick={() => window.print()}
             >
               پرینت
+              <FontAwesomeIcon icon={faPrint} />
+            </button>
+            <button
+              className="print-btn confirmation-btn"
+              onClick={confirmFromHandler}
+            >
+              تایید
               <FontAwesomeIcon icon={faPrint} />
             </button>
           </div>

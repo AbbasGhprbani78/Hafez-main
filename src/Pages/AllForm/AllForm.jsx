@@ -71,17 +71,19 @@ export default function AllForm() {
   const fetchCommonData = async () => {
     const pageNumber = page + 1;
 
-    const carStep =
-      filter === 1
-        ? "done"
-        : filter === 2
-        ? "one,two,three"
-        : filter === 3
-        ? "done"
-        : filter === 4
-        ? "three"
-        : null;
+    let carStep = null;
+    if (filter === 1) {
+      carStep = ["done"];
+    } else if (filter === 2) {
+      carStep = ["one", "two", "three"];
+    } else if (filter === 3) {
+      carStep = ["two"];
+    } else if (filter === 4) {
+      carStep = ["expert confirmation"];
+    }
+
     setInformation(undefined);
+
     try {
       const response = await apiClient.get(`/app/get-admissions-office/`, {
         params: {
@@ -90,9 +92,28 @@ export default function AllForm() {
           search: admissionNumber,
           step: carStep,
         },
+        paramsSerializer: (params) => {
+          const query = Object.keys(params)
+            .filter((key) => params[key] !== null && params[key] !== undefined)
+            .map((key) => {
+              if (Array.isArray(params[key])) {
+                return params[key]
+                  .map(
+                    (val) =>
+                      `${encodeURIComponent(key)}=${encodeURIComponent(val)}`
+                  )
+                  .join("&");
+              }
+              return `${encodeURIComponent(key)}=${encodeURIComponent(
+                params[key]
+              )}`;
+            })
+            .join("&");
+          return query;
+        },
       });
+
       if (response.status === 200) {
-        console.log(response.data);
         setInformation(response.data.results);
         setTotalRows(response.data.count);
       }
@@ -111,6 +132,12 @@ export default function AllForm() {
       setCurrentTab(3);
     } else if (step === "three") {
       setCurrentTab(4);
+    } else if (step === "expert confirmation") {
+      setCurrentTab(3);
+    } else if (step === "done") {
+      //code
+    } else if (step === "repair card") {
+      //code
     }
     navigate("/paziresh");
   };
@@ -303,7 +330,7 @@ export default function AllForm() {
                     >
                       <div
                         className={`${styles.status_btn} ${
-                          row.step === "repair card"
+                          row.step === "done" || row.step === "repair card"
                             ? styles.status_none
                             : ["one", "two", "three"].includes(row.step)
                             ? styles.status_one
@@ -312,7 +339,7 @@ export default function AllForm() {
                             : ""
                         }`}
                       >
-                        {row.step === "repair card"
+                        {row.step === "done"
                           ? "اتمام پذیرش"
                           : row.step === "one" ||
                             row.step === "two" ||
@@ -320,6 +347,8 @@ export default function AllForm() {
                           ? "ناتمام"
                           : row.step === "expert confirmation"
                           ? "در انتظار تاییدیه کارشناس"
+                          : row.step === "repair card"
+                          ? "کارت تعمیر"
                           : "نامشخص"}
                       </div>
                     </TableCell>
@@ -358,7 +387,7 @@ const filterItems = [
   { value: 1, label: "فرم‌های تکمیل‌شده", tabNameEn: "completed" },
   { value: 2, label: "فرم‌های ناتمام", tabNameEn: "unfinished" },
   // { value: 3, label: "برگشتی", tabNameEn: "returned" },
-  // { value: 4, label: "در انتظار تایید کارشناس", tabNameEn: "pending approval" },
+  { value: 4, label: "در انتظار تایید کارشناس", tabNameEn: "pending approval" },
 ];
 
 //  styles.status_two

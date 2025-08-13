@@ -218,7 +218,7 @@ function AddAndEditEquipment({
       setHallsInfo([]);
     }
   };
-  console.log(equipmentInfo);
+
   return (
     <Grid
       container

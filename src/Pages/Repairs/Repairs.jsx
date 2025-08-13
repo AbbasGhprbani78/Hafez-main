@@ -62,6 +62,20 @@ export default function Repairs() {
     }
   };
 
+  const colseCartHandler = async () => {
+    try {
+      const response = await apiClient.get(
+        `/app/forms-update-step-repair-card/${id}`
+      );
+
+      if (response.status === 200) {
+        navigate("/repairsall");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getDataTable();
     getPieces();
@@ -73,7 +87,7 @@ export default function Repairs() {
         <DeleContent
           text={"آیا از بستن کارت اطمینان دارید ؟"}
           close={handleToggleModal}
-          onClick={() => navigate("/repairsall")}
+          onClick={colseCartHandler}
         />
       </Modal>
       <div className="content-conatiner">
