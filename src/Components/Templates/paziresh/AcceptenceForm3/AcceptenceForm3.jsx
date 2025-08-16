@@ -57,6 +57,7 @@ function AcceptenceForm3({
     CustomerFile: [],
     CustomerVoice: [],
     ExpertStatements: "",
+    ExpertStatementsText: "",
     ExpertFile: [],
     ExpertVoice: [],
     invoiceItems: [{ wages: "", price: "", repairman: "" }],
@@ -101,10 +102,11 @@ function AcceptenceForm3({
     }, 100);
   };
 
-  const handleChange = (field, value) => {
+  const handleChange = (field, value, label) => {
     setDataForm3((prev) => ({
       ...prev,
       [field]: value,
+      ...(field === "ExpertStatements" && { ExpertStatementsText: label }),
     }));
   };
 
@@ -195,6 +197,7 @@ function AcceptenceForm3({
           ExpertFile: dataform3.ExpertFile,
           ExpertVoice: dataform3.ExpertVoice,
           invoiceItems: dataform3.invoiceItems,
+          ExpertStatementsText: dataform3.ExpertStatementsText,
         };
         return {
           ...prev,
@@ -212,6 +215,7 @@ function AcceptenceForm3({
         ExpertFile: dataform3.ExpertFile,
         ExpertVoice: dataform3.ExpertVoice,
         invoiceItems: dataform3.invoiceItems,
+        ExpertStatementsText: dataform3.ExpertStatementsText,
       };
 
       setSelectedData((prev) => ({
@@ -228,6 +232,7 @@ function AcceptenceForm3({
       ExpertStatements: "",
       ExpertFile: [],
       ExpertVoice: [],
+      ExpertStatementsText: "",
       invoiceItems: [{ wages: "", price: "", repairman: "" }],
     });
   };
@@ -375,6 +380,7 @@ function AcceptenceForm3({
       );
 
       if (response.status === 200) {
+        console.log(response.data);
         const { EstimatedRepairTime, tableForm = [], ...rest } = response.data;
 
         const miladiDate = EstimatedRepairTime
@@ -414,12 +420,17 @@ function AcceptenceForm3({
               )
             );
 
+            const matchedExpert = expertTexts.find(
+              (opt) => opt.value_id === item.ExpertStatements
+            );
+
             return {
               ...item,
               CustomerFile,
               ExpertFile,
               CustomerVoice,
               ExpertVoice,
+              ExpertStatementsText: matchedExpert ? matchedExpert.value : "",
             };
           })
         );
@@ -449,8 +460,13 @@ function AcceptenceForm3({
     setContent("اظهارات مشتری:");
     getCustomerStatements();
     getExpertStatements();
-    getForm3Data();
   }, []);
+
+  useEffect(() => {
+    if (idForm || formId) {
+      getForm3Data();
+    }
+  }, [expertTexts]);
 
   return (
     <Grid

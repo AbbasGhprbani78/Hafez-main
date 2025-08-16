@@ -138,7 +138,6 @@ export default function Pform1({
         }
 
         if (response.status === 200 || response.status === 201) {
-          // getAllDataForm(response.data.id);
           setFormId(response.data.id);
           nextTab();
         }
@@ -289,7 +288,7 @@ export default function Pform1({
       });
       return;
     }
-    console.log("hello");
+
     formik2.handleSubmit();
   };
 
@@ -304,6 +303,10 @@ export default function Pform1({
 
     return () => clearTimeout(timeout);
   }, [isOpen]);
+
+  useEffect(() => {
+    setValue(form1?.form_type === "personal" ? 0 : 1);
+  }, [form1?.form_type]);
 
   return (
     <>

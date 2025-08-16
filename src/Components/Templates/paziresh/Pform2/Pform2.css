@@ -164,6 +164,7 @@
   text-align: start;
   margin-top: 1.2rem;
   font-size: 0.9rem;
+  color: var(--color-1);
 }
 
 .other-belongs-title {

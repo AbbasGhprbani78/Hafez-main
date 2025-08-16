@@ -123,22 +123,20 @@ export default function AllForm() {
       setTotalRows(0);
     }
   };
-
   const openFormHandler = (step, id) => {
     setIdForm(id);
-    if (step === "one") {
-      setCurrentTab(2);
-    } else if (step === "two") {
-      setCurrentTab(3);
-    } else if (step === "three") {
-      setCurrentTab(4);
-    } else if (step === "expert confirmation") {
-      setCurrentTab(3);
-    } else if (step === "done") {
-      //code
-    } else if (step === "repair card") {
-      //code
-    }
+
+    const tabMap = {
+      one: 2,
+      two: 3,
+      "expert confirmation": 3,
+      three: 4,
+      done: 4,
+      "repair card": 4,
+      "reception desk": 4,
+    };
+
+    setCurrentTab(tabMap[step] ?? 2);
     navigate("/paziresh");
   };
 
@@ -330,7 +328,9 @@ export default function AllForm() {
                     >
                       <div
                         className={`${styles.status_btn} ${
-                          row.step === "done" || row.step === "repair card"
+                          row.step === "done" ||
+                          row.step === "repair card" ||
+                          row.step === "reception desk"
                             ? styles.status_none
                             : ["one", "two", "three"].includes(row.step)
                             ? styles.status_one
@@ -339,17 +339,15 @@ export default function AllForm() {
                             : ""
                         }`}
                       >
-                        {row.step === "done"
-                          ? "اتمام پذیرش"
-                          : row.step === "one" ||
-                            row.step === "two" ||
-                            row.step === "three"
-                          ? "ناتمام"
-                          : row.step === "expert confirmation"
-                          ? "در انتظار تاییدیه کارشناس"
-                          : row.step === "repair card"
-                          ? "کارت تعمیر"
-                          : "نامشخص"}
+                        {{
+                          done: "اتمام پذیرش",
+                          one: "ناتمام",
+                          two: "ناتمام",
+                          three: "ناتمام",
+                          "expert confirmation": "در انتظار تاییدیه کارشناس",
+                          "repair card": "اتمام پذیرش",
+                          "reception desk": "اتمام پذیرش",
+                        }[row.step] ?? "نامشخص"}
                       </div>
                     </TableCell>
                     <TableCell align="center">

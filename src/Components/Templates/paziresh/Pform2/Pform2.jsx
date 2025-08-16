@@ -56,7 +56,7 @@ export default function Pform2({
   const [isEdited, setIsEdited] = useState(false);
   const [form2, setForm2] = useState({
     customer_secend_form: {
-      customer: idForm || formId,
+      customer: idForm ? idForm : formId,
       material: "",
       other_car: "",
       chassis_number: "",
@@ -369,7 +369,8 @@ export default function Pform2({
     ];
 
     imageFields.forEach((field) => {
-      if (sanitizedForm.customer_secend_form[field]?.startsWith("/media")) {
+      const val = sanitizedForm.customer_secend_form[field];
+      if (!val || val?.startsWith("/media")) {
         delete sanitizedForm.customer_secend_form[field];
       }
     });
@@ -485,7 +486,7 @@ export default function Pform2({
     }
   }, [form2Data, carParts]);
 
-  console.log(machineParts);
+  console.log(form2);
 
   return (
     <>
@@ -908,9 +909,9 @@ export default function Pform2({
                     </p>
                   </div>
                 </div>
-                <p className="saved-text">
+                {/* <p className="saved-text">
                   {form2?.customer_secend_form?.front_car_text}
-                </p>
+                </p> */}
               </Grid>
 
               <Grid
@@ -939,9 +940,9 @@ export default function Pform2({
                     </p>
                   </div>
                 </div>
-                <p className="saved-text">
+                {/* <p className="saved-text">
                   {form2?.customer_secend_form?.behind_car_text}
-                </p>
+                </p> */}
               </Grid>
 
               <Grid
@@ -970,9 +971,9 @@ export default function Pform2({
                     </p>
                   </div>
                 </div>
-                <p className="saved-text">
+                {/* <p className="saved-text">
                   {form2?.customer_secend_form?.right_side_text}
-                </p>
+                </p> */}
               </Grid>
 
               <Grid
@@ -1001,9 +1002,9 @@ export default function Pform2({
                     </p>
                   </div>
                 </div>
-                <p className="saved-text">
+                {/* <p className="saved-text">
                   {form2?.customer_secend_form?.left_side_text}
-                </p>
+                </p> */}
               </Grid>
 
               <Grid
@@ -1032,9 +1033,9 @@ export default function Pform2({
                     </p>
                   </div>
                 </div>
-                <p className="saved-text">
+                {/* <p className="saved-text">
                   {form2?.customer_secend_form?.car_km_text}
-                </p>
+                </p> */}
               </Grid>
 
               <Grid
@@ -1066,9 +1067,9 @@ export default function Pform2({
                     </p>
                   </div>
                 </div>
-                <p className="saved-text">
+                {/* <p className="saved-text">
                   {form2?.customer_secend_form?.engine_door_open_text}
-                </p>
+                </p> */}
               </Grid>
             </Grid>
             <Grid
@@ -1108,7 +1109,7 @@ export default function Pform2({
                 {machineParts.length > 0 &&
                   machineParts.map((part) => (
                     <Grid
-                      size={{ xs: 6, md: 3 }}
+                      size={{ xs: 6, md: 4 }}
                       key={part.id}
                       sx={{ display: "flex", alignItems: "start" }}
                     >
@@ -1236,6 +1237,7 @@ export default function Pform2({
                     value={form2?.customer_secend_form?.other_accessories}
                     onChange={handleInputChange}
                     maxLength={300}
+                    autoComplete="off"
                   />
                 </div>
               </Grid>

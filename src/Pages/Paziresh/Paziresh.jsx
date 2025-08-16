@@ -29,9 +29,6 @@ export default function Paziresh() {
       return false;
     } else {
       setCurrentTab((prevTab) => prevTab + 1);
-      if (editMode) {
-        setEditMode(false);
-      }
     }
   };
 
@@ -59,7 +56,7 @@ export default function Paziresh() {
     }
   };
 
-  const getDateEditForms = async () => {
+  const getDataEditForms = async () => {
     try {
       const response = await apiClient.get(
         `/app/get-full-complated-form/${idForm ? idForm : formId}`
@@ -93,7 +90,7 @@ export default function Paziresh() {
 
   useEffect(() => {
     if (editMode) {
-      getDateEditForms();
+      getDataEditForms();
     }
   }, [editMode]);
 

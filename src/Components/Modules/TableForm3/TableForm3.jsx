@@ -37,6 +37,9 @@ function Row({ row, deleteRow, index, editRow, currentTab }) {
         <TableCell align="center" className={styles.table}>
           {toFarsiNumber(row?.ExpertStatements)}
         </TableCell>
+        <TableCell align="center" className={styles.table}>
+          {toFarsiNumber(row?.ExpertStatementsText)}
+        </TableCell>
 
         <TableCell align="center" className={styles.table}>
           <div className={styles.wrapper_icon}>
@@ -183,7 +186,9 @@ export default function TableForm3({
             <TableCell align="center" className={styles.table}>
               کد اظهار
             </TableCell>
-
+            <TableCell align="center" className={styles.table}>
+              شرح اظهار
+            </TableCell>
             <TableCell align="center" className={styles.table}>
               پیوست مشتری
             </TableCell>

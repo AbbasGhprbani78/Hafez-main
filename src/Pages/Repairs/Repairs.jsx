@@ -64,7 +64,7 @@ export default function Repairs() {
 
   const colseCartHandler = async () => {
     try {
-      const response = await apiClient.get(
+      const response = await apiClient.post(
         `/app/forms-update-step-repair-card/${id}`
       );
 

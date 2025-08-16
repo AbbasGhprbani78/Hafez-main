@@ -95,11 +95,7 @@ export default function InputUloadPform2({
               className={styles.img_input}
             />
           ) : (
-            <div className={styles.drag_drop_text}>
-              drag and drop
-              <br />
-              or
-            </div>
+            <div className={styles.drag_drop_text}>drag and drop</div>
           )}
 
           <label htmlFor={name} className={`${styles.label_uploadInput}`}>
