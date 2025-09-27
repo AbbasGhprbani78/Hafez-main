@@ -60,6 +60,7 @@ const fakeRows = [
     acceptDate: "1403/04/04",
   },
 ];
+
 export default function History() {
   const columns = [
     "مدل ماشین",

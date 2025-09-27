@@ -1,0 +1,121 @@
+.container {
+  margin-top: 2rem;
+  display: grid;
+  grid-column: 1/-1;
+  gap: 25px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 227px 158.5px 158.5px 226px;
+  grid-template-areas:
+    "div1_1 div2_2 div3_3"
+    "div4_4 div4_4 div5_5"
+    "div4_4 div4_4 div5_5"
+    "div6_6 div6_6 div5_5";
+  margin-bottom: 24px;
+}
+
+.div_item {
+  border-radius: var(--border-radius-1);
+  box-shadow: var(--box-shadow-2);
+}
+.div1 {
+  grid-area: div1_1;
+}
+.div2 {
+  grid-area: div2_2;
+}
+.div3 {
+  grid-area: div3_3;
+}
+.div4 {
+  grid-area: div4_4;
+}
+.div5 {
+  grid-area: div5_5;
+}
+.div6 {
+  grid-area: div6_6;
+}
+
+.wrap_tools {
+  width: 100%;
+  max-height: 150px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.wrap_status_text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status_elem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 35px;
+  width: 102px;
+  border-radius: 100px;
+  font-weight: medium;
+  font-size: 14px;
+}
+.status_text {
+  font-weight: 700;
+  color: var(--color-1);
+}
+
+.active {
+  background-color: #d6e1dd;
+  color: var(--color-3);
+}
+.inactive {
+  background-color: var(--color-18);
+  color: #ffff;
+}
+
+@media (max-width: 895px) {
+  .container {
+    margin-top: 2rem;
+    display: grid;
+    grid-column: 1/-1;
+    gap: 25px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 227px 158.5px 158.5px 158.5px 158.5px 226px;
+    grid-template-areas:
+      "div1_1 div1_1 div2_2 div2_2"
+      "div4_4 div4_4 div4_4 div4_4"
+      "div4_4 div4_4 div4_4 div4_4"
+      "div5_5 div5_5 div5_5 div5_5"
+      "div5_5 div5_5 div5_5 div5_5"
+      "div6_6 div6_6 div6_6 div6_6";
+    margin-bottom: 24px;
+  }
+  .div3 {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    margin-top: 2rem;
+    display: grid;
+    grid-column: 1/-1;
+    gap: 25px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 227px 227px 158.5px 158.5px 158.5px 158.5px 226px;
+    grid-template-areas:
+      "div1_1 div1_1 div1_1 div1_1"
+      "div2_2 div2_2 div2_2 div2_2"
+      "div4_4 div4_4 div4_4 div4_4"
+      "div4_4 div4_4 div4_4 div4_4"
+      "div5_5 div5_5 div5_5 div5_5"
+      "div5_5 div5_5 div5_5 div5_5"
+      "div6_6 div6_6 div6_6 div6_6";
+    margin-bottom: 24px;
+  }
+  .div3 {
+    display: none;
+  }
+}

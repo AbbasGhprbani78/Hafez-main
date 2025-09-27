@@ -13,8 +13,13 @@ import ManagementPage from "./Pages/Management/ManagementPage";
 import PRepairmanPrivate from "./Components/Modules/Privates/PRepairmanPrivate";
 import RepairManPanel from "./Pages/RepairmanPanel/index";
 import PRepairIndex from "./Pages/RepairmanPanel/Index/Index";
+import PAdminPrivate from "./Components/Modules/Privates/PAdminPrivate";
+import PanelAdmin from "./Pages/AdminPanel/Index";
+import PAdminIndex from "./Pages/AdminPanel/Index/Index";
 import RunningTasks from "./Pages/RepairmanPanel/RunningTasks/RunningTasks";
 import History from "./Pages/RepairmanPanel/History/History";
+import Users from "./Pages/AdminPanel/Users/Users";
+import Account from "./Pages/AdminPanel/Account/Account";
 const routes = [
   { path: "/", element: <Home /> },
   { path: "/draft", element: <Draft /> },
@@ -28,7 +33,6 @@ const routes = [
   { path: "/fund", element: <Fund /> },
   { path: "/fund/:id", element: <FundItem /> },
   { path: "/settings", element: <ManagementPage /> },
-
   {
     path: "/p-repairman/*",
     element: (
@@ -40,7 +44,19 @@ const routes = [
       { path: "", element: <PRepairIndex /> },
       { path: "tasks", element: <RunningTasks /> },
       { path: "history", element: <History /> },
-      // { path: "courses", element: <AdminCourses /> },
+    ],
+  },
+  {
+    path: "/p-admin/*",
+    element: (
+      <PAdminPrivate>
+        <PanelAdmin />
+      </PAdminPrivate>
+    ),
+    children: [
+      { path: "", element: <PAdminIndex /> },
+      { path: "users", element: <Users /> },
+      { path: "account", element: <Account /> },
     ],
   },
 ];

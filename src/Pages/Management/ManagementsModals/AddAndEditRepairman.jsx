@@ -12,14 +12,12 @@ import Button2 from "../../../Components/Modules/Button2/Button2";
 import Input3 from "../../../Components/Modules/Input3/Input3";
 import MultipleSelectCheckmarks from "../../../Components/Modules/MultipleSelectCheckmarks/MultipleSelectCheckmarks";
 
-//MUI Components
 import Grid from "@mui/material/Grid2";
 import { Typography } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 
-//Icons
 import {
   faXmark,
   faCheck,
@@ -30,6 +28,7 @@ import {
   faUser,
   faLock,
   faCircleUser,
+  faPercent,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import apiClient from "../../../config/axiosConfig";
@@ -53,6 +52,7 @@ function AddAndEditRepairman({
     repair_work_hours: 8,
     repair_username: "",
     repair_password: "",
+    help_participation_percentage: 0,
   });
   const [itemRepairHalls, setItemRepairHalls] = useState(undefined);
   const [itemRepairExpertise, setItemRepairExpertise] = useState(undefined);
@@ -64,6 +64,7 @@ function AddAndEditRepairman({
     help_work_hours: "",
     help_halls: "",
     help_username: "",
+    help_participation_percentage: "",
     help_password: "",
   });
   const [loading, setLoading] = useState(false);
@@ -205,6 +206,13 @@ function AddAndEditRepairman({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+
+    if (name === "help_help_participation_percentage" && value === "") {
+      setHelperText((prev) => ({
+        ...prev,
+        help_participation_percentage: "این فیلد نمی‌تواند خالی باشد!",
+      }));
+    }
   };
 
   const handleSubmitForm = async () => {
@@ -279,6 +287,21 @@ function AddAndEditRepairman({
       }
       if (helperText.help_password !== "") {
         warningMessage("لطفا رمز عبور را به درستی وارد نمایید!");
+        return;
+      }
+
+      if (
+        repairmanInfo.help_participation_percentage === null ||
+        repairmanInfo.help_participation_percentage === ""
+      ) {
+        warningMessage("لطفا درصد مشارکت را وارد نمایید!");
+        return;
+      }
+      if (
+        repairmanInfo.help_participation_percentage < 0 ||
+        repairmanInfo.help_participation_percentage > 100
+      ) {
+        warningMessage("درصد مشارکت باید بین 0 تا 100 باشد!");
         return;
       }
     }
@@ -620,6 +643,41 @@ function AddAndEditRepairman({
               />
             </Grid>
           </Grid>
+          <Grid
+            container
+            item
+            size={12}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "row",
+              width: "100%",
+            }}
+          >
+            <Grid
+              item
+              size={12}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Input3
+                id="help_participation_percentage"
+                name="help_participation_percentage"
+                value={repairmanInfo.help_participation_percentage}
+                handleChange={handleChange}
+                helperText={helperText.help_participation_percentage}
+                lable="درصد مشارکت"
+                placeholder="درصد مشارکت"
+                type="number"
+                icon={faPercent}
+                key={15}
+              />
+            </Grid>
+          </Grid>
 
           <MultipleSelectCheckmarks
             options={hallsInfo?.map((hall) => ({
@@ -663,7 +721,7 @@ function AddAndEditRepairman({
                 placeholder="حداقل ۵ کاراکتر"
                 type="text"
                 icon={faCircleUser}
-                key={15}
+                key={16}
               />
             </Grid>
             <Grid

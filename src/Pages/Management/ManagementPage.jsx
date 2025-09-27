@@ -523,13 +523,13 @@ function ManagementPage() {
                               padding: "18px 10px",
                             }}
                           >
-                            <Button2
+                            <Button3
                               icon={faPencil}
                               variant="contained"
                               style={"edit_delete_btn"}
                               onClick={() => handleOpenModal(row, "edit")}
                             />
-                            <Button2
+                            <Button3
                               icon={faTrashCan}
                               variant="contained"
                               style={"edit_delete_btn"}
@@ -641,13 +641,13 @@ function ManagementPage() {
                               padding: "18px 10px",
                             }}
                           >
-                            <Button2
+                            <Button3
                               icon={faPencil}
                               variant="contained"
                               style={"edit_delete_btn"}
                               onClick={() => handleOpenModal(row, "edit")}
                             />
-                            <Button2
+                            <Button3
                               icon={faTrashCan}
                               variant="contained"
                               style={"edit_delete_btn"}
@@ -926,14 +926,13 @@ export function InfoTabel({
 }
 
 const tabHeaders = [
-  { value: 0, label: "سالن‌ها", tabNameEn: "Halls" },
   {
-    value: 1,
+    value: 0,
     label: "برنامه‌ریزی تعمیرکار",
     tabNameEn: "Repairman Scheduling",
   },
-  { value: 2, label: "تجهیزات", tabNameEn: "Equipment" },
-  { value: 3, label: "کاربران", tabNameEn: "Users" },
+  { value: 1, label: "تجهیزات", tabNameEn: "Equipment" },
+  { value: 2, label: "سالن‌ها", tabNameEn: "Halls" },
 ];
 
 const item1 = {

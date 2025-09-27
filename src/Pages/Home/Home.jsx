@@ -48,6 +48,7 @@ const data = [
     status: "1",
   },
 ];
+
 export default function Home() {
   return (
     <>
@@ -172,7 +173,13 @@ export default function Home() {
                           </TableCell>
                           <TableCell
                             align="center"
-                            sx={{ fontFamily: "iranYekan" }}
+                            sx={{
+                              fontFamily: "iranYekan",
+                              flexDirection: "row",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
                           >
                             <Button2>مشاهده</Button2>
                           </TableCell>
