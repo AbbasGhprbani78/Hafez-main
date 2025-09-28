@@ -18,13 +18,11 @@ import Button2 from "../../Components/Modules/Button2/Button2";
 import TableCustom from "../../Components/Modules/TableCustom/TableCustom";
 import LoadingForm from "../../Components/Modules/Loading/LoadingForm";
 
-//MUI Components
 import Grid from "@mui/material/Grid2";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import { Button, TableCell, TableRow } from "@mui/material";
 
-//Icons
 import {
   faPlus,
   faMagnifyingGlass,
@@ -59,16 +57,13 @@ CustomTabPanel.propTypes = {
 function ManagementPage() {
   const [tabInformation, setTabInformation] = useState([]);
   const [filterRows, setFilterRows] = useState([]);
-
   const [selectedRowInfo, setSelectedRowInfo] = useState(item1);
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState(1);
   const [modal, setModal] = useState(false);
   const [operation, setOperation] = useState("add");
   const [searchInput, setSearchInput] = useState("");
-
   const [page, setPage] = useState(0);
   const rowsPerPage = 5;
-
   const handleChange = (newValue) => {
     setTab(newValue);
   };
@@ -82,7 +77,6 @@ function ManagementPage() {
   const handleChangePage = (newPage) => {
     setPage(newPage);
   };
-
   const handleChangeSearchField = (e) => {
     const searchTerm = e.target.value.toLowerCase();
     setSearchInput(searchTerm);
@@ -136,7 +130,6 @@ function ManagementPage() {
     }
     setFilterRows(filterProducts);
   };
-
   const fetchTabData = async (tab) => {
     try {
       let response = null;
@@ -176,7 +169,6 @@ function ManagementPage() {
     setOperation(operation);
     handleToggleModal();
   };
-
   useEffect(() => {
     fetchTabData(tab);
     handleChangePage(0);
@@ -765,7 +757,7 @@ function ManagementPage() {
                 </InfoTabel>
               )}
             </CustomTabPanel>
-            <CustomTabPanel value={tab} index={3}>
+            {/* <CustomTabPanel value={tab} index={3}>
               {filterRows === undefined ? (
                 <LoadingForm />
               ) : (
@@ -875,7 +867,7 @@ function ManagementPage() {
                   )}
                 </InfoTabel>
               )}
-            </CustomTabPanel>
+            </CustomTabPanel> */}
           </Box>
         </Grid>
       </Grid>
@@ -927,12 +919,12 @@ export function InfoTabel({
 
 const tabHeaders = [
   {
-    value: 0,
+    value: 1,
     label: "برنامه‌ریزی تعمیرکار",
     tabNameEn: "Repairman Scheduling",
   },
-  { value: 1, label: "تجهیزات", tabNameEn: "Equipment" },
-  { value: 2, label: "سالن‌ها", tabNameEn: "Halls" },
+  { value: 2, label: "تجهیزات", tabNameEn: "Equipment" },
+  { value: 0, label: "سالن‌ها", tabNameEn: "Halls" },
 ];
 
 const item1 = {

@@ -94,11 +94,13 @@ export default function History() {
   };
   return (
     <>
-      <TitleWithSearch
-        searchInput={searchInput}
-        onChange={handleChangeSearchField}
-        title={"سوابق"}
-      />
+      <div style={{ margin: "1rem 0" }}>
+        <TitleWithSearch
+          searchInput={searchInput}
+          onChange={handleChangeSearchField}
+          title={"سوابق"}
+        />
+      </div>
 
       <TableCustom
         rows={filterRows}

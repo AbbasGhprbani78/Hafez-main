@@ -49,3 +49,7 @@
   background-color: #f7f7f7;
   resize: none;
 }
+
+.main_text {
+  font-weight: 600;
+}

@@ -69,6 +69,16 @@
   font-family: "iranYekan", sans-serif !important;
   line-height: 20px !important;
 }
+
+.width {
+  width: 100%;
+}
+
+.btn_cancel {
+  color: #fff !important;
+  background-color: #c3c3c3 !important;
+}
+
 @media (min-width: 600px) {
   .outline_btn {
     min-width: 130px !important;

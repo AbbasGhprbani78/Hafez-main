@@ -102,7 +102,7 @@
 }
 
 .error {
-  font-size: 0.9rem !important;
+  font-size: 0.8rem !important;
   color: var(--color-17);
   font-weight: normal;
   margin-top: 5px;

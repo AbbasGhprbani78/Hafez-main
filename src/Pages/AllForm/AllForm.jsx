@@ -33,7 +33,7 @@ import Button2 from "../../Components/Modules/Button2/Button2";
 import { MyContext } from "../../context/context";
 
 export default function AllForm() {
-  const { currentTab, setCurrentTab, setIdForm } = useContext(MyContext);
+  const { setCurrentTab, setIdForm } = useContext(MyContext);
   const [information, setInformation] = useState(undefined);
   const [admissionNumber, setAdmissionNumber] = useState("");
   const [filter, setFilter] = useState(0);

@@ -95,11 +95,13 @@ export default function RunningTasks() {
   };
   return (
     <>
-      <TitleWithSearch
-        searchInput={searchInput}
-        onChange={handleChangeSearchField}
-        title={"تسک های درحال اجرا"}
-      />
+      <div style={{ margin: "1rem 0" }}>
+        <TitleWithSearch
+          searchInput={searchInput}
+          onChange={handleChangeSearchField}
+          title={"تسک های درحال اجرا"}
+        />
+      </div>
       <TableCustom
         rows={filterRows}
         columns={columns}

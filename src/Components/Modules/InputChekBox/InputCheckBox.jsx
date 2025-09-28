@@ -5,6 +5,7 @@ export default function InputCheckBox({
   checked,
   value,
   text,
+  ismain = false,
 }) {
   return (
     <div className={`${styles.checkbox_container} mx-2 ${marginRight}`}>
@@ -15,7 +16,9 @@ export default function InputCheckBox({
         checked={checked}
         onChange={onChange}
       />
-      <label className="lable-check">{text}</label>
+      <label className={`lable-check ${ismain && styles.main_text}`}>
+        {text}
+      </label>
     </div>
   );
 }

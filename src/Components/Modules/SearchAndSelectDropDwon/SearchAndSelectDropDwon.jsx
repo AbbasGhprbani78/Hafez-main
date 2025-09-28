@@ -90,7 +90,6 @@ export default function CustomStyledSelect({
   label,
   items,
   name,
-  setother,
   value,
   onChange,
   material,

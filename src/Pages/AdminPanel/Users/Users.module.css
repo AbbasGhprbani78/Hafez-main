@@ -1,0 +1,55 @@
+.top_table {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.add_new_item_btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  color: var(--color-3);
+}
+
+.add_new_item_btn > span {
+  font-size: clamp(0.8rem, 0.9vw, 1rem);
+  font-weight: 500;
+}
+
+.icon_container {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-3);
+  color: #fff;
+  width: 25px;
+  height: 25px;
+}
+
+.btn_protect {
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-3);
+  color: #ffff;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+}
+
+.delete_icon_modal {
+  border: 1px solid #9f9f9f;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 100px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9f9f9f;
+}

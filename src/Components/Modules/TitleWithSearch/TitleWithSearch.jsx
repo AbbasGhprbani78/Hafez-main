@@ -6,17 +6,25 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Input from "../Input/Input";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-export default function TitleWithSearch({ searchInput, onChange, title }) {
+export default function TitleWithSearch({
+  searchInput,
+  onChange,
+  title,
+  isbackButton = true,
+}) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.search_container}>
         <div className={styles.title_back}>
           <span className={styles.title}>{title} :</span>
-          <button className={styles.btn}>
-            بازگشت
-            <FontAwesomeIcon icon={faArrowLeft} />
-          </button>
+          {isbackButton && (
+            <button className={styles.btn}>
+              بازگشت
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </button>
+          )}
         </div>
+
         <div className={styles.search_box}>
           <div className={styles.wrap_input}>
             <Input
@@ -26,7 +34,7 @@ export default function TitleWithSearch({ searchInput, onChange, title }) {
               placeholder={"جستجو"}
             />
           </div>
-          <Button2 onClick={() => {}} icon={faMagnifyingGlass} style={"width"}>
+          <Button2 onClick={() => {}} icon={faMagnifyingGlass}>
             جستجو
           </Button2>
         </div>
