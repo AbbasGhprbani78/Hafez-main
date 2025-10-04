@@ -1,0 +1,237 @@
+.arboretum_container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  min-height: 100vh;
+}
+
+.unified_table {
+  background-color: white;
+  border-radius: var(--border-radius-1);
+  border: 1px solid var(--color-8);
+  overflow: hidden;
+}
+
+.table_header_row {
+  background-color: #f7f4eb;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  border-bottom: 1px solid var(--color-8);
+}
+
+.table_header_cell {
+  padding: 0.8rem 1rem;
+  font-weight: bold;
+  color: var(--color-1);
+  font-family: "iranYekan", sans-serif;
+  font-size: 0.9rem;
+  border-left: 1px solid var(--color-8);
+  text-align: center;
+}
+
+.table_header_cell:first-child {
+  border-left: none;
+}
+
+.sub_header_row {
+  background-color: #cde0d9;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  border-bottom: 1px solid var(--color-8);
+}
+
+.sub_header_cell {
+  padding: 0.6rem 0.5rem;
+  font-weight: bold;
+  color: var(--color-1);
+  font-family: "iranYekan", sans-serif;
+  font-size: 17px;
+  border-left: 1px solid var(--color-8);
+  text-align: center;
+}
+
+.sub_header_cell:first-child {
+  border-left: none;
+}
+
+.search_row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  border-bottom: 1px solid var(--color-8);
+}
+
+.search_cell {
+  padding: 1rem;
+  border-left: 1px solid var(--color-8);
+}
+
+.search_cell:first-child {
+  border-left: none;
+}
+
+.search_input_wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search_input {
+  width: 100%;
+  padding: 0.5rem 0.8rem 0.5rem 2.5rem;
+  border: 1px solid var(--color-8);
+  border-radius: var(--border-radius-1);
+  background-color: var(--color-20);
+  font-family: "iranYekan", sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.search_input::placeholder {
+  color: var(--color-21);
+  font-family: "iranYekan", sans-serif;
+}
+
+.search_icon {
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  background-color: var(--color-3);
+  padding: 0.3rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.table_content {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.table_row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  border-bottom: 1px solid var(--color-8);
+  transition: background-color 0.2s ease;
+}
+
+.table_row:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.table_row:hover {
+  background-color: #f0f8f0;
+}
+
+.table_cell {
+  padding: 0.8rem 0.5rem;
+  font-family: "iranYekan", sans-serif;
+  font-size: 12px;
+  color: var(--color-1);
+  border-left: 1px solid var(--color-8);
+  text-align: center;
+  font-weight: 600;
+}
+
+.table_cell:first-child {
+  border-left: none;
+}
+
+.empty_cell {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--color-21);
+  font-family: "iranYekan", sans-serif;
+  font-size: 0.9rem;
+  border-left: 1px solid var(--color-8);
+}
+
+.empty_cell:first-child {
+  border-left: none;
+}
+
+.pagination_container {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-top: 1px solid var(--color-8);
+  background-color: #f9f9f9;
+}
+
+.pagination_button {
+  background: none;
+  border: none;
+  color: var(--color-1);
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  font-family: "iranYekan", sans-serif;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.pagination_button:hover {
+  background-color: var(--color-10);
+}
+
+.pagination_button:disabled {
+  color: var(--color-21);
+  cursor: not-allowed;
+}
+
+.pagination_info {
+  color: var(--color-1);
+  font-family: "iranYekan", sans-serif;
+  font-size: 0.9rem;
+  margin: 0 0.5rem;
+}
+
+@media (max-width: 1200px) {
+  .table_header_row,
+  .search_row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sub_header_row,
+  .table_row {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .table_header_cell:nth-child(3),
+  .search_cell:nth-child(3) {
+    border-left: none;
+  }
+
+  .sub_header_cell:nth-child(3),
+  .table_cell:nth-child(3) {
+    border-left: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .table_header_row,
+  .search_row {
+    grid-template-columns: 1fr;
+  }
+
+  .sub_header_row,
+  .table_row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .table_header_cell,
+  .search_cell {
+    border-left: none;
+    border-bottom: 1px solid var(--color-8);
+  }
+
+  .sub_header_cell:nth-child(3),
+  .table_cell:nth-child(3) {
+    border-left: none;
+  }
+
+  .arboretum_container {
+    padding: 0.5rem;
+  }
+}

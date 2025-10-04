@@ -20,6 +20,7 @@ import RunningTasks from "./Pages/RepairmanPanel/RunningTasks/RunningTasks";
 import History from "./Pages/RepairmanPanel/History/History";
 import Users from "./Pages/AdminPanel/Users/Users";
 import Account from "./Pages/AdminPanel/Account/Account";
+import Arboretum from "./Pages/Arboretum/Arboretum";
 const routes = [
   { path: "/", element: <Home /> },
   { path: "/draft", element: <Draft /> },
@@ -33,6 +34,7 @@ const routes = [
   { path: "/fund", element: <Fund /> },
   { path: "/fund/:id", element: <FundItem /> },
   { path: "/settings", element: <ManagementPage /> },
+  { path: "/arboretum", element: <Arboretum /> },
   {
     path: "/p-repairman/*",
     element: (

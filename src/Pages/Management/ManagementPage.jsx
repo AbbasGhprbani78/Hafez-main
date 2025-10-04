@@ -82,7 +82,6 @@ function ManagementPage() {
     setSearchInput(searchTerm);
     let filterProducts;
     if (tab === 0) {
-      //code, name, description
       filterProducts = tabInformation.filter(
         (item) =>
           item.code?.includes(searchTerm) ||
