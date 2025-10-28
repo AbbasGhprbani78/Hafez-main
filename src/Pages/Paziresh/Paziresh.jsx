@@ -97,6 +97,7 @@ export default function Paziresh() {
   return (
     <Grid size={12} sx={{ display: "flex" }}>
       <SideBar />
+
       <ToastContainerCustom />
       <div className="space-content" ref={printRef}>
         <Header
@@ -168,7 +169,7 @@ export default function Paziresh() {
         </Grid>
 
         {currentTab === 4 && (
-          <div className="confirmation-btns">
+          <div className="no-print confirmation-btns">
             <button
               className="edit-btn confirmation-btn "
               onClick={() => setCurrentTab(3)}

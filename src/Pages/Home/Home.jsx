@@ -9,6 +9,7 @@ import BoxCard from "../../Components/Modules/Box/Box";
 import { Box, TableCell, TableRow } from "@mui/material";
 import TableForm from "../../Components/Modules/Table/TableForm";
 import Button2 from "../../Components/Modules/Button2/Button2";
+import { toFarsiNumber } from "../../utils/helper";
 const columns = [
   "کد",
   "نام تعمیرکار",
@@ -77,7 +78,7 @@ export default function Home() {
                     }}
                   >
                     <span className={"titleone"}>سالن</span>
-                    <span className="value-one">3</span>
+                    <span className="value-one">{toFarsiNumber(3)}</span>
                   </Box>
                   <Box
                     sx={{
@@ -89,7 +90,7 @@ export default function Home() {
                     }}
                   >
                     <span className={"titleone"}>تجهیزات</span>
-                    <span className="value-one">124</span>
+                    <span className="value-one">{toFarsiNumber(3)}</span>
                   </Box>
                   <Box
                     sx={{
@@ -101,7 +102,7 @@ export default function Home() {
                     }}
                   >
                     <span className={"titleone"}>تعمیرکار</span>
-                    <span className="value-one">23</span>
+                    <span className="value-one">{toFarsiNumber(3)}</span>
                   </Box>
                 </Grid>
               </BoxCard>
@@ -125,7 +126,7 @@ export default function Home() {
             </div>
             <div className="home-item div3">
               <BoxCard title={"تعداد پذیرش روزانه"} icon={faUsers}>
-                <span className="value-one">56</span>
+                <span className="value-one">{toFarsiNumber(56)}</span>
               </BoxCard>
             </div>
             <div className="home-item div4">
@@ -145,31 +146,31 @@ export default function Home() {
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {item.id}
+                            {toFarsiNumber(item.id)}
                           </TableCell>
                           <TableCell
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {item.repairmanname}
+                            {toFarsiNumber(item.repairmanname)}
                           </TableCell>
                           <TableCell
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {item.respairmanexp}
+                            {toFarsiNumber(item.respairmanexp)}
                           </TableCell>
                           <TableCell
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {item.timework}
+                            {toFarsiNumber(item.timework)}
                           </TableCell>
                           <TableCell
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {item.status}
+                            {toFarsiNumber(item.status)}
                           </TableCell>
                           <TableCell
                             align="center"

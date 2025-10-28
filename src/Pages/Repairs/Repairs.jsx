@@ -15,7 +15,7 @@ import apiClient from "../../config/axiosConfig";
 import { useNavigate, useParams } from "react-router-dom";
 import Modal from "../../Components/Modules/Modal/Modal";
 import DeleContent from "../../Components/Modules/DeleteContent/DeleContent";
-
+import { Box } from "@mui/material";
 export default function Repairs() {
   const { id } = useParams();
   const [data, setData] = useState("");
@@ -102,22 +102,35 @@ export default function Repairs() {
             <Piece id={id} pieces={pieces} />
             <OutWork id={id} pieces={pieces} />
             <Attaches id={id} />
-            <div className={styles.wrap_actions_repairs}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "end",
+                gap: "1rem",
+                margin: "1rem 0",
+                flexDirection: {
+                  xs: "column",
+                  sm: "row",
+                },
+              }}
+            >
               <Button2
                 onClick={() => window.print()}
                 icon={faPrint}
-                style={"width"}
+                style={"button_width"}
               >
                 {"پرینت"}
               </Button2>
+
               <Button2
                 onClick={() => setShowModal(true)}
                 icon={faCheck}
-                style={"width"}
+                style={"button_width"}
               >
                 {"بستن کارت تعمیر"}
               </Button2>
-            </div>
+            </Box>
           </div>
         </div>
       </div>

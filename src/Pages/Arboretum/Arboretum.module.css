@@ -2,15 +2,38 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1rem;
-  min-height: 100vh;
 }
 
-.unified_table {
-  background-color: white;
+.separate_tables_container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
   border-radius: var(--border-radius-1);
+  padding: 1rem;
+}
+
+.table_column {
+  background-color: white;
   border: 1px solid var(--color-8);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+}
+
+.table_column:not(:first-child) {
+  border-left: none;
+}
+
+.table_header {
+  background-color: #f7f4eb;
+  padding: 0.8rem 1rem;
+  font-weight: bold;
+  color: var(--color-1);
+  font-family: "iranYekan", sans-serif;
+  font-size: 0.9rem;
+  text-align: center;
+  border-bottom: 1px solid var(--color-8);
 }
 
 .table_header_row {
@@ -37,16 +60,16 @@
 .sub_header_row {
   background-color: #cde0d9;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   border-bottom: 1px solid var(--color-8);
 }
 
 .sub_header_cell {
   padding: 0.6rem 0.5rem;
-  font-weight: bold;
+  font-weight: 600;
   color: var(--color-1);
   font-family: "iranYekan", sans-serif;
-  font-size: 17px;
+  font-size: 14px;
   border-left: 1px solid var(--color-8);
   text-align: center;
 }
@@ -56,18 +79,12 @@
 }
 
 .search_row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  display: block;
   border-bottom: 1px solid var(--color-8);
 }
 
 .search_cell {
   padding: 1rem;
-  border-left: 1px solid var(--color-8);
-}
-
-.search_cell:first-child {
-  border-left: none;
 }
 
 .search_input_wrapper {
@@ -106,20 +123,108 @@
 .table_content {
   max-height: 400px;
   overflow-y: auto;
+  flex: 1;
+}
+
+.columns_container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--color-8);
+}
+
+.column:first-child {
+  border-left: none;
+}
+
+.column_item {
+  display: block;
+  cursor: pointer;
+  padding: 0.2rem 0;
+}
+
+/* inside a column we don't want the inner .table_cell left borders between code/title */
+.column .table_cell {
+  border-left: none;
+  text-align: right; /* keep Persian layout aligned nicely */
+  padding: 0.5rem 0.6rem;
+}
+
+.column_item:hover {
+  background-color: #f5fbf6;
+}
+
+/* Legacy selected class - keeping for compatibility */
+.selected {
+  background-color: #e3f2fd !important;
+  border-left: 4px solid #1976d2;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.2);
+}
+
+.selected .table_cell {
+  color: #1976d2;
+  font-weight: 700;
 }
 
 .table_row {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   border-bottom: 1px solid var(--color-8);
-  transition: background-color 0.2s ease;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* vertical separators between columns: apply border to the immediate child cell wrappers */
+.table_row > div {
+  border-left: 1px solid var(--color-8);
+}
+.table_row > div:first-child {
+  border-left: none;
 }
 
 .table_row:nth-child(even) {
   background-color: #f9f9f9;
 }
 
+/* Hover effects */
 .table_row:hover {
+  background-color: #e8f4fd !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table_row:hover .table_cell {
+  color: #1976d2;
+}
+
+/* Active/Selected state is handled by .selected class above */
+
+/* Active state for clicked rows */
+.table_row:active {
+  transform: translateY(0px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  background-color: #bbdefb !important;
+}
+
+/* Focus state for accessibility */
+.table_row:focus {
+  outline: 2px solid #1976d2;
+  outline-offset: -2px;
+}
+
+.col_wrapper {
+  display: contents; /* so the wrapper doesn't break the grid layout but can be targeted for hover */
+}
+
+/* Use a hover effect on the two-cell group (code + title) by targeting the immediate child div pair inside the row.
+   To avoid highlighting the whole row, add a rule that highlights the two internal .table_cell elements when their parent wrapper is hovered. */
+.table_row > .col_wrapper:hover > .table_cell {
   background-color: #f0f8f0;
 }
 
@@ -128,9 +233,10 @@
   font-family: "iranYekan", sans-serif;
   font-size: 12px;
   color: var(--color-1);
-  border-left: 1px solid var(--color-8);
+  border-left: none; /* handled by the wrapper to create clean vertical separators */
   text-align: center;
   font-weight: 600;
+  transition: all 0.3s ease;
 }
 
 .table_cell:first-child {
@@ -154,29 +260,33 @@
   padding: 1rem;
   display: flex;
   align-items: center;
+
   gap: 0.5rem;
   border-top: 1px solid var(--color-8);
   background-color: #f9f9f9;
+  border-radius: 0 0 var(--border-radius-1) var(--border-radius-1);
 }
 
 .pagination_button {
   background: none;
   border: none;
-  color: var(--color-1);
+  color: #999;
   cursor: pointer;
   padding: 0.3rem 0.5rem;
-  border-radius: 4px;
   font-family: "iranYekan", sans-serif;
   font-size: 0.9rem;
-  transition: background-color 0.2s ease;
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.pagination_button:hover {
-  background-color: var(--color-10);
+.pagination_button:hover:not(:disabled) {
+  color: var(--color-1);
 }
 
 .pagination_button:disabled {
-  color: var(--color-21);
+  color: #ccc;
   cursor: not-allowed;
 }
 
@@ -184,54 +294,121 @@
   color: var(--color-1);
   font-family: "iranYekan", sans-serif;
   font-size: 0.9rem;
+  font-weight: 500;
   margin: 0 0.5rem;
 }
 
+/* Loading States */
+.loading_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  background-color: white;
+  border-radius: var(--border-radius-1);
+  border: 1px solid var(--color-8);
+}
+
+.loading_spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #1976d2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading_container p {
+  color: var(--color-1);
+  font-family: "iranYekan", sans-serif;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Error States */
+.error_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  background-color: white;
+  border-radius: var(--border-radius-1);
+  border: 1px solid var(--color-8);
+}
+
+.error_message {
+  color: #d32f2f;
+  font-family: "iranYekan", sans-serif;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.retry_button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--border-radius-1);
+  font-family: "iranYekan", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.retry_button:hover {
+  background-color: #1565c0;
+}
+
+.empty_hint {
+  display: flex;
+  justify-content: center;
+  font-weight: 600;
+  color: var(--color-21);
+  padding: 1.2rem 0;
+  font-size: 14px;
+}
+
 @media (max-width: 1200px) {
-  .table_header_row,
-  .search_row {
+  .separate_tables_container {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .sub_header_row,
-  .table_row {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .table_header_cell:nth-child(3),
-  .search_cell:nth-child(3) {
-    border-left: none;
-  }
-
-  .sub_header_cell:nth-child(3),
-  .table_cell:nth-child(3) {
-    border-left: none;
   }
 }
 
 @media (max-width: 768px) {
-  .table_header_row,
-  .search_row {
+  .separate_tables_container {
     grid-template-columns: 1fr;
-  }
-
-  .sub_header_row,
-  .table_row {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .table_header_cell,
-  .search_cell {
-    border-left: none;
-    border-bottom: 1px solid var(--color-8);
-  }
-
-  .sub_header_cell:nth-child(3),
-  .table_cell:nth-child(3) {
-    border-left: none;
   }
 
   .arboretum_container {
     padding: 0.5rem;
+  }
+
+  .pagination_container {
+    gap: 0.3rem;
+    padding: 0.8rem;
+  }
+
+  .pagination_button {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.8rem;
+  }
+
+  .pagination_info {
+    font-size: 0.8rem;
+    margin: 0 0.3rem;
   }
 }

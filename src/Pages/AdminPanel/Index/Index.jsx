@@ -9,6 +9,7 @@ import Notifications from "../../../Components/Modules/Notifications/Notificatio
 import Button2 from "../../../Components/Modules/Button2/Button2";
 import TableForm from "../../../Components/Modules/Table/TableForm";
 import { TableCell, TableRow } from "@mui/material";
+import { toFarsiNumber } from "../../../utils/helper";
 const tools = [
   {
     id: 1,
@@ -185,19 +186,19 @@ export default function Index() {
               data.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                    {item.id}
+                    {toFarsiNumber(item.id)}
                   </TableCell>
                   <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                    {item.repairmanname}
+                    {toFarsiNumber(item.repairmanname)}
                   </TableCell>
                   <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                    {item.respairmanexp}
+                    {toFarsiNumber(item.respairmanexp)}
                   </TableCell>
                   <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                    {item.timework}
+                    {toFarsiNumber(item.timework)}
                   </TableCell>
                   <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                    {item.status}
+                    {toFarsiNumber(item.status)}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -226,19 +227,19 @@ export default function Index() {
               data2.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                    {item.id}
+                    {toFarsiNumber(item.id)}
                   </TableCell>
                   <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                    {item.repairmanname}
+                    {toFarsiNumber(item.repairmanname)}
                   </TableCell>
                   <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                    {item.respairmanexp}
+                    {toFarsiNumber(item.respairmanexp)}
                   </TableCell>
                   <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                    {item.phonenumber}
+                    {toFarsiNumber(item.phonenumber)}
                   </TableCell>
                   <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                    {item.status}
+                    {toFarsiNumber(item.status)}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -264,7 +265,7 @@ export default function Index() {
 function StatusItem({ item }) {
   return (
     <div className={styles.wrap_status_text}>
-      <span className={styles.status_text}>{item.name}</span>
+      <span className={styles.status_text}>{toFarsiNumber(item?.name)}</span>
       <div
         className={`${styles.status_elem} ${
           item.status === 1 ? styles.active : styles.inactive

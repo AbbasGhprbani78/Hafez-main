@@ -38,7 +38,7 @@ export default function SideBar({
 
   return (
     <div
-      className={`${styles.sidebar_container} ${
+      className={`no-print ${styles.sidebar_container} ${
         isOpen ? styles.active_sidebar : ""
       }`}
     >

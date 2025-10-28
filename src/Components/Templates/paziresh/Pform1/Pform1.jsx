@@ -305,7 +305,8 @@ export default function Pform1({
   }, [isOpen]);
 
   useEffect(() => {
-    setValue(form1?.form_type === "personal" ? 0 : 1);
+    const type = form1?.form_type ?? "personal";
+    setValue(type === "personal" ? 0 : 1);
   }, [form1?.form_type]);
 
   return (

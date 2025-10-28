@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import styles from "./ManagementStyles.module.css";
-
-//Components
 import SideBar from "../../Components/Modules/SideBar/SideBar";
 import Header from "../../Components/Modules/Header/Header";
 import { ToastContainerCustom } from "../../Components/Modules/Toast/ToastCustom";
@@ -31,6 +29,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../config/axiosConfig";
 import Button3 from "../../Components/Modules/Button3/Button3";
+import { toFarsiNumber } from "../../utils/helper";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -129,6 +128,7 @@ function ManagementPage() {
     }
     setFilterRows(filterProducts);
   };
+
   const fetchTabData = async (tab) => {
     try {
       let response = null;
@@ -456,20 +456,20 @@ function ManagementPage() {
                             align={"center"}
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {row.code}
+                            {toFarsiNumber(row.code)}
                           </TableCell>
                           <TableCell
                             align={"center"}
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {row.name}
+                            {toFarsiNumber(row.name)}
                           </TableCell>
 
                           <TableCell
                             align={"center"}
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {`${row.remaining_capacity} ساعت`}
+                            {`${toFarsiNumber(row.remaining_capacity)} ساعت`}
                           </TableCell>
 
                           <TableCell
@@ -501,7 +501,7 @@ function ManagementPage() {
                             align={"center"}
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {row.descriptions}
+                            {toFarsiNumber(row.descriptions)}
                           </TableCell>
 
                           <TableCell
@@ -564,13 +564,13 @@ function ManagementPage() {
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {row.id}
+                            {toFarsiNumber}
                           </TableCell>
                           <TableCell
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {row.full_name}
+                            {toFarsiNumber(row.full_name)}
                           </TableCell>
                           <TableCell
                             align="center"
@@ -584,7 +584,7 @@ function ManagementPage() {
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {`${row.work_time} ساعت کار در روز`}
+                            {`${toFarsiNumber(row.work_time)} ساعت کار در روز`}
                           </TableCell>
                           <TableCell
                             align="center"
@@ -616,9 +616,11 @@ function ManagementPage() {
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {Array.isArray(row.salon) && row.salon.length > 0
-                              ? row.salon.map((s) => s.name).join(" / ")
-                              : "No data"}
+                            {toFarsiNumber(
+                              Array.isArray(row.salon) && row.salon.length > 0
+                                ? row.salon.map((s) => s.name).join(" / ")
+                                : "اطلاعاتی موجود نیست"
+                            )}
                           </TableCell>
 
                           <TableCell
@@ -682,19 +684,19 @@ function ManagementPage() {
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {row.code}
+                            {toFarsiNumber(row.code)}
                           </TableCell>
                           <TableCell
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {row.name}
+                            {toFarsiNumber(row.name)}
                           </TableCell>
                           <TableCell
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {row.salon?.name}
+                            {toFarsiNumber(row.salon?.name)}
                           </TableCell>
                           <TableCell
                             align="center"
@@ -726,7 +728,7 @@ function ManagementPage() {
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {row.descriptions}
+                            {toFarsiNumber(row.descriptions)}
                           </TableCell>
                           <TableCell
                             align="center"
@@ -956,12 +958,12 @@ const equipment_columns = [
   "عملیات",
 ];
 
-const userColumns = [
-  "ردیف",
-  "نام کاربر",
-  "نقش کاربر",
-  "کد ملی",
-  "وضعیت",
-  "شماره تماس",
-  "عملیات",
-];
+// const userColumns = [
+//   "ردیف",
+//   "نام کاربر",
+//   "نقش کاربر",
+//   "کد ملی",
+//   "وضعیت",
+//   "شماره تماس",
+//   "عملیات",
+// ];

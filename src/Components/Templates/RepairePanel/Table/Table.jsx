@@ -113,7 +113,7 @@ export default function Table() {
                   align="center"
                   sx={{ fontFamily: "iranYekan", padding: "5px" }}
                 >
-                  {row.carModel}
+                  {toFarsiNumber(row.carModel)}
                 </TableCell>
                 <TableCell
                   align="center"

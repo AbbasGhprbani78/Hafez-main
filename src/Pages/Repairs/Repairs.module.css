@@ -6,9 +6,9 @@
 .wrap_actions_repairs {
   display: flex;
   align-items: center;
-  justify-content: end;
   margin-top: 2rem;
   gap: 20px;
+  justify-items: end;
 }
 
 .trash_row_table {

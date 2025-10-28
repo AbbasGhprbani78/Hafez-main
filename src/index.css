@@ -159,6 +159,12 @@ button {
   font-family: "iranYekan", sans-serif;
 }
 
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
 @media (max-width: 600px) {
 }
 

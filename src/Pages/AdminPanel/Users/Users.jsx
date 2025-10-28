@@ -19,6 +19,7 @@ import Grid from "@mui/material/Grid2";
 import Button2 from "../../../Components/Modules/Button2/Button2";
 import apiClient from "../../../config/axiosConfig";
 import InputCheckBox from "../../../Components/Modules/InputChekBox/InputCheckBox";
+import { toFarsiNumber } from "../../../utils/helper";
 
 const fakeRows = [
   {
@@ -308,7 +309,6 @@ export default function Users() {
     try {
       const response = await apiClient.post("/", users);
       if (response.status === 201) {
-        console.log("hello");
         setErrors({});
       }
     } catch (err) {
@@ -364,7 +364,6 @@ export default function Users() {
     try {
       const response = await apiClient.post("/change-password", passwords);
       if (response.status === 201) {
-        console.log(response.data);
         setShowModal(false);
         setPasswords({
           old_password: "",
@@ -657,28 +656,28 @@ export default function Users() {
                 }}
               >
                 <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                  {row.code}
+                  {toFarsiNumber(row.code)}
                 </TableCell>
                 <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                  {row.username}
+                  {toFarsiNumber(row.username)}
                 </TableCell>
                 <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                  {row.nationalCode}
+                  {toFarsiNumber(row.nationalCode)}
                 </TableCell>
                 <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                  {row.fullName}
+                  {toFarsiNumber(row.fullName)}
                 </TableCell>
                 <TableCell
                   align="center"
                   sx={{ fontFamily: "iranYekan", justifyItems: "center" }}
                 >
-                  {row.lastLogin}
+                  {toFarsiNumber(row.lastLogin)}
                 </TableCell>
                 <TableCell
                   align="center"
                   sx={{ fontFamily: "iranYekan", justifyItems: "center" }}
                 >
-                  {row.role}
+                  {toFarsiNumber(row.role)}
                 </TableCell>
                 <TableCell
                   sx={{ fontFamily: "iranYekan", justifyItems: "center" }}

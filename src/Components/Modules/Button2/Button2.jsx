@@ -10,6 +10,7 @@ export default function Button2({
   disable = false,
   type = "button",
   children,
+  button_width,
 }) {
   return (
     <Button

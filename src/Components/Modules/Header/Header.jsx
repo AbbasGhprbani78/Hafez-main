@@ -16,7 +16,7 @@ export default function Header({ title, isPanel, routes }) {
         setIsShowSideBar={setIsShowSideBar}
         routes={routes}
       />
-      <header className={`${styles.header}`} style={{ width: "100%" }}>
+      <header className={`no-print ${styles.header}`} style={{ width: "100%" }}>
         <div className={styles.header_content}>
           <div
             className={styles.wrap_icon}

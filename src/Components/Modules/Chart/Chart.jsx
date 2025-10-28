@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./Chart.module.css";
 import { faChartPie } from "@fortawesome/free-solid-svg-icons";
-
 import {
   LineChart,
   Line,
@@ -12,6 +11,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import { toFarsiNumber } from "../../../utils/helper";
 
 const data = [
   { name: "فروردین", sales: 120, views: 300 },
@@ -30,13 +30,24 @@ export default function Chart() {
         <span>گزارش</span>
       </div>
       <div className={styles.chartContainer}>
-        <ResponsiveContainer width="100%" height={"100%"}>
+        <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
             <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
+
+            <XAxis dataKey="name" tickFormatter={(value) => value} />
+
+            <YAxis tickFormatter={(value) => toFarsiNumber(value)} />
+
+            <Tooltip
+              formatter={(value, name) => [
+                toFarsiNumber(value),
+                name === "sales" ? "فروش" : "بازدید",
+              ]}
+              labelFormatter={(label) => label}
+            />
+
             <Legend />
+
             <Line
               type="monotone"
               dataKey="sales"

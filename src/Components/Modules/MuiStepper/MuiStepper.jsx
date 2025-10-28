@@ -13,6 +13,7 @@ const steps = [
 export default function MuiStepper({ activeStep = 0 }) {
   return (
     <Grid
+      className="no-print"
       size={{ xs: 12 }}
       sx={{
         display: "flex",
