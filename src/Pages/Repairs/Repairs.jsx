@@ -10,7 +10,7 @@ import Button2 from "../../Components/Modules/Button2/Button2";
 import { faCheck, faPrint } from "@fortawesome/free-solid-svg-icons";
 import Header from "../../Components/Modules/Header/Header";
 import { ToastContainerCustom } from "../../Components/Modules/Toast/ToastCustom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import apiClient from "../../config/axiosConfig";
 import { useNavigate, useParams } from "react-router-dom";
 import Modal from "../../Components/Modules/Modal/Modal";
@@ -21,7 +21,6 @@ export default function Repairs() {
   const [data, setData] = useState("");
   const [expertStatements, setExpertStatements] = useState([]);
   const [pieces, setPieces] = useState([]);
-  const printRef = useRef();
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const handleToggleModal = () => {
@@ -93,9 +92,9 @@ export default function Repairs() {
       <div className="content-conatiner">
         <SideBar />
         <ToastContainerCustom />
-        <div className={`space-content ${styles.wrap_repairs}`} ref={printRef}>
+        <div className={`space-content ${styles.wrap_repairs}`}>
           <Header title={"کارت تعمیر :"} />
-          <div className="">
+          <div>
             <AboutCar id={id} />
             <Occultation data={data} id={id} getDataTable={getDataTable} />
             <Geret data={data} id={id} expertStatements={expertStatements} />
@@ -115,11 +114,7 @@ export default function Repairs() {
                 },
               }}
             >
-              <Button2
-                onClick={() => window.print()}
-                icon={faPrint}
-                style={"button_width"}
-              >
+              <Button2 icon={faPrint} style={"button_width"}>
                 {"پرینت"}
               </Button2>
 

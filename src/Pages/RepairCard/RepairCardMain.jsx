@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import styles from "./RepairCardStyle.module.css";
 import { useNavigate } from "react-router-dom";
-import moment from "jalali-moment";
-
 //Components
 import SideBar from "../../Components/Modules/SideBar/SideBar";
 import Header from "../../Components/Modules/Header/Header";
 import Input from "../../Components/Modules/Input/Input";
 import Button2 from "../../Components/Modules/Button2/Button2";
-import DatePicker from "../../Components/Modules/DatePicker/DatePickerInput";
+import DateRangeFilter from "../../Components/Modules/DateRangeFilter/DateRangeFilter";
 import LoadingForm from "../../Components/Modules/Loading/LoadingForm";
 import TableCustom from "../../Components/Modules/TableCustom/TableCustom";
 import { ToastContainerCustom } from "../../Components/Modules/Toast/ToastCustom";
@@ -24,13 +22,13 @@ import { Button, TableCell, TableRow } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 
 //Icons
-import {
-  faHashtag,
-  faCalendarDays,
-  faCalendarXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHashtag } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../config/axiosConfig";
 import { toFarsiNumber } from "../../utils/helper";
+import {
+  ChnageDate,
+  convertPersianToGregorian,
+} from "../../Components/Modules/ChnageDate/ChnageDate";
 
 function RepairCardMain() {
   const [page, setPage] = useState(0);
@@ -53,17 +51,13 @@ function RepairCardMain() {
       warningMessage("فقط عدد وارد نمایید!");
     }
   };
-  const handleChangeStartDate = (date) => {
-    const persianDate = `${date.year}/${date.month.number}/${date.day}`;
-    setStartDate(persianDate);
-    setPage(0);
-  };
-  const handleChangeEndtDate = (date) => {
-    const persianDate = `${date.year}/${date.month.number}/${date.day}`;
-    setEndDate(persianDate);
+  const handleDateRangeChange = ({ startDate, endDate }) => {
+    setStartDate(startDate || "");
+    setEndDate(endDate || "");
     setPage(0);
   };
   const navigate = useNavigate();
+
   const handleGoToPaziresh = () => {
     navigate("/paziresh");
   };
@@ -73,21 +67,16 @@ function RepairCardMain() {
   };
 
   useEffect(() => {
-    if (startDate === null && endDate === null && admissionNumber === null) {
+    setInformation(undefined);
+    const delayFetch = setTimeout(() => {
       fetchCommonData();
-    } else {
-      setInformation(undefined);
-      const delayFetch = setTimeout(() => {
-        fetchCommonData();
-      }, 500);
+    }, 500);
 
-      return () => clearTimeout(delayFetch);
-    }
+    return () => clearTimeout(delayFetch);
   }, [page, endDate, startDate, admissionNumber]);
 
   const fetchCommonData = async () => {
     const pageNumber = page + 1;
-
     let en_start_date = "",
       en_end_date = "";
     if (startDate !== "") {
@@ -112,13 +101,6 @@ function RepairCardMain() {
     }
   };
 
-  const resetDatePicker = (number) => {
-    if (number === 1) {
-      setStartDate("");
-    } else if (number === 2) {
-      setEndDate("");
-    }
-  };
   const handleClickOnDownloadExcel = async () => {
     const pageNumner = page + 1;
 
@@ -161,6 +143,7 @@ function RepairCardMain() {
       setLoading(false);
     }
   };
+
   return (
     <Grid className="content-conatiner">
       <SideBar />
@@ -186,29 +169,21 @@ function RepairCardMain() {
           container
           sx={{
             display: "flex",
-            flexDirection: { xs: "column", sm: "row" },
-            justifyContent: "center",
+            flexDirection: { xs: "column", md: "row" },
             alignItems: { xs: "flex-start", md: "center" },
             width: "100%",
           }}
-          gap={{ xs: "0.75rem", sm: "0" }}
           size={{ xs: 12 }}
+          spacing={{ xs: 2, md: 6, xl: 10 }}
         >
           <Grid
             item
-            size={{ xs: 12, sm: 4, md: 4 }}
+            size={{ xs: 12, md: 4 }}
             sx={{
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               width: "100%",
-            }}
-            paddingLeft={{
-              xs: "0",
-              sm: "1rem",
-              md: "2rem",
-              lg: "4rem",
-              xl: "5rem",
             }}
           >
             <Input
@@ -223,66 +198,20 @@ function RepairCardMain() {
           </Grid>
           <Grid
             item
-            container
-            size={{ xs: 12, sm: 8, md: 8 }}
+            size={{ xs: 12, md: 8 }}
             sx={{
               display: "flex",
-              flexDirection: "row",
-              alignItems: "flex-end",
+              alignItems: "center",
               justifyContent: "center",
               width: "100%",
             }}
           >
-            <Grid
-              item
-              size={6}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              paddingLeft={{
-                xs: "0.75rem",
-                sm: "0.5rem",
-                md: "1rem",
-                lg: "2rem",
-                xl: "2.5rem",
-              }}
-            >
-              <DatePicker
-                value={startDate}
-                onChange={handleChangeStartDate}
-                label={"از تاریخ فاکتور"}
-                placeholder="۱۴۰۰/۰۱/۰۱"
-                icon={startDate !== "" ? faCalendarXmark : faCalendarDays}
-                onReset={() => resetDatePicker(1)}
-              />
-            </Grid>
-            <Grid
-              item
-              size={6}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              paddingRight={{
-                xs: "0.75rem",
-                sm: "0.5rem",
-                md: "1rem",
-                lg: "2rem",
-                xl: "2.5rem",
-              }}
-            >
-              <DatePicker
-                value={endDate}
-                onChange={handleChangeEndtDate}
-                label={"تا تاریخ فاکتور"}
-                placeholder="۱۴۰۳/۰۱/۰۱"
-                icon={endDate !== "" ? faCalendarXmark : faCalendarDays}
-                onReset={() => resetDatePicker(2)}
-              />
-            </Grid>
+            <DateRangeFilter
+              onDateChange={handleDateRangeChange}
+              startLabel="از تاریخ فاکتور"
+              endLabel="تا تاریخ فاکتور"
+              spacing={10}
+            />
           </Grid>
         </Grid>
         {information === undefined ? (
@@ -384,8 +313,8 @@ function InfoTabel({
             <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
               {toFarsiNumber(row.invoice_number)}
             </TableCell>
-            <ShowConvertedData date={row.invoice_date} />
-            <ShowConvertedData date={row.admission_date} />
+            <ChnageDate date={row.invoice_date} />
+            <ChnageDate date={row.admission_date} />
             <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
               {row.chassis_number}
             </TableCell>
@@ -416,42 +345,5 @@ function InfoTabel({
     </Grid>
   );
 }
-export function ShowConvertedData({ date }) {
-  const [persianDate, setPersianDate] = useState("");
-  useEffect(() => {
-    const gregorianDate = date?.slice(0, 10);
-    const convert = convertGregorianToPersian(gregorianDate);
-    setPersianDate(convert);
-  }, [date]);
-  return (
-    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-      {toFarsiNumber(persianDate)}
-    </TableCell>
-  );
-}
 
 export default RepairCardMain;
-
-export function convertPersianToGregorian(persianDate) {
-  const m = moment.from(persianDate, "fa", "YYYY/MM/DD");
-  if (m.isValid()) {
-    return m.locale("en").format("YYYY-MM-DD");
-  } else {
-    return "Invalid Persian Date";
-  }
-}
-export function convertGregorianToPersian(gregorianDate) {
-  if (!gregorianDate || typeof gregorianDate !== "string") {
-    return "Invalid Date";
-  }
-  // Expecting format yyyy-mm-dd
-  const [year, month, day] = gregorianDate.split("-");
-  const formattedDate = `${year}-${month}-${day}`; // Moment expects yyyy-mm-dd format
-
-  const m = moment(formattedDate, "YYYY-MM-DD");
-  if (m.isValid()) {
-    return m.locale("fa").format("YYYY/MM/DD");
-  } else {
-    return "Invalid Gregorian Date";
-  }
-}

@@ -1,30 +1,29 @@
-//شماره شاسی
-//شماره پذیرش
-//تاریخ پذیرش  از تاریخ تا تاریخ
-//تاریخ ترخیص  از تاریخ تا تاریخ
-//وضعیت پذیرش  امکان  انتخاب چند گزینه
-//نوع خودرو  امکان  انتخاب چند گزینه
-//نوع خدمات امکان  انتخاب چند گزینه
 import { useState } from "react";
-import { TableRow, TableCell } from "@mui/material";
+import { TableRow, TableCell, Box, CircularProgress } from "@mui/material";
 import SideBar from "../../Components/Modules/SideBar/SideBar";
 import Header from "../../Components/Modules/Header/Header";
 import TableCustom from "../../Components/Modules/TableCustom/TableCustom";
 import Grid from "@mui/material/Grid2";
 import { toFarsiNumber } from "../../utils/helper";
 import styles from "./Report.module.css";
+import Input from "../../Components/Modules/Input/Input";
+import { faHashtag } from "@fortawesome/free-solid-svg-icons";
+import DateRangeFilter from "../../Components/Modules/DateRangeFilter/DateRangeFilter";
+import MultiSelectDropDwon from "../../Components/Modules/MultiSelectDropdown/MultiSelectDropDwon";
+import Button2 from "../../Components/Modules/Button2/Button2";
 const columns = [
   "شماره پذیرش",
   "نوع خودرو",
   "اطلاعات خودرو",
   "اطلاعات پذیرش و مشتری",
+  "نوع خدمات",
   "سالن",
   "زمان و هزینه تخمینی",
-  "(ساعت) زمان تعمیرات",
+  "زمان تعمیرات (ساعت)",
   "تعمیرگاه",
-  "(ساعت) توقف در سالن",
-  "(ساعت) زمان پیش فاکتور",
-  "(ساعت) زمان پذیرش تا ترخیص",
+  "نوقف در سالن (ساعت)",
+  "زمان پیش فاکتور (ساعت)",
+  "زمان پذیرش تا ترخیص (ساعت)",
   "وضعیت",
 ];
 
@@ -44,6 +43,7 @@ const tableInformation = [
       acceptTime: "14:16 | 1404/06/01",
       deliveryTime: "15:30 | 1404/06/01",
     },
+    services: ["تعویض روغن", "تنظیم موتور", "بازدید ترمز"],
     hall: "سالن 1",
     estimate: {
       time: "5 ساعت",
@@ -71,6 +71,7 @@ const tableInformation = [
       acceptTime: "09:40 | 1404/06/01",
       deliveryTime: "11:15 | 1404/06/01",
     },
+    services: ["تعویض باطری", "شست‌وشوی انژکتور"],
     hall: "سالن 1",
     estimate: {
       time: "3 ساعت",
@@ -84,64 +85,66 @@ const tableInformation = [
     status: "رسید مشتری",
   },
   {
-    id: "F000484",
-    carType: "ساینا",
+    id: "F000482",
+    carType: "شاهین",
     carInfo: {
-      vin: "NAPXY1BAARJP009778",
-      color: "نقره‌ای",
-      plate: "22 ب 784 ایران 99",
-      mileage: "18700",
+      vin: "NAPXY1AAJPZ004344",
+      color: "مشکی",
+      plate: "78 الف 894 ایران 11",
+      mileage: "31500",
     },
     customerInfo: {
-      name: "قدسی نیک‌فر",
+      name: "علی اولیایی",
       type: "مشتری گارانتی",
-      acceptTime: "09:50 | 1404/06/01",
-      deliveryTime: "13:00 | 1404/06/01",
+      acceptTime: "14:16 | 1404/06/01",
+      deliveryTime: "15:30 | 1404/06/01",
     },
+    services: ["تعویض روغن", "تنظیم موتور", "بازدید ترمز"],
     hall: "سالن 1",
     estimate: {
-      time: "4 ساعت",
-      cost: "14,000,000 ریال",
+      time: "5 ساعت",
+      cost: "15,000,000 ریال",
     },
-    repairTime: "4",
-    repairShop: "تعمیرگاه 2",
+    repairTime: "5",
+    repairShop: "تعمیرگاه 4",
     stopTime: "3",
     preInvoiceTime: "3",
-    totalTime: "9.14",
+    totalTime: "39.14",
     status: "رسید مشتری",
   },
   {
-    id: "F000485",
-    carType: "X100",
+    id: "F000483",
+    carType: "کوییک",
     carInfo: {
-      vin: "NASFA1EERJP491101",
-      color: "نقره‌ای",
-      plate: "43 ب 578 ایران 15",
-      mileage: "24500",
+      vin: "NAPXY1BASJP133366",
+      color: "سفید",
+      plate: "98 ص 824 ایران 13",
+      mileage: "22345",
     },
     customerInfo: {
-      name: "صادق کریمی",
-      type: "مشتری آزاد",
-      acceptTime: "08:45 | 1404/06/01",
-      deliveryTime: "10:57 | 1404/06/01",
+      name: "علی اصغر بهرامی",
+      type: "مشتری امدادی",
+      acceptTime: "09:40 | 1404/06/01",
+      deliveryTime: "11:15 | 1404/06/01",
     },
+    services: ["تعویض باطری", "شست‌وشوی انژکتور"],
     hall: "سالن 1",
     estimate: {
-      time: "4 ساعت",
-      cost: "12,000,000 ریال",
+      time: "3 ساعت",
+      cost: "10,000,000 ریال",
     },
-    repairTime: "4",
-    repairShop: "تعمیرگاه 3",
-    stopTime: "2",
-    preInvoiceTime: "2.11",
-    totalTime: "3.11",
+    repairTime: "3",
+    repairShop: "تعمیرگاه 1",
+    stopTime: "1",
+    preInvoiceTime: "1.33",
+    totalTime: "1.33",
     status: "رسید مشتری",
   },
 ];
-
 export default function Receptionreports() {
   const [page, setPage] = useState(0);
   const [totalRows, setTotalRows] = useState(tableInformation.length);
+  const [loading, setLoading] = useState(false);
 
   const handleChangePage = (newPage) => {
     setPage(newPage);
@@ -166,6 +169,87 @@ export default function Receptionreports() {
       >
         <Header title={"گزارش پذیرش"} />
 
+        <Box
+          sx={{
+            margin: "2rem 0",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+          }}
+        >
+          <Grid
+            container
+            sx={{ width: "100%" }}
+            spacing={{ xs: 2, md: 10, xl: 30 }}
+          >
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Input
+                name={"chassis_number"}
+                label="شماره شاسی :"
+                placeholder="شماره شاسی"
+                icon={faHashtag}
+                value={""}
+                onChange={""}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Input
+                name={"admission_number"}
+                label="شماره پذیرش :"
+                placeholder="شماره پذیرش"
+                icon={faHashtag}
+                value={""}
+                onChange={""}
+              />
+            </Grid>
+          </Grid>
+          <Grid container sx={{ width: "100%" }}>
+            <Grid size={{ xs: 12 }}>
+              <DateRangeFilter
+                onDateChange={""}
+                startLabel="از تاریخ پذیرش"
+                endLabel="تا تاریخ پذیرش"
+                spacingxl={30}
+                spacingmd={10}
+                spacingsx={2}
+              />
+            </Grid>
+          </Grid>
+          <Grid container sx={{ width: "100%" }}>
+            <Grid size={{ xs: 12 }}>
+              <DateRangeFilter
+                onDateChange={""}
+                startLabel="از تاریخ ترخیص"
+                endLabel="تا تاریخ ترخیص"
+                spacingxl={30}
+                spacingmd={10}
+                spacingsx={2}
+              />
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            sx={{ width: "100%" }}
+            spacing={{ xs: 2, md: 10, xl: 30 }}
+          >
+            <Grid size={{ xs: 12, md: 6 }}>
+              <MultiSelectDropDwon label={"وضعیت پذیرش"} />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <MultiSelectDropDwon label={"نوع خودرو"} />
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            sx={{ width: "100%" }}
+            spacing={{ xs: 2, md: 10, xl: 30 }}
+          >
+            <Grid size={{ xs: 12, md: 6 }}>
+              <MultiSelectDropDwon label={"نوع خدمات"} />
+            </Grid>
+          </Grid>
+        </Box>
         <TableCustom
           rows={tableInformation}
           columns={columns}
@@ -194,7 +278,7 @@ export default function Receptionreports() {
                 sx={{ fontFamily: "iranYekan" }}
                 className={styles.info_cell}
               >
-                <div>{toFarsiNumber(`VIN: ${row.carInfo.vin}`)}</div>
+                <div>{toFarsiNumber(`شماره شاسی: ${row.carInfo.vin}`)}</div>
                 <div>{toFarsiNumber(`رنگ: ${row.carInfo.color}`)}</div>
                 <div>{toFarsiNumber(`پلاک: ${row.carInfo.plate}`)}</div>
                 <div>{toFarsiNumber(`کیلومتر: ${row.carInfo.mileage}`)}</div>
@@ -216,7 +300,11 @@ export default function Receptionreports() {
                   {toFarsiNumber(`ترخیص: ${row.customerInfo.deliveryTime}`)}
                 </div>
               </TableCell>
-
+              <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                {row.services && row.services.length > 0
+                  ? toFarsiNumber(row.services.join("، "))
+                  : "-"}
+              </TableCell>
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                 {toFarsiNumber(row.hall)}
               </TableCell>
@@ -263,7 +351,48 @@ export default function Receptionreports() {
             </TableRow>
           ))}
         </TableCustom>
+
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            gap: ".5rem",
+            margin: "1rem 0",
+            justifyContent: "end",
+            width: "100%",
+            flexDirection: { sx: "column", md: "row" },
+          }}
+        >
+          <Button2 button_width={"button_width"}>
+            {loading ? (
+              <CircularProgress size={"20px"} color="success" />
+            ) : (
+              "دریافت اکسل"
+            )}
+          </Button2>
+          <Button2 button_width={"button_width"}>
+            {loading ? (
+              <CircularProgress size={"20px"} color="success" />
+            ) : (
+              "دریافت PDF"
+            )}
+          </Button2>
+          <Button2 button_width={"button_width"}>
+            {loading ? (
+              <CircularProgress size={"20px"} color="success" />
+            ) : (
+              "چاپ"
+            )}
+          </Button2>
+        </Box>
       </Grid>
     </Grid>
   );
+}
+
+{
+  /* <Grid container sx={{ width: "100%" }}>
+          <Grid size={{ xs: 12 }}></Grid>
+        </Grid> */
 }

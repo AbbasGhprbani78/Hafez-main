@@ -20,6 +20,9 @@ function DatePickerInput({
   placeholder = "",
   onReset,
   labelClass = "label_input",
+  minDate,
+  maxDate,
+  disabled,
 }) {
   return (
     <Grid
@@ -31,7 +34,7 @@ function DatePickerInput({
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
-        gap: "0.5rem",
+        gap: "0.3rem",
       }}
     >
       {label && (
@@ -44,14 +47,9 @@ function DatePickerInput({
             alignItems: "flex-start",
             flexDirection: "column",
             width: "100%",
-            gap: "0.5rem",
           }}
         >
-          <label
-            htmlFor={name}
-            style={{ marginBottom: "0.2rem" }}
-            className={` ${labelClass}`}
-          >
+          <label htmlFor={name} className={` ${labelClass}`}>
             {label}
           </label>
         </Grid>
@@ -87,14 +85,20 @@ function DatePickerInput({
             calendar={persian}
             locale={persian_fa}
             calendarPosition="bottom-right"
-            value={value}
+            value={value ? value : undefined}
             onChange={onChange}
             format="YYYY/MM/DD"
+            onlyShowInPopover={true}
+            multiple={false}
+            minDate={minDate}
+            maxDate={maxDate}
+            disabled={disabled}
             style={{
               border: "none",
               background: "transparent",
               outline: "none",
               boxShadow: "none",
+              width: "100%",
             }}
           />
         </Grid>

@@ -19,7 +19,7 @@ export default function Button2({
       variant={variant}
       className={` ${disable ? styles.disabled_btn : styles.add_btn} ${
         styles[style]
-      }`}
+      } ${styles[button_width]}`}
       onClick={onClick}
     >
       {children}

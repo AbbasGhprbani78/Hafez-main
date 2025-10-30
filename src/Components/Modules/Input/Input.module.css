@@ -34,6 +34,12 @@
   width: 70%;
 }
 
+.input_container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
 @media (max-width: 767.5px) {
   .width {
     width: 35.5%;

@@ -15,7 +15,7 @@ import {
   warningMessage,
 } from "../../Components/Modules/Toast/ToastCustom";
 import ReactDropdown from "../../Components/Modules/ReactDropdown/ReactDropdown";
-import { ShowConvertedData } from "../RepairCard/RepairCardMain";
+
 import Input from "../../Components/Modules/Input/Input";
 import LoadingForm from "../../Components/Modules/Loading/LoadingForm";
 import { InfoTabel } from "../Management/ManagementPage";
@@ -31,6 +31,7 @@ import apiClient from "../../config/axiosConfig";
 import { toFarsiNumber } from "../../utils/helper";
 import Button2 from "../../Components/Modules/Button2/Button2";
 import { MyContext } from "../../context/context";
+import { ChnageDate } from "../../Components/Modules/ChnageDate/ChnageDate";
 
 export default function AllForm() {
   const { setCurrentTab, setIdForm } = useContext(MyContext);
@@ -313,7 +314,7 @@ export default function AllForm() {
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                       {row.chassis_number}
                     </TableCell>
-                    <ShowConvertedData date={row.admission_date} />
+                    <ChnageDate date={row.admission_date} />
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                       {toFarsiNumber(row.license_plate_number)}
                     </TableCell>

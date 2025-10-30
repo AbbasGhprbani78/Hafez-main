@@ -1,0 +1,10 @@
+.info_cell div {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 2px;
+  margin-bottom: 2px;
+}
+
+.info_cell div:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}

@@ -173,6 +173,7 @@ function ManagementPage() {
     handleChangePage(0);
     setFilterRows(undefined);
   }, [tab]);
+
   return (
     <Grid className="content-conatiner">
       <Modal showModal={modal} setShowModal={handleToggleModal}>
@@ -758,7 +759,107 @@ function ManagementPage() {
                 </InfoTabel>
               )}
             </CustomTabPanel>
-            {/* <CustomTabPanel value={tab} index={3}>
+          </Box>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
+}
+
+export default ManagementPage;
+
+export function InfoTabel({
+  tableInformation = [],
+  handleChange,
+  page = 0,
+  pageLength = 10,
+  totalRows,
+  columnsTitle,
+  children,
+}) {
+  return (
+    <Grid
+      container
+      item
+      size={12}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "flex-start",
+      }}
+    >
+      {tableInformation === undefined ? (
+        <LoadingForm />
+      ) : (
+        <TableCustom
+          rows={tableInformation}
+          columns={columnsTitle}
+          onChange={handleChange}
+          page={page}
+          rowsPerPage={pageLength}
+          total={totalRows}
+          maxHeight={"500px"}
+        >
+          {children}
+        </TableCustom>
+      )}
+    </Grid>
+  );
+}
+
+const tabHeaders = [
+  {
+    value: 1,
+    label: "برنامه‌ریزی تعمیرکار",
+    tabNameEn: "Repairman Scheduling",
+  },
+  { value: 2, label: "تجهیزات", tabNameEn: "Equipment" },
+  { value: 0, label: "سالن‌ها", tabNameEn: "Halls" },
+];
+
+const item1 = {
+  name: "Halls",
+};
+
+const halls_columns = [
+  "کد",
+  "نام سالن",
+  "مانده ظرفیت",
+  "وضعیت",
+  "توضیحات",
+  "عملیات",
+];
+const repairman_columns = [
+  "کد",
+  "نام تعمیرکار",
+  "تخصص تعمیرکار",
+  " قابلیت زمانی تعمیرکار",
+  "وضعیت",
+  "نام سالن",
+  "عملیات",
+];
+const equipment_columns = [
+  "کد",
+  "نام تجهیزات",
+  "نام سالن",
+  "وضعیت",
+  "توضیحات",
+  "عملیات",
+];
+
+// const userColumns = [
+//   "ردیف",
+//   "نام کاربر",
+//   "نقش کاربر",
+//   "کد ملی",
+//   "وضعیت",
+//   "شماره تماس",
+//   "عملیات",
+// ];
+
+{
+  /* <CustomTabPanel value={tab} index={3}>
               {filterRows === undefined ? (
                 <LoadingForm />
               ) : (
@@ -868,102 +969,5 @@ function ManagementPage() {
                   )}
                 </InfoTabel>
               )}
-            </CustomTabPanel> */}
-          </Box>
-        </Grid>
-      </Grid>
-    </Grid>
-  );
+            </CustomTabPanel> */
 }
-
-export default ManagementPage;
-
-export function InfoTabel({
-  tableInformation = [],
-  handleChange,
-  page = 0,
-  pageLength = 10,
-  totalRows,
-  columnsTitle,
-  children,
-}) {
-  return (
-    <Grid
-      container
-      item
-      size={12}
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "flex-start",
-      }}
-    >
-      {tableInformation === undefined ? (
-        <LoadingForm />
-      ) : (
-        <TableCustom
-          rows={tableInformation}
-          columns={columnsTitle}
-          onChange={handleChange}
-          page={page}
-          rowsPerPage={pageLength}
-          total={totalRows}
-          maxHeight={"500px"}
-        >
-          {children}
-        </TableCustom>
-      )}
-    </Grid>
-  );
-}
-
-const tabHeaders = [
-  {
-    value: 1,
-    label: "برنامه‌ریزی تعمیرکار",
-    tabNameEn: "Repairman Scheduling",
-  },
-  { value: 2, label: "تجهیزات", tabNameEn: "Equipment" },
-  { value: 0, label: "سالن‌ها", tabNameEn: "Halls" },
-];
-
-const item1 = {
-  name: "Halls",
-};
-
-const halls_columns = [
-  "کد",
-  "نام سالن",
-  "مانده ظرفیت",
-  "وضعیت",
-  "توضیحات",
-  "عملیات",
-];
-const repairman_columns = [
-  "کد",
-  "نام تعمیرکار",
-  "تخصص تعمیرکار",
-  " قابلیت زمانی تعمیرکار",
-  "وضعیت",
-  "نام سالن",
-  "عملیات",
-];
-const equipment_columns = [
-  "کد",
-  "نام تجهیزات",
-  "نام سالن",
-  "وضعیت",
-  "توضیحات",
-  "عملیات",
-];
-
-// const userColumns = [
-//   "ردیف",
-//   "نام کاربر",
-//   "نقش کاربر",
-//   "کد ملی",
-//   "وضعیت",
-//   "شماره تماس",
-//   "عملیات",
-// ];

@@ -21,6 +21,10 @@ import History from "./Pages/RepairmanPanel/History/History";
 import Users from "./Pages/AdminPanel/Users/Users";
 import Account from "./Pages/AdminPanel/Account/Account";
 import Arboretum from "./Pages/Arboretum/Arboretum";
+import Receptionreports from "./Pages/Report/Receptionreports";
+import CustomerList from "./Pages/Report/CustomerList";
+import CustomerHistory from "./Pages/Report/CustomerHistory";
+
 const routes = [
   { path: "/", element: <Home /> },
   { path: "/draft", element: <Draft /> },
@@ -33,8 +37,11 @@ const routes = [
   { path: "/repairplan", element: <RepairPlan /> },
   { path: "/fund", element: <Fund /> },
   { path: "/fund/:id", element: <FundItem /> },
-  { path: "/settings", element: <ManagementPage /> },
+  { path: "/management", element: <ManagementPage /> },
   { path: "/arboretum", element: <Arboretum /> },
+  { path: "/report/reception-reports", element: <Receptionreports /> },
+  { path: "/report/customer-list", element: <CustomerList /> },
+  { path: "/report/customer-history", element: <CustomerHistory /> },
   {
     path: "/p-repairman/*",
     element: (

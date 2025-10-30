@@ -1,0 +1,18 @@
+/* Styles for DateRangeFilter component */
+.date_range_filter_wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  gap: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .date_range_filter_wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+

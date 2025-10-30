@@ -14,7 +14,7 @@ body {
 }
 
 .space-content {
-  padding: 0 calc(20px + 1vw);
+  padding: 0 calc(20px + 1vw) !important;
   width: 100%;
 }
 

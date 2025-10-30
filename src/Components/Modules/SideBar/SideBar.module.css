@@ -1,67 +1,113 @@
 .sidebar_container {
-    background-color: var(--color-3);
-    position: relative;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 60px;
-    min-height: 100vh;
-    transition: all .5s ease;
+  background-color: var(--color-3);
+  position: relative;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  min-height: 100vh;
+  transition: all 0.5s ease;
 }
 
 .sidebar_item_text {
-    display: none;
-    transition: display 0.3s ease 0s
+  display: none;
+  transition: display 0.3s ease 0s;
 }
 
 .active_sidebar {
-    width: 230px;
+  width: 230px;
 }
 
 .active_sidebar .sidebar_item_text {
-    display: block;
-    transition: display .3s ease .5s;
+  display: block;
+  transition: display 0.3s ease 0.5s;
 }
 
 .sidebarlist {
-    padding: 0;
-    margin: 0;
-    position: sticky;
-    right: 0;
-    top: 0;
+  padding: 0;
+  margin: 0;
+  position: sticky;
+  right: 0;
+  top: 0;
 }
 
 .sidebar_item {
-    padding: 10px 20px 10px 15px;
-    margin: 15px 0;
-    display: flex;
-    align-items: center;
-    color: #fff;
-    transition: .3s;
-    cursor: pointer;
+  padding: 10px 20px 10px 15px;
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  transition: 0.3s;
+  cursor: pointer;
 }
 
 .sidebar_item:hover {
-    background-color: var(--color-5);
+  background-color: var(--color-5);
 }
 
-
-
 .first_icon_sidebar {
-    margin-top: 0;
-    margin-bottom: 3rem;
+  margin-top: 0;
+  margin-bottom: 3rem;
 }
 
 .sidebar_item_text {
-    margin-right: 1.2rem;
+  margin-right: 1.2rem;
 }
 
 .logout_sidebar {
-    margin-top: 3rem;
+  margin-top: 3rem;
 }
 
-@media (max-width:900px) {
-    .sidebar_container {
-        display: none;
-    }
+.dropdown_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.chevron_icon {
+  display: none;
+}
+
+.active_sidebar .chevron_icon {
+  display: block;
+}
+
+.sidebar_submenu {
+  display: flex;
+  flex-direction: column;
+}
+
+.submenu {
+  display: flex;
+  flex-direction: column;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.submenu.open {
+  max-height: 500px;
+}
+
+.submenu_item {
+  color: #fff;
+  font-size: 0.9rem;
+  transition: background 0.2s ease;
+  text-decoration: none;
+  margin-top: 0.8rem;
+}
+
+.submenu_item:hover {
+  color: #ccc;
+}
+
+.submenu_item.active {
+  color: #ccc;
+}
+
+@media (max-width: 900px) {
+  .sidebar_container {
+    display: none;
+  }
 }

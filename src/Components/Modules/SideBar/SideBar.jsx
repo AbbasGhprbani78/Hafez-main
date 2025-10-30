@@ -10,24 +10,34 @@ import {
   faRightToBracket,
   faListCheck,
   faCalendarPlus,
+  faChevronDown,
+  faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
-
 import { NavLink, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { MyContext } from "../../../context/context";
+
 export default function SideBar({
   routes = [
     { path: "/", label: "خانه", icon: faHome },
     { path: "/paziresh", label: "پذیرش", icon: faNewspaper },
     { path: "/repairsall", label: "کارت تعمیر", icon: faScrewdriverWrench },
     { path: "/fund", label: "حسابداری", icon: faLayerGroup },
-    // { path: "/g", label: "گزارشات", icon: faChartPie },
+
+    {
+      label: "گزارشات",
+      icon: faChartPie,
+      subRoutes: [
+        { path: "/report/reception-reports", label: "گزارش پذیرش" },
+        { path: "/report/customer-list", label: "لیست مشتریان" },
+        { path: "/report/customer-history", label: "سابقه مشتریان" },
+      ],
+    },
     { path: "/allform", label: "فرم‌ها", icon: faListCheck },
-    { path: "/settings", label: "مدیریت", icon: faCalendarPlus },
+    { path: "/management", label: "مدیریت", icon: faCalendarPlus },
   ],
 }) {
   const navigate = useNavigate();
-
   const logoutHandler = () => {
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
@@ -35,6 +45,14 @@ export default function SideBar({
   };
 
   const { toggleOpen, isOpen } = useContext(MyContext);
+  const [openDropdown, setOpenDropdown] = useState(null);
+
+  const toggleDropdown = (label) => {
+    if (!isOpen) {
+      toggleOpen();
+    }
+    setOpenDropdown((prev) => (prev === label ? null : label));
+  };
 
   return (
     <div
@@ -52,19 +70,73 @@ export default function SideBar({
           </div>
         </li>
 
-        {routes.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            className={`${styles.sidebar_item} navlink`}
-            end
-          >
-            <div className={styles.icon_sidebar_wrapper}>
-              <FontAwesomeIcon icon={item.icon} />
-            </div>
-            <p className={styles.sidebar_item_text}>{item.label}</p>
-          </NavLink>
-        ))}
+        {routes.map((item) => {
+          if (item.subRoutes) {
+            return (
+              <li
+                onClick={() => toggleDropdown(item.label)}
+                key={item.label}
+                className={`${styles.sidebar_item} ${styles.sidebar_submenu}`}
+              >
+                <div
+                  className={`${styles.icon_sidebar_wrapper} ${styles.dropdown_header} `}
+                >
+                  <div style={{ display: "flex" }}>
+                    <FontAwesomeIcon icon={item.icon} />
+                    <p className={styles.sidebar_item_text}>{item.label}</p>
+                  </div>
+                  <FontAwesomeIcon
+                    icon={
+                      isOpen && openDropdown === item.label
+                        ? faChevronUp
+                        : faChevronDown
+                    }
+                    className={styles.chevron_icon}
+                  />
+                </div>
+
+                <ul
+                  className={`${styles.submenu} ${
+                    isOpen && openDropdown ? styles.open : ""
+                  }`}
+                >
+                  {item.subRoutes.map((sub) => (
+                    <NavLink
+                      key={sub.path}
+                      to={sub.path}
+                      className={({ isActive }) =>
+                        `${styles.submenu_item} ${
+                          isActive ? styles.active : ""
+                        }`
+                      }
+                      end
+                    >
+                      {sub.label}
+                    </NavLink>
+                  ))}
+                </ul>
+              </li>
+            );
+          }
+
+          return (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `${styles.sidebar_item} navlink ${
+                  isActive ? styles.active : ""
+                }`
+              }
+              end
+            >
+              <div className={styles.icon_sidebar_wrapper}>
+                <FontAwesomeIcon icon={item.icon} />
+              </div>
+              <p className={styles.sidebar_item_text}>{item.label}</p>
+            </NavLink>
+          );
+        })}
 
         <li
           className={`${styles.sidebar_item} navlink ${styles.logou_sidebar}`}
