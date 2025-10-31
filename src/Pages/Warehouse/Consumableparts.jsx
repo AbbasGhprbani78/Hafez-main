@@ -1,76 +1,92 @@
 import { useState } from "react";
-import Grid from "@mui/material/Grid2";
-import SideBar from "../../Components/Modules/SideBar/SideBar";
-import Header from "../../Components/Modules/Header/Header";
-import MultiSelectDropDwon from "../../Components/Modules/MultiSelectDropdown/MultiSelectDropDwon";
-import DateRangeFilter from "../../Components/Modules/DateRangeFilter/DateRangeFilter";
-import Input from "../../Components/Modules/Input/Input";
-import { faHashtag } from "@fortawesome/free-solid-svg-icons";
+import Button2 from "../../Components/Modules/Button2/Button2";
 import { Box, CircularProgress, TableCell, TableRow } from "@mui/material";
 import { toFarsiNumber } from "../../utils/helper";
 import TableCustom from "../../Components/Modules/TableCustom/TableCustom";
-import Button2 from "../../Components/Modules/Button2/Button2";
-
+import { faHashtag } from "@fortawesome/free-solid-svg-icons";
+import Input from "../../Components/Modules/Input/Input";
+import Grid from "@mui/material/Grid2";
+import SideBar from "../../Components/Modules/SideBar/SideBar";
+import Header from "../../Components/Modules/Header/Header";
+import DateRangeFilter from "../../Components/Modules/DateRangeFilter/DateRangeFilter";
+//مصرف قطعات
 const columns = [
-  "کد",
-  "نام مشتری",
-  "کد ملی",
-  "شماره تماس",
+  "کد قطعه / سریال قطعه",
+  "شرح قطعه",
   "نوع خودرو",
+  "شماره موتور",
   "تاریخ پذیرش",
   "تاریخ ترخیص",
-  "مبلغ فاکتور",
+  "تعداد",
+  "سریال قطعه",
+  "اجرت",
+  "تعداد مصرف",
 ];
 
 const tableInformation = [
   {
-    name: "علی رضایی",
-    nationalCode: "1234567890",
-    phone: "09121234567",
-    carType: "پژو 206",
-    admissionDate: "1403/07/10",
-    releaseDate: "1403/07/15",
-    invoiceAmount: "8,500,000",
+    partCode: "P-1001",
+    description: "فیلتر روغن موتور",
+    carType: "شاهین",
+    engineNumber: "ENG442311",
+    acceptDate: "1404/06/01",
+    releaseDate: "1404/06/02",
+    quantity: 2,
+    serial: "SRL-000245",
+    wage: "800,000 ریال",
+    usedQuantity: 2,
   },
   {
-    name: "مهدی کاظمی",
-    nationalCode: "0987654321",
-    phone: "09351234567",
-    carType: "پراید 131",
-    admissionDate: "1403/07/12",
-    releaseDate: "1403/07/18",
-    invoiceAmount: "5,200,000",
+    partCode: "P-1002",
+    description: "روغن ترمز DOT4",
+    carType: "کوییک",
+    engineNumber: "ENG551922",
+    acceptDate: "1404/06/01",
+    releaseDate: "1404/06/03",
+    quantity: 1,
+    serial: "SRL-000356",
+    wage: "600,000 ریال",
+    usedQuantity: 1,
   },
   {
-    name: "سارا محمدی",
-    nationalCode: "1122334455",
-    phone: "09135551234",
-    carType: "تیبا 2",
-    admissionDate: "1403/07/14",
-    releaseDate: "1403/07/20",
-    invoiceAmount: "6,750,000",
+    partCode: "P-1003",
+    description: "دیسک ترمز جلو",
+    carType: "ساینا",
+    engineNumber: "ENG661508",
+    acceptDate: "1404/06/02",
+    releaseDate: "1404/06/04",
+    quantity: 2,
+    serial: "SRL-000587",
+    wage: "1,400,000 ریال",
+    usedQuantity: 2,
   },
   {
-    name: "حمید نادری",
-    nationalCode: "2233445566",
-    phone: "09198887766",
-    carType: "سمند EF7",
-    admissionDate: "1403/07/11",
-    releaseDate: "1403/07/17",
-    invoiceAmount: "9,200,000",
+    partCode: "P-1004",
+    description: "شمع موتور",
+    carType: "X200",
+    engineNumber: "ENG441278",
+    acceptDate: "1404/06/03",
+    releaseDate: "1404/06/05",
+    quantity: 4,
+    serial: "SRL-000612",
+    wage: "500,000 ریال",
+    usedQuantity: 4,
   },
   {
-    name: "نرگس شریفی",
-    nationalCode: "3344556677",
-    phone: "09352223344",
-    carType: "دنا پلاس",
-    admissionDate: "1403/07/09",
-    releaseDate: "1403/07/16",
-    invoiceAmount: "12,300,000",
+    partCode: "P-1005",
+    description: "فیلتر هوا",
+    carType: "تیبا",
+    engineNumber: "ENG558901",
+    acceptDate: "1404/06/04",
+    releaseDate: "1404/06/06",
+    quantity: 1,
+    serial: "SRL-000734",
+    wage: "300,000 ریال",
+    usedQuantity: 1,
   },
 ];
 
-export default function CustomerList() {
+export default function Consumableparts() {
   const [page, setPage] = useState(0);
   const [totalRows, setTotalRows] = useState(tableInformation.length);
   const [loading, setLoading] = useState(false);
@@ -92,7 +108,7 @@ export default function CustomerList() {
         minWidth={100}
         className="space-content scroll-contant"
       >
-        <Header title={"لیست مشتریان"} />
+        <Header title={"مصرف قطعات"} />
         <Box
           sx={{
             margin: "2rem 0",
@@ -134,8 +150,8 @@ export default function CustomerList() {
             <Grid size={{ xs: 12, md: 6 }}>
               <Input
                 name={"chassis_number"}
-                label="کد ملی :"
-                placeholder="کد ملی"
+                label="سریال قطعه :"
+                placeholder="سریال قطعه"
                 icon={faHashtag}
                 value={""}
                 onChange={""}
@@ -144,21 +160,12 @@ export default function CustomerList() {
             <Grid size={{ xs: 12, md: 6 }}>
               <Input
                 name={"admission_number"}
-                label="نام مشتری :"
-                placeholder="نام مشتری "
+                label="شرح قطعه :"
+                placeholder="شرح قطعه"
                 icon={faHashtag}
                 value={""}
                 onChange={""}
               />
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            sx={{ width: "100%" }}
-            spacing={{ xs: 2, md: 10, xl: 30 }}
-          >
-            <Grid size={{ xs: 12, md: 6 }}>
-              <MultiSelectDropDwon label={"نوع خودرو"} />
             </Grid>
           </Grid>
         </Box>
@@ -179,28 +186,43 @@ export default function CustomerList() {
               }}
             >
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(index + 1)}
+                {toFarsiNumber(`${row.partCode}`)}
               </TableCell>
+
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.name)}
+                {toFarsiNumber(row.description)}
               </TableCell>
-              <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.nationalCode)}
-              </TableCell>
-              <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.phone)}
-              </TableCell>
+
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                 {toFarsiNumber(row.carType)}
               </TableCell>
+
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.admissionDate)}
+                {toFarsiNumber(row.engineNumber)}
               </TableCell>
+
+              <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                {toFarsiNumber(row.acceptDate)}
+              </TableCell>
+
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                 {toFarsiNumber(row.releaseDate)}
               </TableCell>
+
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.invoiceAmount)}
+                {toFarsiNumber(row.quantity)}
+              </TableCell>
+
+              <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                {toFarsiNumber(row.serial)}
+              </TableCell>
+
+              <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                {toFarsiNumber(row.wage)}
+              </TableCell>
+
+              <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                {toFarsiNumber(row.usedQuantity)}
               </TableCell>
             </TableRow>
           ))}

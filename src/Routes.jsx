@@ -24,6 +24,10 @@ import Arboretum from "./Pages/Arboretum/Arboretum";
 import Receptionreports from "./Pages/Report/Receptionreports";
 import CustomerList from "./Pages/Report/CustomerList";
 import CustomerHistory from "./Pages/Report/CustomerHistory";
+import Consumableparts from "./Pages/Warehouse/Consumableparts";
+import Consumptionofparts from "./Pages/Warehouse/Consumptionofparts";
+import DailyBilling from "./Pages/finance/DailyBilling";
+import WorkOfContractors from "./Pages/finance/WorkOfContractors";
 
 const routes = [
   { path: "/", element: <Home /> },
@@ -42,6 +46,10 @@ const routes = [
   { path: "/report/reception-reports", element: <Receptionreports /> },
   { path: "/report/customer-list", element: <CustomerList /> },
   { path: "/report/customer-history", element: <CustomerHistory /> },
+  { path: "/warehouse/consumableparts", element: <Consumableparts /> },
+  { path: "/warehouse/consumptionofparts", element: <Consumptionofparts /> },
+  { path: "/finance/dailybilling", element: <DailyBilling /> },
+  { path: "/finance/workofcontractors", element: <WorkOfContractors /> },
   {
     path: "/p-repairman/*",
     element: (

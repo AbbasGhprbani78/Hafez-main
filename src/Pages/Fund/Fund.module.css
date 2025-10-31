@@ -35,3 +35,9 @@
   min-height: 35px;
   font-family: "iranYekan", sans-serif !important;
 }
+
+@media (max-width: 600px) {
+  .wrap_button {
+    margin-top: 1.5rem;
+  }
+}

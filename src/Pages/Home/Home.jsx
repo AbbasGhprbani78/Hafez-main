@@ -55,7 +55,7 @@ export default function Home() {
     <>
       <div className="content-conatiner">
         <SideBar />
-        <div className="space-content">
+        <div className="space-content scroll-contant">
           <Header title={"خانه"} />
           <div className="home-container">
             <div className="home-item div1">

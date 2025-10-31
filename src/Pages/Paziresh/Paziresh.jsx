@@ -97,9 +97,8 @@ export default function Paziresh() {
   return (
     <Grid size={12} sx={{ display: "flex" }}>
       <SideBar />
-
       <ToastContainerCustom />
-      <div className="space-content" ref={printRef}>
+      <div className="space-content scroll-contant" ref={printRef}>
         <Header
           title={content}
           disabledButton={true}

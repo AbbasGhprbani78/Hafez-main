@@ -47,7 +47,7 @@
 
 .first_icon_sidebar {
   margin-top: 0;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
 .sidebar_item_text {
@@ -92,7 +92,7 @@
 
 .submenu_item {
   color: #fff;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   transition: background 0.2s ease;
   text-decoration: none;
   margin-top: 0.8rem;

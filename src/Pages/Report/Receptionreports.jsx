@@ -158,14 +158,10 @@ export default function Receptionreports() {
         size={{ xs: 12 }}
         container
         sx={{
-          display: "flex",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          flexDirection: "column",
           width: "100%",
         }}
         minWidth={100}
-        className="space-content"
+        className="space-content scroll-contant"
       >
         <Header title={"گزارش پذیرش"} />
 

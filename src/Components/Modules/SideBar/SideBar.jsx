@@ -12,6 +12,8 @@ import {
   faCalendarPlus,
   faChevronDown,
   faChevronUp,
+  faWarehouse,
+  faMoneyCheckDollar,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
@@ -31,6 +33,22 @@ export default function SideBar({
         { path: "/report/reception-reports", label: "گزارش پذیرش" },
         { path: "/report/customer-list", label: "لیست مشتریان" },
         { path: "/report/customer-history", label: "سابقه مشتریان" },
+      ],
+    },
+    {
+      label: "انبار",
+      icon: faWarehouse,
+      subRoutes: [
+        { path: "/warehouse/consumableparts", label: "مصرف قطعات" },
+        { path: "/warehouse/consumptionofparts", label: "قطعات پر مصرف" },
+      ],
+    },
+    {
+      label: "مالی",
+      icon: faMoneyCheckDollar,
+      subRoutes: [
+        { path: "/finance/workofcontractors", label: "کارکرد پیمانکاران" },
+        { path: "/finance/dailybilling", label: "صورتحساب روزانه" },
       ],
     },
     { path: "/allform", label: "فرم‌ها", icon: faListCheck },
@@ -60,7 +78,7 @@ export default function SideBar({
         isOpen ? styles.active_sidebar : ""
       }`}
     >
-      <ul className={"sidebarlist"}>
+      <ul className="scroll-contant">
         <li
           className={`${styles.sidebar_item} ${styles.first_icon_sidebar}`}
           onClick={toggleOpen}
@@ -97,7 +115,7 @@ export default function SideBar({
 
                 <ul
                   className={`${styles.submenu} ${
-                    isOpen && openDropdown ? styles.open : ""
+                    isOpen && openDropdown === item.label ? styles.open : ""
                   }`}
                 >
                   {item.subRoutes.map((sub) => (

@@ -208,7 +208,7 @@ export default function FundItem() {
             container
             rowSpacing={2}
             columnSpacing={4}
-            sx={{ marginTop: "1rem" }}
+            sx={{ margin: "1rem 0" }}
           >
             <Grid size={{ xs: 12, md: 7 }} className={styles.payment_method}>
               <div className={styles.wrap_accardions}>

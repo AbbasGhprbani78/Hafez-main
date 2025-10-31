@@ -304,10 +304,6 @@ function ManagementPage() {
         size={{ xs: 12 }}
         container
         sx={{
-          display: "flex",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          flexDirection: "column",
           width: "100%",
         }}
         minWidth={100}
@@ -318,7 +314,7 @@ function ManagementPage() {
           lg: "1.5rem",
           xl: "2rem",
         }}
-        className={`space-content ${styles.wrap_repairs}`}
+        className={`space-content scroll-contant`}
       >
         <Header title={"مدیریت:"} disabledButton={true} />
         <Grid

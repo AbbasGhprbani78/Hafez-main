@@ -824,8 +824,8 @@ function AcceptenceForm3({
                   type="button"
                   variant="contained"
                   icon={faUserTie}
-                  style={"width"}
                   onClick={handleClickOnSendToExperts}
+                  button_width={"button_width"}
                 >
                   {"ارجاع به کارشناس"}
                 </Button2>
@@ -835,7 +835,7 @@ function AcceptenceForm3({
                   variant="outlined"
                   icon={faPen}
                   onClick={hadleClickOnGoesBack}
-                  style={"width"}
+                  button_width={"button_width"}
                 >
                   {"قبل"}
                 </Button2>
@@ -846,7 +846,7 @@ function AcceptenceForm3({
                   icon={loading ? "" : faCheck}
                   onClick={postForm3Data}
                   disable={loading}
-                  style={"width"}
+                  button_width={"button_width"}
                 >
                   {loading ? (
                     <CircularProgress size={"25.2px"} color="success" />

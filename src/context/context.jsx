@@ -7,7 +7,7 @@ export const MyProvider = ({ children }) => {
   const [dataForm, setDataForm] = useState("");
   const [idForm, setIdForm] = useState("");
 
-  const [currentTab, setCurrentTab] = useState(3);
+  const [currentTab, setCurrentTab] = useState(1);
 
   const toggleOpen = () => {
     setIsOpen((prevStatus) => !prevStatus);

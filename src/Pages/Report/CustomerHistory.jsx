@@ -150,13 +150,10 @@ export default function CustomerHistory() {
         size={{ xs: 12 }}
         container
         sx={{
-          display: "flex",
-          justifyContent: "flex-start",
-          alignItems: "center",
           width: "100%",
         }}
         minWidth={100}
-        className="space-content"
+        className="space-content scroll-contant"
       >
         <Header title={"سابقه مشتریان"} />
         <Box

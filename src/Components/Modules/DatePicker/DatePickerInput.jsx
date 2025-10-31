@@ -85,7 +85,7 @@ function DatePickerInput({
             calendar={persian}
             locale={persian_fa}
             calendarPosition="bottom-right"
-            value={value ? value : undefined}
+            value={value ? value : null}
             onChange={onChange}
             format="YYYY/MM/DD"
             onlyShowInPopover={true}

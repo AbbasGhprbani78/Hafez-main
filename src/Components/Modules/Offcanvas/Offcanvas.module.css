@@ -56,3 +56,45 @@
 .logout_item {
   margin-top: 3.5rem;
 }
+
+.offcanvas_wrap_submenu {
+  display: flex;
+  flex-direction: column;
+}
+
+.offcanvas_submenu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.submenu {
+  display: flex;
+  flex-direction: column;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+}
+.submenu.open {
+  max-height: 500px;
+}
+
+.submenu_item {
+  color: #fff;
+  font-size: 0.9rem;
+  transition: background 0.2s ease;
+  text-decoration: none;
+  margin-top: 0.8rem;
+  width: 100%;
+  margin-right: 2rem;
+}
+
+.submenu_item:hover {
+  color: #ccc;
+}
+
+.submenu_item.active {
+  color: #ccc;
+}

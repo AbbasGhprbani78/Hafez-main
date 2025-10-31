@@ -158,6 +158,10 @@ button {
 ::placeholder {
   font-family: "iranYekan", sans-serif;
 }
+.scroll-contant {
+  max-height: 100vh;
+  overflow-y: scroll;
+}
 
 @media print {
   .no-print {

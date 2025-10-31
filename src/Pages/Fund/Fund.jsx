@@ -10,6 +10,7 @@ import TableStatus from "../../Components/Modules/TableStatus/TableStatus";
 import { useState } from "react";
 import Grid from "@mui/material/Grid2";
 import { toFarsiNumber } from "../../utils/helper";
+import { useNavigate } from "react-router-dom";
 
 export default function Fund() {
   const columns = [
@@ -27,6 +28,7 @@ export default function Fund() {
   const [dateStart, setDateStart] = useState("");
   const [dateEnd, setDateEnd] = useState("");
   const [inputSearch, setInputSearch] = useState("");
+  const navigate = useNavigate();
   const [rows, setRows] = useState([
     {
       admission_number: "400025152",
@@ -249,7 +251,7 @@ export default function Fund() {
   return (
     <div className="content-conatiner">
       <SideBar />
-      <div className="space-content">
+      <div className="space-content scroll-contant">
         <Header title={"کارتابل صندوق پذیرش :"} />
         <div className={styles.wrapper}>
           <Grid container className={`${styles.wrap_filters}`} rowSpacing={2}>
@@ -266,12 +268,12 @@ export default function Fund() {
             <Grid size={{ xs: 12, md: 8 }}>
               <Grid container alignItems={"end"}>
                 <Grid size={{ xs: 12, sm: 9, md: 8 }}>
-                  <Grid container spacing={4}>
+                  <Grid container spacing={2}>
                     <Grid size={{ xs: 12, sm: 6 }}>
                       <label
                         className={`label_input`}
                         style={{
-                          marginBottom: ".5rem",
+                          marginBottom: ".3rem",
                           display: "inline-block",
                         }}
                       >
@@ -283,7 +285,7 @@ export default function Fund() {
                       <label
                         className={`label_input`}
                         style={{
-                          marginBottom: ".5rem",
+                          marginBottom: ".3rem",
                           display: "inline-block",
                         }}
                       >
@@ -351,7 +353,7 @@ export default function Fund() {
                       align="center"
                       sx={{ fontFamily: "iranYekan" }}
                     >
-                      {row.chassis_number}
+                      {toFarsiNumber(row.chassis_number)}
                     </TableCell>
                     <TableCell
                       ali
@@ -372,7 +374,10 @@ export default function Fund() {
                       align="center"
                       sx={{ fontFamily: "iranYekan" }}
                     >
-                      <div className={styles.wrap_btn}>
+                      <div
+                        className={styles.wrap_btn}
+                        onClick={() => navigate("/fund/:id")}
+                      >
                         <button className={styles.btn}>مشاهده</button>
                       </div>
                     </TableCell>
