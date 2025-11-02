@@ -7,7 +7,7 @@ import {
   faClockRotateLeft,
   faChartBar,
 } from "@fortawesome/free-solid-svg-icons";
-export default function index() {
+export default function Index() {
   const routes = [
     { path: "/p-repairman", label: "خانه", icon: faHouse },
     { path: "/p-repairman/tasks", label: "تسک ها", icon: faListCheck },

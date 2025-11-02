@@ -11,7 +11,7 @@ import FundItem from "./Pages/Fund/FundItem";
 import RepairCardMain from "./Pages/RepairCard/RepairCardMain";
 import ManagementPage from "./Pages/Management/ManagementPage";
 import PRepairmanPrivate from "./Components/Modules/Privates/PRepairmanPrivate";
-import RepairManPanel from "./Pages/RepairmanPanel/index";
+import RepairManPanel from "./Pages/RepairmanPanel/Index";
 import PRepairIndex from "./Pages/RepairmanPanel/Index/Index";
 import PAdminPrivate from "./Components/Modules/Privates/PAdminPrivate";
 import PanelAdmin from "./Pages/AdminPanel/Index";
