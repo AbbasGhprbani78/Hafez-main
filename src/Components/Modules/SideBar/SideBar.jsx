@@ -124,7 +124,7 @@ export default function SideBar({
                       to={sub.path}
                       className={({ isActive }) =>
                         `${styles.submenu_item} ${
-                          isActive ? styles.active : ""
+                          isActive ? styles.activesub : ""
                         }`
                       }
                       end
@@ -146,7 +146,6 @@ export default function SideBar({
                   isActive ? styles.active : ""
                 }`
               }
-              end
             >
               <div className={styles.icon_sidebar_wrapper}>
                 <FontAwesomeIcon icon={item.icon} />
