@@ -6,22 +6,19 @@ import {
   faListCheck,
   faClockRotateLeft,
   faChartBar,
-  faWallet,
-  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
-
-const routes = [
-  { path: "/p-admin", label: "خانه", icon: faHouse },
-  { path: "/p-admin/account", label: "حساب", icon: faWallet },
-  { path: "/p-admin/users", label: "کاربرها", icon: faUsers },
-];
-
-export default function Index() {
+export default function Main() {
+  const routes = [
+    { path: "/p-repairman", label: "خانه", icon: faHouse },
+    { path: "/p-repairman/tasks", label: "تسک ها", icon: faListCheck },
+    { path: "/p-repairman/history", label: "سوابق", icon: faClockRotateLeft },
+    { path: "/p-repairman/reports", label: "گزارشات", icon: faChartBar },
+  ];
   return (
     <div className="content-conatiner">
       <Sidebar routes={routes} />
       <div className="space-content">
-        <Header title={"دسترسی ادمین"} isPanel={"true"} routes={routes} />
+        <Header title={"پنل تعمیرکار"} isPanel={"true"} routes={routes} />
         <Outlet />
       </div>
     </div>
