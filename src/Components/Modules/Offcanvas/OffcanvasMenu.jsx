@@ -4,8 +4,6 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBoxArchive,
-  faCalendarPlus,
   faChartPie,
   faHome,
   faLayerGroup,
@@ -18,6 +16,7 @@ import {
   faChevronUp,
   faWarehouse,
   faMoneyCheckDollar,
+  faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "./Offcanvas.module.css";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -58,7 +57,7 @@ function ResponsiveDrawer({
       ],
     },
     { path: "/allform", label: "فرم‌ها", icon: faListCheck },
-    { path: "/management", label: "مدیریت", icon: faCalendarPlus },
+    { path: "/management", label: "مدیریت", icon: faUserTie },
   ],
 }) {
   const navigate = useNavigate();

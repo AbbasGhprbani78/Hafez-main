@@ -486,8 +486,6 @@ export default function Pform2({
     }
   }, [form2Data, carParts]);
 
-  console.log(form2);
-
   return (
     <>
       <CarModal

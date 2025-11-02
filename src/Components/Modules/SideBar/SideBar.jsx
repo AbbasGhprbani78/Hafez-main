@@ -9,11 +9,11 @@ import {
   faChartPie,
   faRightToBracket,
   faListCheck,
-  faCalendarPlus,
   faChevronDown,
   faChevronUp,
   faWarehouse,
   faMoneyCheckDollar,
+  faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
@@ -52,7 +52,7 @@ export default function SideBar({
       ],
     },
     { path: "/allform", label: "فرم‌ها", icon: faListCheck },
-    { path: "/management", label: "مدیریت", icon: faCalendarPlus },
+    { path: "/management", label: "مدیریت", icon: faUserTie },
   ],
 }) {
   const navigate = useNavigate();

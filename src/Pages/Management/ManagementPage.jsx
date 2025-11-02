@@ -300,13 +300,13 @@ function ManagementPage() {
       <SideBar />
       <ToastContainerCustom />
       <Grid
-        item
         size={{ xs: 12 }}
         container
         sx={{
           width: "100%",
         }}
         minWidth={100}
+        direction={"column"}
         gap={{
           xs: "0.5rem",
           sm: "0.7rem",
@@ -314,7 +314,7 @@ function ManagementPage() {
           lg: "1.5rem",
           xl: "2rem",
         }}
-        className={`space-content scroll-contant`}
+        className={`space-content `}
       >
         <Header title={"مدیریت:"} disabledButton={true} />
         <Grid
