@@ -7,7 +7,7 @@ import Button2 from "../../../Components/Modules/Button2/Button2";
 import { faWallet } from "@fortawesome/free-solid-svg-icons";
 import BoxCard from "../../../Components/Modules/Box/Box";
 
-export default function Index() {
+export default function Home() {
   return (
     <div className={styles.parent}>
       <div className={`${styles.div1} ${styles.box}`}>

@@ -153,7 +153,7 @@ const data2 = [
   },
 ];
 
-export default function Index() {
+export default function Home() {
   return (
     <div className={styles.container}>
       <div className={`${styles.div1} ${styles.div_item}`}>
