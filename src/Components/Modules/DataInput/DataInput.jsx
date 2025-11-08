@@ -21,25 +21,42 @@ export default function DataInput({
   return (
     <div className="estimate_input">
       <div className="input_content_wrapper">
-        <DatePicker
-          placeholder={placeHolder}
-          calendar={persian}
-          locale={persian_fa}
-          format="YYYY/MM/DD HH:mm"
-          calendarPosition="bottom-right"
-          value={displayValue}
-          plugins={[<TimePicker key={1} position="bottom" />]}
-          onChange={(dateObject) => {
-            const gregorianDate = dateObject?.toDate();
-            onChange(gregorianDate);
-          }}
-          style={{
-            border: "none",
-            background: "transparent",
-            outline: "none",
-            fontFamily: "iranYekan",
-          }}
-        />
+        <div className="datepicker_with_clear">
+          <DatePicker
+            placeholder={placeHolder}
+            calendar={persian}
+            locale={persian_fa}
+            format="YYYY/MM/DD HH:mm"
+            calendarPosition="bottom-right"
+            value={displayValue}
+            plugins={[<TimePicker key={1} position="bottom" />]}
+            onChange={(dateObject) => {
+              const gregorianDate = dateObject?.toDate();
+              onChange(gregorianDate);
+            }}
+            style={{
+              border: "none",
+              background: "transparent",
+              outline: "none",
+              fontFamily: "iranYekan",
+            }}
+          />
+
+          {value ? (
+            <button
+              type="button"
+              className="clear-date-btn"
+              aria-label="پاک کردن تاریخ"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onChange(null);
+              }}
+            >
+              ×
+            </button>
+          ) : null}
+        </div>
       </div>
     </div>
   );

@@ -6,8 +6,6 @@ import SideBar from "../../Components/Modules/SideBar/SideBar";
 import Header from "../../Components/Modules/Header/Header";
 import Input from "../../Components/Modules/Input/Input";
 import Button2 from "../../Components/Modules/Button2/Button2";
-import DateRangeFilter from "../../Components/Modules/DateRangeFilter/DateRangeFilter";
-import LoadingForm from "../../Components/Modules/Loading/LoadingForm";
 import TableCustom from "../../Components/Modules/TableCustom/TableCustom";
 import { ToastContainerCustom } from "../../Components/Modules/Toast/ToastCustom";
 import {
@@ -22,23 +20,27 @@ import { Button, TableCell, TableRow } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 
 //Icons
-import { faHashtag } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHashtag,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../config/axiosConfig";
 import { toFarsiNumber } from "../../utils/helper";
 import {
   ChnageDate,
   convertPersianToGregorian,
 } from "../../Components/Modules/ChnageDate/ChnageDate";
+import DataInput from "../../Components/Modules/DataInput/DataInput";
 
 function RepairCardMain() {
   const [page, setPage] = useState(0);
   const [totalRows, setTotalRows] = useState(undefined);
   const pageLength = 4;
 
-  const [information, setInformation] = useState(undefined);
+  const [information, setInformation] = useState([]);
   const [admissionNumber, setAdmissionNumber] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleChangeAdmissionNumber = (event) => {
@@ -51,11 +53,7 @@ function RepairCardMain() {
       warningMessage("فقط عدد وارد نمایید!");
     }
   };
-  const handleDateRangeChange = ({ startDate, endDate }) => {
-    setStartDate(startDate || "");
-    setEndDate(endDate || "");
-    setPage(0);
-  };
+
   const navigate = useNavigate();
 
   const handleGoToPaziresh = () => {
@@ -66,33 +64,31 @@ function RepairCardMain() {
     setPage(newPage);
   };
 
-  useEffect(() => {
-    setInformation(undefined);
-    const delayFetch = setTimeout(() => {
-      fetchCommonData();
-    }, 500);
-
-    return () => clearTimeout(delayFetch);
-  }, [page, endDate, startDate, admissionNumber]);
-
   const fetchCommonData = async () => {
     const pageNumber = page + 1;
-    let en_start_date = "",
-      en_end_date = "";
-    if (startDate !== "") {
-      en_start_date = convertPersianToGregorian(startDate);
-    }
-    if (endDate !== "") {
-      en_end_date = convertPersianToGregorian(endDate);
-    }
-    setInformation(undefined);
+
+    const formatDate = (date) =>
+      date ? new Date(date).toISOString().split("T")[0] : "";
+
+    const en_start_date = formatDate(startDate);
+    const en_end_date = formatDate(endDate);
+
+    setInformation([]);
     try {
-      const response = await apiClient.get(
-        `/app/get-customer-all-form/?page=${pageNumber}&page_size=${pageLength}&admission_number=${admissionNumber}&from_date=${en_start_date}&to_date=${en_end_date}`
-      );
+      const response = await apiClient.get("/app/get-customer-all-form/", {
+        params: {
+          page: pageNumber,
+          page_size: pageLength,
+          admission_number: admissionNumber,
+          from_date: en_start_date,
+          to_date: en_end_date,
+        },
+      });
+
       if (response.status === 200) {
-        setInformation(response.data.results);
-        setTotalRows(response.data.count);
+        setInformation(response.data.results || []);
+
+        setTotalRows(response.data.count || 0);
       }
     } catch (error) {
       errorMessage("خطا در برقراری ارتباط با سرور");
@@ -143,6 +139,26 @@ function RepairCardMain() {
       setLoading(false);
     }
   };
+
+  const handleSearchNow = () => {
+    setPage(0);
+    fetchCommonData();
+  };
+
+  useEffect(() => {
+    const delayFetch = setTimeout(() => {
+      fetchCommonData();
+    }, 500);
+
+    return () => clearTimeout(delayFetch);
+  }, [admissionNumber, page]);
+
+  useEffect(() => {
+    if (startDate === null && endDate === null) {
+      setPage(0);
+      fetchCommonData();
+    }
+  }, [startDate, endDate]);
 
   return (
     <Grid className="content-conatiner">
@@ -196,37 +212,50 @@ function RepairCardMain() {
               onChange={handleChangeAdmissionNumber}
             />
           </Grid>
-          <Grid
-            item
-            size={{ xs: 12, md: 8 }}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "100%",
-            }}
-          >
-            <DateRangeFilter
-              onDateChange={handleDateRangeChange}
-              startLabel="از تاریخ فاکتور"
-              endLabel="تا تاریخ فاکتور"
-              spacing={10}
-            />
+          <Grid size={{ xs: 12, md: 8 }}>
+            <Grid container alignItems={"end"}>
+              <Grid size={{ xs: 12, sm: 9, md: 8 }}>
+                <Grid container spacing={2}>
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <label
+                      className="label_input"
+                      style={{ marginBottom: ".3rem", display: "inline-block" }}
+                    >
+                      از تاریخ فاکتور
+                    </label>
+                    <DataInput value={startDate} onChange={setStartDate} />
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <label
+                      className="label_input"
+                      style={{ marginBottom: ".3rem", display: "inline-block" }}
+                    >
+                      تا تاریخ فاکتور
+                    </label>
+                    <DataInput value={endDate} onChange={setEndDate} />
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid
+                size={{ xs: 12, sm: 3, md: 4 }}
+                className={`${styles.wrap_button}`}
+              >
+                <Button2 icon={faMagnifyingGlass} onClick={handleSearchNow}>
+                  {"جستجو"}
+                </Button2>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
-        {information === undefined ? (
-          <LoadingForm />
-        ) : (
-          <InfoTabel
-            tableInformation={information}
-            handleChange={handleChangePage}
-            handleExcel={handleClickOnDownloadExcel}
-            page={page}
-            pageLength={pageLength}
-            totalRows={totalRows}
-            loading={loading}
-          />
-        )}
+        <InfoTabel
+          tableInformation={information}
+          handleChange={handleChangePage}
+          handleExcel={handleClickOnDownloadExcel}
+          page={page}
+          pageLength={pageLength}
+          totalRows={totalRows}
+          loading={loading}
+        />
       </Grid>
     </Grid>
   );
@@ -257,6 +286,7 @@ function InfoTabel({
     navigate(`/repairs/${id}`);
   };
 
+  console.log(tableInformation);
   return (
     <Grid
       container
@@ -299,7 +329,7 @@ function InfoTabel({
         rowsPerPage={pageLength}
         total={totalRows}
       >
-        {tableInformation.map((row, index) => (
+        {tableInformation?.map((row, index) => (
           <TableRow
             key={index}
             sx={{

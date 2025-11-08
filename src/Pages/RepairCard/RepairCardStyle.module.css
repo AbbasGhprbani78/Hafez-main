@@ -19,3 +19,13 @@
   font-family: "iranYekan", sans-serif !important;
   line-height: 20px !important;
 }
+
+.wrap_button {
+  display: flex;
+  justify-content: end;
+}
+@media (max-width: 600px) {
+  .wrap_button {
+    margin-top: 1.5rem;
+  }
+}

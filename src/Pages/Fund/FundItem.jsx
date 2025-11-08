@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import Accardion from "../../Components/Modules/Accardion/Accardion";
 import SumItem from "../../Components/Modules/SumItem/SumItem";
 import TableStatus from "../../Components/Modules/TableStatus/TableStatus";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, TableCell, TableRow } from "@mui/material";
 import {
   formatWithThousandSeparators,
@@ -58,11 +58,14 @@ export default function FundItem() {
       customer: 16700000,
     },
   ]);
+
   return (
     <>
       <div className="content-conatiner">
         <SideBar />
-        <div className={`space-content ${styles.wrap_fund_item}`}>
+        <div
+          className={`space-content ${styles.wrap_fund_item} scroll-contant`}
+        >
           <Header title={"کارتابل صندوق پذیرش :"} />
           <div className={styles.wrapper_info}>
             <p className={styles.title}>مشخصات خودرو :</p>

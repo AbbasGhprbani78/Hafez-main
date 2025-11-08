@@ -6,3 +6,40 @@
 .rmdp-input:focus {
   box-shadow: none !important;
 }
+
+/* wrapper for positioning the clear button */
+.input_content_wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.datepicker_with_clear {
+  position: relative;
+  width: 100%;
+}
+
+.clear-date-btn {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px 6px;
+  color: #666;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clear-date-btn:hover {
+  color: #333;
+}
+
+.clear-date-btn:focus {
+  outline: none;
+  box-shadow: none;
+}

@@ -425,112 +425,105 @@ function ManagementPage() {
           </Grid>
           <Box sx={{ width: "100%" }}>
             <CustomTabPanel value={tab} index={0}>
-              {filterRows === undefined ? (
-                <LoadingForm />
-              ) : (
-                <InfoTabel
-                  tableInformation={filterRows}
-                  page={page}
-                  handleChange={handleChangePage}
-                  totalRows={filterRows.length}
-                  pageLength={rowsPerPage}
-                  columnsTitle={halls_columns}
-                  key={21}
-                >
-                  {filterRows.length > 0 ? (
-                    filterRows
-                      .slice(page * rowsPerPage, (page + 1) * rowsPerPage)
-                      .map((row, index) => (
-                        <TableRow
-                          key={index}
+              <InfoTabel
+                tableInformation={filterRows}
+                page={page}
+                handleChange={handleChangePage}
+                totalRows={filterRows?.length}
+                pageLength={rowsPerPage}
+                columnsTitle={halls_columns}
+                key={21}
+              >
+                {filterRows !== undefined &&
+                  filterRows.length > 0 &&
+                  filterRows
+                    .slice(page * rowsPerPage, (page + 1) * rowsPerPage)
+                    .map((row, index) => (
+                      <TableRow
+                        key={index}
+                        sx={{
+                          backgroundColor: index % 2 === 0 ? "#fff" : "#f2f2f2",
+                          fontFamily: "iranYekan",
+                        }}
+                      >
+                        <TableCell
+                          align={"center"}
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {toFarsiNumber(row.code)}
+                        </TableCell>
+                        <TableCell
+                          align={"center"}
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {toFarsiNumber(row.name)}
+                        </TableCell>
+
+                        <TableCell
+                          align={"center"}
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {`${toFarsiNumber(row.remaining_capacity)} ساعت`}
+                        </TableCell>
+
+                        <TableCell
                           sx={{
-                            backgroundColor:
-                              index % 2 === 0 ? "#fff" : "#f2f2f2",
+                            display: "flex",
+                            justifyContent: "center",
                             fontFamily: "iranYekan",
+                            padding: "19px",
                           }}
                         >
-                          <TableCell
-                            align={"center"}
-                            sx={{ fontFamily: "iranYekan" }}
-                          >
-                            {toFarsiNumber(row.code)}
-                          </TableCell>
-                          <TableCell
-                            align={"center"}
-                            sx={{ fontFamily: "iranYekan" }}
-                          >
-                            {toFarsiNumber(row.name)}
-                          </TableCell>
-
-                          <TableCell
-                            align={"center"}
-                            sx={{ fontFamily: "iranYekan" }}
-                          >
-                            {`${toFarsiNumber(row.remaining_capacity)} ساعت`}
-                          </TableCell>
-
-                          <TableCell
-                            sx={{
-                              display: "flex",
-                              justifyContent: "center",
-                              fontFamily: "iranYekan",
-                              padding: "19px",
-                            }}
-                          >
-                            <div
-                              className={`${styles.status_btn_halls} ${
-                                row.status === true
-                                  ? styles.status_halls_one
-                                  : row.status === false
-                                  ? styles.status_halls_two
-                                  : styles.status_halls_defualt
-                              }`}
-                            >
-                              {row.status === true
-                                ? "فعال"
+                          <div
+                            className={`${styles.status_btn_halls} ${
+                              row.status === true
+                                ? styles.status_halls_one
                                 : row.status === false
-                                ? "غیرفعال"
-                                : "نامشخص"}
-                            </div>
-                          </TableCell>
-
-                          <TableCell
-                            align={"center"}
-                            sx={{ fontFamily: "iranYekan" }}
+                                ? styles.status_halls_two
+                                : styles.status_halls_defualt
+                            }`}
                           >
-                            {toFarsiNumber(row.descriptions)}
-                          </TableCell>
+                            {row.status === true
+                              ? "فعال"
+                              : row.status === false
+                              ? "غیرفعال"
+                              : "نامشخص"}
+                          </div>
+                        </TableCell>
 
-                          <TableCell
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              flexDirection: "row",
-                              gap: "1rem",
-                              padding: "18px 10px",
-                            }}
-                          >
-                            <Button3
-                              icon={faPencil}
-                              variant="contained"
-                              style={"edit_delete_btn"}
-                              onClick={() => handleOpenModal(row, "edit")}
-                            />
-                            <Button3
-                              icon={faTrashCan}
-                              variant="contained"
-                              style={"edit_delete_btn"}
-                              onClick={() => handleOpenModal(row, "delete")}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      ))
-                  ) : (
-                    <></>
-                  )}
-                </InfoTabel>
-              )}
+                        <TableCell
+                          align={"center"}
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {toFarsiNumber(row.descriptions)}
+                        </TableCell>
+
+                        <TableCell
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            flexDirection: "row",
+                            gap: "1rem",
+                            padding: "18px 10px",
+                          }}
+                        >
+                          <Button3
+                            icon={faPencil}
+                            variant="contained"
+                            style={"edit_delete_btn"}
+                            onClick={() => handleOpenModal(row, "edit")}
+                          />
+                          <Button3
+                            icon={faTrashCan}
+                            variant="contained"
+                            style={"edit_delete_btn"}
+                            onClick={() => handleOpenModal(row, "delete")}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+              </InfoTabel>
             </CustomTabPanel>
             <CustomTabPanel value={tab} index={1}>
               {filterRows === undefined ? (
@@ -540,7 +533,7 @@ function ManagementPage() {
                   tableInformation={filterRows}
                   page={page}
                   handleChange={handleChangePage}
-                  totalRows={filterRows.length}
+                  totalRows={filterRows?.length}
                   pageLength={rowsPerPage}
                   columnsTitle={repairman_columns}
                   key={22}

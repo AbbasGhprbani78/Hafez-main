@@ -58,7 +58,7 @@ export default function TableStatus({
         <TablePagination
           rowsPerPageOptions={[]}
           component="div"
-          count={rows?.length}
+          count={rows}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={onChange}

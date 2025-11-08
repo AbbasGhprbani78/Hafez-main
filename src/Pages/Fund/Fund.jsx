@@ -7,10 +7,12 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Input from "../../Components/Modules/Input/Input";
 import { TableCell, TableRow } from "@mui/material";
 import TableStatus from "../../Components/Modules/TableStatus/TableStatus";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid2";
 import { toFarsiNumber } from "../../utils/helper";
 import { useNavigate } from "react-router-dom";
+import apiClient from "../../config/axiosConfig";
+import { ChnageDate } from "../../Components/Modules/ChnageDate/ChnageDate";
 
 export default function Fund() {
   const columns = [
@@ -25,228 +27,92 @@ export default function Fund() {
   ];
 
   const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [inputSearch, setInputSearch] = useState("");
   const [dateStart, setDateStart] = useState("");
   const [dateEnd, setDateEnd] = useState("");
-  const [inputSearch, setInputSearch] = useState("");
+  const [rows, setRows] = useState([]);
+  const [totalRows, setTotalRows] = useState(0);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
-  const [rows, setRows] = useState([
-    {
-      admission_number: "400025152",
-      invoice_number: "400025152",
-      invoice_date: "01/02/03",
-      date_of_admission: "01/02/03",
-      chassis_number: "154884dfgbh4512445",
-      national_code: "1272516628",
-      fullname: "لیلا سعیدی",
-      actions: "",
-    },
-    {
-      admission_number: "400025153",
-      invoice_number: "400025153",
-      invoice_date: "02/03/04",
-      date_of_admission: "02/03/04",
-      chassis_number: "264885afbh5612556",
-      national_code: "1272516629",
-      fullname: "مهدی رضایی",
-      actions: "",
-    },
-    {
-      admission_number: "400025154",
-      invoice_number: "400025154",
-      invoice_date: "03/04/05",
-      date_of_admission: "03/04/05",
-      chassis_number: "374886bgbj6712667",
-      national_code: "1272516630",
-      fullname: "زهرا عباسی",
-      actions: "",
-    },
-    {
-      admission_number: "400025155",
-      invoice_number: "400025155",
-      invoice_date: "04/05/06",
-      date_of_admission: "04/05/06",
-      chassis_number: "484887chcl7812778",
-      national_code: "1272516631",
-      fullname: "احمد محمدی",
-      actions: "",
-    },
-    {
-      admission_number: "400025156",
-      invoice_number: "400025156",
-      invoice_date: "05/06/07",
-      date_of_admission: "05/06/07",
-      chassis_number: "594888didm8912889",
-      national_code: "1272516632",
-      fullname: "سارا امینی",
-      actions: "",
-    },
-    {
-      admission_number: "400025157",
-      invoice_number: "400025157",
-      invoice_date: "06/07/08",
-      date_of_admission: "06/07/08",
-      chassis_number: "604889ejdn9012990",
-      national_code: "1272516633",
-      fullname: "علی حیدری",
-      actions: "",
-    },
-    {
-      admission_number: "400025158",
-      invoice_number: "400025158",
-      invoice_date: "07/08/09",
-      date_of_admission: "07/08/09",
-      chassis_number: "714890fkep11231011",
-      national_code: "1272516634",
-      fullname: "فاطمه کاظمی",
-      actions: "",
-    },
-    {
-      admission_number: "400025159",
-      invoice_number: "400025159",
-      invoice_date: "08/09/10",
-      date_of_admission: "08/09/10",
-      chassis_number: "824891gleq12232122",
-      national_code: "1272516635",
-      fullname: "محمد حسینی",
-      actions: "",
-    },
-    {
-      admission_number: "400025160",
-      invoice_number: "400025160",
-      invoice_date: "09/10/11",
-      date_of_admission: "09/10/11",
-      chassis_number: "934892hmfr13233233",
-      national_code: "1272516636",
-      fullname: "ریحانه یوسفی",
-      actions: "",
-    },
-    {
-      admission_number: "400025161",
-      invoice_number: "400025161",
-      invoice_date: "10/11/12",
-      date_of_admission: "10/11/12",
-      chassis_number: "044893infs14234344",
-      national_code: "1272516637",
-      fullname: "عباس شریفی",
-      actions: "",
-    },
-  ]);
-  const [filterRows, setFilterRows] = useState([
-    {
-      admission_number: "400025152",
-      invoice_number: "400025152",
-      invoice_date: "01/02/03",
-      date_of_admission: "01/02/03",
-      chassis_number: "154884dfgbh4512445",
-      national_code: "1272516628",
-      fullname: "لیلا سعیدی",
-      actions: "",
-    },
-    {
-      admission_number: "400025153",
-      invoice_number: "400025153",
-      invoice_date: "02/03/04",
-      date_of_admission: "02/03/04",
-      chassis_number: "264885afbh5612556",
-      national_code: "1272516629",
-      fullname: "مهدی رضایی",
-      actions: "",
-    },
-    {
-      admission_number: "400025154",
-      invoice_number: "400025154",
-      invoice_date: "03/04/05",
-      date_of_admission: "03/04/05",
-      chassis_number: "374886bgbj6712667",
-      national_code: "1272516630",
-      fullname: "زهرا عباسی",
-      actions: "",
-    },
-    {
-      admission_number: "400025155",
-      invoice_number: "400025155",
-      invoice_date: "04/05/06",
-      date_of_admission: "04/05/06",
-      chassis_number: "484887chcl7812778",
-      national_code: "1272516631",
-      fullname: "احمد محمدی",
-      actions: "",
-    },
-    {
-      admission_number: "400025156",
-      invoice_number: "400025156",
-      invoice_date: "05/06/07",
-      date_of_admission: "05/06/07",
-      chassis_number: "594888didm8912889",
-      national_code: "1272516632",
-      fullname: "سارا امینی",
-      actions: "",
-    },
-    {
-      admission_number: "400025157",
-      invoice_number: "400025157",
-      invoice_date: "06/07/08",
-      date_of_admission: "06/07/08",
-      chassis_number: "604889ejdn9012990",
-      national_code: "1272516633",
-      fullname: "علی حیدری",
-      actions: "",
-    },
-    {
-      admission_number: "400025158",
-      invoice_number: "400025158",
-      invoice_date: "07/08/09",
-      date_of_admission: "07/08/09",
-      chassis_number: "714890fkep11231011",
-      national_code: "1272516634",
-      fullname: "فاطمه کاظمی",
-      actions: "",
-    },
-    {
-      admission_number: "400025159",
-      invoice_number: "400025159",
-      invoice_date: "08/09/10",
-      date_of_admission: "08/09/10",
-      chassis_number: "824891gleq12232122",
-      national_code: "1272516635",
-      fullname: "محمد حسینی",
-      actions: "",
-    },
-    {
-      admission_number: "400025160",
-      invoice_number: "400025160",
-      invoice_date: "09/10/11",
-      date_of_admission: "09/10/11",
-      chassis_number: "934892hmfr13233233",
-      national_code: "1272516636",
-      fullname: "ریحانه یوسفی",
-      actions: "",
-    },
-    {
-      admission_number: "400025161",
-      invoice_number: "400025161",
-      invoice_date: "10/11/12",
-      date_of_admission: "10/11/12",
-      chassis_number: "044893infs14234344",
-      national_code: "1272516637",
-      fullname: "عباس شریفی",
-      actions: "",
-    },
-  ]);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const fetchCustomers = async () => {
+    setLoading(true);
+    try {
+      const params = {
+        page: page + 1,
+        page_size: rowsPerPage,
+      };
+
+      if (inputSearch !== undefined) {
+        params.search = inputSearch || undefined;
+      }
+
+      if (dateStart) {
+        const formatted = new Date(dateStart).toISOString().split("T")[0];
+        params.invoice_from = formatted;
+      }
+
+      if (dateEnd) {
+        const formatted = new Date(dateEnd).toISOString().split("T")[0];
+        params.invoice_to = formatted;
+      }
+
+      const response = await apiClient.get("app/customers/", { params });
+
+      if (response.status === 200) {
+        setRows(response.data.results || []);
+        setTotalRows(response.data.count || 0);
+      }
+    } catch (error) {
+      console.error("Error fetching customers:", error);
+      setRows([]);
+      setTotalRows(0);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSearchClick = () => {
+    setPage(0);
+    fetchCustomers();
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  const handleSerach = (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    setInputSearch(searchTerm);
-    const filterProducts = rows.filter((item) =>
-      item.admission_number.includes(searchTerm)
-    );
-    setFilterRows(filterProducts);
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setInputSearch(value);
+    setPage(0);
+  };
+
+  useEffect(() => {
+    fetchCustomers();
+  }, [page, rowsPerPage]);
+
+  useEffect(() => {
+    const debounce = setTimeout(() => {
+      setPage(0);
+      fetchCustomers();
+    }, 600);
+
+    return () => clearTimeout(debounce);
+  }, [inputSearch, page, rowsPerPage]);
+
+  useEffect(() => {
+    if (!dateStart && !dateEnd) {
+      setPage(0);
+      fetchCustomers();
+    }
+  }, [dateStart, dateEnd]);
 
   return (
     <div className="content-conatiner">
@@ -257,11 +123,13 @@ export default function Fund() {
           <Grid container className={`${styles.wrap_filters}`} rowSpacing={2}>
             <Grid size={{ xs: 12, md: 4 }}>
               <Input
-                label={"شماره پذیرش"}
+                label={"جستوجو"}
                 icon={faMagnifyingGlass}
                 value={inputSearch}
-                onChange={handleSerach}
-                placeholder={"شماره پذیرش"}
+                onChange={handleSearch}
+                placeholder={
+                  "جستجو بر اساس شماره پذیرش، کد ملی، نام مشتری، شماره فاکتور"
+                }
                 styled={"width"}
               />
             </Grid>
@@ -297,92 +165,61 @@ export default function Fund() {
                 </Grid>
                 <Grid
                   size={{ xs: 12, sm: 3, md: 4 }}
-                  className={`${styles.wrap_button} `}
+                  className={`${styles.wrap_button}`}
                 >
-                  <Button2 icon={faMagnifyingGlass} onClick={""}>
+                  <Button2 icon={faMagnifyingGlass} onClick={handleSearchClick}>
                     {"جستجو"}
                   </Button2>
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
+
           <div className={styles.wrap_table}>
             <TableStatus
               Gridumns={columns}
-              rows={rows}
+              rows={totalRows}
               page={page}
               onChange={handleChangePage}
               rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              loading={loading}
             >
-              {filterRows
-                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => (
-                  <TableRow
-                    key={index}
-                    sx={{
-                      backgroundColor: index % 2 === 0 ? "#fff" : "#f2f2f2",
-                      fontFamily: "iranYekan",
-                    }}
-                  >
-                    <TableCell
-                      ali
-                      align="center"
-                      sx={{ fontFamily: "iranYekan" }}
+              {rows.map((row, index) => (
+                <TableRow
+                  key={row.id || index}
+                  sx={{
+                    backgroundColor: index % 2 === 0 ? "#fff" : "#f2f2f2",
+                    fontFamily: "iranYekan",
+                  }}
+                >
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {toFarsiNumber(row?.admission_number)}
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {toFarsiNumber(row?.invoice_number)}
+                  </TableCell>
+                  <ChnageDate date={row.invoice_date} />
+                  <ChnageDate date={row.admission_date} />
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {toFarsiNumber(row?.chassis_number)}
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {toFarsiNumber(row?.national_code_owner)}
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {row?.full_name}
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    <div
+                      className={styles.wrap_btn}
+                      onClick={() => navigate(`/fund/${row.id}`)}
                     >
-                      {toFarsiNumber(row.admission_number)}
-                    </TableCell>
-                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {toFarsiNumber(row.invoice_number)}
-                    </TableCell>
-                    <TableCell
-                      ali
-                      align="center"
-                      sx={{ fontFamily: "iranYekan" }}
-                    >
-                      {toFarsiNumber(row.invoice_date)}
-                    </TableCell>
-                    <TableCell
-                      ali
-                      align="center"
-                      sx={{ fontFamily: "iranYekan" }}
-                    >
-                      {toFarsiNumber(row.date_of_admission)}
-                    </TableCell>
-                    <TableCell
-                      ali
-                      align="center"
-                      sx={{ fontFamily: "iranYekan" }}
-                    >
-                      {toFarsiNumber(row.chassis_number)}
-                    </TableCell>
-                    <TableCell
-                      ali
-                      align="center"
-                      sx={{ fontFamily: "iranYekan" }}
-                    >
-                      {toFarsiNumber(row.national_code)}
-                    </TableCell>
-                    <TableCell
-                      ali
-                      align="center"
-                      sx={{ fontFamily: "iranYekan" }}
-                    >
-                      {row.fullname}
-                    </TableCell>
-                    <TableCell
-                      ali
-                      align="center"
-                      sx={{ fontFamily: "iranYekan" }}
-                    >
-                      <div
-                        className={styles.wrap_btn}
-                        onClick={() => navigate("/fund/:id")}
-                      >
-                        <button className={styles.btn}>مشاهده</button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      <button className={styles.btn}>مشاهده</button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableStatus>
           </div>
         </div>

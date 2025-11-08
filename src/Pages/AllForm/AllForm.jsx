@@ -278,90 +278,84 @@ export default function AllForm() {
             },
           }}
         >
-          {information === undefined ? (
-            <LoadingForm />
-          ) : (
-            <InfoTabel
-              tableInformation={information}
-              page={page}
-              handleChange={handleChangePage}
-              totalRows={totalRows}
-              pageLength={pageLength}
-              columnsTitle={columnsAcceptance}
-              key={41}
-            >
-              {information.length > 0 ? (
-                information.map((row, index) => (
-                  <TableRow
-                    key={index}
+          <InfoTabel
+            tableInformation={information}
+            page={page}
+            handleChange={handleChangePage}
+            totalRows={totalRows}
+            pageLength={pageLength}
+            columnsTitle={columnsAcceptance}
+            key={41}
+          >
+            {information?.length > 0 ? (
+              information.map((row, index) => (
+                <TableRow
+                  key={index}
+                  sx={{
+                    backgroundColor: index % 2 === 0 ? "#fff" : "#f2f2f2",
+                    fontFamily: "iranYekan",
+                  }}
+                >
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {toFarsiNumber(row?.admission_number)}
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {toFarsiNumber(row?.pyramid_number)}
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {toFarsiNumber(row?.car_model)}
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {row?.chassis_number}
+                  </TableCell>
+                  <ChnageDate date={row?.admission_date} />
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {toFarsiNumber(row?.license_plate_number)}
+                  </TableCell>
+                  <TableCell
+                    align="center"
                     sx={{
-                      backgroundColor: index % 2 === 0 ? "#fff" : "#f2f2f2",
+                      display: "flex",
+                      justifyContent: "center",
                       fontFamily: "iranYekan",
+                      padding: "19px",
                     }}
                   >
-                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {toFarsiNumber(row.admission_number)}
-                    </TableCell>
-                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {toFarsiNumber(row.pyramid_number)}
-                    </TableCell>
-                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {toFarsiNumber(row.car_model)}
-                    </TableCell>
-                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {row.chassis_number}
-                    </TableCell>
-                    <ChnageDate date={row.admission_date} />
-                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {toFarsiNumber(row.license_plate_number)}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        fontFamily: "iranYekan",
-                        padding: "19px",
-                      }}
+                    <div
+                      className={`${styles.status_btn} ${
+                        row.step === "done" ||
+                        row.step === "repair card" ||
+                        row.step === "reception desk"
+                          ? styles.status_none
+                          : ["one", "two", "three"].includes(row.step)
+                          ? styles.status_one
+                          : row.step === "expert confirmation"
+                          ? styles.status_three
+                          : ""
+                      }`}
                     >
-                      <div
-                        className={`${styles.status_btn} ${
-                          row.step === "done" ||
-                          row.step === "repair card" ||
-                          row.step === "reception desk"
-                            ? styles.status_none
-                            : ["one", "two", "three"].includes(row.step)
-                            ? styles.status_one
-                            : row.step === "expert confirmation"
-                            ? styles.status_three
-                            : ""
-                        }`}
-                      >
-                        {{
-                          done: "اتمام پذیرش",
-                          one: "ناتمام",
-                          two: "ناتمام",
-                          three: "ناتمام",
-                          "expert confirmation": "در انتظار تاییدیه کارشناس",
-                          "repair card": "اتمام پذیرش",
-                          "reception desk": "اتمام پذیرش",
-                        }[row.step] ?? "نامشخص"}
-                      </div>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Button2
-                        onClick={() => openFormHandler(row.step, row.id)}
-                      >
-                        مشاهده
-                      </Button2>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <></>
-              )}
-            </InfoTabel>
-          )}
+                      {{
+                        done: "اتمام پذیرش",
+                        one: "ناتمام",
+                        two: "ناتمام",
+                        three: "ناتمام",
+                        "expert confirmation": "در انتظار تاییدیه کارشناس",
+                        "repair card": "اتمام پذیرش",
+                        "reception desk": "اتمام پذیرش",
+                      }[row.step] ?? "نامشخص"}
+                    </div>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Button2 onClick={() => openFormHandler(row.step, row.id)}>
+                      مشاهده
+                    </Button2>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <></>
+            )}
+          </InfoTabel>
         </Box>
       </Grid>
     </Grid>
