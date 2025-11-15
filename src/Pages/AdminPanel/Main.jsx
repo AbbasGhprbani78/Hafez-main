@@ -18,9 +18,9 @@ const routes = [
 
 export default function Main() {
   return (
-    <div className="content-conatiner">
+    <div className="content-conatiner ">
       <Sidebar routes={routes} />
-      <div className="space-content">
+      <div className="space-content scroll-contant">
         <Header title={"دسترسی ادمین"} isPanel={"true"} routes={routes} />
         <Outlet />
       </div>

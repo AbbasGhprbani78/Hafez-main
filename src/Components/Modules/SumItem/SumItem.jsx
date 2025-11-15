@@ -1,3 +1,7 @@
+import {
+  formatWithThousandSeparators,
+  toFarsiNumber,
+} from "../../../utils/helper";
 import styles from "./SumItem.module.css";
 import Grid from "@mui/material/Grid2";
 export default function SumItem({ title, price, color }) {
@@ -8,7 +12,7 @@ export default function SumItem({ title, price, color }) {
       </Grid>
       <Grid size={{ xs: 12, md: 5 }}>
         <span className={`${styles.number_price} ${styles[color]}`}>
-          {price.toLocaleString("fa")}
+          {toFarsiNumber(formatWithThousandSeparators(price))}
         </span>
       </Grid>
     </Grid>

@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-bottom: 0.5rem;
 }
 
 .search_container {
@@ -11,7 +12,7 @@
 .title {
   font-weight: bold;
   color: var(--color-3);
-  font-size: 1.1rem;
+  font-size: clamp(0.8rem, 0.9vw, 1rem);
 }
 .search_box {
   display: flex;

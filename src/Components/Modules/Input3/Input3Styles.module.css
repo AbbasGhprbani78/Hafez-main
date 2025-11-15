@@ -21,7 +21,6 @@
   outline: none;
   background: transparent;
   font-size: clamp(0.9rem, 0.9vw, 1rem);
-  font-weight: 600;
 }
 .icon_input {
   color: var(--color-1);

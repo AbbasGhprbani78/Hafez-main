@@ -163,6 +163,11 @@ button {
   overflow-y: scroll;
 }
 
+.title_top {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: #15616d;
+}
 @media print {
   .no-print {
     display: none !important;

@@ -213,7 +213,7 @@ export default function Fund() {
                   <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                     <div
                       className={styles.wrap_btn}
-                      onClick={() => navigate(`/fund/${row.id}`)}
+                      onClick={() => navigate(`/fund/${row?.admission_number}`)}
                     >
                       <button className={styles.btn}>مشاهده</button>
                     </div>

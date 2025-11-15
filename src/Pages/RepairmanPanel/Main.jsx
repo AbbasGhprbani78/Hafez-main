@@ -17,7 +17,7 @@ export default function Main() {
   return (
     <div className="content-conatiner">
       <Sidebar routes={routes} />
-      <div className="space-content">
+      <div className="space-content scroll-contant">
         <Header title={"پنل تعمیرکار"} isPanel={"true"} routes={routes} />
         <Outlet />
       </div>

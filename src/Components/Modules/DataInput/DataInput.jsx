@@ -4,6 +4,8 @@ import persian_fa from "react-date-object/locales/persian_fa";
 import DateObject from "react-date-object";
 import TimePicker from "react-multi-date-picker/plugins/time_picker";
 import "./DataInput.css";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function DataInput({
   value,
@@ -23,6 +25,7 @@ export default function DataInput({
       <div className="input_content_wrapper">
         <div className="datepicker_with_clear">
           <DatePicker
+            className="teal"
             placeholder={placeHolder}
             calendar={persian}
             locale={persian_fa}
@@ -53,7 +56,7 @@ export default function DataInput({
                 onChange(null);
               }}
             >
-              ×
+              <FontAwesomeIcon icon={faXmark} fontSize={18} />
             </button>
           ) : null}
         </div>

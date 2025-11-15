@@ -22,6 +22,7 @@ const columns = [
   "اجرت",
   "کار خارج",
 ];
+const pageLength = 10;
 
 const tableInformation = [
   {
@@ -138,11 +139,12 @@ export default function CustomerHistory() {
   const [page, setPage] = useState(0);
   const [totalRows, setTotalRows] = useState(tableInformation.length);
   const [loading, setLoading] = useState(false);
+  const [rows, setRows] = useState([]);
 
   const handleChangePage = (newPage) => {
     setPage(newPage);
   };
-  const pageLength = 10;
+
   return (
     <Grid className="content-conatiner">
       <SideBar />

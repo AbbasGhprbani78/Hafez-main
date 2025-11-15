@@ -224,8 +224,8 @@ export default function RepairPlan() {
             />
           </div>
           <TableStatus
-            columns={columns}
-            rows={rows}
+            Gridumns={columns}
+            rows={20}
             page={page}
             onChange={handleChangePage}
             rowsPerPage={rowsPerPage}
@@ -240,16 +240,16 @@ export default function RepairPlan() {
                     fontFamily: "iranYekan",
                   }}
                 >
-                  <TableCell sx={{ fontFamily: "iranYekan" }}>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                     {row.code}
                   </TableCell>
-                  <TableCell sx={{ fontFamily: "iranYekan" }}>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                     {row.name}
                   </TableCell>
-                  <TableCell sx={{ fontFamily: "iranYekan" }}>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                     {row.expertise}
                   </TableCell>
-                  <TableCell sx={{ fontFamily: "iranYekan" }}>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                     {row.time_capability}
                   </TableCell>
                   <TableCell
@@ -282,7 +282,7 @@ export default function RepairPlan() {
                         : ""}
                     </div>
                   </TableCell>
-                  <TableCell sx={{ width: "200px" }}>
+                  <TableCell align="center" sx={{ width: "200px" }}>
                     <div className={styles.wrap_btn}>
                       <button className={styles.btn}>مشاهده</button>
                     </div>

@@ -253,7 +253,7 @@ export default function Occultation({ data, id, getDataTable }) {
         ) : (
           <div className="modal_content">
             <div className="modal_top">
-              <span className="titel_top">عیب یابی جدید</span>
+              <span className="title_top">عیب یابی جدید</span>
             </div>
             <div className="modal_bottom">
               <SelectDropDown2

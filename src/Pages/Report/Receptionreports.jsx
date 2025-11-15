@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { TableRow, TableCell, Box, CircularProgress } from "@mui/material";
 import SideBar from "../../Components/Modules/SideBar/SideBar";
 import Header from "../../Components/Modules/Header/Header";
 import TableCustom from "../../Components/Modules/TableCustom/TableCustom";
 import Grid from "@mui/material/Grid2";
-import { toFarsiNumber } from "../../utils/helper";
+import {
+  formatWithThousandSeparators,
+  toFarsiNumber,
+} from "../../utils/helper";
 import styles from "./Report.module.css";
 import Input from "../../Components/Modules/Input/Input";
 import { faHashtag } from "@fortawesome/free-solid-svg-icons";
 import DateRangeFilter from "../../Components/Modules/DateRangeFilter/DateRangeFilter";
 import MultiSelectDropDwon from "../../Components/Modules/MultiSelectDropdown/MultiSelectDropDwon";
 import Button2 from "../../Components/Modules/Button2/Button2";
+import apiClient from "../../config/axiosConfig";
+import { convertGregorianToPersian } from "../../Components/Modules/ChnageDate/ChnageDate";
 const columns = [
   "شماره پذیرش",
   "نوع خودرو",
@@ -26,130 +31,175 @@ const columns = [
   "زمان پذیرش تا ترخیص (ساعت)",
   "وضعیت",
 ];
+const pageLength = 10;
 
-const tableInformation = [
-  {
-    id: "F000482",
-    carType: "شاهین",
-    carInfo: {
-      vin: "NAPXY1AAJPZ004344",
-      color: "مشکی",
-      plate: "78 الف 894 ایران 11",
-      mileage: "31500",
-    },
-    customerInfo: {
-      name: "علی اولیایی",
-      type: "مشتری گارانتی",
-      acceptTime: "14:16 | 1404/06/01",
-      deliveryTime: "15:30 | 1404/06/01",
-    },
-    services: ["تعویض روغن", "تنظیم موتور", "بازدید ترمز"],
-    hall: "سالن 1",
-    estimate: {
-      time: "5 ساعت",
-      cost: "15,000,000 ریال",
-    },
-    repairTime: "5",
-    repairShop: "تعمیرگاه 4",
-    stopTime: "3",
-    preInvoiceTime: "3",
-    totalTime: "39.14",
-    status: "رسید مشتری",
-  },
-  {
-    id: "F000483",
-    carType: "کوییک",
-    carInfo: {
-      vin: "NAPXY1BASJP133366",
-      color: "سفید",
-      plate: "98 ص 824 ایران 13",
-      mileage: "22345",
-    },
-    customerInfo: {
-      name: "علی اصغر بهرامی",
-      type: "مشتری امدادی",
-      acceptTime: "09:40 | 1404/06/01",
-      deliveryTime: "11:15 | 1404/06/01",
-    },
-    services: ["تعویض باطری", "شست‌وشوی انژکتور"],
-    hall: "سالن 1",
-    estimate: {
-      time: "3 ساعت",
-      cost: "10,000,000 ریال",
-    },
-    repairTime: "3",
-    repairShop: "تعمیرگاه 1",
-    stopTime: "1",
-    preInvoiceTime: "1.33",
-    totalTime: "1.33",
-    status: "رسید مشتری",
-  },
-  {
-    id: "F000482",
-    carType: "شاهین",
-    carInfo: {
-      vin: "NAPXY1AAJPZ004344",
-      color: "مشکی",
-      plate: "78 الف 894 ایران 11",
-      mileage: "31500",
-    },
-    customerInfo: {
-      name: "علی اولیایی",
-      type: "مشتری گارانتی",
-      acceptTime: "14:16 | 1404/06/01",
-      deliveryTime: "15:30 | 1404/06/01",
-    },
-    services: ["تعویض روغن", "تنظیم موتور", "بازدید ترمز"],
-    hall: "سالن 1",
-    estimate: {
-      time: "5 ساعت",
-      cost: "15,000,000 ریال",
-    },
-    repairTime: "5",
-    repairShop: "تعمیرگاه 4",
-    stopTime: "3",
-    preInvoiceTime: "3",
-    totalTime: "39.14",
-    status: "رسید مشتری",
-  },
-  {
-    id: "F000483",
-    carType: "کوییک",
-    carInfo: {
-      vin: "NAPXY1BASJP133366",
-      color: "سفید",
-      plate: "98 ص 824 ایران 13",
-      mileage: "22345",
-    },
-    customerInfo: {
-      name: "علی اصغر بهرامی",
-      type: "مشتری امدادی",
-      acceptTime: "09:40 | 1404/06/01",
-      deliveryTime: "11:15 | 1404/06/01",
-    },
-    services: ["تعویض باطری", "شست‌وشوی انژکتور"],
-    hall: "سالن 1",
-    estimate: {
-      time: "3 ساعت",
-      cost: "10,000,000 ریال",
-    },
-    repairTime: "3",
-    repairShop: "تعمیرگاه 1",
-    stopTime: "1",
-    preInvoiceTime: "1.33",
-    totalTime: "1.33",
-    status: "رسید مشتری",
-  },
-];
+const formatDate = (date) =>
+  date ? new Date(date).toISOString().split("T")[0] : null;
+
+const defaultFilters = {
+  admission_number: null,
+  chassis_number: null,
+  admission_date_from: null,
+  admission_date_to: null,
+  release_date_from: null,
+  release_date_to: null,
+  car_type: [],
+  status: [],
+  typeof_service: [],
+};
 export default function Receptionreports() {
   const [page, setPage] = useState(0);
-  const [totalRows, setTotalRows] = useState(tableInformation.length);
+  const [totalRows, setTotalRows] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [rows, setRows] = useState([]);
+  const [filters, setFilters] = useState(defaultFilters);
+  const [receptionFilterData, setReceptionFilterData] = useState({});
+
+  const applyFilter = (data) => {
+    setFilters((prev) => ({ ...prev, ...data }));
+    setPage(0);
+  };
+
+  const handleInputChange = (name, value) => {
+    applyFilter({ [name]: value || null });
+  };
+
+  const handleMultiSelectChange = (field, selectedOptions) => {
+    const ids = selectedOptions ? selectedOptions.map((opt) => opt.value) : [];
+    applyFilter({ [field]: ids });
+  };
+
+  const handleAdmissionDateChange = ({ startDate, endDate }) => {
+    applyFilter({
+      admission_date_from: formatDate(startDate),
+      admission_date_to: formatDate(endDate),
+    });
+  };
+
+  const handleReleaseDateChange = ({ startDate, endDate }) => {
+    applyFilter({
+      release_date_from: formatDate(startDate),
+      release_date_to: formatDate(endDate),
+    });
+  };
+
+  const getReceptionFilterData = async () => {
+    try {
+      const response = await apiClient.get("app/reception-filter-data/");
+
+      if (response.status === 200) {
+        setReceptionFilterData(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const statusOptions = useMemo(
+    () =>
+      receptionFilterData?.reception_status?.map((item) => ({
+        value: item.id,
+        label: item.value,
+      })) || [],
+    [receptionFilterData]
+  );
+
+  const serviceOptions = useMemo(
+    () =>
+      receptionFilterData?.type_of_services?.map((item) => ({
+        value: item.id,
+        label: item.name,
+      })) || [],
+    [receptionFilterData]
+  );
+
+  const carTypeOptions = useMemo(
+    () =>
+      receptionFilterData?.car_types?.map((item) => ({
+        value: item.id,
+        label: item.name || item.value,
+      })) || [],
+    [receptionFilterData]
+  );
+
+  const fetchReceptionReports = useCallback(async () => {
+    try {
+      const params = new URLSearchParams({
+        page: page + 1,
+        page_size: pageLength,
+      });
+
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value === null || value === "" || value?.length === 0) return;
+
+        if (Array.isArray(value)) {
+          value.forEach((v) => params.append(key, v));
+        } else {
+          params.append(key, value);
+        }
+      });
+
+      const response = await apiClient.get(
+        `app/report/reception-reports/?${params.toString()}`
+      );
+
+      if (response.status === 200) {
+        const data = response.data;
+
+        setTotalRows(data.count || 0);
+        const mappedRows = (data.results || []).map((item) => ({
+          id: item.admission_number,
+          carType: item.second_form?.car_type || "-",
+          carInfo: {
+            vin: item?.second_form?.chassis_number || "-",
+            color: item.second_form?.color || "-",
+            plate: item.second_form?.license_plate_number || "-",
+            mileage: item.second_form?.mileage || "-",
+          },
+          customerInfo: {
+            name: `${item.owner_first_name || ""} ${
+              item.owner_last_name || ""
+            }`,
+            type: item.form_type || "-",
+            acceptTime: item.admission_date || "-",
+            deliveryTime: item.duration_estimated || "-",
+          },
+          services: item.type_of_service?.map((s) => s.name) || [],
+          hall: item.salon?.name || "-",
+          estimate: {
+            time: item.salon?.time || "-",
+            cost: item.salon?.cost || "-",
+          },
+          repairTime: item.repair_time_hours || "-",
+          repairShop: "-",
+          stopTime: item.stay_in_salon_hours || "-",
+          preInvoiceTime: item.pre_invoice_time_hours || "-",
+          totalTime: item.total_time_hours || "-",
+          status: item.status_display || "-",
+        }));
+
+        setRows(mappedRows);
+      }
+    } catch (error) {
+      console.error("خطا در دریافت گزارش:", error);
+    }
+  }, [filters, page]);
+
+  useEffect(() => {
+    getReceptionFilterData();
+  }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      fetchReceptionReports();
+    }, 400);
+
+    return () => clearTimeout(timeout);
+  }, [filters, page]);
 
   const handleChangePage = (newPage) => {
     setPage(newPage);
   };
-  const pageLength = 10;
 
   return (
     <Grid className="content-conatiner">
@@ -181,31 +231,37 @@ export default function Receptionreports() {
           >
             <Grid size={{ xs: 12, md: 6 }}>
               <Input
-                name={"chassis_number"}
+                name="chassis_number"
                 label="شماره شاسی :"
                 placeholder="شماره شاسی"
                 icon={faHashtag}
-                value={""}
-                onChange={""}
+                value={filters.chassis_number}
+                onChange={(e) =>
+                  handleInputChange("chassis_number", e.target.value)
+                }
               />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
               <Input
-                name={"admission_number"}
+                name="admission_number"
                 label="شماره پذیرش :"
                 placeholder="شماره پذیرش"
                 icon={faHashtag}
-                value={""}
-                onChange={""}
+                value={filters.admission_number}
+                onChange={(e) =>
+                  handleInputChange("admission_number", e.target.value)
+                }
               />
             </Grid>
           </Grid>
           <Grid container sx={{ width: "100%" }}>
             <Grid size={{ xs: 12 }}>
               <DateRangeFilter
-                onDateChange={""}
+                onDateChange={handleAdmissionDateChange}
                 startLabel="از تاریخ پذیرش"
                 endLabel="تا تاریخ پذیرش"
+                startDateProp={filters.admission_date_from}
+                endDateProp={filters.admission_date_to}
                 spacingxl={30}
                 spacingmd={10}
                 spacingsx={2}
@@ -215,9 +271,11 @@ export default function Receptionreports() {
           <Grid container sx={{ width: "100%" }}>
             <Grid size={{ xs: 12 }}>
               <DateRangeFilter
-                onDateChange={""}
+                onDateChange={handleReleaseDateChange}
                 startLabel="از تاریخ ترخیص"
                 endLabel="تا تاریخ ترخیص"
+                startDateProp={filters.release_date_from}
+                endDateProp={filters.release_date_to}
                 spacingxl={30}
                 spacingmd={10}
                 spacingsx={2}
@@ -230,10 +288,20 @@ export default function Receptionreports() {
             spacing={{ xs: 2, md: 10, xl: 30 }}
           >
             <Grid size={{ xs: 12, md: 6 }}>
-              <MultiSelectDropDwon label={"وضعیت پذیرش"} />
+              <MultiSelectDropDwon
+                label="وضعیت پذیرش"
+                onChange={(values) => handleMultiSelectChange("status", values)}
+                items={statusOptions}
+              />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
-              <MultiSelectDropDwon label={"نوع خودرو"} />
+              <MultiSelectDropDwon
+                label="نوع خودرو"
+                onChange={(values) =>
+                  handleMultiSelectChange("car_type", values)
+                }
+                items={carTypeOptions}
+              />
             </Grid>
           </Grid>
           <Grid
@@ -242,19 +310,25 @@ export default function Receptionreports() {
             spacing={{ xs: 2, md: 10, xl: 30 }}
           >
             <Grid size={{ xs: 12, md: 6 }}>
-              <MultiSelectDropDwon label={"نوع خدمات"} />
+              <MultiSelectDropDwon
+                label="نوع خدمات"
+                onChange={(values) =>
+                  handleMultiSelectChange("typeof_service", values)
+                }
+                items={serviceOptions}
+              />
             </Grid>
           </Grid>
         </Box>
         <TableCustom
-          rows={tableInformation}
+          rows={totalRows}
           columns={columns}
           onChange={handleChangePage}
           page={page}
           rowsPerPage={pageLength}
           total={totalRows}
         >
-          {tableInformation.map((row, index) => (
+          {rows.map((row, index) => (
             <TableRow
               key={index}
               sx={{
@@ -290,10 +364,18 @@ export default function Receptionreports() {
                 </div>
                 <div>{toFarsiNumber(`نوع: ${row.customerInfo.type}`)}</div>
                 <div>
-                  {toFarsiNumber(`پذیرش: ${row.customerInfo.acceptTime}`)}
+                  {toFarsiNumber(
+                    `پذیرش: ${convertGregorianToPersian(
+                      row.customerInfo.acceptTime
+                    )}`
+                  )}
                 </div>
                 <div>
-                  {toFarsiNumber(`ترخیص: ${row.customerInfo.deliveryTime}`)}
+                  {toFarsiNumber(
+                    `ترخیص: ${convertGregorianToPersian(
+                      row.customerInfo.deliveryTime
+                    )}`
+                  )}
                 </div>
               </TableCell>
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
@@ -311,7 +393,11 @@ export default function Receptionreports() {
                 className={styles.info_cell}
               >
                 <div>{toFarsiNumber(`زمان: ${row.estimate.time}`)}</div>
-                <div>{toFarsiNumber(`هزینه: ${row.estimate.cost}`)}</div>
+                <div>
+                  {toFarsiNumber(
+                    `هزینه: ${formatWithThousandSeparators(row.estimate.cost)}`
+                  )}
+                </div>
               </TableCell>
 
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
@@ -392,3 +478,16 @@ export default function Receptionreports() {
           <Grid size={{ xs: 12 }}></Grid>
         </Grid> */
 }
+
+// const GetreceptionreportsFilter = async () => {
+//   try {
+//     const response = await apiClient.get(
+//       "app/report/reception-reports/filter/"
+//     );
+//     if (response.status === 200) {
+//       console.log(response);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };

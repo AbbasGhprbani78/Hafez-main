@@ -41,7 +41,7 @@ const customStyles = {
     fontFamily: '"iranYekan", sans-serif',
     direction: "rtl",
     backgroundColor: state.isFocused ? "var(--color-5)" : base.backgroundColor,
-    color: state.isFocused ? "#fff" : base.color, // متن سفید اگر هاور باشد
+    color: state.isFocused ? "#fff" : base.color,
   }),
 };
 

@@ -7,57 +7,34 @@ import SumItem from "../../Components/Modules/SumItem/SumItem";
 import TableStatus from "../../Components/Modules/TableStatus/TableStatus";
 import { useEffect, useState } from "react";
 import { Box, TableCell, TableRow } from "@mui/material";
-import {
-  formatWithThousandSeparators,
-  toFarsiNumber,
-} from "../../utils/helper";
+import { toFarsiNumber } from "../../utils/helper";
 import Grid from "@mui/material/Grid2";
-import colors from "react-multi-date-picker/plugins/colors";
+
 import Button2 from "../../Components/Modules/Button2/Button2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPrint } from "@fortawesome/free-solid-svg-icons";
-
+import apiClient from "../../config/axiosConfig";
+import { convertGregorianToPersian } from "../../Components/Modules/ChnageDate/ChnageDate";
+const Gridumns = ["", "عهده شرکت", "مشتری"];
 export default function FundItem() {
   const { id } = useParams();
+  const [fund, setFund] = useState({});
 
-  const Gridumns = ["", "عهده شرکت", "مشتری"];
-  const [rows, setRows] = useState([
-    {
-      work: "قطعات",
-      company: 0,
-      customer: 1200000,
-    },
-    {
-      work: "اجرت تعمیرات",
-      company: 2,
-      customer: 1500000,
-    },
-    {
-      work: "جمع کل خدمات",
-      company: 7,
-      customer: 1900000,
-    },
-    {
-      work: "تخفیف خدمات",
-      company: 2,
-      customer: 3400000,
-    },
-    {
-      work: "کار خارج",
-      company: 11,
-      customer: 100000,
-    },
-    {
-      work: "جمع خالص",
-      company: 4,
-      customer: 1700000,
-    },
-    {
-      work: "مبلغ قابل پرداخت",
-      company: 2,
-      customer: 16700000,
-    },
-  ]);
+  const getFunditem = async () => {
+    try {
+      const response = await apiClient.get(`app/invoice/${id}/`);
+      if (response.status === 200) {
+        console.log(response.data);
+        setFund(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getFunditem();
+  }, []);
 
   return (
     <>
@@ -74,29 +51,46 @@ export default function FundItem() {
                 size={{ xs: 12, md: 6, lg: 3 }}
                 className={styles.item_content}
               >
+                <span className={styles.key_item}>مدل :</span>
+                <span className={styles.value_item}>
+                  {toFarsiNumber(fund?.car_info?.model)}
+                </span>
+              </Grid>
+              <Grid
+                size={{ xs: 12, md: 6, lg: 3 }}
+                className={styles.item_content}
+              >
+                <span className={styles.key_item}>پلاک :</span>
+                <span className={styles.value_item}>
+                  {toFarsiNumber(fund?.car_info?.plate)}
+                </span>
+              </Grid>
+              <Grid
+                size={{ xs: 12, md: 6, lg: 3 }}
+                className={styles.item_content}
+              >
                 <span className={styles.key_item}>شماره شاسی :</span>
-                <span className={styles.value_item}>dsfdg518h4956f</span>
+                <span className={styles.value_item}>
+                  {toFarsiNumber(fund?.car_info?.chassis)}
+                </span>
               </Grid>
               <Grid
                 size={{ xs: 12, md: 6, lg: 3 }}
                 className={styles.item_content}
               >
-                <span className={styles.key_item}>شماره موتور :</span>
-                <span className={styles.value_item}>{toFarsiNumber(7521)}</span>
-              </Grid>
-              <Grid
-                size={{ xs: 12, md: 6, lg: 3 }}
-                className={styles.item_content}
-              >
-                <span className={styles.key_item}>تاریخ شروع گارانتی :</span>
-                <span className={styles.value_item}>10/05/25</span>
+                <span className={styles.key_item}>کیلومتر :</span>
+                <span className={styles.value_item}>
+                  {toFarsiNumber(fund?.car_info?.km)}
+                </span>
               </Grid>
               <Grid
                 size={{ xs: 12, md: 6, lg: 3 }}
                 className={styles.item_content}
               >
                 <span className={styles.key_item}>رنگ :</span>
-                <span className={styles.value_item}>سفید</span>
+                <span className={styles.value_item}>
+                  {toFarsiNumber(fund?.car_info?.color)}
+                </span>
               </Grid>
             </Grid>
           </div>
@@ -104,36 +98,51 @@ export default function FundItem() {
             <p className={styles.title}>اطلاعات پذیرش :</p>
             <Grid container className={`${styles.content} `}>
               <Grid
-                size={{ xs: 12, md: 6, lg: 4 }}
+                size={{ xs: 12, md: 6, lg: 3 }}
                 className={`${styles.item_content}`}
               >
                 <span className={styles.key_item}>شماره پذیرش :</span>
-                <span className={styles.value_item}>12444956f</span>
-              </Grid>
-              <Grid
-                size={{ xs: 12, md: 6, lg: 4 }}
-                className={`${styles.item_content}`}
-              >
-                <span className={styles.key_item}>کیلومتر :</span>
-                <span className={styles.value_item}>7521</span>
-              </Grid>
-              <Grid
-                size={{ xs: 12, md: 6, lg: 4 }}
-                className={`${styles.item_content}`}
-              >
-                <span className={styles.key_item}>پلاک :</span>
                 <span className={styles.value_item}>
-                  {toFarsiNumber("64ط258 ایران 13")}
+                  {toFarsiNumber(fund?.admission_info?.admission_number)}
                 </span>
               </Grid>
               <Grid
-                size={{ xs: 12, md: 6, lg: 4 }}
+                size={{ xs: 12, md: 6, lg: 3 }}
                 className={`${styles.item_content}`}
               >
-                <span className={styles.key_item}>تاریخ و زمان پذیرش :</span>
-                <span className={styles.value_item}>1403/12/7</span>
+                <span className={styles.key_item}>تاریخ پذیرش :</span>
+                <span className={styles.value_item}>
+                  {toFarsiNumber(
+                    convertGregorianToPersian(
+                      fund?.admission_info?.admission_date
+                    )
+                  )}
+                </span>
               </Grid>
               <Grid
+                size={{ xs: 12, md: 6, lg: 3 }}
+                className={`${styles.item_content}`}
+              >
+                <span className={styles.key_item}>شماره فاکتور :</span>
+                <span className={styles.value_item}>
+                  {toFarsiNumber(fund?.admission_info?.invoice_number)}
+                </span>
+              </Grid>
+              <Grid
+                size={{ xs: 12, md: 6, lg: 3 }}
+                className={`${styles.item_content}`}
+              >
+                <span className={styles.key_item}>تاریخ فاکتور :</span>
+                <span className={styles.value_item}>
+                  {toFarsiNumber(
+                    convertGregorianToPersian(
+                      fund?.admission_info?.invoice_date
+                    )
+                  )}
+                </span>
+              </Grid>
+
+              {/* <Grid
                 size={{ xs: 12, md: 6, lg: 4 }}
                 className={`${styles.item_content}`}
               >
@@ -148,9 +157,9 @@ export default function FundItem() {
                 <span className={styles.value_item}>
                   {toFarsiNumber(formatWithThousandSeparators(1400000))}
                 </span>
-              </Grid>
+              </Grid> */}
             </Grid>
-            <Grid container className={`${styles.content} `}>
+            {/* <Grid container className={`${styles.content} `}>
               <Grid
                 size={{ xs: 12, md: 6, lg: 4 }}
                 className={`${styles.item_content}`}
@@ -172,7 +181,7 @@ export default function FundItem() {
                   maiores! Amet quaerat earum tempora?
                 </span>
               </Grid>
-            </Grid>
+            </Grid> */}
           </div>
           <div className={styles.wrapper_info}>
             <p className={styles.title}>اطلاعات مشتری :</p>
@@ -181,29 +190,28 @@ export default function FundItem() {
                 size={{ xs: 12, md: 6, lg: 3 }}
                 className={`${styles.item_content}`}
               >
-                <span className={styles.key_item}>نام :</span>
-                <span className={styles.value_item}>لیلا</span>
-              </Grid>
-              <Grid
-                size={{ xs: 12, md: 6, lg: 3 }}
-                className={`${styles.item_content}`}
-              >
-                <span className={styles.key_item}>نام خانوادگی :</span>
-                <span className={styles.value_item}>سعیدی</span>
+                <span className={styles.key_item}>نام و نام خانوادگی :</span>
+                <span className={styles.value_item}>
+                  {fund?.customer_info?.name}
+                </span>
               </Grid>
               <Grid
                 size={{ xs: 12, md: 6, lg: 3 }}
                 className={`${styles.item_content}`}
               >
                 <span className={styles.key_item}>کد ملی :</span>
-                <span className={styles.value_item}>1234567890</span>
+                <span className={styles.value_item}>
+                  {toFarsiNumber(fund?.customer_info?.national_code)}
+                </span>
               </Grid>
               <Grid
                 size={{ xs: 12, md: 6, lg: 3 }}
                 className={`${styles.item_content}`}
               >
                 <span className={styles.key_item}>تلفن همراه :</span>
-                <span className={styles.value_item}>09162957253</span>
+                <span className={styles.value_item}>
+                  {toFarsiNumber(fund?.customer_info?.phone)}
+                </span>
               </Grid>
             </Grid>
           </div>
@@ -220,12 +228,14 @@ export default function FundItem() {
                 <Accardion title={"پرداخت نقدی"} />
               </div>
               <div className={styles.prices_wrapper}>
-                <SumItem title={"پیش پرداخت"} price={1200000} />
-                <SumItem title={"جمع پرداختی"} price={1200000} />
+                <SumItem
+                  title={"پیش پرداخت"}
+                  price={fund?.factor?.totals?.prepayment}
+                />
+
                 <SumItem
                   title={"جمع پرداختی"}
-                  price={1200000}
-                  Gridor={"Gridor"}
+                  price={fund?.factor?.totals?.payable_amount}
                 />
               </div>
             </Grid>
@@ -243,8 +253,8 @@ export default function FundItem() {
                     rowsPerPage={""}
                     notPagination={"true"}
                   >
-                    {rows.length > 0 &&
-                      rows.map((row, i) => (
+                    {fund?.factor?.invoice_table.length > 0 &&
+                      fund?.factor?.invoice_table.map((item, i) => (
                         <TableRow
                           key={i}
                           sx={{
@@ -259,7 +269,7 @@ export default function FundItem() {
                               fontWeight: 600,
                             }}
                           >
-                            {row.work}
+                            {item?.row}
                           </TableCell>
                           <TableCell
                             align="center"
@@ -269,7 +279,7 @@ export default function FundItem() {
                               fontWeight: 600,
                             }}
                           >
-                            {toFarsiNumber(row.company)}
+                            {toFarsiNumber(item?.company)}
                           </TableCell>
                           <TableCell
                             align="center"
@@ -279,7 +289,7 @@ export default function FundItem() {
                               fontWeight: 600,
                             }}
                           >
-                            {row.customer.toLocaleString("fa")}
+                            {item.customer.toLocaleString("fa")}
                           </TableCell>
                         </TableRow>
                       ))}

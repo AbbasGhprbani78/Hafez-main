@@ -100,6 +100,7 @@ export default function RunningTasks() {
           searchInput={searchInput}
           onChange={handleChangeSearchField}
           title={"تسک های درحال اجرا"}
+          isbackButton={false}
         />
       </div>
       <TableCustom

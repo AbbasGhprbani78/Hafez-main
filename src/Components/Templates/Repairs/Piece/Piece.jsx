@@ -373,7 +373,7 @@ export default function Piece({ id, pieces }) {
         ) : (
           <>
             <div className="modal_top">
-              <span className="titel_top">افزودن قطعه جدید</span>
+              <span className="title_top">افزودن قطعه جدید</span>
             </div>
             <div className="modal_bottom">
               <Grid

@@ -113,15 +113,7 @@ function DatePickerInput({
           }}
           onClick={value === "" ? "" : onReset}
         >
-          {icon && (
-            <FontAwesomeIcon
-              fontSize={18}
-              icon={icon}
-              className={
-                value !== "" ? styles.icon_input_remove : styles.icon_input_pick
-              }
-            />
-          )}
+          {icon && <FontAwesomeIcon fontSize={18} icon={icon} />}
         </Grid>
       </Grid>
     </Grid>
