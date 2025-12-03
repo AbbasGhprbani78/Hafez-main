@@ -45,7 +45,7 @@ const defaultFilters = {
   release_date_to: null,
   car_type: [],
   status: [],
-  typeof_service: [],
+  type_of_service: [],
 };
 export default function Receptionreports() {
   const [page, setPage] = useState(0);
@@ -313,7 +313,7 @@ export default function Receptionreports() {
               <MultiSelectDropDwon
                 label="نوع خدمات"
                 onChange={(values) =>
-                  handleMultiSelectChange("typeof_service", values)
+                  handleMultiSelectChange("type_of_service", values)
                 }
                 items={serviceOptions}
               />

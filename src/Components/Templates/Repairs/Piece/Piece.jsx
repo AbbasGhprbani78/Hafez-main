@@ -7,6 +7,8 @@ import {
   faTrash,
   faAngleDown,
   faCircleCheck,
+  faListOl,
+  faBoxes,
 } from "@fortawesome/free-solid-svg-icons";
 
 import TableForm from "../../../Modules/Table/TableForm";
@@ -24,10 +26,7 @@ import {
 } from "../../../../utils/helper";
 import InputRadio from "../../../Modules/InputRadio/InputRadio";
 import Input from "../../../Modules/Input/Input";
-import {
-  errorMessage,
-  successMessage,
-} from "../../../Modules/Toast/ToastCustom";
+import { successMessage } from "../../../Modules/Toast/ToastCustom";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../../../config/axiosConfig";
 import DeleContent from "../../../Modules/DeleteContent/DeleContent";
@@ -406,6 +405,7 @@ export default function Piece({ id, pieces }) {
                     name="markCode"
                     placeHolder={"قطعه را انتخاب کنید انتخاب کنید"}
                     value={piceModalData.markCode}
+                    icon={faBoxes}
                   />
                   {errors.markCode && (
                     <p className="error">{errors.markCode}</p>
@@ -471,6 +471,7 @@ export default function Piece({ id, pieces }) {
                         setErrors((prev) => ({ ...prev, [name]: "" }));
                       }
                     }}
+                    icon={faListOl}
                   />
                   {errors.numberPiece && (
                     <p className="error">{errors.numberPiece}</p>

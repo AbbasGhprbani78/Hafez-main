@@ -6,6 +6,7 @@ import {
   faPenToSquare,
   faTrash,
   faAngleDown,
+  faMoneyCheckDollar,
 } from "@fortawesome/free-solid-svg-icons";
 import TableForm from "../../../Modules/Table/TableForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -414,6 +415,7 @@ export default function Geret({ data, id, expertStatements }) {
                     onChange={handlePriceChange}
                     name="price"
                     maxLength={30}
+                    icon={faMoneyCheckDollar}
                   />
                   {errors.price && <p className="error">{errors.price}</p>}
                 </Grid>

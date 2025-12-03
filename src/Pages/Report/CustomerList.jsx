@@ -203,6 +203,7 @@ export default function CustomerList() {
                 onChange={(e) =>
                   handleInputChange("national_code", e.target.value)
                 }
+                justNumber={true}
               />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>

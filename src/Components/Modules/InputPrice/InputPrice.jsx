@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   formatWithThousandSeparators,
   toEnglishNumber,
@@ -5,6 +6,7 @@ import {
 } from "../../../utils/helper";
 
 import styles from "./InputPrice.module.css";
+import { faMoneyCheckDollar } from "@fortawesome/free-solid-svg-icons";
 
 export default function InputPrice({
   label,
@@ -12,6 +14,7 @@ export default function InputPrice({
   onChange,
   name,
   maxLength,
+  icon,
 }) {
   return (
     <>
@@ -32,6 +35,7 @@ export default function InputPrice({
           autoComplete="off"
           maxLength={maxLength}
         />
+        <FontAwesomeIcon icon={faMoneyCheckDollar} color="var(--color-1)" />
       </div>
     </>
   );

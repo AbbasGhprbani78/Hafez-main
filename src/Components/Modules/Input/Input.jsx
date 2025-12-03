@@ -14,12 +14,17 @@ const Input = ({
   styled,
   disabled = false,
   convertNumbers = true,
+  justNumber = false,
 }) => {
   const handleChange = (e) => {
     let val = e.target.value;
 
     if (convertNumbers) {
       val = toEnglishNumber(val);
+    }
+
+    if (justNumber) {
+      val = val.replace(/[^0-9]/g, "");
     }
 
     onChange?.({

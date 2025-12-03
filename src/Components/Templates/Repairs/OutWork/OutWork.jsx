@@ -6,6 +6,7 @@ import {
   faAngleDown,
   faCheck,
   faEnvelope,
+  faGauge,
   faPenToSquare,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
@@ -419,7 +420,7 @@ export default function OutWork({ id, pieces }) {
                   <Input
                     label="کیلومتر ورود"
                     placeholder="کیلومتر ورود"
-                    icon={""}
+                    icon={faGauge}
                     name="Arrivalkm"
                     value={toFarsiNumber(outOfworkModaldata.Arrivalkm)}
                     onChange={(e) => {
@@ -444,7 +445,7 @@ export default function OutWork({ id, pieces }) {
                   <Input
                     label="کیلومتر خروج"
                     placeholder="کیلومتر خروج"
-                    icon={""}
+                    icon={faGauge}
                     name="departurekm"
                     value={toFarsiNumber(outOfworkModaldata.departurekm)}
                     onChange={(e) => {

@@ -1,15 +1,21 @@
 import { Box, CircularProgress, TableCell, TableRow } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button2 from "../../Components/Modules/Button2/Button2";
-import { toFarsiNumber } from "../../utils/helper";
+import {
+  formatWithThousandSeparators,
+  toFarsiNumber,
+} from "../../utils/helper";
 import TableCustom from "../../Components/Modules/TableCustom/TableCustom";
 
-import { faHashtag } from "@fortawesome/free-solid-svg-icons";
+import { faBuilding, faHashtag } from "@fortawesome/free-solid-svg-icons";
 import Input from "../../Components/Modules/Input/Input";
 import Grid from "@mui/material/Grid2";
 import SideBar from "../../Components/Modules/SideBar/SideBar";
 import Header from "../../Components/Modules/Header/Header";
 import styles from "./Report.module.css";
+import apiClient from "../../config/axiosConfig";
+import SelectDropDown2 from "../../Components/Modules/SelectDropDown2/SelectDropDown2";
+import { ChnageDate } from "../../Components/Modules/ChnageDate/ChnageDate";
 const columns = [
   "شماره پذیرش",
   "کد ملی",
@@ -24,126 +30,139 @@ const columns = [
 ];
 const pageLength = 10;
 
-const tableInformation = [
-  {
-    id: "F000601",
-    nationalCode: "1234567890",
-    vin: "NAPXY1AAJPZ004344",
-    engineNumber: "ENG441233",
-    acceptDate: "1404/06/01",
-    releaseDate: "1404/06/03",
-    status: "در حال تعمیر",
-    parts: [
-      {
-        code: "P-001",
-        description: "فیلتر روغن",
-        reason: "تعویض در سرویس دوره‌ای",
-        price: "1,200,000 ریال",
-        quantity: 1,
-        mechanic: "مهدی رضایی",
-      },
-      {
-        code: "P-002",
-        description: "روغن موتور",
-        reason: "تعویض پس از 10,000 کیلومتر",
-        price: "2,500,000 ریال",
-        quantity: 4,
-        mechanic: "مهدی رضایی",
-      },
-    ],
-    wages: [
-      {
-        issue: "تعویض روغن و فیلتر",
-        wage: "800,000 ریال",
-        mechanic: "علی موسوی",
-        repairTime: "0.5 ساعت",
-      },
-      {
-        issue: "بازرسی سیستم ترمز",
-        wage: "1,200,000 ریال",
-        mechanic: "علی موسوی",
-        repairTime: "1 ساعت",
-      },
-    ],
-    externalWork: [
-      {
-        description: "تراش دیسک ترمز در تراشکاری",
-        price: "1,800,000 ریال",
-      },
-    ],
-  },
-  {
-    id: "F000602",
-    nationalCode: "1122334455",
-    vin: "NAPXY1BASJP133366",
-    engineNumber: "ENG558721",
-    acceptDate: "1404/06/02",
-    releaseDate: "1404/06/04",
-    status: "تکمیل شده",
-    parts: [
-      {
-        code: "P-010",
-        description: "واشر سرسیلندر",
-        reason: "نشت روغن",
-        price: "3,200,000 ریال",
-        quantity: 1,
-        mechanic: "حمید احمدی",
-      },
-    ],
-    wages: [
-      {
-        issue: "تعویض واشر سرسیلندر",
-        wage: "2,000,000 ریال",
-        mechanic: "حمید احمدی",
-        repairTime: "3 ساعت",
-      },
-    ],
-    externalWork: [
-      {
-        description: "تست انژکتور در تعمیرگاه تخصصی",
-        price: "900,000 ریال",
-      },
-    ],
-  },
-  {
-    id: "F000603",
-    nationalCode: "9988776655",
-    vin: "NAPXY1BAARJP009778",
-    engineNumber: "ENG338211",
-    acceptDate: "1404/06/03",
-    releaseDate: "1404/06/03",
-    status: "تحویل شده",
-    parts: [
-      {
-        code: "P-021",
-        description: "باتری",
-        reason: "ضعیف شدن باتری قبلی",
-        price: "4,500,000 ریال",
-        quantity: 1,
-        mechanic: "رضا کیانی",
-      },
-    ],
-    wages: [
-      {
-        issue: "تعویض باتری و تست دینام",
-        wage: "500,000 ریال",
-        mechanic: "رضا کیانی",
-        repairTime: "0.3 ساعت",
-      },
-    ],
-    externalWork: [],
-  },
-];
-
 export default function CustomerHistory() {
   const [page, setPage] = useState(0);
-  const [totalRows, setTotalRows] = useState(tableInformation.length);
+  const [totalRows, setTotalRows] = useState(0);
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState([]);
+  const [parts, setParts] = useState([]);
+  const [filters, setFilters] = useState({
+    chassis_number: "",
+    national_code: "",
+    repairs: "",
+    parts: "",
+    external_work: "",
+  });
+
+  const applyFilter = (updater) => {
+    setFilters((prev) =>
+      typeof updater === "function" ? updater(prev) : { ...prev, ...updater }
+    );
+    setPage(0);
+  };
 
   const handleChangePage = (newPage) => {
     setPage(newPage);
   };
+
+  const handleInputChange = (name, value) => {
+    applyFilter({ [name]: value });
+  };
+
+  const handleChange = (field, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const transformCustomerHistory = (results) => {
+    return results.map((item) => ({
+      admission_number: item.admission_number,
+      nationalCode: item.customer_info?.national_code || "",
+      vin: item.car_info?.chassis_number || "",
+      engineNumber: item.car_info?.engine_number || "",
+      acceptDate: item.admission_date || "",
+      releaseDate: item.estimated_time_cost || "",
+      status: mapStatus(item.status),
+      parts: (item.parts || []).map((p) => ({
+        code: p.piece_code ? `P-${String(p.piece_code).padStart(3, "0")}` : "",
+        description: p.piece_name || "",
+        reason: p.description || "",
+        price: p.price || "",
+        quantity: p.count || 1,
+        mechanic: p.repairman_name || "",
+      })),
+      wages: (item.repairs || []).map((r) => ({
+        issue: r.action || "",
+        wage: r.price || "",
+        mechanic: r.repairman[0] || "",
+        repairTime: r.repair_hours ? `${r.repair_hours} ساعت` : "",
+      })),
+      externalWork: (item.work_abroad || []).map((w) => ({
+        description: w.descriptions || "",
+        price: w.price || "",
+      })),
+    }));
+  };
+
+  const mapStatus = (status) => {
+    const map = {
+      one: "در انتظار",
+      two: "در حال بررسی",
+      three: "در حال تعمیر",
+      done: "تکمیل شده",
+    };
+    return map[status] || status;
+  };
+
+  const getCustomerHistory = async () => {
+    try {
+      const params = new URLSearchParams({
+        page: page + 1,
+        page_size: pageLength,
+      });
+
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== null && value !== "") {
+          params.append(key, value);
+        }
+      });
+
+      const response = await apiClient.get(
+        `/app/api/receptions/?${params.toString()}`
+      );
+
+      if (response.status === 200) {
+        const data = response.data;
+        console.log(response.data.results);
+        setTotalRows(data.count || 0);
+        const transformedRows = transformCustomerHistory(data.results || []);
+        setRows(transformedRows);
+      }
+    } catch (error) {
+      console.error("خطا در دریافت تاریخچه مشتریان:", error);
+    }
+  };
+
+  const getParts = async () => {
+    try {
+      const resposne = await apiClient.get("app/api/parts/");
+      if (resposne.status === 200) {
+        const allParts =
+          resposne.data?.map((item) => ({
+            value_id: item.id,
+            value: item.name || item.value,
+          })) || [];
+
+        setParts(allParts);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getParts();
+  }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      getCustomerHistory();
+    }, 400);
+
+    return () => clearTimeout(timeout);
+  }, [filters, page]);
 
   return (
     <Grid className="content-conatiner">
@@ -174,22 +193,27 @@ export default function CustomerHistory() {
           >
             <Grid size={{ xs: 12, md: 6 }}>
               <Input
-                name={"chassis_number"}
+                name="chassis_number"
                 label="شماره شاسی :"
                 placeholder="شماره شاسی"
                 icon={faHashtag}
-                value={""}
-                onChange={""}
+                value={filters.chassis_number}
+                onChange={(e) =>
+                  handleInputChange("chassis_number", e.target.value)
+                }
               />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
               <Input
-                name={"admission_number"}
+                name="national_code"
                 label="کد ملی :"
                 placeholder="کد ملی"
                 icon={faHashtag}
-                value={""}
-                onChange={""}
+                value={filters.national_code}
+                onChange={(e) =>
+                  handleInputChange("national_code", e.target.value)
+                }
+                justNumber={true}
               />
             </Grid>
           </Grid>
@@ -200,22 +224,24 @@ export default function CustomerHistory() {
           >
             <Grid size={{ xs: 12, md: 6 }}>
               <Input
-                name={"chassis_number"}
+                name="repairs"
                 label="اجرت :"
                 placeholder="اجرت"
                 icon={faHashtag}
-                value={""}
-                onChange={""}
+                value={filters.repairs}
+                justNumber
+                onChange={(e) => handleInputChange("repairs", e.target.value)}
               />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
-              <Input
-                name={"admission_number"}
+              <SelectDropDown2
                 label="قطعات :"
-                placeholder="قطعات"
-                icon={faHashtag}
-                value={""}
-                onChange={""}
+                items={parts}
+                name="parts"
+                placeHolder={"قطعه را انتخاب یا وارد کنید"}
+                isDesirableValue={false}
+                onChange={handleChange}
+                value={filters.parts}
               />
             </Grid>
           </Grid>
@@ -226,25 +252,27 @@ export default function CustomerHistory() {
           >
             <Grid size={{ xs: 12, md: 6 }}>
               <Input
-                name={"chassis_number"}
+                name="external_work"
                 label="کار خارج :"
                 placeholder="کار خارج"
-                icon={faHashtag}
-                value={""}
-                onChange={""}
+                value={filters.external_work}
+                onChange={(e) =>
+                  handleInputChange("external_work", e.target.value)
+                }
+                icon={faBuilding}
               />
             </Grid>
           </Grid>
         </Box>
         <TableCustom
-          rows={tableInformation}
+          rows={totalRows}
           columns={columns}
           onChange={handleChangePage}
           page={page}
           rowsPerPage={pageLength}
           total={totalRows}
         >
-          {tableInformation.map((row, index) => (
+          {rows?.map((row, index) => (
             <TableRow
               key={index}
               sx={{
@@ -253,7 +281,7 @@ export default function CustomerHistory() {
               }}
             >
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.id)}
+                {toFarsiNumber(row.admission_number)}
               </TableCell>
 
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
@@ -267,15 +295,8 @@ export default function CustomerHistory() {
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                 {toFarsiNumber(row.engineNumber)}
               </TableCell>
-
-              <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.acceptDate)}
-              </TableCell>
-
-              <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.releaseDate)}
-              </TableCell>
-
+              <ChnageDate date={row.acceptDate} />
+              <ChnageDate date={row.releaseDate} />
               <TableCell
                 align="center"
                 sx={{
@@ -308,7 +329,11 @@ export default function CustomerHistory() {
                           {toFarsiNumber(`شرح قطعه: ${part.description}`)}
                         </div>
                         <div>{toFarsiNumber(`علت تعویض: ${part.reason}`)}</div>
-                        <div>{toFarsiNumber(`قیمت: ${part.price}`)}</div>
+                        <div>
+                          {toFarsiNumber(
+                            `قیمت: ${formatWithThousandSeparators(part.price)}`
+                          )}
+                        </div>
                         <div>{toFarsiNumber(`تعداد: ${part.quantity}`)}</div>
                         <div>{toFarsiNumber(`تعمیرکار: ${part.mechanic}`)}</div>
                       </div>
@@ -330,7 +355,11 @@ export default function CustomerHistory() {
                         <div>
                           {toFarsiNumber(`اظهار/عیب فنی: ${wage.issue}`)}
                         </div>
-                        <div>{toFarsiNumber(`اجرت: ${wage.wage}`)}</div>
+                        <div>
+                          {toFarsiNumber(
+                            `اجرت: ${formatWithThousandSeparators(wage.wage)}`
+                          )}
+                        </div>
                         <div>{toFarsiNumber(`تعمیرکار: ${wage.mechanic}`)}</div>
                         <div>
                           {toFarsiNumber(`مدت زمان تعمیر: ${wage.repairTime}`)}
@@ -354,7 +383,11 @@ export default function CustomerHistory() {
                         <div>
                           {toFarsiNumber(`شرح کار: ${work.description}`)}
                         </div>
-                        <div>{toFarsiNumber(`قیمت: ${work.price}`)}</div>
+                        <div>
+                          {toFarsiNumber(
+                            `قیمت: ${formatWithThousandSeparators(work.price)}`
+                          )}
+                        </div>
                       </div>
                     ))
                   : "-"}
@@ -400,4 +433,14 @@ export default function CustomerHistory() {
       </Grid>
     </Grid>
   );
+}
+
+{
+  /* <Input
+                name="parts"
+                label="قطعات :"
+                placeholder="قطعات"
+                value={filters.parts}
+                onChange={(e) => handleInputChange("parts", e.target.value)}
+              /> */
 }

@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Button2 from "../../Components/Modules/Button2/Button2";
 import { Box, CircularProgress, TableCell, TableRow } from "@mui/material";
-import { toFarsiNumber } from "../../utils/helper";
+import {
+  formatWithThousandSeparators,
+  toFarsiNumber,
+} from "../../utils/helper";
 import TableCustom from "../../Components/Modules/TableCustom/TableCustom";
 import { faHashtag } from "@fortawesome/free-solid-svg-icons";
 import Input from "../../Components/Modules/Input/Input";
@@ -9,9 +12,13 @@ import Grid from "@mui/material/Grid2";
 import SideBar from "../../Components/Modules/SideBar/SideBar";
 import Header from "../../Components/Modules/Header/Header";
 import DateRangeFilter from "../../Components/Modules/DateRangeFilter/DateRangeFilter";
+import apiClient from "../../config/axiosConfig";
+import SelectDropDown2 from "../../Components/Modules/SelectDropDown2/SelectDropDown2";
+import { ChnageDate } from "../../Components/Modules/ChnageDate/ChnageDate";
 //مصرف قطعات
+
 const columns = [
-  "کد قطعه / سریال قطعه",
+  "کد قطعه",
   "شرح قطعه",
   "نوع خودرو",
   "شماره موتور",
@@ -22,79 +29,123 @@ const columns = [
   "اجرت",
   "تعداد مصرف",
 ];
-
-const tableInformation = [
-  {
-    partCode: "P-1001",
-    description: "فیلتر روغن موتور",
-    carType: "شاهین",
-    engineNumber: "ENG442311",
-    acceptDate: "1404/06/01",
-    releaseDate: "1404/06/02",
-    quantity: 2,
-    serial: "SRL-000245",
-    wage: "800,000 ریال",
-    usedQuantity: 2,
-  },
-  {
-    partCode: "P-1002",
-    description: "روغن ترمز DOT4",
-    carType: "کوییک",
-    engineNumber: "ENG551922",
-    acceptDate: "1404/06/01",
-    releaseDate: "1404/06/03",
-    quantity: 1,
-    serial: "SRL-000356",
-    wage: "600,000 ریال",
-    usedQuantity: 1,
-  },
-  {
-    partCode: "P-1003",
-    description: "دیسک ترمز جلو",
-    carType: "ساینا",
-    engineNumber: "ENG661508",
-    acceptDate: "1404/06/02",
-    releaseDate: "1404/06/04",
-    quantity: 2,
-    serial: "SRL-000587",
-    wage: "1,400,000 ریال",
-    usedQuantity: 2,
-  },
-  {
-    partCode: "P-1004",
-    description: "شمع موتور",
-    carType: "X200",
-    engineNumber: "ENG441278",
-    acceptDate: "1404/06/03",
-    releaseDate: "1404/06/05",
-    quantity: 4,
-    serial: "SRL-000612",
-    wage: "500,000 ریال",
-    usedQuantity: 4,
-  },
-  {
-    partCode: "P-1005",
-    description: "فیلتر هوا",
-    carType: "تیبا",
-    engineNumber: "ENG558901",
-    acceptDate: "1404/06/04",
-    releaseDate: "1404/06/06",
-    quantity: 1,
-    serial: "SRL-000734",
-    wage: "300,000 ریال",
-    usedQuantity: 1,
-  },
-];
+const pageLength = 10;
+const formatDate = (date) =>
+  date ? new Date(date).toISOString().split("T")[0] : null;
 
 export default function Consumableparts() {
   const [page, setPage] = useState(0);
-  const [totalRows, setTotalRows] = useState(tableInformation.length);
+  const [totalRows, setTotalRows] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [rows, setRows] = useState([]);
+  const [parts, setParts] = useState([]);
+  const [filters, setFilters] = useState({
+    admission_date_from: null,
+    admission_date_to: null,
+    release_date_from: null,
+    release_date_to: null,
+    piece_code: "",
+    piece_description: "",
+  });
+
+  const applyFilter = (updater) => {
+    setFilters((prev) =>
+      typeof updater === "function" ? updater(prev) : { ...prev, ...updater }
+    );
+    setPage(0);
+  };
 
   const handleChangePage = (newPage) => {
     setPage(newPage);
   };
-  const pageLength = 10;
+
+  const handleAdmissionDateChange = ({ startDate, endDate }) => {
+    applyFilter({
+      admission_date_from: formatDate(startDate),
+      admission_date_to: formatDate(endDate),
+    });
+  };
+
+  const handleReleaseDateChange = ({ startDate, endDate }) => {
+    applyFilter({
+      release_date_from: formatDate(startDate),
+      release_date_to: formatDate(endDate),
+    });
+  };
+
+  const handleInputChange = (name, value) => {
+    applyFilter({ [name]: value });
+  };
+
+  const handleChange = (field, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const getPartsOptions = async () => {
+    try {
+      const resposne = await apiClient.get(
+        "app/api/consumable-parts-filter-options/"
+      );
+      if (resposne.status === 200) {
+        const allParts =
+          resposne.data?.pieces?.map((item) => ({
+            value_id: item.id,
+            value: item.name || item.value,
+          })) || [];
+
+        setParts(allParts);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchPartsdata = useCallback(async () => {
+    try {
+      const params = new URLSearchParams({
+        page: page + 1,
+        page_size: pageLength,
+      });
+
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value == null || value === "" || value?.length === 0) return;
+
+        if (Array.isArray(value)) {
+          value.forEach((item) => params.append(key, item));
+        } else {
+          params.append(key, value);
+        }
+      });
+
+      const response = await apiClient.get(
+        `app/api/consumable-parts-report/?${params.toString()}`
+      );
+
+      if (response.status === 200) {
+        const data = response.data;
+        console.log(response.data);
+        setTotalRows(data.count || 0);
+        setRows(data.results);
+      }
+    } catch (error) {
+      console.error("خطا در دریافت لیست مشتریان:", error);
+    }
+  }, [filters, page]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      fetchPartsdata();
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [filters, page]);
+
+  useEffect(() => {
+    getPartsOptions();
+  }, []);
 
   return (
     <Grid className="content-conatiner">
@@ -121,9 +172,11 @@ export default function Consumableparts() {
           <Grid container sx={{ width: "100%" }}>
             <Grid size={{ xs: 12 }}>
               <DateRangeFilter
-                onDateChange={""}
+                onDateChange={handleAdmissionDateChange}
                 startLabel="از تاریخ پذیرش"
                 endLabel="تا تاریخ پذیرش"
+                startDateProp={filters.admission_date_from}
+                endDateProp={filters.admission_date_to}
                 spacingxl={30}
                 spacingmd={10}
                 spacingsx={2}
@@ -133,9 +186,11 @@ export default function Consumableparts() {
           <Grid container sx={{ width: "100%" }}>
             <Grid size={{ xs: 12 }}>
               <DateRangeFilter
-                onDateChange={""}
+                onDateChange={handleReleaseDateChange}
                 startLabel="از تاریخ ترخیص"
                 endLabel="تا تاریخ ترخیص"
+                startDateProp={filters.release_date_from}
+                endDateProp={filters.release_date_to}
                 spacingxl={30}
                 spacingmd={10}
                 spacingsx={2}
@@ -148,13 +203,14 @@ export default function Consumableparts() {
             spacing={{ xs: 2, md: 10, xl: 30 }}
           >
             <Grid size={{ xs: 12, md: 6 }}>
-              <Input
-                name={"chassis_number"}
-                label="سریال قطعه :"
-                placeholder="سریال قطعه"
-                icon={faHashtag}
-                value={""}
-                onChange={""}
+              <SelectDropDown2
+                label="کد قطعه / سریال قطعه :"
+                items={parts}
+                name="piece_code"
+                placeHolder={"قطعه را انتخاب یا وارد کنید"}
+                isDesirableValue={false}
+                onChange={handleChange}
+                value={filters.piece_code}
               />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
@@ -162,22 +218,23 @@ export default function Consumableparts() {
                 name={"admission_number"}
                 label="شرح قطعه :"
                 placeholder="شرح قطعه"
-                icon={faHashtag}
-                value={""}
-                onChange={""}
+                value={filters.piece_description}
+                onChange={(e) =>
+                  handleInputChange("piece_description", e.target.value)
+                }
               />
             </Grid>
           </Grid>
         </Box>
         <TableCustom
-          rows={tableInformation}
+          rows={totalRows}
           columns={columns}
           onChange={handleChangePage}
           page={page}
           rowsPerPage={pageLength}
           total={totalRows}
         >
-          {tableInformation.map((row, index) => (
+          {rows?.map((row, index) => (
             <TableRow
               key={index}
               sx={{
@@ -186,43 +243,37 @@ export default function Consumableparts() {
               }}
             >
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(`${row.partCode}`)}
+                {toFarsiNumber(`${row?.piece_code}`)}
               </TableCell>
 
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.description)}
+                {toFarsiNumber(row?.piece_description)}
               </TableCell>
 
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.carType)}
+                {toFarsiNumber(row?.car_type)}
               </TableCell>
 
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.engineNumber)}
+                {toFarsiNumber(row?.engine_number)}
+              </TableCell>
+
+              <ChnageDate date={row?.admission_date} />
+              <ChnageDate date={row?.release_date} />
+              <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                {toFarsiNumber(row?.count)}
               </TableCell>
 
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.acceptDate)}
+                {toFarsiNumber(row?.piece_serial)}
               </TableCell>
 
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.releaseDate)}
+                {toFarsiNumber(formatWithThousandSeparators(row?.wage))}
               </TableCell>
 
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.quantity)}
-              </TableCell>
-
-              <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.serial)}
-              </TableCell>
-
-              <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.wage)}
-              </TableCell>
-
-              <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.usedQuantity)}
+                {toFarsiNumber(row?.consumption_count)}
               </TableCell>
             </TableRow>
           ))}
