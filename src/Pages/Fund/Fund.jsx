@@ -7,7 +7,7 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Input from "../../Components/Modules/Input/Input";
 import { TableCell, TableRow } from "@mui/material";
 import TableStatus from "../../Components/Modules/TableStatus/TableStatus";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Grid from "@mui/material/Grid2";
 import { toFarsiNumber } from "../../utils/helper";
 import { useNavigate } from "react-router-dom";
@@ -37,7 +37,7 @@ export default function Fund() {
 
   const navigate = useNavigate();
 
-  const fetchCustomers = async () => {
+  const fetchCustomers = useCallback(async () => {
     setLoading(true);
     try {
       const params = {
@@ -64,6 +64,7 @@ export default function Fund() {
       if (response.status === 200) {
         setRows(response.data.results || []);
         setTotalRows(response.data.count || 0);
+        console.log("Fetched customers:", response.data);
       }
     } catch (error) {
       console.error("Error fetching customers:", error);
@@ -72,7 +73,7 @@ export default function Fund() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, rowsPerPage, inputSearch, dateStart, dateEnd]);
 
   const handleSearchClick = () => {
     setPage(0);
@@ -101,16 +102,14 @@ export default function Fund() {
   useEffect(() => {
     const debounce = setTimeout(() => {
       setPage(0);
-      fetchCustomers();
     }, 600);
 
     return () => clearTimeout(debounce);
-  }, [inputSearch, page, rowsPerPage]);
+  }, [inputSearch]);
 
   useEffect(() => {
     if (!dateStart && !dateEnd) {
       setPage(0);
-      fetchCustomers();
     }
   }, [dateStart, dateEnd]);
 

@@ -312,10 +312,11 @@ function AddAndEditRepairman({
       phone_number: repairmanInfo.repair_phone_number,
       salon: itemRepairHalls,
       status: repairmanInfo.repair_status,
-      type: itemRepairExpertise,
+      specialty: itemRepairExpertise,
       username: repairmanInfo.repair_username,
       password: repairmanInfo.repair_password,
       work_time: repairmanInfo.repair_work_hours,
+      type: [2],
     };
     setLoading(true);
     if (action === "add") {
@@ -358,23 +359,29 @@ function AddAndEditRepairman({
   useEffect(() => {
     if (tab === 1) {
       if (modal === true) {
-        if (action === "edit") {
+        if (action === "edit" && infoItem) {
           setRepairmanInfo({
             id: infoItem.id,
             repair_status: infoItem.status,
-            repair_name: infoItem.full_name,
-            repair_national_code: infoItem.national_code,
-            repair_phone_number: infoItem.phone_number,
-            repair_work_hours: infoItem.work_time,
-            repair_username: infoItem.username,
+            repair_name: infoItem.full_name || "",
+            repair_national_code: infoItem.national_code || "",
+            repair_phone_number: infoItem.phone_number || "",
+            repair_work_hours: infoItem.work_time
+              ? Number(infoItem.work_time)
+              : 8,
+            repair_username: infoItem.username || "",
           });
+          // salon is already an array of IDs: [36, 41, 42]
           setItemRepairHalls(
-            infoItem.salon?.length > 0
-              ? infoItem.salon.map((hall) => hall.id)
+            Array.isArray(infoItem.salon) && infoItem.salon.length > 0
+              ? infoItem.salon
               : []
           );
+          // type is already an array of IDs: [1, 2, 3]
           setItemRepairExpertise(
-            infoItem.type?.length > 0 ? infoItem.type.map((exp) => exp.id) : []
+            Array.isArray(infoItem.type) && infoItem.type.length > 0
+              ? infoItem.type
+              : []
           );
         } else if (action === "add") {
           setRepairmanInfo({
@@ -421,7 +428,18 @@ function AddAndEditRepairman({
       const response = await apiClient.get(`/app/get-user-type/`);
       if (response.status === 200) {
         setHallsInfo(response.data.salons);
-        setExpertiseInfo(response.data.user_type);
+      }
+    } catch (error) {
+      errorMessage("خطا در برقراری ارتباط با سرور");
+      setHallsInfo([]);
+    }
+  };
+
+  const fetchAllExpertise = async () => {
+    try {
+      const response = await apiClient.get(`app/api/repairman-specialties/`);
+      if (response.status === 200) {
+        setExpertiseInfo(response.data.specialties);
       }
     } catch (error) {
       errorMessage("خطا در برقراری ارتباط با سرور");
@@ -430,6 +448,7 @@ function AddAndEditRepairman({
     }
   };
   useEffect(() => {
+    fetchAllExpertise();
     fetchGetHalls();
   }, []);
 
@@ -611,7 +630,7 @@ function AddAndEditRepairman({
               <MultipleSelectCheckmarks
                 options={expertiseInfo?.map((exp) => ({
                   value: exp.id,
-                  label: exp.type,
+                  label: exp.name,
                 }))}
                 selectedValues={itemRepairExpertise}
                 onChange={setItemRepairExpertise}

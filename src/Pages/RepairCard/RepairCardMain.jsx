@@ -286,7 +286,6 @@ function InfoTabel({
     navigate(`/repairs/${id}`);
   };
 
-  console.log(tableInformation);
   return (
     <Grid
       container

@@ -12,8 +12,9 @@ import DataInput from "../../../Modules/DataInput/DataInput";
 //Mui Components
 import Grid from "@mui/material/Grid2";
 import Box from "@mui/material/Box";
-import { Typography } from "@mui/material";
+import { TableCell, TableRow, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
+import TextField from "@mui/material/TextField";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import "react-toastify/dist/ReactToastify.css";
 import DateObject from "react-date-object";
@@ -39,6 +40,19 @@ import InputPrice from "../../../Modules/InputPrice/InputPrice";
 import { MyContext } from "../../../../context/context";
 import SearchAndSelectDropDwon from "../../../Modules/SearchAndSelectDropDwon/SearchAndSelectDropDwon";
 import SelectDropDown2 from "../../../Modules/SelectDropDown2/SelectDropDown2";
+import TableForm from "../../../Modules/Table/TableForm";
+import { toFarsiNumber } from "../../../../utils/helper";
+import { InfoTabel } from "../../../../Pages/Management/ManagementPage";
+import TableCustom from "../../../Modules/TableCustom/TableCustom";
+
+const columns = [
+  "کد",
+  "نام تعمیرکار",
+  "تخصص تعمیرکار",
+  "قابلیت زمانی تعمیرکار",
+  "زمان ازاد",
+  "وضعیت",
+];
 
 function AcceptenceForm3({
   nextTab = () => {},
@@ -62,6 +76,7 @@ function AcceptenceForm3({
     ExpertVoice: [],
     invoiceItems: [{ wages: "", price: "", repairman: "" }],
   });
+  const [page, setPage] = useState(0);
 
   const [selectedData, setSelectedData] = useState({
     customer: formId,
@@ -80,6 +95,15 @@ function AcceptenceForm3({
   const [wages, setWages] = useState([]);
   const [prices, setPrices] = useState();
   const [repairmen, setRepairmen] = useState([]);
+  const [allschedules, setAllShedules] = useState([]);
+  const [repairmanSearch, setRepairmanSearch] = useState("");
+  const [schedulesLoading, setSchedulesLoading] = useState(false);
+  const [selectedSchedule, setSelectedSchedule] = useState(null);
+  const [assignLoading, setAssignLoading] = useState(false);
+  const [hourlyRateInput, setHourlyRateInput] = useState("");
+  const [descriptionInput, setDescriptionInput] = useState("");
+  const [totalSchedules, setTotalSchedules] = useState(0);
+  const rowsPerPage = 10;
 
   const handleToggleModal = () => {
     setShowModal((modal) => !modal);
@@ -380,7 +404,6 @@ function AcceptenceForm3({
       );
 
       if (response.status === 200) {
-        console.log(response.data);
         const { EstimatedRepairTime, tableForm = [], ...rest } = response.data;
 
         const miladiDate = EstimatedRepairTime
@@ -448,7 +471,129 @@ function AcceptenceForm3({
 
   const handleClickOnSendToExperts = () => {};
 
-  const handleCliclOnRepairmanSchedule = () => {};
+  const handleCliclOnRepairmanSchedule = async () => {
+    setShowModal(true);
+    setTypeModal(3);
+  };
+
+  const getRepairmanSchedules = async (
+    search = "",
+    pageNumber = page,
+    pageSize = rowsPerPage
+  ) => {
+    try {
+      setSchedulesLoading(true);
+      const response = await apiClient.get("app/api/repairman-schedule/", {
+        params: {
+          search,
+          page: pageNumber + 1,
+          page_size: pageSize,
+        },
+      });
+      if (response.status === 200) {
+        setAllShedules(response.data.results.all_schedules || []);
+        setTotalSchedules(
+          response.data.count ||
+            response.data.total ||
+            (response.data.all_schedules || []).length
+        );
+      }
+    } catch (error) {
+      errorMessage("خطا در دریافت برنامه تعمیرکار");
+    } finally {
+      setSchedulesLoading(false);
+    }
+  };
+
+  const searchTimeoutRef = useRef(null);
+  const isSearchChangeRef = useRef(false);
+
+  const handleChangePage = (newPage) => {
+    setPage(newPage);
+  };
+
+  useEffect(() => {
+    if (typeModal === 3 && showModal) {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+      isSearchChangeRef.current = true;
+      setPage(0);
+      searchTimeoutRef.current = setTimeout(() => {
+        getRepairmanSchedules(repairmanSearch, 0, rowsPerPage);
+        isSearchChangeRef.current = false;
+      }, 500);
+
+      return () => {
+        if (searchTimeoutRef.current) {
+          clearTimeout(searchTimeoutRef.current);
+        }
+      };
+    }
+  }, [repairmanSearch, showModal, typeModal]);
+
+  useEffect(() => {
+    if (typeModal === 3 && showModal) {
+      if (!isSearchChangeRef.current) {
+        getRepairmanSchedules(repairmanSearch, page, rowsPerPage);
+      }
+    }
+  }, [page]);
+
+  const handleSelectSchedule = (item) => {
+    setSelectedSchedule(item);
+    if (item?.hourly_rate) setHourlyRateInput(String(item.hourly_rate));
+    else setHourlyRateInput("");
+    setDescriptionInput("");
+  };
+
+  const assignRepairman = async () => {
+    if (!selectedSchedule) return errorMessage("تعمیرکاری انتخاب نشده است");
+    const form_id = idForm ? idForm : formId;
+    // const form_id = idForm ? idForm : 35;
+    if (!form_id) return errorMessage("شناسه فرم موجود نیست");
+
+    let estimated_end_time = null;
+    try {
+      if (selectedData.EstimatedRepairTime) {
+        const d =
+          selectedData.EstimatedRepairTime instanceof Date
+            ? selectedData.EstimatedRepairTime
+            : new Date(selectedData.EstimatedRepairTime);
+        estimated_end_time = d.toISOString();
+      }
+    } catch (e) {
+      estimated_end_time = null;
+    }
+
+    const payload = {
+      form_id,
+      repairman_id: selectedSchedule.repairman,
+      estimated_end_time,
+      hourly_rate: hourlyRateInput ? Number(hourlyRateInput) : null,
+      description: descriptionInput,
+    };
+
+    try {
+      setAssignLoading(true);
+      const response = await apiClient.post(
+        "/app/api/repairman-schedule/",
+        payload
+      );
+      if (response.status === 200 || response.status === 201) {
+        successMessage("تعمیرکار با موفقیت برنامه‌ریزی شد.");
+        getRepairmanSchedules(repairmanSearch, page, rowsPerPage);
+        setShowModal(false);
+      } else {
+        errorMessage("خطا در ثبت برنامه تعمیرکار");
+      }
+    } catch (error) {
+      console.error(error);
+      errorMessage("خطا در ثبت برنامه تعمیرکار");
+    } finally {
+      setAssignLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (dataform3.ExpertStatements) {
@@ -460,6 +605,7 @@ function AcceptenceForm3({
     setContent("اظهارات مشتری:");
     getCustomerStatements();
     getExpertStatements();
+    getRepairmanSchedules("", 0, rowsPerPage);
   }, []);
 
   useEffect(() => {
@@ -524,7 +670,203 @@ function AcceptenceForm3({
             />
           </>
         ) : (
-          <></>
+          <>
+            <Box
+              sx={{
+                mb: 1,
+                display: "flex",
+                gap: ".5rem",
+                alignItems: "center",
+              }}
+            >
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="جستجوی تعمیرکار..."
+                value={repairmanSearch}
+                onChange={(e) => setRepairmanSearch(e.target.value)}
+                InputProps={{ dir: "rtl" }}
+                size="small"
+              />
+              {schedulesLoading && (
+                <CircularProgress size={20} color="#00c494" />
+              )}
+            </Box>
+
+            <TableCustom
+              rows={allschedules}
+              columns={columns}
+              onChange={handleChangePage}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              total={totalSchedules}
+              maxHeight={200}
+            >
+              {allschedules.length > 0 &&
+                allschedules.map((item) => (
+                  <TableRow
+                    key={item.id}
+                    onClick={() => handleSelectSchedule(item)}
+                    sx={{
+                      cursor: "pointer",
+                      backgroundColor:
+                        selectedSchedule && selectedSchedule.id === item.id
+                          ? "rgba(25,118,210,0.08)"
+                          : "transparent",
+                    }}
+                  >
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {toFarsiNumber(item?.repairman_code)}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {toFarsiNumber(item?.repairman_name)}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {Array.isArray(item.repairman_specialties) &&
+                      item.repairman_specialties.length > 0
+                        ? item.repairman_specialties.map((t) => t).join(" / ")
+                        : "Invalid data"}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {`${toFarsiNumber(item?.total_hours)} ساعت کار در روز`}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {`${toFarsiNumber(item?.free_hours)}`}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      <div
+                        style={{
+                          color: "#fff",
+                          padding: "4px 10px",
+                          borderRadius: "100px",
+                        }}
+                        className={` ${
+                          item?.work_status === "free"
+                            ? "free"
+                            : item?.work_status === "in_repair"
+                            ? "under"
+                            : "hide"
+                        }`}
+                      >
+                        {item?.work_status === "free"
+                          ? "آزاد"
+                          : item?.work_status === "in_repair"
+                          ? "درحال تعمیر"
+                          : "Hide"}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableCustom>
+
+            {selectedSchedule && (
+              <Box
+                sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 1 }}
+              >
+                <Typography
+                  sx={{
+                    fontWeight: 500,
+                    fontFamily: "iranYekan",
+                    fontSize: ".9rem",
+                  }}
+                >
+                  {`تعمیرکار انتخاب شده: ${
+                    selectedSchedule.repairman_name ||
+                    selectedSchedule.repairman_full_name ||
+                    selectedSchedule.repairman_name
+                  }`}
+                </Typography>
+                <TextField
+                  label="اجرت ساعتی"
+                  placeholder="مثال: ۵۰۰۰۰"
+                  value={hourlyRateInput}
+                  onChange={(e) => setHourlyRateInput(e.target.value)}
+                  size="small"
+                  dir="rtl"
+                  InputLabelProps={{
+                    sx: {
+                      right: 25,
+                      left: "auto",
+                      transformOrigin: "right",
+                      "&.Mui-focused": {
+                        transform: "translate(14px, -9px) scale(0.75)",
+                      },
+                      "&.MuiFormLabel-filled": {
+                        transform: "translate(14px, -9px) scale(0.75)",
+                      },
+                    },
+                  }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      pr: 1.5,
+                    },
+                    "& .MuiInputBase-input": {
+                      textAlign: "right",
+                    },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      textAlign: "right",
+                    },
+                    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: "primary.main",
+                      },
+                  }}
+                />
+                <TextField
+                  label="توضیحات"
+                  placeholder="شرح کار (مثال: تعمیر موتور)"
+                  value={descriptionInput}
+                  onChange={(e) => setDescriptionInput(e.target.value)}
+                  size="small"
+                  rows={2}
+                  dir="rtl"
+                  InputLabelProps={{
+                    sx: {
+                      right: 25,
+                      left: "auto",
+                      transformOrigin: "right",
+                      "&.Mui-focused": {
+                        transform: "translate(14px, -9px) scale(0.75)",
+                      },
+                      "&.MuiFormLabel-filled": {
+                        transform: "translate(14px, -9px) scale(0.75)",
+                      },
+                    },
+                  }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": { pr: 1.5 },
+                    "& .MuiInputBase-input": { textAlign: "right" },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      textAlign: "right",
+                    },
+                  }}
+                />
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: ".5rem",
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <Button2
+                    type="button"
+                    variant="outlined"
+                    onClick={() => setSelectedSchedule(null)}
+                  >
+                    لغو
+                  </Button2>
+                  <Button2
+                    type="button"
+                    variant="contained"
+                    onClick={assignRepairman}
+                    disable={assignLoading}
+                  >
+                    {assignLoading ? <CircularProgress size={20} /> : "ارسال"}
+                  </Button2>
+                </Box>
+              </Box>
+            )}
+          </>
         )}
       </Modal>
 

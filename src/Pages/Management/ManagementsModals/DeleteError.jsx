@@ -52,6 +52,8 @@ function DeleteError({
       setLoading(false);
     }
   };
+
+  console.log(infoItem);
   return (
     <Grid
       container

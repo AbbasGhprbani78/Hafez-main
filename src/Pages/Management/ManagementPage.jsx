@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styles from "./ManagementStyles.module.css";
 import SideBar from "../../Components/Modules/SideBar/SideBar";
 import Header from "../../Components/Modules/Header/Header";
@@ -30,6 +30,7 @@ import {
 import apiClient from "../../config/axiosConfig";
 import Button3 from "../../Components/Modules/Button3/Button3";
 import { toFarsiNumber } from "../../utils/helper";
+import axios from "axios";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -62,7 +63,8 @@ function ManagementPage() {
   const [operation, setOperation] = useState("add");
   const [searchInput, setSearchInput] = useState("");
   const [page, setPage] = useState(0);
-  const rowsPerPage = 5;
+  const [count, setCount] = useState(0);
+  const rowsPerPage = 10;
   const handleChange = (newValue) => {
     setTab(newValue);
   };
@@ -75,104 +77,104 @@ function ManagementPage() {
   };
   const handleChangePage = (newPage) => {
     setPage(newPage);
+    fetchTabData(tab, newPage);
   };
   const handleChangeSearchField = (e) => {
     const searchTerm = e.target.value.toLowerCase();
     setSearchInput(searchTerm);
-    let filterProducts;
-    if (tab === 0) {
-      filterProducts = tabInformation.filter(
-        (item) =>
-          item.code?.includes(searchTerm) ||
-          item.name?.toLowerCase().includes(searchTerm) ||
-          item.descriptions?.includes(searchTerm)
-      );
-    } else if (tab === 1) {
-      //code, full name, expertice, halls name
-      filterProducts = tabInformation.filter(
-        (item) =>
-          item.id?.toString().includes(searchTerm) ||
-          item.full_name?.toLowerCase().includes(searchTerm) ||
-          item.type
-            ?.map((exp) => exp.type)
-            .join(" ")
-            .toLowerCase()
-            .includes(searchTerm) ||
-          item.salon
-            ?.map((hall) => hall.name)
-            .join(",")
-            .includes(searchTerm)
-      );
-    } else if (tab === 2) {
-      //code, name, halls name, description
-      filterProducts = tabInformation.filter(
-        (item) =>
-          item.code?.includes(searchTerm) ||
-          item.name?.includes(searchTerm) ||
-          item.salon?.name.toLowerCase().includes(searchTerm) ||
-          item.descriptions?.includes(searchTerm)
-      );
-    } else if (tab === 3) {
-      //full name, expertice, national code, phone number
-      filterProducts = tabInformation.filter(
-        (item) =>
-          item.type
-            ?.map((exp) => exp.type)
-            .join(" ")
-            .toLowerCase()
-            .includes(searchTerm) ||
-          item.full_name?.includes(searchTerm) ||
-          item.national_code?.includes(searchTerm) ||
-          item.phone_number?.includes(searchTerm)
-      );
-    }
-    setFilterRows(filterProducts);
+    setPage(0);
   };
 
-  const fetchTabData = async (tab) => {
+  const fetchTabData = useCallback(
+    async (tab, pageOverride, searchOverride) => {
+      try {
+        let response = null;
+        const currentPage =
+          typeof pageOverride === "number" ? pageOverride : page;
+        const searchValue =
+          searchOverride !== undefined ? searchOverride : searchInput;
+        const params = {
+          page: currentPage + 1,
+          page_size: rowsPerPage,
+        };
+        if (searchValue && searchValue.length > 0) params.search = searchValue;
+        const config = { params };
+        if (tab === 0) {
+          response = await apiClient.get(`/app/get-all-salon/`, config);
+          if (response.status === 200) {
+            setTabInformation(response.data.results);
+            setFilterRows(response.data.results);
+            setCount(response.data.count);
+          }
+        } else if (tab === 1) {
+          response = await apiClient.get(
+            `/app/api/repairman-schedule/`,
+            config
+          );
+          if (response.status === 200) {
+            const schedules = response.data?.results?.all_schedules ?? [];
+            setTabInformation(schedules);
+            setFilterRows(schedules);
+            setCount(response.data.count);
+          }
+        } else if (tab === 2) {
+          response = await apiClient.get(`/app/equipment/`, config);
+          if (response.status === 200) {
+            setTabInformation(response.data?.results);
+            setFilterRows(response.data?.results);
+            setCount(response.data.count);
+          }
+        } else if (tab === 3) {
+          response = await apiClient.get(`/app/add-user/`, config);
+          if (response.status === 200) {
+            setTabInformation(response.data.users);
+            setFilterRows(response.data.users);
+          }
+        }
+      } catch (error) {
+        errorMessage("خطا در برقراری ارتباط با سرور");
+        setTabInformation([]);
+        setFilterRows([]);
+      }
+    },
+    [page, searchInput]
+  );
+
+  const getDetailRepairman = async (id) => {
     try {
-      let response = null;
-      if (tab === 0) {
-        response = await apiClient.get(`/app/get-all-salon/`);
-        if (response.status === 200) {
-          setTabInformation(response.data);
-          setFilterRows(response.data);
-        }
-      } else if (tab === 1) {
-        response = await apiClient.get(`/app/add-repairman/`);
-        if (response.status === 200) {
-          setTabInformation(response.data.users);
-          setFilterRows(response.data.users);
-        }
-      } else if (tab === 2) {
-        response = await apiClient.get(`/app/equipment/`);
-        if (response.status === 200) {
-          setTabInformation(response.data);
-          setFilterRows(response.data);
-        }
-      } else if (tab === 3) {
-        response = await apiClient.get(`/app/add-user/`);
-        if (response.status === 200) {
-          setTabInformation(response.data.users);
-          setFilterRows(response.data.users);
-        }
+      const response = await apiClient.get(`/app/add-repairman/${id}`);
+      if (response.status === 200) {
+        setSelectedRowInfo(response.data);
+        setOperation("edit");
+        handleToggleModal();
       }
     } catch (error) {
-      errorMessage("خطا در برقراری ارتباط با سرور");
-      setTabInformation([]);
-      setFilterRows([]);
+      errorMessage("خطا در دریافت اطلاعات تعمیرکار");
     }
   };
-  const handleOpenModal = (chosenItem = null, operation = "add") => {
-    setSelectedRowInfo(chosenItem);
+
+  const handleOpenModal = (rowInfo = null, operation = "add") => {
+    if (rowInfo) {
+      setSelectedRowInfo(rowInfo);
+    } else {
+      setSelectedRowInfo(item1);
+    }
     setOperation(operation);
     handleToggleModal();
   };
   useEffect(() => {
     fetchTabData(tab);
-    handleChangePage(0);
+    setPage(0);
     setFilterRows(undefined);
-  }, [tab]);
+  }, [tab, fetchTabData]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      fetchTabData(tab, 0, searchInput);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchInput, tab, fetchTabData]);
 
   return (
     <Grid className="content-conatiner">
@@ -463,7 +465,7 @@ function ManagementPage() {
                           align={"center"}
                           sx={{ fontFamily: "iranYekan" }}
                         >
-                          {`${toFarsiNumber(row.remaining_capacity)} ساعت`}
+                          {`${toFarsiNumber(row.remaining_capacity)}`}
                         </TableCell>
 
                         <TableCell
@@ -533,112 +535,133 @@ function ManagementPage() {
                   tableInformation={filterRows}
                   page={page}
                   handleChange={handleChangePage}
-                  totalRows={filterRows?.length}
+                  totalRows={count}
                   pageLength={rowsPerPage}
                   columnsTitle={repairman_columns}
                   key={22}
                 >
                   {filterRows.length > 0 ? (
-                    filterRows
-                      .slice(page * rowsPerPage, (page + 1) * rowsPerPage)
-                      .map((row, index) => (
-                        <TableRow
-                          key={index}
+                    filterRows.map((row, index) => (
+                      <TableRow
+                        key={index}
+                        sx={{
+                          backgroundColor: index % 2 === 0 ? "#fff" : "#f2f2f2",
+                          fontFamily: "iranYekan",
+                        }}
+                      >
+                        <TableCell
+                          align="center"
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {toFarsiNumber(row?.repairman_code)}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {toFarsiNumber(row.repairman_name)}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {Array.isArray(row.repairman_specialties) &&
+                          row.repairman_specialties.length > 0
+                            ? row.repairman_specialties
+                                .map((t) => t)
+                                .join(" / ")
+                            : "Invalid data"}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {`${toFarsiNumber(row.total_hours)} ساعت کار در روز`}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {`${toFarsiNumber(row?.free_hours)}`}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          <div
+                            style={{
+                              color: "#fff",
+                              padding: "5px 10px",
+                              borderRadius: "100px",
+                            }}
+                            className={` ${
+                              row?.work_status === "free"
+                                ? "free"
+                                : row?.work_status === "in_repair"
+                                ? "under"
+                                : "hide"
+                            }`}
+                          >
+                            {row?.work_status === "free"
+                              ? "آزاد"
+                              : row?.work_status === "in_repair"
+                              ? "درحال تعمیر"
+                              : "Hide"}
+                          </div>
+                        </TableCell>
+
+                        {/* <TableCell
+                          align="center"
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {toFarsiNumber(
+                            Array.isArray(row.salon) && row.salon.length > 0
+                              ? row.salon.map((s) => s.name).join(" / ")
+                              : "اطلاعاتی موجود نیست"
+                          )}
+                        </TableCell> */}
+
+                        <TableCell
+                          align="center"
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {`${toFarsiNumber(row?.salon)}`}
+                        </TableCell>
+
+                        <TableCell
+                          align="center"
                           sx={{
-                            backgroundColor:
-                              index % 2 === 0 ? "#fff" : "#f2f2f2",
-                            fontFamily: "iranYekan",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            flexDirection: "row",
+                            gap: "1rem",
+                            padding: "18px 10px",
                           }}
                         >
-                          <TableCell
-                            align="center"
-                            sx={{ fontFamily: "iranYekan" }}
-                          >
-                            {toFarsiNumber}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ fontFamily: "iranYekan" }}
-                          >
-                            {toFarsiNumber(row.full_name)}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ fontFamily: "iranYekan" }}
-                          >
-                            {Array.isArray(row.type) && row.type.length > 0
-                              ? row.type.map((t) => t.type).join(" / ")
-                              : "Invalid data"}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ fontFamily: "iranYekan" }}
-                          >
-                            {`${toFarsiNumber(row.work_time)} ساعت کار در روز`}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{
-                              display: "flex",
-                              justifyContent: "center",
-                              fontFamily: "iranYekan",
-                              padding: "19px",
-                            }}
-                          >
-                            <div
-                              className={`${styles.status_btn_halls} ${
-                                row.status === true
-                                  ? styles.status_halls_one
-                                  : row.status === false
-                                  ? styles.status_halls_two
-                                  : styles.status_halls_defualt
-                              }`}
-                            >
-                              {row.status === true
-                                ? "فعال"
-                                : row.status === false
-                                ? "غیرفعال"
-                                : "نامشخص"}
-                            </div>
-                          </TableCell>
-
-                          <TableCell
-                            align="center"
-                            sx={{ fontFamily: "iranYekan" }}
-                          >
-                            {toFarsiNumber(
-                              Array.isArray(row.salon) && row.salon.length > 0
-                                ? row.salon.map((s) => s.name).join(" / ")
-                                : "اطلاعاتی موجود نیست"
-                            )}
-                          </TableCell>
-
-                          <TableCell
-                            align="center"
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              flexDirection: "row",
-                              gap: "1rem",
-                              padding: "18px 10px",
-                            }}
-                          >
-                            <Button3
-                              icon={faPencil}
-                              variant="contained"
-                              style={"edit_delete_btn"}
-                              onClick={() => handleOpenModal(row, "edit")}
-                            />
-                            <Button3
-                              icon={faTrashCan}
-                              variant="contained"
-                              style={"edit_delete_btn"}
-                              onClick={() => handleOpenModal(row, "delete")}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      ))
+                          <Button3
+                            icon={faPencil}
+                            variant="contained"
+                            style={"edit_delete_btn"}
+                            onClick={() => getDetailRepairman(row.repairman)}
+                          />
+                          <Button3
+                            icon={faTrashCan}
+                            variant="contained"
+                            style={"edit_delete_btn"}
+                            onClick={() =>
+                              handleOpenModal(
+                                {
+                                  id: row.repairman,
+                                  full_name: row.repairman_name,
+                                },
+                                "delete"
+                              )
+                            }
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))
                   ) : (
                     <></>
                   )}
@@ -659,89 +682,86 @@ function ManagementPage() {
                   key={23}
                 >
                   {filterRows.length > 0 ? (
-                    filterRows
-                      .slice(page * rowsPerPage, (page + 1) * rowsPerPage)
-                      .map((row, index) => (
-                        <TableRow
-                          key={index}
+                    filterRows.map((row, index) => (
+                      <TableRow
+                        key={index}
+                        sx={{
+                          backgroundColor: index % 2 === 0 ? "#fff" : "#f2f2f2",
+                          fontFamily: "iranYekan",
+                        }}
+                      >
+                        <TableCell
+                          align="center"
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {toFarsiNumber(row.code)}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {toFarsiNumber(row.name)}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {toFarsiNumber(row.salon?.name)}
+                        </TableCell>
+                        <TableCell
+                          align="center"
                           sx={{
-                            backgroundColor:
-                              index % 2 === 0 ? "#fff" : "#f2f2f2",
+                            display: "flex",
+                            justifyContent: "center",
                             fontFamily: "iranYekan",
+                            padding: "19px",
                           }}
                         >
-                          <TableCell
-                            align="center"
-                            sx={{ fontFamily: "iranYekan" }}
-                          >
-                            {toFarsiNumber(row.code)}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ fontFamily: "iranYekan" }}
-                          >
-                            {toFarsiNumber(row.name)}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ fontFamily: "iranYekan" }}
-                          >
-                            {toFarsiNumber(row.salon?.name)}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{
-                              display: "flex",
-                              justifyContent: "center",
-                              fontFamily: "iranYekan",
-                              padding: "19px",
-                            }}
-                          >
-                            <div
-                              className={`${styles.status_btn_halls} ${
-                                row.status === true
-                                  ? styles.status_halls_one
-                                  : row.status === false
-                                  ? styles.status_halls_two
-                                  : styles.status_halls_defualt
-                              }`}
-                            >
-                              {row.status === true
-                                ? "فعال"
+                          <div
+                            className={`${styles.status_btn_halls} ${
+                              row.status === true
+                                ? styles.status_halls_one
                                 : row.status === false
-                                ? "غیرفعال"
-                                : "نامشخص"}
-                            </div>
-                          </TableCell>
+                                ? styles.status_halls_two
+                                : styles.status_halls_defualt
+                            }`}
+                          >
+                            {row.status === true
+                              ? "فعال"
+                              : row.status === false
+                              ? "غیرفعال"
+                              : "نامشخص"}
+                          </div>
+                        </TableCell>
 
-                          <TableCell
-                            align="center"
-                            sx={{ fontFamily: "iranYekan" }}
-                          >
-                            {toFarsiNumber(row.descriptions)}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              flexDirection: "row",
-                              gap: "1rem",
-                              padding: "18px 10px",
-                            }}
-                          >
-                            <Button3
-                              icon={faPencil}
-                              onClick={() => handleOpenModal(row, "edit")}
-                            />
-                            <Button3
-                              icon={faTrashCan}
-                              onClick={() => handleOpenModal(row, "delete")}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      ))
+                        <TableCell
+                          align="center"
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {toFarsiNumber(row.descriptions)}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            flexDirection: "row",
+                            gap: "1rem",
+                            padding: "18px 10px",
+                          }}
+                        >
+                          <Button3
+                            icon={faPencil}
+                            onClick={() => handleOpenModal(row, "edit")}
+                          />
+                          <Button3
+                            icon={faTrashCan}
+                            onClick={() => handleOpenModal(row, "delete")}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))
                   ) : (
                     <></>
                   )}
@@ -824,6 +844,7 @@ const repairman_columns = [
   "نام تعمیرکار",
   "تخصص تعمیرکار",
   " قابلیت زمانی تعمیرکار",
+  "زمان ازاد",
   "وضعیت",
   "نام سالن",
   "عملیات",

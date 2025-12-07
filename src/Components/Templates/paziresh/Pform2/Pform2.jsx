@@ -59,6 +59,7 @@ export default function Pform2({
       customer: idForm ? idForm : formId,
       material: "",
       other_car: "",
+      engine_number: "",
       chassis_number: "",
       color: "",
       other_color: "",
@@ -455,6 +456,7 @@ export default function Pform2({
           material: form2Data.material || "",
           other_car: form2Data.other_car || "",
           chassis_number: form2Data.chassis_number || "",
+          engine_number: form2Data.engine_number || "",
           color: form2Data.color || "",
           other_color: form2Data.other_color || "",
           car_operation: form2Data.car_operation || "",
@@ -623,6 +625,28 @@ export default function Pform2({
 
                 {errors.car_operation && (
                   <span className="error">{errors.car_operation}</span>
+                )}
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              rowSpacing={2}
+              columnSpacing={4}
+              className={"distancerow"}
+            >
+              <Grid size={{ xs: 12, md: 4 }}>
+                <Input
+                  label="شماره موتور"
+                  styled={"widthinput"}
+                  placeholder="شماره موتور"
+                  icon={faHashtag}
+                  name="engine_number"
+                  value={form2?.customer_secend_form?.engine_number}
+                  onChange={handleInputChange}
+                />
+
+                {errors.engine_number && (
+                  <span className="error">{errors.engine_number}</span>
                 )}
               </Grid>
             </Grid>

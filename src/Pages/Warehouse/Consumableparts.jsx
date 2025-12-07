@@ -126,7 +126,7 @@ export default function Consumableparts() {
 
       if (response.status === 200) {
         const data = response.data;
-        console.log(response.data);
+
         setTotalRows(data.count || 0);
         setRows(data.results);
       }

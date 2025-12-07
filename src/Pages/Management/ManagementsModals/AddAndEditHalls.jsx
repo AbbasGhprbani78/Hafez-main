@@ -48,7 +48,6 @@ function AddAndEditHalls({
   });
   const [loading, setLoading] = useState(false);
 
-  // Handle change and validation
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (name === "hall_code" && value === "") {

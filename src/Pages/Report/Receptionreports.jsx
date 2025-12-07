@@ -472,22 +472,3 @@ export default function Receptionreports() {
     </Grid>
   );
 }
-
-{
-  /* <Grid container sx={{ width: "100%" }}>
-          <Grid size={{ xs: 12 }}></Grid>
-        </Grid> */
-}
-
-// const GetreceptionreportsFilter = async () => {
-//   try {
-//     const response = await apiClient.get(
-//       "app/report/reception-reports/filter/"
-//     );
-//     if (response.status === 200) {
-//       console.log(response);
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };

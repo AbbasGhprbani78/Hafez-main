@@ -15,10 +15,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPrint } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../config/axiosConfig";
 import { convertGregorianToPersian } from "../../Components/Modules/ChnageDate/ChnageDate";
+import {
+  errorMessage,
+  successMessage,
+} from "../../Components/Modules/Toast/ToastCustom";
+import { ToastContainerCustom } from "../../Components/Modules/Toast/ToastCustom";
 const Gridumns = ["", "عهده شرکت", "مشتری"];
 export default function FundItem() {
   const { id } = useParams();
   const [fund, setFund] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const getFunditem = async () => {
     try {
@@ -29,6 +35,23 @@ export default function FundItem() {
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const approveFund = async () => {
+    setLoading(true);
+    try {
+      const response = await apiClient.post(`/app/api/invoices/confirm/`, {
+        invoice_number: fund?.admission_info.invoice_number,
+      });
+      if (response.status === 200) {
+        successMessage("پذیرش با موفقیت تایید شد.");
+      }
+    } catch (error) {
+      console.log(error);
+      errorMessage(error.response?.data?.error || "خطا در تایید پذیرش.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -308,7 +331,7 @@ export default function FundItem() {
                 gap: "20px",
               }}
             >
-              <Button2>
+              <Button2 onClick={approveFund} disabled={loading}>
                 تایید
                 <FontAwesomeIcon icon={faCheck} />
               </Button2>
@@ -320,6 +343,7 @@ export default function FundItem() {
           </Grid>
         </div>
       </div>
+      <ToastContainerCustom />
     </>
   );
 }

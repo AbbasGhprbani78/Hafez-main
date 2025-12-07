@@ -125,7 +125,7 @@ export default function CustomerHistory() {
 
       if (response.status === 200) {
         const data = response.data;
-        console.log(response.data.results);
+
         setTotalRows(data.count || 0);
         const transformedRows = transformCustomerHistory(data.results || []);
         setRows(transformedRows);
