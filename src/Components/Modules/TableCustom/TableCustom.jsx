@@ -26,6 +26,7 @@ function TableCustom({
   rowsPerPage = 5,
   total = 10,
   maxHeight = 370,
+  ishidepageination = false,
 }) {
   return (
     <Grid
@@ -96,53 +97,55 @@ function TableCustom({
           </TableBody>
         </Table>
       </TableContainer>
-      <Grid
-        item
-        size={12}
-        sx={{
-          display: "flex",
-          justifyContent: { xs: "center", sm: "flex-start" },
-          alignItems: "center",
-          flexDirection: "row",
-          width: "100%",
-        }}
-        spacing={1}
-      >
-        <IconButton
-          disabled={(page + 2) * rowsPerPage >= total}
-          onClick={() => onChange(page + 2)}
-          aria-label="double_next"
+      {!ishidepageination && (
+        <Grid
+          item
+          size={12}
+          sx={{
+            display: "flex",
+            justifyContent: { xs: "center", sm: "flex-start" },
+            alignItems: "center",
+            flexDirection: "row",
+            width: "100%",
+          }}
+          spacing={1}
         >
-          <KeyboardDoubleArrowRightIcon />
-        </IconButton>
-        <IconButton
-          disabled={(page + 1) * rowsPerPage >= total}
-          onClick={() => onChange(page + 1)}
-          aria-label="next"
-        >
-          <ChevronRightIcon />
-        </IconButton>
-        <Typography className="text_navigation" style={{ direction: "ltr" }}>
-          {`${page * rowsPerPage + 1} - ${Math.min(
-            (page + 1) * rowsPerPage,
-            total
-          )} of ${total}`}{" "}
-        </Typography>
-        <IconButton
-          disabled={page <= 0}
-          onClick={() => onChange(page - 1)}
-          aria-label="previous"
-        >
-          <ChevronLeftIcon />
-        </IconButton>
-        <IconButton
-          disabled={page <= 1}
-          onClick={() => onChange(page - 2)}
-          aria-label="double_previous"
-        >
-          <KeyboardDoubleArrowLeftIcon />
-        </IconButton>
-      </Grid>
+          <IconButton
+            disabled={(page + 2) * rowsPerPage >= total}
+            onClick={() => onChange(page + 2)}
+            aria-label="double_next"
+          >
+            <KeyboardDoubleArrowRightIcon />
+          </IconButton>
+          <IconButton
+            disabled={(page + 1) * rowsPerPage >= total}
+            onClick={() => onChange(page + 1)}
+            aria-label="next"
+          >
+            <ChevronRightIcon />
+          </IconButton>
+          <Typography className="text_navigation" style={{ direction: "ltr" }}>
+            {`${page * rowsPerPage + 1} - ${Math.min(
+              (page + 1) * rowsPerPage,
+              total
+            )} of ${total}`}{" "}
+          </Typography>
+          <IconButton
+            disabled={page <= 0}
+            onClick={() => onChange(page - 1)}
+            aria-label="previous"
+          >
+            <ChevronLeftIcon />
+          </IconButton>
+          <IconButton
+            disabled={page <= 1}
+            onClick={() => onChange(page - 2)}
+            aria-label="double_previous"
+          >
+            <KeyboardDoubleArrowLeftIcon />
+          </IconButton>
+        </Grid>
+      )}
     </Grid>
   );
 }

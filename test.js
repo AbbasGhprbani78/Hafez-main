@@ -1,44 +1,47 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import styles from "./Input.module.css";
-
-const Input = ({
-  name,
-  label,
-  icon,
-  placeholder,
-  type,
-  styleInput,
-  value,
-  onChange,
-  styled,
-  disabled = false,
-}) => {
-  return (
-    <div
-      className={`${styles.input_container} ${styles[styleInput]} ${styles[styled]}`}
-    >
-      {label && (
-        <label htmlFor={name} className={`label_input`}>
-          {label}
-        </label>
-      )}
-      <div className={styles.input_content_wrapper}>
-        <input
-          id={name}
-          name={name}
-          type={type}
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-          className={styles.input_form}
-          autoComplete="off"
-          maxLength={70}
-          disabled={disabled}
-        />
-        {icon && <FontAwesomeIcon icon={icon} className={styles.icon_input} />}
-      </div>
-    </div>
-  );
-};
-
-export default Input;
+{
+  data?.repairmen_status?.length > 0 &&
+    data?.repairmen_status.map((item) => (
+      <TableRow key={item.id}>
+        <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+          {toFarsiNumber(item?.repairman_code)}
+        </TableCell>
+        <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+          {toFarsiNumber(item?.repairman_name)}
+        </TableCell>
+        <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+          {Array.isArray(item.repairman_specialties) &&
+          item.repairman_specialties.length > 0
+            ? item.repairman_specialties.map((t) => t).join(" / ")
+            : "Invalid data"}
+        </TableCell>
+        <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+          {`${toFarsiNumber(item?.total_hours)} ساعت کار در روز`}
+        </TableCell>
+        <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+          {`${toFarsiNumber(item?.free_hours)}`}
+        </TableCell>
+        <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+          <div
+            style={{
+              color: "#fff",
+              padding: "4px 10px",
+              borderRadius: "100px",
+            }}
+            className={` ${
+              item?.work_status === "free"
+                ? "free"
+                : item?.work_status === "in_repair"
+                ? "under"
+                : "hide"
+            }`}
+          >
+            {item?.work_status === "free"
+              ? "آزاد"
+              : item?.work_status === "in_repair"
+              ? "درحال تعمیر"
+              : "Hide"}
+          </div>
+        </TableCell>
+      </TableRow>
+    ));
+}

@@ -28,6 +28,8 @@ import Consumableparts from "./Pages/Warehouse/Consumableparts";
 import Consumptionofparts from "./Pages/Warehouse/Consumptionofparts";
 import DailyBilling from "./Pages/finance/DailyBilling";
 import WorkOfContractors from "./Pages/finance/WorkOfContractors";
+import ExpertReferral from "./Pages/ExpertReferral/ExpertReferral";
+import ExpertReferralItem from "./Pages/ExpertReferralItem/ExpertReferralItem";
 
 const routes = [
   { path: "/", element: <Home /> },
@@ -50,6 +52,8 @@ const routes = [
   { path: "/warehouse/consumptionofparts", element: <Consumptionofparts /> },
   { path: "/finance/dailybilling", element: <DailyBilling /> },
   { path: "/finance/workofcontractors", element: <WorkOfContractors /> },
+  // { path: "/expert-referral", element: <ExpertReferral /> },
+  // { path: "/expert-referral/:id", element: <ExpertReferralItem /> },
   {
     path: "/p-repairman/*",
     element: (

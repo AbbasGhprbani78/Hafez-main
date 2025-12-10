@@ -66,6 +66,16 @@
   color: #4c6fff;
 }
 
+.status_four {
+  background-color: #ffe5cc;
+  color: #ff8c00;
+}
+
+.status_default {
+  background-color: #e0e0e0;
+  color: #666666;
+}
+
 .wrap_button {
   width: max-content;
 }

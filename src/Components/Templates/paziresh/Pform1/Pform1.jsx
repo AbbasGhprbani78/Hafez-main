@@ -143,6 +143,7 @@ export default function Pform1({
         }
       } catch (error) {
         console.error("Error submitting form:", error);
+        errorMessage(error?.response?.message || "خطا در ارسال داده‌ها");
       } finally {
         setLoading(false);
       }

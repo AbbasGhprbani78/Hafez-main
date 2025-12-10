@@ -13,6 +13,7 @@ import {
 import { toFarsiNumber } from "../../../../utils/helper";
 import { Button } from "react-bootstrap";
 import Button3 from "../../../Modules/Button3/Button3";
+import { ChnageDate } from "../../../Modules/ChnageDate/ChnageDate";
 
 const rows = [
   {
@@ -58,7 +59,7 @@ const rows = [
     hasTicket: true,
   },
 ];
-export default function Table() {
+export default function Table({ pendingTask = [] }) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.title}>
@@ -94,26 +95,28 @@ export default function Table() {
               >
                 تاریخ پذیرش
               </TableCell>
-              <TableCell
+              {/* <TableCell
                 align="center"
                 sx={{ fontFamily: "iranYekan", fontWeight: "bold" }}
               >
                 ارسال تیکت
-              </TableCell>
+              </TableCell> */}
               <TableCell
                 align="center"
                 sx={{ fontFamily: "iranYekan", fontWeight: "bold" }}
-              ></TableCell>
+              >
+                عملیات
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.id}>
+            {pendingTask?.map((row) => (
+              <TableRow key={row?.id}>
                 <TableCell
                   align="center"
                   sx={{ fontFamily: "iranYekan", padding: "5px" }}
                 >
-                  {toFarsiNumber(row.carModel)}
+                  {toFarsiNumber(row?.model)}
                 </TableCell>
                 <TableCell
                   align="center"
@@ -123,15 +126,11 @@ export default function Table() {
                     padding: "5px",
                   }}
                 >
-                  <div className={styles.status}>{row.repairStatus}</div>
+                  <div className={styles.status}>{row?.status}</div>
                 </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ fontFamily: "iranYekan", padding: "5px" }}
-                >
-                  {toFarsiNumber(row.receiveDate)}
-                </TableCell>
-                <TableCell
+                <ChnageDate date={row?.admission_date} />
+
+                {/* <TableCell
                   align="center"
                   sx={{
                     fontFamily: "iranYekan",
@@ -140,7 +139,7 @@ export default function Table() {
                   }}
                 >
                   <Button3 icon={faComments} onClick={""} />
-                </TableCell>
+                </TableCell> */}
                 <TableCell
                   align="center"
                   sx={{

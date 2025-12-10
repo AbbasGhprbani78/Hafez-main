@@ -2,7 +2,8 @@ import styles from "./Notification.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import NotificationItem from "../NotificationItem/NotificationItem";
-export default function Notifications() {
+
+export default function Notifications({ notifications = [] }) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.title}>
@@ -10,11 +11,15 @@ export default function Notifications() {
         <span>اعلانات</span>
       </div>
       <div className={styles.notifications_wrapper}>
-        {Array(20)
-          .fill(0)
-          .map((item, i) => (
-            <NotificationItem key={i} />
-          ))}
+        {notifications.length > 0 ? (
+          notifications.map((notif) => (
+            <NotificationItem key={notif?.id} notif={notif} />
+          ))
+        ) : (
+          <>
+            <p className="text">هیج نوتیفی وجود ندارد !</p>
+          </>
+        )}
       </div>
     </div>
   );

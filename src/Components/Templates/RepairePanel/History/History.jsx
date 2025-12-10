@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
 import HistoryItem from "./HistoryItem";
 
-export default function History() {
+export default function History({ history = [] }) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.title}>
@@ -11,11 +11,9 @@ export default function History() {
         <span>سوابق</span>
       </div>
       <div className={styles.wrapper_history}>
-        {Array(20)
-          .fill(0)
-          .map((_, i) => (
-            <HistoryItem key={i} />
-          ))}
+        {history?.map((item) => (
+          <HistoryItem item={item} key={item?.id} />
+        ))}
       </div>
     </div>
   );

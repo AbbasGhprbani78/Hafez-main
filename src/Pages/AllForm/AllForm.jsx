@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./AllForm.module.css";
 
@@ -6,18 +6,11 @@ import styles from "./AllForm.module.css";
 
 import SideBar from "../../Components/Modules/SideBar/SideBar";
 import Header from "../../Components/Modules/Header/Header";
-import {
-  successMessage,
-  ToastContainerCustom,
-} from "../../Components/Modules/Toast/ToastCustom";
-import {
-  errorMessage,
-  warningMessage,
-} from "../../Components/Modules/Toast/ToastCustom";
+import { ToastContainerCustom } from "../../Components/Modules/Toast/ToastCustom";
+import { warningMessage } from "../../Components/Modules/Toast/ToastCustom";
 import ReactDropdown from "../../Components/Modules/ReactDropdown/ReactDropdown";
 
 import Input from "../../Components/Modules/Input/Input";
-import LoadingForm from "../../Components/Modules/Loading/LoadingForm";
 import { InfoTabel } from "../Management/ManagementPage";
 
 //MUI Component
@@ -46,6 +39,8 @@ export default function AllForm() {
   const handleChangeFilter = (newValue) => {
     setFilter(newValue);
     setPage(0);
+    setInformation(undefined);
+    setTotalRows(0);
   };
 
   const navigate = useNavigate();
@@ -69,62 +64,89 @@ export default function AllForm() {
     }
   };
 
-  const fetchCommonData = async () => {
+  const fetchCommonData = useCallback(async () => {
     const pageNumber = page + 1;
-
-    let carStep = null;
-    if (filter === 1) {
-      carStep = ["done"];
-    } else if (filter === 2) {
-      carStep = ["one", "two", "three"];
-    } else if (filter === 3) {
-      carStep = ["two"];
-    } else if (filter === 4) {
-      carStep = ["expert confirmation"];
-    }
 
     setInformation(undefined);
 
     try {
-      const response = await apiClient.get(`/app/get-admissions-office/`, {
-        params: {
+      if (filter === 4) {
+        const params = {
           page: pageNumber,
           page_size: pageLength,
-          search: admissionNumber,
-          step: carStep,
-        },
-        paramsSerializer: (params) => {
-          const query = Object.keys(params)
-            .filter((key) => params[key] !== null && params[key] !== undefined)
-            .map((key) => {
-              if (Array.isArray(params[key])) {
-                return params[key]
-                  .map(
-                    (val) =>
-                      `${encodeURIComponent(key)}=${encodeURIComponent(val)}`
-                  )
-                  .join("&");
-              }
-              return `${encodeURIComponent(key)}=${encodeURIComponent(
-                params[key]
-              )}`;
-            })
-            .join("&");
-          return query;
-        },
-      });
+        };
 
-      if (response.status === 200) {
-        setInformation(response.data.results);
-        setTotalRows(response.data.count);
+        if (admissionNumber && admissionNumber.trim() !== "") {
+          params.search = admissionNumber.trim();
+        }
+
+        const response = await apiClient.get("app/get-referral-to-an-expert/", {
+          params,
+        });
+
+        if (response.status === 200) {
+          console.log(response.data.results);
+          setInformation(response.data.results || []);
+          setTotalRows(response.data.count || 0);
+        }
+      } else {
+        let carStep = null;
+        if (filter === 1) {
+          carStep = ["done"];
+        } else if (filter === 2) {
+          carStep = ["one", "two", "three"];
+        } else if (filter === 3) {
+          carStep = ["two"];
+        }
+
+        const response = await apiClient.get(`/app/get-admissions-office/`, {
+          params: {
+            page: pageNumber,
+            page_size: pageLength,
+            search: admissionNumber,
+            step: carStep,
+          },
+          paramsSerializer: (params) => {
+            const query = Object.keys(params)
+              .filter(
+                (key) => params[key] !== null && params[key] !== undefined
+              )
+              .map((key) => {
+                if (Array.isArray(params[key])) {
+                  return params[key]
+                    .map(
+                      (val) =>
+                        `${encodeURIComponent(key)}=${encodeURIComponent(val)}`
+                    )
+                    .join("&");
+                }
+                return `${encodeURIComponent(key)}=${encodeURIComponent(
+                  params[key]
+                )}`;
+              })
+              .join("&");
+            return query;
+          },
+        });
+
+        if (response.status === 200) {
+          setInformation(response.data.results);
+          setTotalRows(response.data.count);
+        }
       }
     } catch (error) {
       warningMessage("خطا در برقراری ارتباط با سرور");
       setInformation([]);
       setTotalRows(0);
     }
-  };
-  const openFormHandler = (step, id) => {
+  }, [page, pageLength, filter, admissionNumber]);
+
+  const openFormHandler = (step, id, isExpertReferral = false) => {
+    if (isExpertReferral || filter === 4) {
+      navigate(`/expert-referral/${id}`);
+      return;
+    }
+
     setIdForm(id);
 
     const tabMap = {
@@ -151,7 +173,7 @@ export default function AllForm() {
 
       return () => clearTimeout(delayFetch);
     }
-  }, [page, admissionNumber, filter]);
+  }, [fetchCommonData, admissionNumber, filter]);
 
   return (
     <Grid className="content-conatiner">
@@ -284,74 +306,135 @@ export default function AllForm() {
             handleChange={handleChangePage}
             totalRows={totalRows}
             pageLength={pageLength}
-            columnsTitle={columnsAcceptance}
-            key={41}
+            columnsTitle={
+              filter === 4 ? columnsExpertReferral : columnsAcceptance
+            }
+            key={`table-${filter}-${page}`}
           >
             {information?.length > 0 ? (
-              information.map((row, index) => (
-                <TableRow
-                  key={index}
-                  sx={{
-                    backgroundColor: index % 2 === 0 ? "#fff" : "#f2f2f2",
-                    fontFamily: "iranYekan",
-                  }}
-                >
-                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                    {toFarsiNumber(row?.admission_number)}
-                  </TableCell>
-                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                    {toFarsiNumber(row?.pyramid_number)}
-                  </TableCell>
-                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                    {toFarsiNumber(row?.car_model)}
-                  </TableCell>
-                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                    {row?.chassis_number}
-                  </TableCell>
-                  <ChnageDate date={row?.admission_date} />
-                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                    {toFarsiNumber(row?.license_plate_number)}
-                  </TableCell>
-                  <TableCell
-                    align="center"
+              filter === 4 ? (
+                information.map((row, index) => (
+                  <TableRow
+                    key={`expert-${row.id || row.form_id || index}-${index}`}
                     sx={{
-                      display: "flex",
-                      justifyContent: "center",
+                      backgroundColor: index % 2 === 0 ? "#fff" : "#f2f2f2",
                       fontFamily: "iranYekan",
-                      padding: "19px",
                     }}
                   >
-                    <div
-                      className={`${styles.status_btn} ${
-                        row.step === "done" ||
-                        row.step === "repair card" ||
-                        row.step === "reception desk"
-                          ? styles.status_none
-                          : ["one", "two", "three"].includes(row.step)
-                          ? styles.status_one
-                          : row.step === "expert confirmation"
-                          ? styles.status_three
-                          : ""
-                      }`}
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {toFarsiNumber(row.admission_number)}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {row.CustomerStatements || "-"}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {toFarsiNumber(row.referral_date)}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      <div
+                        style={{
+                          color: "#fff",
+                          padding: "8px",
+                          borderRadius: "100px",
+                          width: "180px",
+                          margin: "0 auto",
+                        }}
+                        className={styles.status_three}
+                      >
+                        در انتظار تایید کارشناس
+                      </div>
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        fontFamily: "iranYekan",
+                        flexDirection: "row",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
                     >
-                      {{
-                        done: "اتمام پذیرش",
-                        one: "ناتمام",
-                        two: "ناتمام",
-                        three: "ناتمام",
-                        "expert confirmation": "در انتظار تاییدیه کارشناس",
-                        "repair card": "اتمام پذیرش",
-                        "reception desk": "اتمام پذیرش",
-                      }[row.step] ?? "نامشخص"}
-                    </div>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Button2 onClick={() => openFormHandler(row.step, row.id)}>
-                      مشاهده
-                    </Button2>
-                  </TableCell>
-                </TableRow>
-              ))
+                      <Button2
+                        onClick={() =>
+                          openFormHandler(null, row.form_id || row.id, true)
+                        }
+                      >
+                        مشاهده
+                      </Button2>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                information.map((row, index) => (
+                  <TableRow
+                    key={index}
+                    sx={{
+                      backgroundColor: index % 2 === 0 ? "#fff" : "#f2f2f2",
+                      fontFamily: "iranYekan",
+                    }}
+                  >
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {toFarsiNumber(row?.admission_number)}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {toFarsiNumber(row?.pyramid_number)}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {toFarsiNumber(row?.car_model)}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {row?.chassis_number}
+                    </TableCell>
+                    <ChnageDate date={row?.admission_date} />
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {toFarsiNumber(row?.license_plate_number)}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        fontFamily: "iranYekan",
+                        padding: "19px",
+                      }}
+                    >
+                      <div
+                        className={`${styles.status_btn} ${
+                          row.step === "done" ||
+                          row.step === "repair card" ||
+                          row.step === "reception desk"
+                            ? styles.status_none
+                            : ["one", "two", "three"].includes(row.step)
+                            ? styles.status_one
+                            : row.step === "awaiting expert approval"
+                            ? styles.status_three
+                            : row.step === "expert confirmation"
+                            ? styles.status_four
+                            : styles.status_default
+                        }`}
+                      >
+                        {{
+                          done: "اتمام پذیرش",
+                          one: "ناتمام",
+                          two: "ناتمام",
+                          three: "ناتمام",
+                          "expert confirmation": "تایید کارشناس",
+                          "awaiting expert approval": "در انتظار تایید کارشناس",
+                          "repair card": "اتمام پذیرش",
+                          "reception desk": "اتمام پذیرش",
+                        }[row.step] ?? "نامشخص"}
+                      </div>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Button2
+                        onClick={() => openFormHandler(row.step, row.id)}
+                      >
+                        مشاهده
+                      </Button2>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )
             ) : (
               <></>
             )}
@@ -372,6 +455,15 @@ const columnsAcceptance = [
   "وضعیت پذیرش",
   "",
 ];
+
+const columnsExpertReferral = [
+  "شماره پذیرش",
+  "اظهارات مشتری",
+  "تاریخ ارجاع",
+  "وضعیت پذیرش",
+  "",
+];
+
 const filterItems = [
   { value: 0, label: "همه", tabNameEn: "all" },
   { value: 1, label: "فرم‌های تکمیل‌شده", tabNameEn: "completed" },

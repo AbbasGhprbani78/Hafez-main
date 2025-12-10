@@ -8,8 +8,6 @@ import LoadingForm from "../../../Modules/Loading/LoadingForm";
 import Modal from "../../../Modules/Modal/Modal";
 import Button2 from "../../../Modules/Button2/Button2";
 import DataInput from "../../../Modules/DataInput/DataInput";
-
-//Mui Components
 import Grid from "@mui/material/Grid2";
 import Box from "@mui/material/Box";
 import { TableCell, TableRow, Typography } from "@mui/material";
@@ -40,10 +38,9 @@ import InputPrice from "../../../Modules/InputPrice/InputPrice";
 import { MyContext } from "../../../../context/context";
 import SearchAndSelectDropDwon from "../../../Modules/SearchAndSelectDropDwon/SearchAndSelectDropDwon";
 import SelectDropDown2 from "../../../Modules/SelectDropDown2/SelectDropDown2";
-import TableForm from "../../../Modules/Table/TableForm";
 import { toFarsiNumber } from "../../../../utils/helper";
-import { InfoTabel } from "../../../../Pages/Management/ManagementPage";
 import TableCustom from "../../../Modules/TableCustom/TableCustom";
+import { useNavigate } from "react-router-dom";
 
 const columns = [
   "کد",
@@ -60,12 +57,12 @@ function AcceptenceForm3({
   prevTab = () => {},
   formId = "",
   currentTab,
-  form3,
+  fromExpertReferral = false,
 }) {
   const apiUrl = import.meta.env.VITE_API_URL;
   const { idForm } = useContext(MyContext);
   const endRef = useRef(null);
-
+  const navigate = useNavigate();
   const [dataform3, setDataForm3] = useState({
     CustomerStatements: "",
     CustomerFile: [],
@@ -82,6 +79,7 @@ function AcceptenceForm3({
     customer: formId,
     tableForm: [],
     EstimatedRepairTime: "",
+    referral_to_an_expert: "normal",
   });
 
   const [loading, setLoading] = useState(false);
@@ -110,6 +108,11 @@ function AcceptenceForm3({
   };
 
   const hadleClickOnGoesBack = () => {
+    if (fromExpertReferral) {
+      navigate("/expert-referral");
+    } else {
+      prevTab();
+    }
     prevTab();
   };
 
@@ -183,31 +186,30 @@ function AcceptenceForm3({
   };
 
   const addToTable = () => {
-    if (
-      !dataform3.CustomerStatements.trim() ||
-      dataform3.ExpertStatements === ""
-    ) {
+    if (!dataform3.CustomerStatements.trim()) {
       errorMessage("لطفاً اظهارات مشتری و کارشناس را وارد کنید.");
       return;
     }
 
-    if (
-      !dataform3.invoiceItems.length ||
-      dataform3.invoiceItems.some((item) => {
-        const price = Number(item.price);
-        return (
-          item.wages === "" ||
-          item.price === "" ||
-          item.repairman === "" ||
-          isNaN(price) ||
-          price < 0
+    if (fromExpertReferral) {
+      if (
+        !dataform3.invoiceItems.length ||
+        dataform3.invoiceItems.some((item) => {
+          const price = Number(item.price);
+          return (
+            item.wages === "" ||
+            item.price === "" ||
+            item.repairman === "" ||
+            isNaN(price) ||
+            price < 0
+          );
+        })
+      ) {
+        errorMessage(
+          "لطفاً تمام فیلدهای آیتم‌های فاکتور را به‌درستی وارد کنید (قیمت نباید منفی باشد)."
         );
-      })
-    ) {
-      errorMessage(
-        "لطفاً تمام فیلدهای آیتم‌های فاکتور را به‌درستی وارد کنید (قیمت نباید منفی باشد)."
-      );
-      return;
+        return;
+      }
     }
 
     if (editMode) {
@@ -316,25 +318,82 @@ function AcceptenceForm3({
   };
 
   const postForm3Data = async () => {
-    if (!selectedData.tableForm.length) {
-      errorMessage("لطفا فرم را تکمیل کنید");
-      return;
+    if (fromExpertReferral) {
+      selectedData.referral_to_an_expert = "expert approve";
     }
-    if (!selectedData.EstimatedRepairTime) {
-      errorMessage("لطفا تخمین زمان را وارد کنید");
-      return;
+    const submitMethod = fromExpertReferral ? "put" : "post";
+    if (
+      selectedData.referral_to_an_expert === "normal" ||
+      selectedData.referral_to_an_expert === "expert approve"
+    ) {
+      if (!selectedData.tableForm.length) {
+        errorMessage("لطفا فرم را تکمیل کنید");
+        return;
+      }
+      if (!selectedData.EstimatedRepairTime) {
+        errorMessage("لطفا تخمین زمان را وارد کنید");
+        return;
+      }
+      if (
+        selectedData.referral_to_an_expert === "normal" ||
+        (selectedData.referral_to_an_expert === "expert approve" &&
+          selectedData.tableForm.some((row) => {
+            if (!row.invoiceItems?.length) return true;
+            return row.invoiceItems.some((item) => {
+              const price = Number(item.price);
+              return (
+                item.wages === "" ||
+                item.price === "" ||
+                item.repairman === "" ||
+                Number.isNaN(price) ||
+                price < 0
+              );
+            });
+          }))
+      ) {
+        errorMessage(
+          "لطفاً تمام فیلدهای آیتم‌های فاکتور را به‌درستی وارد کنید (قیمت نباید منفی باشد)."
+        );
+        return;
+      }
     }
-
     setLoading(true);
 
     try {
-      const response = await apiClient.post(
+      const response = await apiClient[submitMethod](
         `/app/submit-repair-form/${idForm ? idForm : formId}`,
         selectedData
       );
 
       if (response.status === 200) {
-        nextTab();
+        successMessage(
+          selectedData?.referral_to_an_expert === "normal"
+            ? "اطلاعات با موفقیت ارسال شد."
+            : selectedData.referral_to_an_expert === "expert approve"
+            ? "فرم با موفقیت تایید شد"
+            : "اطلاعات با موفقیت ارجاع داده شد منتظر تایید کارشناس باشید"
+        );
+        selectedData?.referral_to_an_expert === "normal" && nextTab();
+      }
+    } catch (error) {
+      errorMessage(error?.response?.message || "خطا در ارسال داده‌ها");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const postForm3Toexpert = async () => {
+    setLoading(true);
+
+    try {
+      const response = await apiClient.post(
+        `app/form/${idForm ? idForm : formId}/referral-to-expert/`
+      );
+
+      if (response.status === 200) {
+        selectedData.referral_to_an_expert = "referral to an expert";
+        selectedData.referral_date = new Date().toISOString().split("T")[0];
+        postForm3Data();
       }
     } catch (error) {
       errorMessage(error?.response?.message || "خطا در ارسال داده‌ها");
@@ -469,8 +528,6 @@ function AcceptenceForm3({
     }
   };
 
-  const handleClickOnSendToExperts = () => {};
-
   const handleCliclOnRepairmanSchedule = async () => {
     setShowModal(true);
     setTypeModal(3);
@@ -550,7 +607,7 @@ function AcceptenceForm3({
   const assignRepairman = async () => {
     if (!selectedSchedule) return errorMessage("تعمیرکاری انتخاب نشده است");
     const form_id = idForm ? idForm : formId;
-    // const form_id = idForm ? idForm : 35;
+
     if (!form_id) return errorMessage("شناسه فرم موجود نیست");
 
     let estimated_end_time = null;
@@ -1084,16 +1141,7 @@ function AcceptenceForm3({
                     flexDirection: { xs: "column", sm: "row" },
                     gap: { xs: "0.5rem" },
                   }}
-                >
-                  <Button2
-                    type="button"
-                    variant="contained"
-                    icon={faCheck}
-                    onClick={addToTable}
-                  >
-                    تایید
-                  </Button2>
-                </Grid>
+                ></Grid>
                 <Grid
                   size={12}
                   sx={{
@@ -1136,6 +1184,16 @@ function AcceptenceForm3({
                     {"برنامه‌ریزی تعمیرکار"}
                   </Button2>
                 </Grid>
+                <Box sx={{ width: "100%" }}>
+                  <Button2
+                    type="button"
+                    variant="contained"
+                    icon={faCheck}
+                    onClick={addToTable}
+                  >
+                    افزودن به جدول
+                  </Button2>
+                </Box>
               </>
             )}
 
@@ -1161,16 +1219,19 @@ function AcceptenceForm3({
                   gap: { xs: "0.5rem" },
                 }}
               >
-                <Button2
-                  key={813}
-                  type="button"
-                  variant="contained"
-                  icon={faUserTie}
-                  onClick={handleClickOnSendToExperts}
-                  button_width={"button_width"}
-                >
-                  {"ارجاع به کارشناس"}
-                </Button2>
+                {!fromExpertReferral && (
+                  <Button2
+                    key={813}
+                    type="button"
+                    variant="contained"
+                    icon={faUserTie}
+                    onClick={postForm3Toexpert}
+                    button_width={"button_width"}
+                    disable={loading}
+                  >
+                    {"ارجاع به کارشناس"}
+                  </Button2>
+                )}
                 <Button2
                   key={812}
                   type="button"
@@ -1179,7 +1240,7 @@ function AcceptenceForm3({
                   onClick={hadleClickOnGoesBack}
                   button_width={"button_width"}
                 >
-                  {"قبل"}
+                  {fromExpertReferral ? "بازگشت" : "قبل"}
                 </Button2>
                 <Button2
                   key={811}

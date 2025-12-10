@@ -192,7 +192,7 @@ export default function Fund() {
                     fontFamily: "iranYekan",
                   }}
                 >
-                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                  <TableCell align="c enter" sx={{ fontFamily: "iranYekan" }}>
                     {toFarsiNumber(row?.admission_number)}
                   </TableCell>
                   <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>

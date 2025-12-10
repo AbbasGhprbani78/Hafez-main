@@ -7,50 +7,37 @@ import { faBoxArchive, faUsers } from "@fortawesome/free-solid-svg-icons";
 import Grid from "@mui/material/Grid2";
 import BoxCard from "../../Components/Modules/Box/Box";
 import { Box, TableCell, TableRow } from "@mui/material";
-import TableForm from "../../Components/Modules/Table/TableForm";
-import Button2 from "../../Components/Modules/Button2/Button2";
 import { toFarsiNumber } from "../../utils/helper";
+import { useEffect, useState } from "react";
+import { errorMessage } from "../../Components/Modules/Toast/ToastCustom";
+import apiClient from "../../config/axiosConfig";
+import TableCustom from "../../Components/Modules/TableCustom/TableCustom";
 const columns = [
   "کد",
   "نام تعمیرکار",
   "تخصص تعمیرکار",
   "قابلیت زمانی تعمیرکار",
+  "زمان ازاد",
   "وضعیت",
-  "عملیات",
 ];
-
-const data = [
-  {
-    id: "0012",
-    repairmanname: "مهدی رضائی",
-    respairmanexp: "مکانیک",
-    timework: "3 ساعت کار در روز",
-    status: "1",
-  },
-  {
-    id: "0013",
-    repairmanname: "نیما سلیمانی",
-    respairmanexp: "برق",
-    timework: "8 ساعت کار در روز",
-    status: "2",
-  },
-  {
-    id: "0014",
-    repairmanname: "سعید رضائی",
-    respairmanexp: "صافکاری",
-    timework: "10 ساعت کار در روز",
-    status: "3",
-  },
-  {
-    id: "0014",
-    repairmanname: "رضا احمدی",
-    respairmanexp: "نقاشی",
-    timework: "3 ساعت کار در روز",
-    status: "1",
-  },
-];
-
 export default function Home() {
+  const [data, setData] = useState("");
+
+  const getDataHome = async () => {
+    try {
+      const response = await apiClient.get("app/api/home-stats/");
+      if (response.status === 200) {
+        setData(response.data);
+        console.log(response.data);
+      }
+    } catch (error) {
+      errorMessage("خطا در دریافت داده‌ها");
+    }
+  };
+
+  useEffect(() => {
+    getDataHome();
+  }, []);
   return (
     <>
       <div className="content-conatiner">
@@ -78,7 +65,9 @@ export default function Home() {
                     }}
                   >
                     <span className={"titleone"}>سالن</span>
-                    <span className="value-one">{toFarsiNumber(3)}</span>
+                    <span className="value-one">
+                      {toFarsiNumber(data?.capacity?.salons)}
+                    </span>
                   </Box>
                   <Box
                     sx={{
@@ -90,7 +79,9 @@ export default function Home() {
                     }}
                   >
                     <span className={"titleone"}>تجهیزات</span>
-                    <span className="value-one">{toFarsiNumber(3)}</span>
+                    <span className="value-one">
+                      {toFarsiNumber(data?.capacity?.equipments)}
+                    </span>
                   </Box>
                   <Box
                     sx={{
@@ -102,7 +93,9 @@ export default function Home() {
                     }}
                   >
                     <span className={"titleone"}>تعمیرکار</span>
-                    <span className="value-one">{toFarsiNumber(3)}</span>
+                    <span className="value-one">
+                      {toFarsiNumber(data?.capacity?.repairmen)}
+                    </span>
                   </Box>
                 </Grid>
               </BoxCard>
@@ -125,68 +118,103 @@ export default function Home() {
               </BoxCard>
             </div>
             <div className="home-item div3">
-              <BoxCard title={"تعداد پذیرش روزانه"} icon={faUsers}>
-                <span className="value-one">{toFarsiNumber(56)}</span>
+              <BoxCard
+                title={"تعداد پذیرش روزانه"}
+                icon={faUsers}
+                iscenter={true}
+              >
+                <span className="value-one">
+                  {toFarsiNumber(data?.new_admissions_today)}
+                </span>
               </BoxCard>
             </div>
             <div className="home-item div4">
-              <Notifications />
+              <Notifications notifications={data?.notifications || []} />
             </div>
             <div className="home-item div5">
               <Chart />
             </div>
-            <div className="home-item div6" style={{ overflow: "hidden" }}>
-              <div style={{ width: "100%", overflow: "hidden" }}>
-                <BoxCard title={"وضعیت لحظه ای تعمیرکار"} icon={faUsers}>
-                  <TableForm columns={columns} maxHeight={200}>
-                    {data.length > 0 &&
-                      data.map((item) => (
+            <div className="home-item div6" style={{ overflow: "auto" }}>
+              <div style={{ width: "100%", overflowX: "auto" }}>
+                <BoxCard
+                  title={"وضعیت لحظه ای تعمیرکار"}
+                  icon={faUsers}
+                  isLink={true}
+                  link="/management"
+                >
+                  <TableCustom
+                    columns={columns}
+                    rows={data?.repairmen_status}
+                    ishidepageination={true}
+                  >
+                    {data?.repairmen_status?.length > 0 &&
+                      data?.repairmen_status.map((item) => (
                         <TableRow key={item.id}>
                           <TableCell
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {toFarsiNumber(item.id)}
+                            {toFarsiNumber(item?.repairman_code)}
                           </TableCell>
                           <TableCell
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {toFarsiNumber(item.repairmanname)}
+                            {toFarsiNumber(item?.repairman_name)}
                           </TableCell>
                           <TableCell
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {toFarsiNumber(item.respairmanexp)}
+                            {Array.isArray(item.repairman_specialties) &&
+                            item.repairman_specialties.length > 0
+                              ? item.repairman_specialties
+                                  .map((t) => t)
+                                  .join(" / ")
+                              : "Invalid data"}
                           </TableCell>
                           <TableCell
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {toFarsiNumber(item.timework)}
+                            {`${toFarsiNumber(
+                              item?.total_hours
+                            )} ساعت کار در روز`}
                           </TableCell>
                           <TableCell
                             align="center"
                             sx={{ fontFamily: "iranYekan" }}
                           >
-                            {toFarsiNumber(item.status)}
+                            {`${toFarsiNumber(item?.free_hours)}`}
                           </TableCell>
                           <TableCell
                             align="center"
-                            sx={{
-                              fontFamily: "iranYekan",
-                              flexDirection: "row",
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                            }}
+                            sx={{ fontFamily: "iranYekan" }}
                           >
-                            <Button2>مشاهده</Button2>
+                            <div
+                              style={{
+                                color: "#fff",
+                                padding: "4px 10px",
+                                borderRadius: "100px",
+                              }}
+                              className={` ${
+                                item?.work_status === "free"
+                                  ? "free"
+                                  : item?.work_status === "in_repair"
+                                  ? "under"
+                                  : "hide"
+                              }`}
+                            >
+                              {item?.work_status === "free"
+                                ? "آزاد"
+                                : item?.work_status === "in_repair"
+                                ? "درحال تعمیر"
+                                : "Hide"}
+                            </div>
                           </TableCell>
                         </TableRow>
                       ))}
-                  </TableForm>
+                  </TableCustom>
                 </BoxCard>
               </div>
             </div>
