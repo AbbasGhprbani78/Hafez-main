@@ -9,17 +9,14 @@ import RepairPlan from "./Pages/RepairPlan/RepairPlan";
 import Fund from "./Pages/Fund/Fund";
 import FundItem from "./Pages/Fund/FundItem";
 import RepairCardMain from "./Pages/RepairCard/RepairCardMain";
-import ManagementPage from "./Pages/Management/ManagementPage";
+import ManagementStatus from "./Pages/ManagementStatus/ManagementStatus";
 import PRepairmanPrivate from "./Components/Modules/Privates/PRepairmanPrivate";
 import RepairManPanel from "./Pages/RepairmanPanel/Main";
 import PRepairIndex from "./Pages/RepairmanPanel/Home/Home";
-import PAdminPrivate from "./Components/Modules/Privates/PAdminPrivate";
-import PanelAdmin from "./Pages/AdminPanel/Main";
-import PAdminIndex from "./Pages/AdminPanel/Home/Home";
 import RunningTasks from "./Pages/RepairmanPanel/RunningTasks/RunningTasks";
 import History from "./Pages/RepairmanPanel/History/History";
-import Users from "./Pages/AdminPanel/Users/Users";
-import Account from "./Pages/AdminPanel/Account/Account";
+import Users from "./Pages/Users/Users";
+import Account from "./Pages/Account/Account";
 import Arboretum from "./Pages/Arboretum/Arboretum";
 import Receptionreports from "./Pages/Report/Receptionreports";
 import CustomerList from "./Pages/Report/CustomerList";
@@ -28,9 +25,8 @@ import Consumableparts from "./Pages/Warehouse/Consumableparts";
 import Consumptionofparts from "./Pages/Warehouse/Consumptionofparts";
 import DailyBilling from "./Pages/finance/DailyBilling";
 import WorkOfContractors from "./Pages/finance/WorkOfContractors";
-import ExpertReferral from "./Pages/ExpertReferral/ExpertReferral";
+import Mangement from "./Pages/Managment/Managment";
 import ExpertReferralItem from "./Pages/ExpertReferralItem/ExpertReferralItem";
-
 const routes = [
   { path: "/", element: <Home /> },
   { path: "/draft", element: <Draft /> },
@@ -43,7 +39,6 @@ const routes = [
   { path: "/repairplan", element: <RepairPlan /> },
   { path: "/fund", element: <Fund /> },
   { path: "/fund/:id", element: <FundItem /> },
-  { path: "/management", element: <ManagementPage /> },
   { path: "/arboretum", element: <Arboretum /> },
   { path: "/report/reception-reports", element: <Receptionreports /> },
   { path: "/report/customer-list", element: <CustomerList /> },
@@ -52,8 +47,11 @@ const routes = [
   { path: "/warehouse/consumptionofparts", element: <Consumptionofparts /> },
   { path: "/finance/dailybilling", element: <DailyBilling /> },
   { path: "/finance/workofcontractors", element: <WorkOfContractors /> },
-  // { path: "/expert-referral", element: <ExpertReferral /> },
-  // { path: "/expert-referral/:id", element: <ExpertReferralItem /> },
+  { path: "/management/home", element: <Mangement /> },
+  { path: "/management/status", element: <ManagementStatus /> },
+  { path: "/account", element: <Account /> },
+  { path: "/users", element: <Users /> },
+  { path: "/expert-referral/:id", element: <ExpertReferralItem /> },
   {
     path: "/p-repairman/*",
     element: (
@@ -67,19 +65,8 @@ const routes = [
       { path: "history", element: <History /> },
     ],
   },
-  {
-    path: "/p-admin/*",
-    element: (
-      <PAdminPrivate>
-        <PanelAdmin />
-      </PAdminPrivate>
-    ),
-    children: [
-      { path: "", element: <PAdminIndex /> },
-      { path: "users", element: <Users /> },
-      { path: "account", element: <Account /> },
-    ],
-  },
+
+  // { path: "/expert-referral", element: <ExpertReferra /> },
 ];
 
 export default routes;

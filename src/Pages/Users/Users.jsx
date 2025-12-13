@@ -1,5 +1,5 @@
 import { useState } from "react";
-import TitleWithSearch from "../../../Components/Modules/TitleWithSearch/TitleWithSearch";
+import TitleWithSearch from "../../Components/Modules/TitleWithSearch/TitleWithSearch";
 import {
   faAngleDown,
   faKey,
@@ -9,17 +9,19 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./Users.module.css";
-import TableCustom from "../../../Components/Modules/TableCustom/TableCustom";
+import TableCustom from "../../Components/Modules/TableCustom/TableCustom";
 import { Box, TableCell, TableRow } from "@mui/material";
-import ToggleSwitch from "../../../Components/Modules/ToggleSwitch/ToggleSwitch";
-import Modal from "../../../Components/Modules/Modal/Modal";
-import Input from "../../../Components/Modules/Input/Input";
-import SearchAndSelectDropDwon from "../../../Components/Modules/SearchAndSelectDropDwon/SearchAndSelectDropDwon";
+import ToggleSwitch from "../../Components/Modules/ToggleSwitch/ToggleSwitch";
+import Modal from "../../Components/Modules/Modal/Modal";
+import Input from "../../Components/Modules/Input/Input";
+import SearchAndSelectDropDwon from "../../Components/Modules/SearchAndSelectDropDwon/SearchAndSelectDropDwon";
 import Grid from "@mui/material/Grid2";
-import Button2 from "../../../Components/Modules/Button2/Button2";
-import apiClient from "../../../config/axiosConfig";
-import InputCheckBox from "../../../Components/Modules/InputChekBox/InputCheckBox";
-import { toFarsiNumber } from "../../../utils/helper";
+import Button2 from "../../Components/Modules/Button2/Button2";
+import apiClient from "../../config/axiosConfig";
+import InputCheckBox from "../../Components/Modules/InputChekBox/InputCheckBox";
+import { toFarsiNumber } from "../../utils/helper";
+import SideBar from "../../Components/Modules/SideBar/SideBar";
+import Header from "../../Components/Modules/Header/Header";
 
 const fakeRows = [
   {
@@ -615,112 +617,118 @@ export default function Users() {
         ) : null}
         <></>
       </Modal>
-      <div className={styles.top_table}>
-        <TitleWithSearch
-          searchInput={searchInput}
-          onChange={handleChangeSearchField}
-          title={"کاربرها"}
-          isbackButton={false}
-        />
-        <div
-          className={styles.add_new_item_btn}
-          onClick={() => {
-            setTypeModal(1);
-            setShowModal(true);
-          }}
-        >
-          <div className={styles.icon_container}>
-            <FontAwesomeIcon icon={faPlus} className="" />
+      <div className="content-conatiner">
+        <SideBar />
+        <div className="space-content scroll-contant">
+          <Header title={"کاربران"} />
+          <div className={styles.top_table}>
+            <TitleWithSearch
+              searchInput={searchInput}
+              onChange={handleChangeSearchField}
+              title={"کاربرها"}
+              isbackButton={false}
+            />
+            <div
+              className={styles.add_new_item_btn}
+              onClick={() => {
+                setTypeModal(1);
+                setShowModal(true);
+              }}
+            >
+              <div className={styles.icon_container}>
+                <FontAwesomeIcon icon={faPlus} className="" />
+              </div>
+              <span>تعریف کاربر جدید</span>
+            </div>
           </div>
-          <span>تعریف کاربر جدید</span>
-        </div>
-      </div>
-      <TableCustom
-        rows={filterRows}
-        columns={columns}
-        onChange={handleChangePage}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        total={filterRows.length}
-        maxHeight={"70vh"}
-      >
-        {filterRows.length > 0 ? (
-          filterRows
-            .slice(page * rowsPerPage, (page + 1) * rowsPerPage)
-            .map((row, index) => (
-              <TableRow
-                key={index}
-                sx={{
-                  backgroundColor: index % 2 === 0 ? "#fff" : "#f2f2f2",
-                  fontFamily: "iranYekan",
-                }}
-              >
-                <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                  {toFarsiNumber(row.code)}
-                </TableCell>
-                <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                  {toFarsiNumber(row.username)}
-                </TableCell>
-                <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                  {toFarsiNumber(row.nationalCode)}
-                </TableCell>
-                <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                  {toFarsiNumber(row.fullName)}
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ fontFamily: "iranYekan", justifyItems: "center" }}
-                >
-                  {toFarsiNumber(row.lastLogin)}
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ fontFamily: "iranYekan", justifyItems: "center" }}
-                >
-                  {toFarsiNumber(row.role)}
-                </TableCell>
-                <TableCell
-                  sx={{ fontFamily: "iranYekan", justifyItems: "center" }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "1rem",
+          <TableCustom
+            rows={filterRows}
+            columns={columns}
+            onChange={handleChangePage}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            total={filterRows.length}
+            maxHeight={"70vh"}
+          >
+            {filterRows.length > 0 ? (
+              filterRows
+                .slice(page * rowsPerPage, (page + 1) * rowsPerPage)
+                .map((row, index) => (
+                  <TableRow
+                    key={index}
+                    sx={{
+                      backgroundColor: index % 2 === 0 ? "#fff" : "#f2f2f2",
+                      fontFamily: "iranYekan",
                     }}
                   >
-                    <button
-                      className={styles.btn_protect}
-                      onClick={() => {
-                        setTypeModal(3);
-                        setShowModal(true);
-                      }}
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {toFarsiNumber(row.code)}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {toFarsiNumber(row.username)}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {toFarsiNumber(row.nationalCode)}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                      {toFarsiNumber(row.fullName)}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{ fontFamily: "iranYekan", justifyItems: "center" }}
                     >
-                      <FontAwesomeIcon icon={faKey} size="24" />
-                    </button>
-                    <button
-                      className={styles.btn_protect}
-                      onClick={() => {
-                        setTypeModal(2);
-                        setShowModal(true);
-                      }}
+                      {toFarsiNumber(row.lastLogin)}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{ fontFamily: "iranYekan", justifyItems: "center" }}
                     >
-                      <FontAwesomeIcon icon={faShield} size="24" />
-                    </button>
-                  </div>
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ fontFamily: "iranYekan", justifyItems: "center" }}
-                >
-                  <ToggleSwitch />
-                </TableCell>
-              </TableRow>
-            ))
-        ) : (
-          <></>
-        )}
-      </TableCustom>
+                      {toFarsiNumber(row.role)}
+                    </TableCell>
+                    <TableCell
+                      sx={{ fontFamily: "iranYekan", justifyItems: "center" }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "1rem",
+                        }}
+                      >
+                        <button
+                          className={styles.btn_protect}
+                          onClick={() => {
+                            setTypeModal(3);
+                            setShowModal(true);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faKey} size="24" />
+                        </button>
+                        <button
+                          className={styles.btn_protect}
+                          onClick={() => {
+                            setTypeModal(2);
+                            setShowModal(true);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faShield} size="24" />
+                        </button>
+                      </div>
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{ fontFamily: "iranYekan", justifyItems: "center" }}
+                    >
+                      <ToggleSwitch />
+                    </TableCell>
+                  </TableRow>
+                ))
+            ) : (
+              <></>
+            )}
+          </TableCustom>
+        </div>
+      </div>
     </>
   );
 }

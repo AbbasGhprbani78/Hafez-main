@@ -17,6 +17,9 @@ import {
   faWarehouse,
   faMoneyCheckDollar,
   faUserTie,
+  faWallet,
+  faUsers,
+  faTree,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "./Offcanvas.module.css";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -28,6 +31,7 @@ function ResponsiveDrawer({
   routes = [
     { path: "/", label: "خانه", icon: faHome },
     { path: "/paziresh", label: "پذیرش", icon: faNewspaper },
+    { path: "/arboretum", label: "درختواره", icon: faTree },
     { path: "/repairsall", label: "کارت تعمیر", icon: faScrewdriverWrench },
     { path: "/fund", label: "حسابداری", icon: faLayerGroup },
 
@@ -57,7 +61,16 @@ function ResponsiveDrawer({
       ],
     },
     { path: "/allform", label: "فرم‌ها", icon: faListCheck },
-    { path: "/management", label: "مدیریت", icon: faUserTie },
+    {
+      label: "مدیریت",
+      icon: faUserTie,
+      subRoutes: [
+        { path: "/management/home", label: "داشبورد مدیریت" },
+        { path: "/management/status", label: "وضعیت ها" },
+        { path: "/account", label: "حساب" },
+        { path: "/users", label: "کاربران" },
+      ],
+    },
   ],
 }) {
   const navigate = useNavigate();

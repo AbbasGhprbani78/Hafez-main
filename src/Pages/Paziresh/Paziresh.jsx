@@ -19,7 +19,8 @@ export default function Paziresh() {
   const [formId, setFormId] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [allDataForms, setAllDataForms] = useState({});
-  const { currentTab, setCurrentTab, idForm } = useContext(MyContext);
+  const { currentTab, setCurrentTab, idForm, setIdForm } =
+    useContext(MyContext);
 
   const printRef = useRef();
   const navigate = useNavigate();
@@ -81,6 +82,19 @@ export default function Paziresh() {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (!idForm && !formId) {
+      setCurrentTab(1);
+    }
+  }, [idForm, formId]);
+
+  useEffect(() => {
+    return () => {
+      setIdForm("");
+      setCurrentTab(1);
+    };
+  }, []);
 
   useEffect(() => {
     if (idForm || formId) {

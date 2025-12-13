@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./CarModel.module.css";
 
 export default function CarModal({

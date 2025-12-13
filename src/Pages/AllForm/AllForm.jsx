@@ -11,7 +11,7 @@ import { warningMessage } from "../../Components/Modules/Toast/ToastCustom";
 import ReactDropdown from "../../Components/Modules/ReactDropdown/ReactDropdown";
 
 import Input from "../../Components/Modules/Input/Input";
-import { InfoTabel } from "../Management/ManagementPage";
+import { InfoTabel } from "../ManagementStatus/ManagementStatus";
 
 //MUI Component
 import Grid from "@mui/material/Grid2";
@@ -46,6 +46,8 @@ export default function AllForm() {
   const navigate = useNavigate();
 
   const handleGoToPaziresh = () => {
+    setIdForm("");
+    setCurrentTab(1);
     navigate("/paziresh");
   };
 

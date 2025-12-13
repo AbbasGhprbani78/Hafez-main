@@ -54,7 +54,7 @@ CustomTabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-function ManagementPage() {
+function ManagementStatus() {
   const [tabInformation, setTabInformation] = useState([]);
   const [filterRows, setFilterRows] = useState([]);
   const [selectedRowInfo, setSelectedRowInfo] = useState(item1);
@@ -318,7 +318,7 @@ function ManagementPage() {
         }}
         className={`space-content `}
       >
-        <Header title={"مدیریت:"} disabledButton={true} />
+        <Header title={"وضعیت ها:"} disabledButton={true} />
         <Grid
           item
           container
@@ -775,7 +775,7 @@ function ManagementPage() {
   );
 }
 
-export default ManagementPage;
+export default ManagementStatus;
 
 export function InfoTabel({
   tableInformation = [],
@@ -857,127 +857,3 @@ const equipment_columns = [
   "توضیحات",
   "عملیات",
 ];
-
-// const userColumns = [
-//   "ردیف",
-//   "نام کاربر",
-//   "نقش کاربر",
-//   "کد ملی",
-//   "وضعیت",
-//   "شماره تماس",
-//   "عملیات",
-// ];
-
-{
-  /* <CustomTabPanel value={tab} index={3}>
-              {filterRows === undefined ? (
-                <LoadingForm />
-              ) : (
-                <InfoTabel
-                  tableInformation={filterRows}
-                  page={page}
-                  handleChange={handleChangePage}
-                  totalRows={filterRows.length}
-                  pageLength={rowsPerPage}
-                  columnsTitle={userColumns}
-                  key={24}
-                >
-                  {filterRows.length > 0 ? (
-                    filterRows
-                      .slice(page * rowsPerPage, (page + 1) * rowsPerPage)
-                      .map((row, index) => (
-                        <TableRow
-                          key={index}
-                          sx={{
-                            backgroundColor:
-                              index % 2 === 0 ? "#fff" : "#f2f2f2",
-                            fontFamily: "iranYekan",
-                          }}
-                        >
-                          <TableCell
-                            align="center"
-                            sx={{ fontFamily: "iranYekan" }}
-                          >
-                            {++index}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ fontFamily: "iranYekan" }}
-                          >
-                            {row.full_name}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ fontFamily: "iranYekan" }}
-                          >
-                            {Array.isArray(row.type) && row.type.length > 0
-                              ? row.type.map((t) => t.type).join(" / ")
-                              : "Invalid data"}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ fontFamily: "iranYekan" }}
-                          >
-                            {row.national_code}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{
-                              display: "flex",
-                              justifyContent: "center",
-                              fontFamily: "iranYekan",
-                              padding: "19px",
-                            }}
-                          >
-                            <div
-                              className={`${styles.status_btn_halls} ${
-                                row.status === true
-                                  ? styles.status_halls_one
-                                  : row.status === false
-                                  ? styles.status_halls_two
-                                  : styles.status_halls_defualt
-                              }`}
-                            >
-                              {row.status === true
-                                ? "فعال"
-                                : row.status === false
-                                ? "غیرفعال"
-                                : "نامشخص"}
-                            </div>
-                          </TableCell>
-
-                          <TableCell
-                            align="center"
-                            sx={{ fontFamily: "iranYekan" }}
-                          >
-                            {row.phone_number}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              flexDirection: "row",
-                              gap: "1rem",
-                              padding: "18px 10px",
-                            }}
-                          >
-                            <Button3
-                              icon={faPencil}
-                              onClick={() => handleOpenModal(row, "edit")}
-                            />
-                            <Button3
-                              icon={faTrashCan}
-                              onClick={() => handleOpenModal(row, "delete")}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      ))
-                  ) : (
-                    <></>
-                  )}
-                </InfoTabel>
-              )}
-            </CustomTabPanel> */
-}

@@ -29,7 +29,7 @@ export default function ExpertReferralItem() {
   };
 
   const handlePrevTab = () => {
-    navigate("/expert-referral");
+    navigate("/allform");
   };
 
   return (

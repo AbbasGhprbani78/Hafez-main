@@ -374,6 +374,8 @@ function AcceptenceForm3({
             : "اطلاعات با موفقیت ارجاع داده شد منتظر تایید کارشناس باشید"
         );
         selectedData?.referral_to_an_expert === "normal" && nextTab();
+        selectedData?.referral_to_an_expert === "expert approve" &&
+          navigate("/allform");
       }
     } catch (error) {
       errorMessage(error?.response?.message || "خطا در ارسال داده‌ها");

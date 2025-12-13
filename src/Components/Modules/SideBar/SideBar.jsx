@@ -14,15 +14,20 @@ import {
   faWarehouse,
   faMoneyCheckDollar,
   faUserTie,
+  faUsers,
+  faWallet,
+  faTree,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { MyContext } from "../../../context/context";
+import { icon } from "@fortawesome/fontawesome-svg-core";
 
 export default function SideBar({
   routes = [
     { path: "/", label: "خانه", icon: faHome },
     { path: "/paziresh", label: "پذیرش", icon: faNewspaper },
+    { path: "/arboretum", label: "درختواره", icon: faTree },
     { path: "/repairsall", label: "کارت تعمیر", icon: faScrewdriverWrench },
     { path: "/fund", label: "حسابداری", icon: faLayerGroup },
 
@@ -52,7 +57,16 @@ export default function SideBar({
       ],
     },
     { path: "/allform", label: "فرم‌ها", icon: faListCheck },
-    { path: "/management", label: "مدیریت", icon: faUserTie },
+    {
+      label: "مدیریت",
+      icon: faUserTie,
+      subRoutes: [
+        { path: "/management/home", label: "داشبورد مدیریت" },
+        { path: "/management/status", label: "وضعیت ها" },
+        { path: "/account", label: "حساب" },
+        { path: "/users", label: "کاربران" },
+      ],
+    },
   ],
 }) {
   const navigate = useNavigate();

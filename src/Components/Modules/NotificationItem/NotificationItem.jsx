@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import styles from "./NtificationItem.module.css";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { errorMessage } from "../Toast/ToastCustom";
 import apiClient from "../../../config/axiosConfig";
@@ -34,11 +34,24 @@ export default function NotificationItem({ notif }) {
         <span className={styles.notif_title}>{notif?.title}</span>
       </div>
       <Modal showModal={showModal} setShowModal={() => setShowModal(false)}>
-        <div className={styles.modal_content}>
-          <div className={styles.modal_title}>{notif?.title}</div>
-          <p className={styles.modal_text}>
-            {notif?.body || notif?.description || notif?.text || "متن اعلان"}
-          </p>
+        <div onClick={(e) => e.stopPropagation()}>
+          <div
+            onClick={() => setShowModal(false)}
+            style={{
+              cursor: "pointer",
+              textAlign: "right",
+              fontSize: "20px",
+              fontWeight: "bold",
+            }}
+          >
+            <FontAwesomeIcon icon={faXmark} />
+          </div>
+          <div className={styles.modal_content}>
+            <div className={styles.modal_title}>{notif?.title}</div>
+            <p className={styles.modal_text}>
+              {notif?.body || notif?.description || notif?.text || "متن اعلان"}
+            </p>
+          </div>
         </div>
       </Modal>
     </div>
