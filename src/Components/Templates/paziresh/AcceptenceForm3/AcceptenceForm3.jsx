@@ -113,7 +113,6 @@ function AcceptenceForm3({
     } else {
       prevTab();
     }
-    prevTab();
   };
 
   const handleAddInvoiceItem = () => {
@@ -192,6 +191,8 @@ function AcceptenceForm3({
     }
 
     if (fromExpertReferral) {
+      console.log(fromExpertReferral);
+      console.log(dataform3.invoiceItems);
       if (
         !dataform3.invoiceItems.length ||
         dataform3.invoiceItems.some((item) => {
@@ -334,23 +335,23 @@ function AcceptenceForm3({
         errorMessage("لطفا تخمین زمان را وارد کنید");
         return;
       }
-      if (
-        selectedData.referral_to_an_expert === "normal" ||
-        (selectedData.referral_to_an_expert === "expert approve" &&
-          selectedData.tableForm.some((row) => {
-            if (!row.invoiceItems?.length) return true;
-            return row.invoiceItems.some((item) => {
-              const price = Number(item.price);
-              return (
-                item.wages === "" ||
-                item.price === "" ||
-                item.repairman === "" ||
-                Number.isNaN(price) ||
-                price < 0
-              );
-            });
-          }))
-      ) {
+      const hasInvalidInvoiceItems = selectedData.tableForm.some((row) => {
+        if (!row.invoiceItems?.length) return true;
+        return row.invoiceItems.some((item) => {
+          const price = Number(item.price);
+          return (
+            item.wages === "" ||
+            item.price === "" ||
+            item.repairman === "" ||
+            Number.isNaN(price) ||
+            price < 0
+          );
+        });
+      });
+
+      if (hasInvalidInvoiceItems) {
+        console.log(selectedData.tableForm);
+        console.log(selectedData.referral_to_an_expert);
         errorMessage(
           "لطفاً تمام فیلدهای آیتم‌های فاکتور را به‌درستی وارد کنید (قیمت نباید منفی باشد)."
         );

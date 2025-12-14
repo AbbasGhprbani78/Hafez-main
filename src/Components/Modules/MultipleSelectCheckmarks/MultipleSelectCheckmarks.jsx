@@ -27,7 +27,7 @@ export default function MultipleSelectCheckmarks({
   selectedValues = [],
   onChange,
   lable = "lable",
-  helperText = "helper text",
+  helperText = "",
 }) {
   const [selected, setSelected] = useState(selectedValues);
 

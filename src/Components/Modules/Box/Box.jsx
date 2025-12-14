@@ -11,7 +11,7 @@ export default function BoxCard({
   iscenter = false,
 }) {
   return (
-    <Link to={link} style={{ textDecoration: "none", color: "inherit" }}>
+    <div style={{ textDecoration: "none", color: "inherit" }}>
       <div className={styles.wrapper}>
         <div className={styles.title}>
           <FontAwesomeIcon icon={icon} />
@@ -19,6 +19,6 @@ export default function BoxCard({
         </div>
         <div className={iscenter && styles.btn_wrapper}>{children}</div>
       </div>
-    </Link>
+    </div>
   );
 }

@@ -11,6 +11,7 @@ export default function TitleWithSearch({
   onChange,
   title,
   isbackButton = true,
+  placeholder = "جستوجو",
 }) {
   return (
     <div className={styles.wrapper}>
@@ -31,12 +32,9 @@ export default function TitleWithSearch({
               icon={faMagnifyingGlass}
               value={searchInput}
               onChange={onChange}
-              placeholder={"جستجو"}
+              placeholder={placeholder}
             />
           </div>
-          <Button2 onClick={() => {}} icon={faMagnifyingGlass}>
-            جستجو
-          </Button2>
         </div>
       </div>
     </div>

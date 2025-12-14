@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import TitleWithSearch from "../../Components/Modules/TitleWithSearch/TitleWithSearch";
 import {
-  faAngleDown,
   faKey,
   faPlus,
   faShield,
   faXmark,
+  faPen,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./Users.module.css";
@@ -14,7 +14,6 @@ import { Box, TableCell, TableRow } from "@mui/material";
 import ToggleSwitch from "../../Components/Modules/ToggleSwitch/ToggleSwitch";
 import Modal from "../../Components/Modules/Modal/Modal";
 import Input from "../../Components/Modules/Input/Input";
-import SearchAndSelectDropDwon from "../../Components/Modules/SearchAndSelectDropDwon/SearchAndSelectDropDwon";
 import Grid from "@mui/material/Grid2";
 import Button2 from "../../Components/Modules/Button2/Button2";
 import apiClient from "../../config/axiosConfig";
@@ -22,129 +21,13 @@ import InputCheckBox from "../../Components/Modules/InputChekBox/InputCheckBox";
 import { toFarsiNumber } from "../../utils/helper";
 import SideBar from "../../Components/Modules/SideBar/SideBar";
 import Header from "../../Components/Modules/Header/Header";
-
-const fakeRows = [
-  {
-    code: "U001",
-    username: "ali.rezaei",
-    nationalCode: "0012345678",
-    fullName: "علی رضایی",
-    lastLogin: "2025-09-28 09:12:34",
-    role: "مدیر",
-    actions: { edit: true, delete: false },
-    status: "فعال",
-  },
-  {
-    code: "U002",
-    username: "sara.ahmadi",
-    nationalCode: "0023456789",
-    fullName: "سارا احمدی",
-    lastLogin: "2025-09-27 18:45:10",
-    role: "کاربر",
-    actions: { edit: true, delete: true },
-    status: "فعال",
-  },
-  {
-    code: "U003",
-    username: "mohammad.h",
-    nationalCode: "0034567890",
-    fullName: "محمد حسینی",
-    lastLogin: "2025-09-26 07:05:00",
-    role: "پشتیبانی",
-    actions: { edit: true, delete: true },
-    status: "معلق",
-  },
-  {
-    code: "U004",
-    username: "fateme.k",
-    nationalCode: "0045678901",
-    fullName: "فاطمه کاظمی",
-    lastLogin: "2025-09-20 21:30:12",
-    role: "کاربر",
-    actions: { edit: false, delete: false },
-    status: "فعال",
-  },
-  {
-    code: "U005",
-    username: "reza.najafi",
-    nationalCode: "0056789012",
-    fullName: "رضا نجفی",
-    lastLogin: "2025-08-15 11:00:00",
-    role: "سرپرست",
-    actions: { edit: true, delete: false },
-    status: "فعال",
-  },
-  {
-    code: "U006",
-    username: "mina.t",
-    nationalCode: "0067890123",
-    fullName: "مینا ترکاشوند",
-    lastLogin: "2025-09-01 14:14:14",
-    role: "کاربر",
-    actions: { edit: true, delete: true },
-    status: "معطل",
-  },
-  {
-    code: "U007",
-    username: "hossein.a",
-    nationalCode: "0078901234",
-    fullName: "حسین اسدی",
-    lastLogin: "2025-09-28 00:05:50",
-    role: "مدیر",
-    actions: { edit: true, delete: false },
-    status: "فعال",
-  },
-  {
-    code: "U008",
-    username: "niloofar.s",
-    nationalCode: "0089012345",
-    fullName: "نیلوفر سلیمانی",
-    lastLogin: "2025-07-30 08:22:10",
-    role: "پشتیبانی",
-    actions: { edit: false, delete: true },
-    status: "حذف شده",
-  },
-  {
-    code: "U009",
-    username: "amir.karimi",
-    nationalCode: "0090123456",
-    fullName: "امیر کریمی",
-    lastLogin: "2025-09-25 12:00:00",
-    role: "کاربر",
-    actions: { edit: true, delete: true },
-    status: "فعال",
-  },
-  {
-    code: "U010",
-    username: "leila.m",
-    nationalCode: "0101234567",
-    fullName: "لیلا مرادی",
-    lastLogin: "2025-06-11 16:40:00",
-    role: "کاربر",
-    actions: { edit: false, delete: false },
-    status: "معلق",
-  },
-  {
-    code: "U011",
-    username: "amirhosein.r",
-    nationalCode: "0112345670",
-    fullName: "امیرحسین رضوی",
-    lastLogin: "2025-09-27 22:11:05",
-    role: "سرپرست",
-    actions: { edit: true, delete: false },
-    status: "فعال",
-  },
-  {
-    code: "U012",
-    username: "samira.b",
-    nationalCode: "0123456701",
-    fullName: "سمیرا بیگی",
-    lastLogin: "2025-09-22 10:10:10",
-    role: "کاربر",
-    actions: { edit: true, delete: true },
-    status: "فعال",
-  },
-];
+import {
+  errorMessage,
+  successMessage,
+  ToastContainerCustom,
+} from "../../Components/Modules/Toast/ToastCustom";
+import { ChnageDate } from "../../Components/Modules/ChnageDate/ChnageDate";
+import MultipleSelectCheckmarks from "../../Components/Modules/MultipleSelectCheckmarks/MultipleSelectCheckmarks";
 
 const permissions = [
   {
@@ -171,7 +54,7 @@ export default function Users() {
     "کد",
     "نام کاربری",
     "کد ملی کاربر",
-    "نام کاربر",
+    "نام و نام خانوادگی",
     "آخرین ورود به سامانه",
     "نقش",
     "عملیات",
@@ -180,41 +63,50 @@ export default function Users() {
 
   const [searchInput, setSearchInput] = useState("");
   const [page, setPage] = useState(0);
-  const [filterRows, setFilterRows] = useState(fakeRows);
-  const [rows, setRows] = useState(fakeRows);
-  const rowsPerPage = 5;
+  const [totalRows, setTotalRows] = useState(0);
+  const [rows, setRows] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [typeModal, setTypeModal] = useState(1);
   const [checkedItems, setCheckedItems] = useState({});
+  const [type_idss, settype_idss] = useState([]);
+  const [id, setId] = useState("");
+  const rowsPerPage = 6;
+  const [loading, setLoading] = useState(false);
+
+  const specialtyOptions = [
+    { value: 1, label: "تخصص 1" },
+    { value: 2, label: "تخصص 2" },
+    { value: 3, label: "تخصص 3" },
+    { value: 4, label: "تخصص 4" },
+  ];
+
   const [users, setUsers] = useState({
+    username: "",
+    email: "",
+    password: "",
     first_name: "",
     last_name: "",
     national_code: "",
     phone_number: "",
-    role: "",
+    code: "",
+    type_ids: [],
+    specialty_ids: [],
   });
 
-  const [passwords, setPasswords] = useState({
-    old_password: "",
-    new_password: "",
-  });
+  const [password, setPassword] = useState("");
 
   const [errors, setErrors] = useState({
+    username: "",
+    email: "",
+    password: "",
     first_name: "",
     last_name: "",
     national_code: "",
     phone_number: "",
-    role: "",
-    old_password: "",
+    code: "",
+    type_ids: "",
+    specialty_ids: "",
   });
-
-  const handleSelectChange = (field, value, label) => {
-    setUsers((prev) => ({
-      ...prev,
-      [field]: value,
-      ...(field === "role" && { role: label }),
-    }));
-  };
 
   const handleChangeForm = (e) => {
     const { name, value } = e.target;
@@ -224,26 +116,9 @@ export default function Users() {
     }));
   };
 
-  const handleChangePasswords = (e) => {
-    const { name, value } = e.target;
-    setPasswords((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
   const handleChangeSearchField = (e) => {
     const searchTerm = e.target.value.toLowerCase();
     setSearchInput(searchTerm);
-    const filtered = rows.filter(
-      (row) =>
-        row.code.toLowerCase().includes(searchTerm) ||
-        row.fullName.toLowerCase().includes(searchTerm) ||
-        row.username.toLowerCase().includes(searchTerm) ||
-        row.nationalCode.toLowerCase().includes(searchTerm) ||
-        row.role.toLowerCase().includes(searchTerm)
-    );
-    setFilterRows(filtered);
   };
 
   const handleChangePage = (newPage) => {
@@ -254,9 +129,20 @@ export default function Users() {
     setShowModal((modal) => !modal);
   };
 
-  const validate = () => {
+  const validate = (isEdit = false) => {
     let newErrors = {};
 
+    if (!users.username.trim()) {
+      newErrors.username = "نام کاربری الزامی است";
+    }
+    if (!users.email.trim()) {
+      newErrors.email = "ایمیل الزامی است";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(users.email)) {
+      newErrors.email = "ایمیل معتبر نیست";
+    }
+    if (!isEdit && !users.password.trim()) {
+      newErrors.password = "رمز عبور الزامی است";
+    }
     if (!users.first_name.trim()) {
       newErrors.first_name = "نام الزامی است";
     }
@@ -269,8 +155,14 @@ export default function Users() {
     if (!/^\d{11}$/.test(users.phone_number)) {
       newErrors.phone_number = "شماره تماس باید 11 رقم عدد باشد";
     }
-    if (!users.role.trim()) {
-      newErrors.role = "انتخاب نقش الزامی است";
+    if (!users.code.trim()) {
+      newErrors.code = "کد الزامی است";
+    }
+    if (!users.type_ids || users.type_ids.length === 0) {
+      newErrors.type_ids = "انتخاب نقش الزامی است";
+    }
+    if (!users.specialty_ids || users.specialty_ids.length === 0) {
+      newErrors.specialty_ids = "انتخاب تخصص الزامی است";
     }
 
     setErrors(newErrors);
@@ -281,40 +173,103 @@ export default function Users() {
   const addUser = async (e) => {
     e.preventDefault();
 
-    if (!validate()) {
+    if (!validate(false)) {
       return;
     }
-
-    const newRow = {
-      code: `U${String(rows.length + 1).padStart(3, "0")}`,
-      username: `${users.first_name}.${users.last_name}`,
-      nationalCode: users.national_code,
-      fullName: `${users.first_name} ${users.last_name}`,
-      lastLogin: new Date().toISOString().slice(0, 19).replace("T", " "),
-      role: users.role,
-      actions: { edit: true, delete: true },
-      status: "فعال",
+    setLoading(true);
+    const requestBody = {
+      username: users.username,
+      email: users.email,
+      password: users.password,
+      first_name: users.first_name,
+      last_name: users.last_name,
+      phone_number: users.phone_number,
+      national_code: users.national_code,
+      level: "one",
+      status: true,
+      is_active: true,
+      is_staff: false,
+      code: users.code,
+      type_ids: users.type_ids,
+      specialty_ids: users.specialty_ids,
     };
 
-    setRows((prev) => [newRow, ...prev]);
-    setFilterRows((prev) => [newRow, ...prev]);
-
-    setUsers({
-      first_name: "",
-      last_name: "",
-      national_code: "",
-      phone_number: "",
-      role: "",
-    });
-    setShowModal(false);
-
     try {
-      const response = await apiClient.post("/", users);
+      const response = await apiClient.post("/user/users/", requestBody);
       if (response.status === 201) {
         setErrors({});
+        setUsers({
+          username: "",
+          email: "",
+          password: "",
+          first_name: "",
+          last_name: "",
+          national_code: "",
+          phone_number: "",
+          code: "",
+          type_ids: [],
+          specialty_ids: [],
+        });
+        setShowModal(false);
+        getUsers();
+        successMessage("کاربر با موفقیت اضافه شد");
       }
     } catch (err) {
       console.error(err);
+      errorMessage(err.response?.data?.message || "خطا در افزودن کاربر");
+      setLoading(false);
+    }
+  };
+
+  const editUser = async (e) => {
+    e.preventDefault();
+
+    if (!validate(true)) {
+      return;
+    }
+    setLoading(true);
+    const requestBody = {
+      username: users.username,
+      email: users.email,
+      first_name: users.first_name,
+      last_name: users.last_name,
+      phone_number: users.phone_number,
+      national_code: users.national_code,
+      code: users.code,
+      type_ids: users.type_ids,
+      specialty_ids: users.specialty_ids,
+    };
+
+    if (users.password && users.password.trim() !== "") {
+      requestBody.password = users.password;
+    }
+
+    try {
+      const response = await apiClient.put(`/user/users/${id}/`, requestBody);
+      if (response.status === 200) {
+        setErrors({});
+        setUsers({
+          username: "",
+          email: "",
+          password: "",
+          first_name: "",
+          last_name: "",
+          national_code: "",
+          phone_number: "",
+          code: "",
+          type_ids: [],
+          specialty_ids: [],
+        });
+        setShowModal(false);
+        setId("");
+        getUsers();
+        successMessage("کاربر با موفقیت ویرایش شد");
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error(err);
+      errorMessage(err.response?.data?.message || "خطا در ویرایش کاربر");
+      setLoading(false);
     }
   };
 
@@ -351,33 +306,131 @@ export default function Users() {
     e.preventDefault();
     let newErrors = {};
 
-    if (!passwords.old_password.trim()) {
-      newErrors.old_password = "رمز قبلی الزامی است";
-    }
-    if (!passwords.new_password.trim()) {
-      newErrors.new_password = "رمز جدید الزامی است";
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+    if (!password.trim()) {
+      newErrors.password = "رمز جدید الزامی است";
+      setErrors((prev) => ({ ...prev, ...newErrors }));
       return;
     }
 
+    setErrors((prev) => ({ ...prev, password: "" }));
+    setLoading(true);
+
     try {
-      const response = await apiClient.post("/change-password", passwords);
-      if (response.status === 201) {
+      const response = await apiClient.put(`/user/users/${id}/`, { password });
+      if (response.status === 200) {
         setShowModal(false);
-        setPasswords({
-          old_password: "",
-          new_password: "",
-        });
+        setPassword("");
         setErrors({});
+        successMessage("رمز عبور با موفقیت تغییر کرد");
       }
     } catch (error) {
       console.error(error);
       setErrors({ server: "خطا در تغییر رمز عبور" });
+    } finally {
+      setLoading(false);
     }
   };
+
+  const getRolls = async () => {
+    try {
+      const response = await apiClient.get("/user/user-types/");
+      if (response.status === 200) {
+        settype_idss(
+          response?.data?.map((item) => ({
+            value: item.id,
+            label: item.type,
+          }))
+        );
+      }
+    } catch (error) {
+      errorMessage(error.response.data.message || "خطا در دریافت داده");
+    }
+  };
+
+  const getUsers = useCallback(async () => {
+    try {
+      const params = {
+        page: page + 1,
+        page_size: rowsPerPage,
+      };
+
+      if (searchInput && searchInput.trim() !== "") {
+        params.search = searchInput.trim();
+      }
+
+      const response = await apiClient.get("/user/users/", { params });
+      if (response.status === 200) {
+        setTotalRows(response.data.count);
+        setRows(response.data?.results);
+      }
+    } catch (error) {
+      errorMessage(error.response?.data?.message || "خطا در دریافت داده");
+    }
+  }, [page, rowsPerPage, searchInput]);
+
+  const handleStatusChange = async (userId, newStatus) => {
+    try {
+      const response = await apiClient.put(`/user/users/${userId}/`, {
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        setRows((prevRows) =>
+          prevRows.map((row) =>
+            row.id === userId ? { ...row, status: newStatus } : row
+          )
+        );
+      }
+    } catch (error) {
+      errorMessage(error.response?.data?.message || "خطا در تغییر وضعیت کاربر");
+      getUsers();
+    }
+  };
+
+  const handleEditClick = (row) => {
+    setId(row.id);
+    setUsers({
+      username: row.username || "",
+      email: row.email || "",
+      password: "",
+      first_name: row.first_name || "",
+      last_name: row.last_name || "",
+      national_code: row.national_code || "",
+      phone_number: row.phone_number || "",
+      code: row.code || "",
+      type_ids:
+        row.type && Array.isArray(row.type) ? row.type.map((t) => t.id) : [],
+      specialty_ids:
+        row.specialty && Array.isArray(row.specialty)
+          ? row.specialty.map((s) => s.id)
+          : [],
+    });
+    setTypeModal(4);
+    setShowModal(true);
+  };
+
+  useEffect(() => {
+    getRolls();
+    getUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const debounce = setTimeout(() => {
+      if (page !== 0) {
+        setPage(0);
+      } else {
+        getUsers();
+      }
+    }, 600);
+
+    return () => clearTimeout(debounce);
+  }, [searchInput, getUsers, page]);
+
+  useEffect(() => {
+    if (page !== undefined) {
+      getUsers();
+    }
+  }, [page, rowsPerPage, getUsers]);
 
   return (
     <>
@@ -442,6 +495,66 @@ export default function Users() {
                 <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
                   <Input
                     onChange={handleChangeForm}
+                    label={"نام کاربری"}
+                    name="username"
+                    placeholder={"نام کاربری"}
+                    value={users.username}
+                  />
+                  {errors.username && (
+                    <p className="error">{errors.username}</p>
+                  )}
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <Input
+                    onChange={handleChangeForm}
+                    label={"ایمیل"}
+                    name="email"
+                    placeholder={"ایمیل"}
+                    type="text"
+                    value={users.email}
+                  />
+                  {errors.email && <p className="error">{errors.email}</p>}
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                className={"distancerow"}
+                rowSpacing={2}
+                columnSpacing={2}
+              >
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <Input
+                    onChange={handleChangeForm}
+                    label={"رمز عبور"}
+                    name="password"
+                    placeholder={"رمز عبور"}
+                    type="password"
+                    value={users.password}
+                  />
+                  {errors.password && (
+                    <p className="error">{errors.password}</p>
+                  )}
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <Input
+                    onChange={handleChangeForm}
+                    label={"کد"}
+                    name="code"
+                    placeholder={"کد"}
+                    value={users.code}
+                  />
+                  {errors.code && <p className="error">{errors.code}</p>}
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                className={"distancerow"}
+                rowSpacing={2}
+                columnSpacing={2}
+              >
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <Input
+                    onChange={handleChangeForm}
                     label={"کدملی"}
                     name="national_code"
                     placeholder={"کدملی"}
@@ -470,27 +583,36 @@ export default function Users() {
                 rowSpacing={2}
                 columnSpacing={2}
               >
-                <Grid size={{ xs: 12 }} sx={{ width: "100%" }}>
-                  <SearchAndSelectDropDwon
-                    icon={faAngleDown}
-                    label={"نقش کاربر"}
-                    items={[
-                      { value_id: "مدیر", value: "مدیر" },
-                      { value_id: "ادمین", value: "ادمین" },
-                      { value_id: "تعمیرکار", value: "تعمیرکار" },
-                    ]}
-                    name="role"
-                    onChange={handleSelectChange}
-                    value={users.role}
-                    placeHolder={"نقش"}
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <MultipleSelectCheckmarks
+                    options={type_idss}
+                    selectedValues={users.type_ids}
+                    onChange={(values) =>
+                      setUsers((prev) => ({ ...prev, type_ids: values }))
+                    }
+                    lable="انتخاب نقش:"
                   />
-
-                  {errors.role && <p className="error">{errors.role}</p>}
+                  {errors.type_ids && (
+                    <p className="error">{errors.type_ids}</p>
+                  )}
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <MultipleSelectCheckmarks
+                    options={specialtyOptions}
+                    selectedValues={users.specialty_ids}
+                    onChange={(values) =>
+                      setUsers((prev) => ({ ...prev, specialty_ids: values }))
+                    }
+                    lable="انتخاب تخصص:"
+                  />
+                  {errors.specialty_ids && (
+                    <p className="error">{errors.specialty_ids}</p>
+                  )}
                 </Grid>
               </Grid>
               <Box sx={{ display: "flex", width: "60%", margin: "0 auto" }}>
-                <Button2 style={"width"} type="submit">
-                  تایید
+                <Button2 style={"width"} type="submit" disabled={loading}>
+                  {loading ? "در حال ذخیره..." : "تایید"}
                 </Button2>
               </Box>
             </form>
@@ -554,65 +676,248 @@ export default function Users() {
             </div>
           </form>
         ) : typeModal === 3 ? (
-          <>
-            <div>
+          <div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                color: "var(--color-3)",
+                fontWeight: "medium",
+              }}
+            >
+              <span>تغییر رمز</span>
               <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  color: "var(--color-3)",
-                  fontWeight: "medium",
+                className={styles.delete_icon_modal}
+                onClick={() => setShowModal(false)}
+              >
+                <FontAwesomeIcon icon={faXmark} />
+              </div>
+            </div>
+            <form onSubmit={changePassword}>
+              <Grid
+                container
+                className={"distancerow"}
+                rowSpacing={2}
+                columnSpacing={2}
+              >
+                <Grid size={{ xs: 12 }} sx={{ width: "100%" }}>
+                  <Input
+                    onChange={(e) => setPassword(e.target.value)}
+                    label={"رمز جدید"}
+                    name="password"
+                    placeholder={"رمز جدید"}
+                    value={password}
+                  />
+                  {errors.password && (
+                    <p className="error">{errors.password}</p>
+                  )}
+                </Grid>
+              </Grid>
+
+              <Box sx={{ display: "flex", width: "60%", margin: "0 auto" }}>
+                <Button2 style={"width"} type="submit" disable={loading}>
+                  {loading ? "درحال تغییر" : "تایید"}
+                </Button2>
+              </Box>
+            </form>
+          </div>
+        ) : typeModal === 4 ? (
+          <>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                color: "var(--color-3)",
+                fontWeight: "medium",
+              }}
+            >
+              <span>ویرایش کاربر</span>
+              <div
+                className={styles.delete_icon_modal}
+                onClick={() => {
+                  setShowModal(false);
+                  setUsers({
+                    username: "",
+                    email: "",
+                    password: "",
+                    first_name: "",
+                    last_name: "",
+                    national_code: "",
+                    phone_number: "",
+                    code: "",
+                    type_ids: [],
+                    specialty_ids: [],
+                  });
+                  setId("");
                 }}
               >
-                <span>تغییر رمز</span>
-                <div
-                  className={styles.delete_icon_modal}
-                  onClick={() => setShowModal(false)}
-                >
-                  <FontAwesomeIcon icon={faXmark} />
-                </div>
+                <FontAwesomeIcon icon={faXmark} />
               </div>
-              <form onSubmit={changePassword}>
-                <Grid
-                  container
-                  className={"distancerow"}
-                  rowSpacing={2}
-                  columnSpacing={2}
-                >
-                  <Grid size={{ xs: 12 }} sx={{ width: "100%" }}>
-                    <Input
-                      onChange={handleChangePasswords}
-                      label={"رمز قبلی"}
-                      name="old_password"
-                      placeholder={"رمز قبلی"}
-                      value={passwords.old_password}
-                    />
-                    {errors.old_password && (
-                      <p className="error">{errors.old_password}</p>
-                    )}
-                  </Grid>
-                  <Grid size={{ xs: 12 }} sx={{ width: "100%" }}>
-                    <Input
-                      onChange={handleChangePasswords}
-                      label={"رمز جدید"}
-                      name="new_password"
-                      placeholder={"رمز جدید"}
-                      value={passwords.new_password}
-                    />
-                    {errors.new_password && (
-                      <p className="error">{errors.new_password}</p>
-                    )}
-                  </Grid>
-                </Grid>
-
-                <Box sx={{ display: "flex", width: "60%", margin: "0 auto" }}>
-                  <Button2 style={"width"} type="submit">
-                    تایید
-                  </Button2>
-                </Box>
-              </form>
             </div>
+            <form onSubmit={editUser}>
+              <Grid
+                container
+                className={"distancerow"}
+                rowSpacing={2}
+                columnSpacing={2}
+              >
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <Input
+                    onChange={handleChangeForm}
+                    label={"نام"}
+                    name="first_name"
+                    placeholder={"نام"}
+                    value={users.first_name}
+                  />
+                  {errors.first_name && (
+                    <p className="error">{errors.first_name}</p>
+                  )}
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <Input
+                    onChange={handleChangeForm}
+                    label={"نام خانوادگی"}
+                    name="last_name"
+                    placeholder={"نام خانوادگی"}
+                    value={users.last_name}
+                  />
+                  {errors.last_name && (
+                    <p className="error">{errors.last_name}</p>
+                  )}
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                className={"distancerow"}
+                rowSpacing={2}
+                columnSpacing={2}
+              >
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <Input
+                    onChange={handleChangeForm}
+                    label={"نام کاربری"}
+                    name="username"
+                    placeholder={"نام کاربری"}
+                    value={users.username}
+                  />
+                  {errors.username && (
+                    <p className="error">{errors.username}</p>
+                  )}
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <Input
+                    onChange={handleChangeForm}
+                    label={"ایمیل"}
+                    name="email"
+                    placeholder={"ایمیل"}
+                    type="text"
+                    value={users.email}
+                  />
+                  {errors.email && <p className="error">{errors.email}</p>}
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                className={"distancerow"}
+                rowSpacing={2}
+                columnSpacing={2}
+              >
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <Input
+                    onChange={handleChangeForm}
+                    label={"رمز عبور (اختیاری)"}
+                    name="password"
+                    placeholder={"رمز عبور جدید"}
+                    type="password"
+                    value={users.password}
+                  />
+                  {errors.password && (
+                    <p className="error">{errors.password}</p>
+                  )}
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <Input
+                    onChange={handleChangeForm}
+                    label={"کد"}
+                    name="code"
+                    placeholder={"کد"}
+                    value={users.code}
+                  />
+                  {errors.code && <p className="error">{errors.code}</p>}
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                className={"distancerow"}
+                rowSpacing={2}
+                columnSpacing={2}
+              >
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <Input
+                    onChange={handleChangeForm}
+                    label={"کدملی"}
+                    name="national_code"
+                    placeholder={"کدملی"}
+                    value={users.national_code}
+                  />
+                  {errors.national_code && (
+                    <p className="error">{errors.national_code}</p>
+                  )}
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <Input
+                    onChange={handleChangeForm}
+                    label={"شماره تماس"}
+                    name="phone_number"
+                    placeholder={"شماره تماس"}
+                    value={users.phone_number}
+                  />
+                  {errors.phone_number && (
+                    <p className="error">{errors.phone_number}</p>
+                  )}
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                className={"distancerow"}
+                rowSpacing={2}
+                columnSpacing={2}
+              >
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <MultipleSelectCheckmarks
+                    options={type_idss}
+                    selectedValues={users.type_ids}
+                    onChange={(values) =>
+                      setUsers((prev) => ({ ...prev, type_ids: values }))
+                    }
+                    lable="انتخاب نقش:"
+                  />
+                  {errors.type_ids && (
+                    <p className="error">{errors.type_ids}</p>
+                  )}
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                  <MultipleSelectCheckmarks
+                    options={specialtyOptions}
+                    selectedValues={users.specialty_ids}
+                    onChange={(values) =>
+                      setUsers((prev) => ({ ...prev, specialty_ids: values }))
+                    }
+                    lable="انتخاب تخصص:"
+                  />
+                  {errors.specialty_ids && (
+                    <p className="error">{errors.specialty_ids}</p>
+                  )}
+                </Grid>
+              </Grid>
+              <Box sx={{ display: "flex", width: "60%", margin: "0 auto" }}>
+                <Button2 style={"width"} type="submit" disabled={loading}>
+                  {loading ? "در حال ذخیره..." : "تایید"}
+                </Button2>
+              </Box>
+            </form>
           </>
         ) : null}
         <></>
@@ -627,6 +932,7 @@ export default function Users() {
               onChange={handleChangeSearchField}
               title={"کاربرها"}
               isbackButton={false}
+              placeholder="جستوجو براساس کد,کد ملی,نام کاربر,نام ونام خانوادگی"
             />
             <div
               className={styles.add_new_item_btn}
@@ -642,97 +948,103 @@ export default function Users() {
             </div>
           </div>
           <TableCustom
-            rows={filterRows}
+            rows={totalRows}
             columns={columns}
             onChange={handleChangePage}
             page={page}
             rowsPerPage={rowsPerPage}
-            total={filterRows.length}
+            total={totalRows}
             maxHeight={"70vh"}
           >
-            {filterRows.length > 0 ? (
-              filterRows
-                .slice(page * rowsPerPage, (page + 1) * rowsPerPage)
-                .map((row, index) => (
-                  <TableRow
-                    key={index}
-                    sx={{
-                      backgroundColor: index % 2 === 0 ? "#fff" : "#f2f2f2",
-                      fontFamily: "iranYekan",
-                    }}
+            {rows.length > 0 ? (
+              rows.map((row, index) => (
+                <TableRow
+                  key={index}
+                  sx={{
+                    backgroundColor: index % 2 === 0 ? "#fff" : "#f2f2f2",
+                    fontFamily: "iranYekan",
+                  }}
+                >
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {toFarsiNumber(row?.code)}
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {toFarsiNumber(row?.username)}
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {toFarsiNumber(row?.national_code)}
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
+                    {toFarsiNumber(row.first_name)}{" "}
+                    {toFarsiNumber(row.last_name)}
+                  </TableCell>
+                  <ChnageDate date={row?.date_joined} />
+                  <TableCell
+                    align="center"
+                    sx={{ fontFamily: "iranYekan", justifyItems: "center" }}
                   >
-                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {toFarsiNumber(row.code)}
-                    </TableCell>
-                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {toFarsiNumber(row.username)}
-                    </TableCell>
-                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {toFarsiNumber(row.nationalCode)}
-                    </TableCell>
-                    <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {toFarsiNumber(row.fullName)}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ fontFamily: "iranYekan", justifyItems: "center" }}
+                    {Array.isArray(row.type) && row.type.length > 0
+                      ? row.type.map((t) => t.type).join(" / ")
+                      : "Invalid data"}
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontFamily: "iranYekan", justifyItems: "center" }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "1rem",
+                      }}
                     >
-                      {toFarsiNumber(row.lastLogin)}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ fontFamily: "iranYekan", justifyItems: "center" }}
-                    >
-                      {toFarsiNumber(row.role)}
-                    </TableCell>
-                    <TableCell
-                      sx={{ fontFamily: "iranYekan", justifyItems: "center" }}
-                    >
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "1rem",
+                      <button
+                        className={styles.btn_protect}
+                        onClick={() => handleEditClick(row)}
+                      >
+                        <FontAwesomeIcon icon={faPen} size="24" />
+                      </button>
+                      <button
+                        className={styles.btn_protect}
+                        onClick={() => {
+                          setTypeModal(3);
+                          setShowModal(true);
+                          setId(row?.id);
                         }}
                       >
-                        <button
-                          className={styles.btn_protect}
-                          onClick={() => {
-                            setTypeModal(3);
-                            setShowModal(true);
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faKey} size="24" />
-                        </button>
-                        <button
-                          className={styles.btn_protect}
-                          onClick={() => {
-                            setTypeModal(2);
-                            setShowModal(true);
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faShield} size="24" />
-                        </button>
-                      </div>
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ fontFamily: "iranYekan", justifyItems: "center" }}
-                    >
-                      <ToggleSwitch />
-                    </TableCell>
-                  </TableRow>
-                ))
+                        <FontAwesomeIcon icon={faKey} size="24" />
+                      </button>
+                      <button
+                        className={styles.btn_protect}
+                        onClick={() => {
+                          setTypeModal(2);
+                          setShowModal(true);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faShield} size="24" />
+                      </button>
+                    </div>
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ fontFamily: "iranYekan", justifyItems: "center" }}
+                  >
+                    <ToggleSwitch
+                      value={row.status}
+                      handleChange={(e) =>
+                        handleStatusChange(row.id, e.target.checked)
+                      }
+                      name={`status-${row.id}`}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))
             ) : (
               <></>
             )}
           </TableCustom>
         </div>
       </div>
+      <ToastContainerCustom />
     </>
   );
-}
-
-{
-  /* <p className="error">{errors.markCode}</p> */
 }

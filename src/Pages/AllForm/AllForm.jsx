@@ -385,7 +385,7 @@ export default function AllForm() {
                       {toFarsiNumber(row?.car_model)}
                     </TableCell>
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                      {row?.chassis_number}
+                      {toFarsiNumber(row?.chassis_number)}
                     </TableCell>
                     <ChnageDate date={row?.admission_date} />
                     <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
