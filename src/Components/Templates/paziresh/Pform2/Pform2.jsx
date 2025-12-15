@@ -381,7 +381,7 @@ export default function Pform2({
       let response;
       if (editMode && form2) {
         response = await apiClient.put(
-          `/app/fill-customer-and-parts/${idForm ? idForm : formId}`,
+          `/app/fill-customer-and-parts/${form2Data?.id}`,
           sanitizedForm
         );
       } else {

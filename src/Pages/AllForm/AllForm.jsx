@@ -87,7 +87,6 @@ export default function AllForm() {
         });
 
         if (response.status === 200) {
-          console.log(response.data.results);
           setInformation(response.data.results || []);
           setTotalRows(response.data.count || 0);
         }

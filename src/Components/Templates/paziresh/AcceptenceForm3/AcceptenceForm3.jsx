@@ -191,8 +191,6 @@ function AcceptenceForm3({
     }
 
     if (fromExpertReferral) {
-      console.log(fromExpertReferral);
-      console.log(dataform3.invoiceItems);
       if (
         !dataform3.invoiceItems.length ||
         dataform3.invoiceItems.some((item) => {
@@ -322,7 +320,7 @@ function AcceptenceForm3({
     if (fromExpertReferral) {
       selectedData.referral_to_an_expert = "expert approve";
     }
-    const submitMethod = fromExpertReferral ? "put" : "post";
+    const submitMethod = fromExpertReferral === true ? "put" : "post";
     if (
       selectedData.referral_to_an_expert === "normal" ||
       selectedData.referral_to_an_expert === "expert approve"
@@ -350,8 +348,6 @@ function AcceptenceForm3({
       });
 
       if (hasInvalidInvoiceItems) {
-        console.log(selectedData.tableForm);
-        console.log(selectedData.referral_to_an_expert);
         errorMessage(
           "لطفاً تمام فیلدهای آیتم‌های فاکتور را به‌درستی وارد کنید (قیمت نباید منفی باشد)."
         );
@@ -369,10 +365,10 @@ function AcceptenceForm3({
       if (response.status === 200) {
         successMessage(
           selectedData?.referral_to_an_expert === "normal"
-            ? "اطلاعات با موفقیت ارسال شد."
-            : selectedData.referral_to_an_expert === "expert approve"
+            ? "فرم با موفقیت ارسال شد"
+            : selectedData?.referral_to_an_expert === "expert approve"
             ? "فرم با موفقیت تایید شد"
-            : "اطلاعات با موفقیت ارجاع داده شد منتظر تایید کارشناس باشید"
+            : ""
         );
         selectedData?.referral_to_an_expert === "normal" && nextTab();
         selectedData?.referral_to_an_expert === "expert approve" &&
@@ -386,17 +382,18 @@ function AcceptenceForm3({
   };
 
   const postForm3Toexpert = async () => {
+    const formPayload = { ...selectedData };
+    delete formPayload.referral_to_an_expert;
     setLoading(true);
 
     try {
       const response = await apiClient.post(
-        `app/form/${idForm ? idForm : formId}/referral-to-expert/`
+        `app/form/${idForm ? idForm : formId}/referral-to-expert/`,
+        formPayload
       );
 
       if (response.status === 200) {
-        selectedData.referral_to_an_expert = "referral to an expert";
-        selectedData.referral_date = new Date().toISOString().split("T")[0];
-        postForm3Data();
+        successMessage("فرم با موفقیت به کارشناس ارجاع داده شد");
       }
     } catch (error) {
       errorMessage(error?.response?.message || "خطا در ارسال داده‌ها");
@@ -648,7 +645,6 @@ function AcceptenceForm3({
         errorMessage("خطا در ثبت برنامه تعمیرکار");
       }
     } catch (error) {
-      console.error(error);
       errorMessage("خطا در ثبت برنامه تعمیرکار");
     } finally {
       setAssignLoading(false);

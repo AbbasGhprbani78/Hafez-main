@@ -6,7 +6,11 @@ import Pform2 from "../../Components/Templates/paziresh/Pform2/Pform2";
 import AcceptenceForm3 from "../../Components/Templates/paziresh/AcceptenceForm3/AcceptenceForm3";
 import Pform4 from "../../Components/Templates/paziresh/Pform4/Pform4";
 import Header from "../../Components/Modules/Header/Header";
-import { ToastContainerCustom } from "../../Components/Modules/Toast/ToastCustom";
+import {
+  errorMessage,
+  successMessage,
+  ToastContainerCustom,
+} from "../../Components/Modules/Toast/ToastCustom";
 import Grid from "@mui/material/Grid2";
 import { MyContext } from "../../context/context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,6 +23,7 @@ export default function Paziresh() {
   const [formId, setFormId] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [allDataForms, setAllDataForms] = useState({});
+  const [loading, setLoading] = useState(false);
   const { currentTab, setCurrentTab, idForm, setIdForm } =
     useContext(MyContext);
 
@@ -60,7 +65,7 @@ export default function Paziresh() {
   const getDataEditForms = async () => {
     try {
       const response = await apiClient.get(
-        `/app/get-full-complated-form/${idForm ? idForm : formId}`
+        `/app/get-full-complated-form/${idForm ? idForm : formId}/`
       );
       if (response.status === 200) {
         setAllDataForms(response.data);
@@ -71,15 +76,20 @@ export default function Paziresh() {
   };
 
   const confirmFromHandler = async () => {
+    setLoading(true);
     try {
       const response = await apiClient.post(
         `/app/forms-update-step-reception-desk/${idForm ? idForm : formId}`
       );
       if (response.status == 200) {
+        successMessage("فرم با موفقیت تکمیل و تایید شد");
         navigate("/repairsall");
       }
     } catch (error) {
       console.log(error);
+      errorMessage("خطا در تایید فرم");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -181,31 +191,33 @@ export default function Paziresh() {
           </div>
         </Grid>
 
-        {currentTab === 4 && (
-          <div className="no-print confirmation-btns">
-            <button
-              className="edit-btn confirmation-btn "
-              onClick={() => setCurrentTab(3)}
-            >
-              قبلی
-              <FontAwesomeIcon icon={faPen} className={`penicon`} />
-            </button>
-            <button
-              className="print-btn confirmation-btn"
-              onClick={() => window.print()}
-            >
-              پرینت
-              <FontAwesomeIcon icon={faPrint} />
-            </button>
-            <button
-              className="print-btn confirmation-btn"
-              onClick={confirmFromHandler}
-            >
-              تایید
-              <FontAwesomeIcon icon={faPrint} />
-            </button>
-          </div>
-        )}
+        {currentTab === 4 &&
+          allDataForms?.customer_form?.step_form === "three" && (
+            <div className="no-print confirmation-btns">
+              <button
+                className="edit-btn confirmation-btn "
+                onClick={() => setCurrentTab(3)}
+              >
+                قبلی
+                <FontAwesomeIcon icon={faPen} className={`penicon`} />
+              </button>
+              <button
+                className="print-btn confirmation-btn"
+                onClick={() => window.print()}
+              >
+                پرینت
+                <FontAwesomeIcon icon={faPrint} />
+              </button>
+              <button
+                className="print-btn confirmation-btn"
+                onClick={confirmFromHandler}
+                disabled={loading}
+              >
+                {loading ? "درحال تایید" : "تایید"}
+                <FontAwesomeIcon icon={faPrint} />
+              </button>
+            </div>
+          )}
       </div>
     </Grid>
   );
