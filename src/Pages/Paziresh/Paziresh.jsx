@@ -185,39 +185,42 @@ export default function Paziresh() {
             style={{
               display: currentTab === 4 ? "block" : "none",
               width: "100%",
+              marginBottom: "1.5rem",
             }}
           >
             <Pform4 />
           </div>
         </Grid>
-
-        {currentTab === 4 &&
-          allDataForms?.customer_form?.step_form === "three" && (
-            <div className="no-print confirmation-btns">
-              <button
-                className="edit-btn confirmation-btn "
-                onClick={() => setCurrentTab(3)}
-              >
-                قبلی
-                <FontAwesomeIcon icon={faPen} className={`penicon`} />
-              </button>
-              <button
-                className="print-btn confirmation-btn"
-                onClick={() => window.print()}
-              >
-                پرینت
-                <FontAwesomeIcon icon={faPrint} />
-              </button>
-              <button
-                className="print-btn confirmation-btn"
-                onClick={confirmFromHandler}
-                disabled={loading}
-              >
-                {loading ? "درحال تایید" : "تایید"}
-                <FontAwesomeIcon icon={faPrint} />
-              </button>
-            </div>
-          )}
+        {!(
+          (currentTab === 4 &&
+            allDataForms?.customer_form?.step_form !== "reception desk") ||
+          allDataForms?.customer_form?.step_form !== "done"
+        ) && (
+          <div className="no-print confirmation-btns">
+            <button
+              className="edit-btn confirmation-btn"
+              onClick={() => setCurrentTab(3)}
+            >
+              قبلی
+              <FontAwesomeIcon icon={faPen} className="penicon" />
+            </button>
+            <button
+              className="print-btn confirmation-btn"
+              onClick={() => window.print()}
+            >
+              پرینت
+              <FontAwesomeIcon icon={faPrint} />
+            </button>
+            <button
+              className="print-btn confirmation-btn"
+              onClick={confirmFromHandler}
+              disabled={loading}
+            >
+              {loading ? "درحال تایید" : "تایید"}
+              <FontAwesomeIcon icon={faPrint} />
+            </button>
+          </div>
+        )}
       </div>
     </Grid>
   );

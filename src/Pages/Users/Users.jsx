@@ -29,26 +29,6 @@ import {
 import { ChnageDate } from "../../Components/Modules/ChnageDate/ChnageDate";
 import MultipleSelectCheckmarks from "../../Components/Modules/MultipleSelectCheckmarks/MultipleSelectCheckmarks";
 
-const permissions = [
-  {
-    label: "گزارشات",
-    value: "reports",
-    children: [
-      { label: "گزارش فروش", value: "salesReport" },
-      { label: "گزارش کاربران", value: "usersReport" },
-      { label: "گزارش مالی", value: "financeReport" },
-    ],
-  },
-  {
-    label: "مدیریت کاربران",
-    value: "userManagement",
-    children: [
-      { label: "افزودن کاربر", value: "addUser" },
-      { label: "ویرایش کاربر", value: "editUser" },
-    ],
-  },
-];
-
 export default function Users() {
   const columns = [
     "کد",
@@ -72,6 +52,8 @@ export default function Users() {
   const [id, setId] = useState("");
   const rowsPerPage = 6;
   const [loading, setLoading] = useState(false);
+  const [permissionsData, setPermissionsData] = useState([]);
+  const [permissionUserId, setPermissionUserId] = useState(null);
 
   const specialtyOptions = [
     { value: 1, label: "تخصص 1" },
@@ -277,20 +259,20 @@ export default function Users() {
     setCheckedItems((prev) => {
       const newState = { ...prev };
 
-      if (item.children) {
-        const isChecked = !prev[item.value];
-        newState[item.value] = isChecked;
+      if (item.children && item.children.length > 0) {
+        const isChecked = !prev[item.id];
+        newState[item.id] = isChecked;
         item.children.forEach((child) => {
-          newState[child.value] = isChecked;
+          newState[child.id] = isChecked;
         });
       } else {
-        newState[item.value] = !prev[item.value];
+        newState[item.id] = !prev[item.id];
 
-        if (parent) {
+        if (parent && parent.children) {
           const allChecked = parent.children.every(
-            (child) => newState[child.value]
+            (child) => newState[child.id]
           );
-          newState[parent.value] = allChecked;
+          newState[parent.id] = allChecked;
         }
       }
 
@@ -298,8 +280,40 @@ export default function Users() {
     });
   };
 
-  const chnageAccess = (e) => {
+  const chnageAccess = async (e) => {
     e.preventDefault();
+
+    if (!permissionUserId) {
+      errorMessage("خطا: شناسه کاربر مشخص نشده است");
+      return;
+    }
+
+    const selectedPermissionIds = Object.keys(checkedItems)
+      .filter((key) => checkedItems[key])
+      .map((key) => parseInt(key));
+
+    setLoading(true);
+
+    try {
+      const response = await apiClient.put(`/user/users/${permissionUserId}/`, {
+        permission_ids: selectedPermissionIds,
+      });
+
+      if (response.status === 200) {
+        successMessage("دسترسی‌های کاربر با موفقیت به‌روزرسانی شد");
+        setShowModal(false);
+        setCheckedItems({});
+        setPermissionUserId(null);
+        getUsers();
+      }
+    } catch (error) {
+      console.error(error);
+      errorMessage(
+        error.response?.data?.message || "خطا در به‌روزرسانی دسترسی‌ها"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const changePassword = async (e) => {
@@ -408,10 +422,64 @@ export default function Users() {
     setShowModal(true);
   };
 
+  const handlePermissionsClick = async (row) => {
+    setTypeModal(2);
+    setPermissionUserId(row.id);
+    setCheckedItems({});
+    setShowModal(true);
+    await getUserPermissions(row.id);
+  };
+
+  const getPermissions = async () => {
+    try {
+      const response = await apiClient.get("/user/permissions/?tree=true");
+      if (response.status === 200) {
+        setPermissionsData(response.data || []);
+      }
+    } catch (error) {
+      errorMessage(error.response?.data?.message || "خطا در دریافت دسترسی ها");
+    }
+  };
+
+  const getUserPermissions = async (userId) => {
+    try {
+      const response = await apiClient.get(`/user/user-types/${userId}/`);
+      if (response.status === 200) {
+        const userPermissions = response.data?.permissions || [];
+        const permissionIds = userPermissions.map((p) =>
+          typeof p === "object" ? p.id : p
+        );
+
+        const initialChecked = {};
+        permissionIds.forEach((permId) => {
+          initialChecked[permId] = true;
+        });
+
+        if (permissionsData.length > 0) {
+          permissionsData.forEach((category) => {
+            if (category.children && category.children.length > 0) {
+              const allChildrenSelected = category.children.every((child) =>
+                permissionIds.includes(child.id)
+              );
+              if (allChildrenSelected) {
+                initialChecked[category.id] = true;
+              }
+            }
+          });
+        }
+
+        setCheckedItems(initialChecked);
+      }
+    } catch (error) {
+      console.error("Error fetching user permissions:", error);
+      setCheckedItems({});
+    }
+  };
+
   useEffect(() => {
     getRolls();
     getUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getPermissions();
   }, []);
 
   useEffect(() => {
@@ -619,39 +687,57 @@ export default function Users() {
           </>
         ) : typeModal === 2 ? (
           <form onSubmit={chnageAccess}>
-            <span
+            <div
               style={{
-                fontWeight: "600",
-                color: "var(--color-1)",
-                display: "inline-block",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                color: "var(--color-3)",
+                fontWeight: "medium",
                 marginBottom: "1rem",
               }}
             >
-              دسترسی کاربر:
-            </span>
-            {permissions.map((item) => (
-              <div key={item.value} style={{ marginTop: "1rem" }}>
-                <InputCheckBox
-                  value={item.value}
-                  checked={!!checkedItems[item.value]}
-                  text={item.label}
-                  onChange={() => handleCheck(item)}
-                  ismain={true}
-                />
-
-                <div>
-                  {item.children?.map((child) => (
-                    <InputCheckBox
-                      key={child.value}
-                      value={child.value}
-                      checked={!!checkedItems[child.value]}
-                      text={child.label}
-                      onChange={() => handleCheck(child, item)}
-                    />
-                  ))}
-                </div>
+              <span>تعریف دسترسی کاربر</span>
+              <div
+                className={styles.delete_icon_modal}
+                onClick={() => {
+                  setShowModal(false);
+                  setCheckedItems({});
+                  setPermissionUserId(null);
+                }}
+              >
+                <FontAwesomeIcon icon={faXmark} />
               </div>
-            ))}
+            </div>
+            {permissionsData.length > 0 ? (
+              permissionsData.map((item) => (
+                <div key={item.id} style={{ marginTop: "1rem" }}>
+                  <InputCheckBox
+                    value={item.id}
+                    checked={!!checkedItems[item.id]}
+                    text={item.display_name || item.name}
+                    onChange={() => handleCheck(item)}
+                    ismain={true}
+                  />
+
+                  <div style={{ marginRight: "2rem" }}>
+                    {item.children?.map((child) => (
+                      <InputCheckBox
+                        key={child.id}
+                        value={child.id}
+                        checked={!!checkedItems[child.id]}
+                        text={child.display_name || child.name}
+                        onChange={() => handleCheck(child, item)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p style={{ textAlign: "center", padding: "2rem" }}>
+                در حال بارگذاری دسترسی‌ها...
+              </p>
+            )}
             <div
               style={{
                 display: "flex",
@@ -662,11 +748,14 @@ export default function Users() {
                 marginTop: "2rem",
               }}
             >
-              <Button2 type="submit">ذخیره</Button2>
+              <Button2 type="submit" disabled={loading}>
+                {loading ? "در حال ذخیره..." : "ذخیره"}
+              </Button2>
               <Button2
                 onClick={() => {
                   setShowModal(false);
                   setCheckedItems({});
+                  setPermissionUserId(null);
                 }}
                 style={"btn_cancel"}
                 type="button"
@@ -1015,10 +1104,7 @@ export default function Users() {
                       </button>
                       <button
                         className={styles.btn_protect}
-                        onClick={() => {
-                          setTypeModal(2);
-                          setShowModal(true);
-                        }}
+                        onClick={() => handlePermissionsClick(row)}
                       >
                         <FontAwesomeIcon icon={faShield} size="24" />
                       </button>

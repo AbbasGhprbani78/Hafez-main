@@ -517,11 +517,18 @@ function AcceptenceForm3({
           })
         );
 
-        setSelectedData({
+        const referralValue =
+          rest?.referral_to_an_expert ??
+          selectedData.referral_to_an_expert ??
+          "normal";
+
+        setSelectedData((prev) => ({
+          ...prev,
           ...rest,
+          referral_to_an_expert: referralValue,
           tableForm: newTableForm,
           EstimatedRepairTime: miladiDate,
-        });
+        }));
       }
     } catch (error) {
       console.log(error);

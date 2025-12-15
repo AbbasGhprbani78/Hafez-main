@@ -93,7 +93,7 @@ export default function AllForm() {
       } else {
         let carStep = null;
         if (filter === 1) {
-          carStep = ["done"];
+          carStep = ["done", "reception desk"];
         } else if (filter === 2) {
           carStep = ["one", "two", "three"];
         } else if (filter === 3) {

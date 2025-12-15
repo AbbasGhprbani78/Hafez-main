@@ -9,7 +9,11 @@ import Attaches from "../../Components/Templates/Repairs/Attaches/Attaches";
 import Button2 from "../../Components/Modules/Button2/Button2";
 import { faCheck, faPrint } from "@fortawesome/free-solid-svg-icons";
 import Header from "../../Components/Modules/Header/Header";
-import { ToastContainerCustom } from "../../Components/Modules/Toast/ToastCustom";
+import {
+  errorMessage,
+  successMessage,
+  ToastContainerCustom,
+} from "../../Components/Modules/Toast/ToastCustom";
 import { useEffect, useState } from "react";
 import apiClient from "../../config/axiosConfig";
 import { useNavigate, useParams } from "react-router-dom";
@@ -68,7 +72,10 @@ export default function Repairs() {
       );
 
       if (response.status === 200) {
-        navigate("/repairsall");
+        successMessage("کارت با موفقیت بسته شد");
+        setTimeout(() => {
+          navigate("/repairsall");
+        }, 2000);
       }
     } catch (error) {
       console.log(error);

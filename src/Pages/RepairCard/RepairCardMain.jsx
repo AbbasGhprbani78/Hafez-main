@@ -221,7 +221,7 @@ function RepairCardMain() {
                       className="label_input"
                       style={{ marginBottom: ".3rem", display: "inline-block" }}
                     >
-                      از تاریخ فاکتور
+                      از تاریخ پذیرش
                     </label>
                     <DataInput value={startDate} onChange={setStartDate} />
                   </Grid>
@@ -230,7 +230,7 @@ function RepairCardMain() {
                       className="label_input"
                       style={{ marginBottom: ".3rem", display: "inline-block" }}
                     >
-                      تا تاریخ فاکتور
+                      تا تاریخ پذیرش
                     </label>
                     <DataInput value={endDate} onChange={setEndDate} />
                   </Grid>
@@ -272,8 +272,6 @@ function InfoTabel({
 }) {
   const columns = [
     " شماره پذیرش",
-    "شماره فاکتور",
-    "تاریخ فاکتور",
     "تاریخ پذیرش",
     "شماره شاسی",
     "کدملی",
@@ -339,10 +337,7 @@ function InfoTabel({
             <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
               {toFarsiNumber(row.admission_number)}
             </TableCell>
-            <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-              {toFarsiNumber(row.invoice_number)}
-            </TableCell>
-            <ChnageDate date={row.invoice_date} />
+
             <ChnageDate date={row.admission_date} />
             <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
               {row.chassis_number}
@@ -376,3 +371,7 @@ function InfoTabel({
 }
 
 export default RepairCardMain;
+
+{
+  /* <ChnageDate date={row.invoice_date} />*/
+}
