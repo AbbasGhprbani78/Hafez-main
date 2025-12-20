@@ -2,16 +2,29 @@
   border-radius: 100px;
   width: 102px;
   padding: 8px;
+  font-family: "iranYekan";
 }
-.status_one {
+.status_pending {
   color: #28b2c8;
   background-color: #d5f0f4;
 }
-.status_two {
+
+.status_in_progress {
   color: #ffc900;
   background-color: #f5eac2;
 }
-.status_three {
+
+.status_completed {
   color: #629d89;
   background-color: #e0ebe7;
+}
+
+.status_cancelled {
+  color: #e74c3c;
+  background-color: #fadbd8;
+}
+
+.status_on_hold {
+  color: #8e44ad;
+  background-color: #ebdef0;
 }

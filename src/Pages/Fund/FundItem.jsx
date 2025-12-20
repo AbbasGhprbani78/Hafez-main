@@ -30,7 +30,6 @@ export default function FundItem() {
     try {
       const response = await apiClient.get(`app/invoice/${id}/`);
       if (response.status === 200) {
-        console.log(response.data);
         setFund(response.data);
       }
     } catch (error) {
@@ -45,11 +44,11 @@ export default function FundItem() {
         invoice_number: fund?.admission_info.invoice_number,
       });
       if (response.status === 200) {
-        successMessage("پذیرش با موفقیت تایید شد.");
+        successMessage("فاکتور با موفقیت تایید شد.");
       }
     } catch (error) {
       console.log(error);
-      errorMessage(error.response?.data?.error || "خطا در تایید پذیرش.");
+      errorMessage(error.response?.data?.error || "خطا در تایید فاکتور.");
     } finally {
       setLoading(false);
     }

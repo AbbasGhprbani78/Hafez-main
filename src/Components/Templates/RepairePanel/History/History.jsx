@@ -11,9 +11,11 @@ export default function History({ history = [] }) {
         <span>سوابق</span>
       </div>
       <div className={styles.wrapper_history}>
-        {history?.map((item) => (
-          <HistoryItem item={item} key={item?.id} />
-        ))}
+        {history?.length > 0 ? (
+          history?.map((item) => <HistoryItem item={item} key={item?.id} />)
+        ) : (
+          <p>هیچ سابقه ای وجود ندارد !</p>
+        )}
       </div>
     </div>
   );

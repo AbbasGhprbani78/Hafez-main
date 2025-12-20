@@ -6,18 +6,34 @@ export default function BoxCard({
   children,
   icon,
   title,
-  isLink = false,
   link = "",
   iscenter = false,
 }) {
+  const titleSection = link ? (
+    <Link
+      to={link}
+      style={{
+        textDecoration: "none",
+        color: "inherit",
+        display: "flex",
+        gap: "10px",
+      }}
+    >
+      <FontAwesomeIcon icon={icon} />
+      <span>{title}</span>
+    </Link>
+  ) : (
+    <>
+      <FontAwesomeIcon icon={icon} />
+      <span>{title}</span>
+    </>
+  );
+
   return (
-    <div style={{ textDecoration: "none", color: "inherit" }}>
-      <div className={styles.wrapper}>
-        <div className={styles.title}>
-          <FontAwesomeIcon icon={icon} />
-          <span>{title}</span>
-        </div>
-        <div className={iscenter && styles.btn_wrapper}>{children}</div>
+    <div className={styles.wrapper}>
+      <div className={styles.title}>{titleSection}</div>
+      <div className={iscenter ? styles.btn_wrapper : undefined}>
+        {children}
       </div>
     </div>
   );

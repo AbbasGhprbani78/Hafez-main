@@ -1,5 +1,4 @@
 import styles from "./TitleWithSearch.module.css";
-import Button2 from "../Button2/Button2";
 import {
   faArrowLeft,
   faMagnifyingGlass,
@@ -10,7 +9,7 @@ export default function TitleWithSearch({
   searchInput,
   onChange,
   title,
-  isbackButton = true,
+  isbackButton = false,
   placeholder = "جستوجو",
 }) {
   return (

@@ -6,29 +6,34 @@ import Chart from "../../Components/Modules/Chart/Chart";
 import { faBoxArchive, faUsers } from "@fortawesome/free-solid-svg-icons";
 import Grid from "@mui/material/Grid2";
 import BoxCard from "../../Components/Modules/Box/Box";
-import { Box, TableCell, TableRow } from "@mui/material";
+import { Box } from "@mui/material";
 import { toFarsiNumber } from "../../utils/helper";
 import { useEffect, useState } from "react";
 import { errorMessage } from "../../Components/Modules/Toast/ToastCustom";
 import apiClient from "../../config/axiosConfig";
+import Modal from "../../Components/Modules/Modal/Modal";
+import notifItemStyles from "../../Components/Modules/NotificationItem/NtificationItem.module.css";
 import TableCustom from "../../Components/Modules/TableCustom/TableCustom";
+import { TableCell, TableRow } from "@mui/material";
+
 const columns = [
   "کد",
   "نام تعمیرکار",
   "تخصص تعمیرکار",
   "قابلیت زمانی تعمیرکار",
-  "زمان ازاد",
   "وضعیت",
 ];
+
 export default function Home() {
   const [data, setData] = useState("");
+  const [selectedNotif, setSelectedNotif] = useState(null);
+  const [showNotifModal, setShowNotifModal] = useState(false);
 
   const getDataHome = async () => {
     try {
       const response = await apiClient.get("app/api/home-stats/");
       if (response.status === 200) {
         setData(response.data);
-        console.log(response.data);
       }
     } catch (error) {
       errorMessage("خطا در دریافت داده‌ها");
@@ -38,6 +43,11 @@ export default function Home() {
   useEffect(() => {
     getDataHome();
   }, []);
+
+  const handleOpenNotif = (notif) => {
+    setSelectedNotif(notif);
+    setShowNotifModal(true);
+  };
   return (
     <>
       <div className="content-conatiner">
@@ -129,7 +139,10 @@ export default function Home() {
               </BoxCard>
             </div>
             <div className="home-item div4">
-              <Notifications notifications={data?.notifications || []} />
+              <Notifications
+                notifications={data?.notifications || []}
+                onOpenNotif={handleOpenNotif}
+              />
             </div>
             <div className="home-item div5">
               <Chart />
@@ -219,6 +232,34 @@ export default function Home() {
               </div>
             </div>
           </div>
+          <Modal showModal={showNotifModal} setShowModal={setShowNotifModal}>
+            {selectedNotif && (
+              <div onClick={(e) => e.stopPropagation()}>
+                <div
+                  onClick={() => setShowNotifModal(false)}
+                  style={{
+                    cursor: "pointer",
+                    textAlign: "right",
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  ×
+                </div>
+                <div className={notifItemStyles.modal_content}>
+                  <div className={notifItemStyles.modal_title}>
+                    {selectedNotif?.title}
+                  </div>
+                  <p className={notifItemStyles.modal_text}>
+                    {selectedNotif?.body ||
+                      selectedNotif?.description ||
+                      selectedNotif?.text ||
+                      "متن اعلان"}
+                  </p>
+                </div>
+              </div>
+            )}
+          </Modal>
         </div>
       </div>
     </>

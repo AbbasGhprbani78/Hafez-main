@@ -425,9 +425,29 @@ export default function Users() {
   const handlePermissionsClick = async (row) => {
     setTypeModal(2);
     setPermissionUserId(row.id);
-    setCheckedItems({});
+
+    const permissionIds =
+      row.permissions?.map((p) => (typeof p === "object" ? p.id : p)) || [];
+    const initialChecked = {};
+    permissionIds.forEach((permId) => {
+      initialChecked[permId] = true;
+    });
+
+    if (permissionsData.length > 0) {
+      permissionsData.forEach((category) => {
+        if (category.children && category.children.length > 0) {
+          const allChildrenSelected = category.children.every((child) =>
+            permissionIds.includes(child.id)
+          );
+          if (allChildrenSelected) {
+            initialChecked[category.id] = true;
+          }
+        }
+      });
+    }
+
+    setCheckedItems(initialChecked);
     setShowModal(true);
-    await getUserPermissions(row.id);
   };
 
   const getPermissions = async () => {
@@ -438,41 +458,6 @@ export default function Users() {
       }
     } catch (error) {
       errorMessage(error.response?.data?.message || "خطا در دریافت دسترسی ها");
-    }
-  };
-
-  const getUserPermissions = async (userId) => {
-    try {
-      const response = await apiClient.get(`/user/user-types/${userId}/`);
-      if (response.status === 200) {
-        const userPermissions = response.data?.permissions || [];
-        const permissionIds = userPermissions.map((p) =>
-          typeof p === "object" ? p.id : p
-        );
-
-        const initialChecked = {};
-        permissionIds.forEach((permId) => {
-          initialChecked[permId] = true;
-        });
-
-        if (permissionsData.length > 0) {
-          permissionsData.forEach((category) => {
-            if (category.children && category.children.length > 0) {
-              const allChildrenSelected = category.children.every((child) =>
-                permissionIds.includes(child.id)
-              );
-              if (allChildrenSelected) {
-                initialChecked[category.id] = true;
-              }
-            }
-          });
-        }
-
-        setCheckedItems(initialChecked);
-      }
-    } catch (error) {
-      console.error("Error fetching user permissions:", error);
-      setCheckedItems({});
     }
   };
 

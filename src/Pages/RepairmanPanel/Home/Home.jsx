@@ -27,6 +27,7 @@ export default function Home() {
   useEffect(() => {
     getDataHome();
   }, []);
+
   return (
     <div className={styles.parent}>
       <div className={`${styles.div1} ${styles.box}`}>

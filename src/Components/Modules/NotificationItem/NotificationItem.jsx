@@ -1,18 +1,18 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import styles from "./NtificationItem.module.css";
-import { faUser, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { errorMessage } from "../Toast/ToastCustom";
 import apiClient from "../../../config/axiosConfig";
-import Modal from "../Modal/Modal";
 
-export default function NotificationItem({ notif }) {
+export default function NotificationItem({ notif, onOpenNotif }) {
   const [isRead, setIsRead] = useState(Boolean(notif?.is_read));
-  const [showModal, setShowModal] = useState(false);
 
   const openNotif = async () => {
-    setShowModal(true);
+    if (onOpenNotif) {
+      onOpenNotif(notif);
+    }
 
     if (!isRead) {
       try {
@@ -33,27 +33,6 @@ export default function NotificationItem({ notif }) {
         <FontAwesomeIcon icon={faUser} />
         <span className={styles.notif_title}>{notif?.title}</span>
       </div>
-      <Modal showModal={showModal} setShowModal={() => setShowModal(false)}>
-        <div onClick={(e) => e.stopPropagation()}>
-          <div
-            onClick={() => setShowModal(false)}
-            style={{
-              cursor: "pointer",
-              textAlign: "right",
-              fontSize: "20px",
-              fontWeight: "bold",
-            }}
-          >
-            <FontAwesomeIcon icon={faXmark} />
-          </div>
-          <div className={styles.modal_content}>
-            <div className={styles.modal_title}>{notif?.title}</div>
-            <p className={styles.modal_text}>
-              {notif?.body || notif?.description || notif?.text || "متن اعلان"}
-            </p>
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 }
@@ -67,4 +46,5 @@ NotificationItem.propTypes = {
     description: PropTypes.string,
     text: PropTypes.string,
   }).isRequired,
+  onOpenNotif: PropTypes.func,
 };

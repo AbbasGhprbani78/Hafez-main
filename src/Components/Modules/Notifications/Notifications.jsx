@@ -2,8 +2,9 @@ import styles from "./Notification.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import NotificationItem from "../NotificationItem/NotificationItem";
+import PropTypes from "prop-types";
 
-export default function Notifications({ notifications = [] }) {
+export default function Notifications({ notifications = [], onOpenNotif }) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.title}>
@@ -13,7 +14,11 @@ export default function Notifications({ notifications = [] }) {
       <div className={styles.notifications_wrapper}>
         {notifications.length > 0 ? (
           notifications.map((notif) => (
-            <NotificationItem key={notif?.id} notif={notif} />
+            <NotificationItem
+              key={notif?.id}
+              notif={notif}
+              onOpenNotif={onOpenNotif}
+            />
           ))
         ) : (
           <>
@@ -24,3 +29,8 @@ export default function Notifications({ notifications = [] }) {
     </div>
   );
 }
+
+Notifications.propTypes = {
+  notifications: PropTypes.arrayOf(PropTypes.object),
+  onOpenNotif: PropTypes.func,
+};

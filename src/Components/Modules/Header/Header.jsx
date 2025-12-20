@@ -1,13 +1,15 @@
 import styles from "./Header.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAlignRight, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ResponsiveExample from "../Offcanvas/OffcanvasMenu";
 import Button2 from "../Button2/Button2";
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { MyContext } from "../../../context/context";
 export default function Header({ title, isPanel, routes }) {
   const [isShowSideBar, setIsShowSideBar] = useState(false);
+  const { userInfo } = useContext(MyContext);
   const navigate = useNavigate();
   return (
     <>
@@ -32,15 +34,12 @@ export default function Header({ title, isPanel, routes }) {
           >
             {title}
           </Typography>
-          {/* <div className={styles.logo_wrapper}>
-            <img src="/image/1.svg" alt="logo" />
-          </div> */}
           {isPanel ? (
             <div className={styles.profile_header}>
               <div className={styles.profile_image_wrapper}>
                 <img src="/public/image/4.png" alt="image profile" />
               </div>
-              <span className={styles.name_porfile}>عباس قربانی</span>
+              <span className={styles.name_porfile}>{userInfo?.full_name}</span>
             </div>
           ) : (
             <div className={styles.header_btn_wrapper}>

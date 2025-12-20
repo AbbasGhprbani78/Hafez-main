@@ -15,50 +15,6 @@ import { Button } from "react-bootstrap";
 import Button3 from "../../../Modules/Button3/Button3";
 import { ChnageDate } from "../../../Modules/ChnageDate/ChnageDate";
 
-const rows = [
-  {
-    id: 1,
-    carModel: "پراید 131",
-    repairStatus: "در حال بررسی",
-    receiveDate: "1403/04/10",
-    hasTicket: true,
-  },
-  {
-    id: 2,
-    carModel: "سمند LX",
-    repairStatus: "در حال تعمیر",
-    receiveDate: "1403/04/12",
-    hasTicket: false,
-  },
-  {
-    id: 3,
-    carModel: "دنا پلاس",
-    repairStatus: "تعمیر کامل",
-    receiveDate: "1403/04/15",
-    hasTicket: true,
-  },
-  {
-    id: 1,
-    carModel: "پراید 131",
-    repairStatus: "در حال بررسی",
-    receiveDate: "1403/04/10",
-    hasTicket: true,
-  },
-  {
-    id: 2,
-    carModel: "سمند LX",
-    repairStatus: "در حال تعمیر",
-    receiveDate: "1403/04/12",
-    hasTicket: false,
-  },
-  {
-    id: 3,
-    carModel: "دنا پلاس",
-    repairStatus: "تعمیر کامل",
-    receiveDate: "1403/04/15",
-    hasTicket: true,
-  },
-];
 export default function Table({ pendingTask = [] }) {
   return (
     <div className={styles.wrapper}>
@@ -101,63 +57,73 @@ export default function Table({ pendingTask = [] }) {
               >
                 ارسال تیکت
               </TableCell> */}
-              <TableCell
+              {/* <TableCell
                 align="center"
                 sx={{ fontFamily: "iranYekan", fontWeight: "bold" }}
               >
                 عملیات
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
-            {pendingTask?.map((row) => (
-              <TableRow key={row?.id}>
-                <TableCell
-                  align="center"
-                  sx={{ fontFamily: "iranYekan", padding: "5px" }}
-                >
-                  {toFarsiNumber(row?.model)}
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    fontFamily: "iranYekan",
-                    justifyItems: "center",
-                    padding: "5px",
-                  }}
-                >
-                  <div className={styles.status}>{row?.status}</div>
-                </TableCell>
-                <ChnageDate date={row?.admission_date} />
-
-                {/* <TableCell
-                  align="center"
-                  sx={{
-                    fontFamily: "iranYekan",
-                    justifyItems: "center",
-                    padding: "5px",
-                  }}
-                >
-                  <Button3 icon={faComments} onClick={""} />
-                </TableCell> */}
-                <TableCell
-                  align="center"
-                  sx={{
-                    fontFamily: "iranYekan",
-                    justifyItems: "center",
-                    padding: "5px",
-                  }}
-                >
-                  <Button
-                    className={`view_btn`}
-                    variant="contained"
-                    onClick={""}
+            {pendingTask.length > 0 ? (
+              pendingTask?.map((row) => (
+                <TableRow key={row?.id}>
+                  <TableCell
+                    align="center"
+                    sx={{ fontFamily: "iranYekan", padding: "5px" }}
                   >
-                    مشاهده
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+                    {toFarsiNumber(row?.model)}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      fontFamily: "iranYekan",
+                      justifyItems: "center",
+                      padding: "5px",
+                    }}
+                  >
+                    <div className={styles.status}>{row?.status}</div>
+                  </TableCell>
+                  <ChnageDate date={row?.admission_date} />
+
+                  {/* <TableCell
+                    align="center"
+                    sx={{
+                      fontFamily: "iranYekan",
+                      justifyItems: "center",
+                      padding: "5px",
+                    }}
+                  >
+                    <Button3 icon={faComments} onClick={""} />
+                  </TableCell>  */}
+                  {/* <TableCell
+                    align="center"
+                    sx={{
+                      fontFamily: "iranYekan",
+                      justifyItems: "center",
+                      padding: "5px",
+                    }}
+                  >
+                    <Button
+                      className={`view_btn`}
+                      variant="contained"
+                      onClick={""}
+                    >
+                      مشاهده
+                    </Button>
+                  </TableCell> */}
+                </TableRow>
+              ))
+            ) : (
+              <p
+                style={{
+                  padding: "10px",
+                }}
+              >
+                هیچ تسکی وجود ندارد !
+              </p>
+            )}
           </TableBody>
         </MuiTable>
       </TableContainer>
