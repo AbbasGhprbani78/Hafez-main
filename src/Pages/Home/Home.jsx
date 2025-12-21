@@ -36,7 +36,7 @@ export default function Home() {
         setData(response.data);
       }
     } catch (error) {
-      errorMessage("خطا در دریافت داده‌ها");
+      console.log(error);
     }
   };
 

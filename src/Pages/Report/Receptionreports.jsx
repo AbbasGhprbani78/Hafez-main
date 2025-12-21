@@ -154,7 +154,7 @@ export default function Receptionreports() {
             vin: item?.second_form?.chassis_number || "-",
             color: item.second_form?.color || "-",
             plate: item.second_form?.license_plate_number || "-",
-            mileage: item.second_form?.mileage || "-",
+            mileage: item.second_form?.car_km_text || "-",
           },
           customerInfo: {
             name: `${item.owner_first_name || ""} ${
@@ -165,7 +165,7 @@ export default function Receptionreports() {
             deliveryTime: item.duration_estimated || "-",
           },
           services: item.type_of_service?.map((s) => s.name) || [],
-          hall: item.salon?.name || "-",
+          hall: item?.salon || "-",
           estimate: {
             time: item.salon?.time || "-",
             cost: item.salon?.cost || "-",
@@ -175,7 +175,8 @@ export default function Receptionreports() {
           stopTime: item.stay_in_salon_hours || "-",
           preInvoiceTime: item.pre_invoice_time_hours || "-",
           totalTime: item.total_time_hours || "-",
-          status: item.status_display || "-",
+          status: item.status || "-",
+          status_display: item.status_display || "-",
         }));
 
         setRows(mappedRows);
@@ -423,12 +424,48 @@ export default function Receptionreports() {
               <TableCell
                 align="center"
                 sx={{
-                  color: "#333",
-                  fontWeight: "bold",
+                  display: "flex",
+                  justifyContent: "center",
                   fontFamily: "iranYekan",
+                  padding: "19px",
                 }}
               >
-                {toFarsiNumber(row.status)}
+                <div
+                  className={`${styles.status_btn} ${
+                    row.status === "done" ||
+                    row.status === "repair card" ||
+                    row.status === "repair_card" ||
+                    row.status === "reception desk" ||
+                    row.status === "reception_desk"
+                      ? styles.status_none
+                      : ["one", "two", "three"].includes(row.status)
+                      ? styles.status_one
+                      : row.status === "awaiting expert approval" ||
+                        row.status === "awaiting_expert_approval"
+                      ? styles.status_three
+                      : row.status === "expert confirmation" ||
+                        row.status === "expert_confirmation"
+                      ? styles.status_four
+                      : styles.status_default
+                  }`}
+                >
+                  {{
+                    done: "اتمام پذیرش",
+                    one: "ناتمام",
+                    two: "ناتمام",
+                    three: "ناتمام",
+                    "expert confirmation": "تایید کارشناس",
+                    expert_confirmation: "تایید کارشناس",
+                    "awaiting expert approval": "در انتظار تایید کارشناس",
+                    awaiting_expert_approval: "در انتظار تایید کارشناس",
+                    "repair card": "اتمام پذیرش",
+                    repair_card: "اتمام پذیرش",
+                    "reception desk": "اتمام پذیرش",
+                    reception_desk: "اتمام پذیرش",
+                  }[row.status] ??
+                    row.status_display ??
+                    "نامشخص"}
+                </div>
               </TableCell>
             </TableRow>
           ))}

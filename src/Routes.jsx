@@ -11,6 +11,7 @@ import FundItem from "./Pages/Fund/FundItem";
 import RepairCardMain from "./Pages/RepairCard/RepairCardMain";
 import ManagementStatus from "./Pages/ManagementStatus/ManagementStatus";
 import PRepairmanPrivate from "./Components/Modules/Privates/PRepairmanPrivate";
+import NonRepairmanPrivate from "./Components/Modules/Privates/NonRepairmanPrivate";
 import RepairManPanel from "./Pages/RepairmanPanel/Main";
 import PRepairIndex from "./Pages/RepairmanPanel/Home/Home";
 import RunningTasks from "./Pages/RepairmanPanel/RunningTasks/RunningTasks";
@@ -28,30 +29,184 @@ import WorkOfContractors from "./Pages/finance/WorkOfContractors";
 import Mangement from "./Pages/Managment/Managment";
 import ExpertReferralItem from "./Pages/ExpertReferralItem/ExpertReferralItem";
 const routes = [
-  { path: "/", element: <Home /> },
-  { path: "/draft", element: <Draft /> },
+  {
+    path: "/",
+    element: (
+      <NonRepairmanPrivate>
+        <Home />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/draft",
+    element: (
+      <NonRepairmanPrivate>
+        <Draft />
+      </NonRepairmanPrivate>
+    ),
+  },
   { path: "/signup", element: <SignUp /> },
-  { path: "/paziresh", element: <Paziresh /> },
+  {
+    path: "/paziresh",
+    element: (
+      <NonRepairmanPrivate>
+        <Paziresh />
+      </NonRepairmanPrivate>
+    ),
+  },
   { path: "/login", element: <Login /> },
-  { path: "/allform", element: <AllForm /> },
-  { path: "/repairs/:id", element: <Repairs /> },
-  { path: "/repairsall", element: <RepairCardMain /> },
-  { path: "/repairplan", element: <RepairPlan /> },
-  { path: "/fund", element: <Fund /> },
-  { path: "/fund/:id", element: <FundItem /> },
-  { path: "/arboretum", element: <Arboretum /> },
-  { path: "/report/reception-reports", element: <Receptionreports /> },
-  { path: "/report/customer-list", element: <CustomerList /> },
-  { path: "/report/customer-history", element: <CustomerHistory /> },
-  { path: "/warehouse/consumableparts", element: <Consumableparts /> },
-  { path: "/warehouse/consumptionofparts", element: <Consumptionofparts /> },
-  { path: "/finance/dailybilling", element: <DailyBilling /> },
-  { path: "/finance/workofcontractors", element: <WorkOfContractors /> },
-  { path: "/management/home", element: <Mangement /> },
-  { path: "/management/status", element: <ManagementStatus /> },
-  { path: "/account", element: <Account /> },
-  { path: "/users", element: <Users /> },
-  { path: "/expert-referral/:id", element: <ExpertReferralItem /> },
+  {
+    path: "/allform",
+    element: (
+      <NonRepairmanPrivate>
+        <AllForm />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/repairs/:id",
+    element: (
+      <NonRepairmanPrivate>
+        <Repairs />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/repairsall",
+    element: (
+      <NonRepairmanPrivate>
+        <RepairCardMain />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/repairplan",
+    element: (
+      <NonRepairmanPrivate>
+        <RepairPlan />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/fund",
+    element: (
+      <NonRepairmanPrivate>
+        <Fund />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/fund/:id",
+    element: (
+      <NonRepairmanPrivate>
+        <FundItem />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/arboretum",
+    element: (
+      <NonRepairmanPrivate>
+        <Arboretum />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/reports/reception-reports",
+    element: (
+      <NonRepairmanPrivate>
+        <Receptionreports />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/reports/customer-list",
+    element: (
+      <NonRepairmanPrivate>
+        <CustomerList />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/reports/customer-history",
+    element: (
+      <NonRepairmanPrivate>
+        <CustomerHistory />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/warehouse/consumableparts",
+    element: (
+      <NonRepairmanPrivate>
+        <Consumableparts />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/warehouse/consumptionofparts",
+    element: (
+      <NonRepairmanPrivate>
+        <Consumptionofparts />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/finance/dailybilling",
+    element: (
+      <NonRepairmanPrivate>
+        <DailyBilling />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/finance/workofcontractors",
+    element: (
+      <NonRepairmanPrivate>
+        <WorkOfContractors />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/management/home",
+    element: (
+      <NonRepairmanPrivate>
+        <Mangement />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/management/status",
+    element: (
+      <NonRepairmanPrivate>
+        <ManagementStatus />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/account",
+    element: (
+      <NonRepairmanPrivate>
+        <Account />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/users",
+    element: (
+      <NonRepairmanPrivate>
+        <Users />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/expert-referral/:id",
+    element: (
+      <NonRepairmanPrivate>
+        <ExpertReferralItem />
+      </NonRepairmanPrivate>
+    ),
+  },
   {
     path: "/p-repairman/*",
     element: (
@@ -65,8 +220,8 @@ const routes = [
       { path: "history", element: <History /> },
     ],
   },
-
-  // { path: "/expert-referral", element: <ExpertReferra /> },
 ];
 
 export default routes;
+
+// { path: "/expert-referral", element: <ExpertReferra /> },

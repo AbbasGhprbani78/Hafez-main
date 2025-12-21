@@ -27,7 +27,10 @@ export const MyProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getUserInfo();
+    const token = sessionStorage.getItem("access");
+    if (token && window.location.pathname !== "/login") {
+      getUserInfo();
+    }
   }, []);
   return (
     <MyContext.Provider

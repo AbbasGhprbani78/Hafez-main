@@ -117,7 +117,7 @@ export default function Managment() {
                           align="center"
                           sx={{ fontFamily: "iranYekan" }}
                         >
-                          {toFarsiNumber(item.timework)}
+                          {toFarsiNumber(item.work_time)}
                         </TableCell>
                         <TableCell
                           align="center"

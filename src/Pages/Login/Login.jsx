@@ -77,13 +77,16 @@ export default function Login() {
                       setSubmitting(false);
                       sessionStorage.setItem("access", response.data.access);
                       sessionStorage.setItem("refresh", response.data.refresh);
+                      sessionStorage.setItem(
+                        "type",
+                        JSON.stringify(response.data.type)
+                      );
                       localStorage.setItem("level", response?.data?.level);
                       if (response?.data?.level !== "one") {
-                        if (response.data.type[0] === "admin") {
-                          navigate("/");
-                        }
                         if (response.data.type[0] === "repairman") {
                           navigate("/p-repairman/");
+                        } else {
+                          navigate("/");
                         }
                       } else {
                         setIsShowActivityForm("one");

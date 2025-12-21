@@ -1,0 +1,67 @@
+
+permissions_tree
+: 
+[{id: 1, name: "Management", display_name: "مدیریت", category: "مدیریت", parent_id: null,…},…]
+0
+: 
+{id: 1, name: "Management", display_name: "مدیریت", category: "مدیریت", parent_id: null,…}
+category
+: 
+"مدیریت"
+children
+: 
+[{id: 4, name: "Account", display_name: "حساب", category: "مدیریت", parent_id: 1, children: []},…]
+0
+: 
+{id: 4, name: "Account", display_name: "حساب", category: "مدیریت", parent_id: 1, children: []}
+1
+: 
+{id: 2, name: "Management Dashboard", display_name: "داشبورد مدیریت", category: "مدیریت", parent_id: 1,…}
+2
+: 
+{id: 3, name: "Status", display_name: "وضیعیت ها", category: "مدیریت", parent_id: 1, children: []}
+3
+: 
+{id: 5, name: "Users", display_name: "کاربران", category: "مدیریت", parent_id: 1, children: []}
+display_name
+: 
+"مدیریت"
+id
+: 
+1
+name
+: 
+"Management"
+parent_id
+: 
+null
+1
+: 
+{id: 6, name: "Reports", display_name: "گزارشات", category: "گزارشات", parent_id: null,…}
+category
+: 
+"گزارشات"
+children
+: 
+[{id: 7, name: "Admission report", display_name: "گزارش پذیرش", category: "گزارشات", parent_id: 6,…},…]
+0
+: 
+{id: 7, name: "Admission report", display_name: "گزارش پذیرش", category: "گزارشات", parent_id: 6,…}
+1
+: 
+{id: 8, name: "Customer List", display_name: "لیست مشتریان", category: "گزارشات", parent_id: 6,…}
+2
+: 
+{id: 9, name: "Customer history", display_name: "سابقه مشتریان", category: "گزارشات", parent_id: 6,…}
+display_name
+: 
+"گزارشات"
+id
+: 
+6
+name
+: 
+"Reports"
+parent_id
+: 
+null

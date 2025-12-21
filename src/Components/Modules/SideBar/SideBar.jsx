@@ -35,9 +35,9 @@ export default function SideBar({
       label: "گزارشات",
       icon: faChartPie,
       subRoutes: [
-        { path: "/report/reception-reports", label: "گزارش پذیرش" },
-        { path: "/report/customer-list", label: "لیست مشتریان" },
-        { path: "/report/customer-history", label: "سابقه مشتریان" },
+        { path: "/reports/reception-reports", label: "گزارش پذیرش" },
+        { path: "/reports/customer-list", label: "لیست مشتریان" },
+        { path: "/reports/customer-history", label: "سابقه مشتریان" },
       ],
     },
     {
