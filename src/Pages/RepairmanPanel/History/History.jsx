@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import TitleWithSearch from "../../../Components/Modules/TitleWithSearch/TitleWithSearch";
 import { Box, TableCell, TableRow, Typography } from "@mui/material";
 import TableCustom from "../../../Components/Modules/TableCustom/TableCustom";
-import styles from "../RunningTasks/RunningTasks.module.css";
 import { errorMessage } from "../../../Components/Modules/Toast/ToastCustom";
 import apiClient from "../../../config/axiosConfig";
 import { ChnageDate } from "../../../Components/Modules/ChnageDate/ChnageDate";
@@ -221,28 +220,28 @@ export default function History() {
                 style={{ display: "flex", justifyContent: "center" }}
               >
                 <div
-                  className={`${styles.status_btn} ${
+                  className={`status_btn ${
                     row.status === "none"
-                      ? styles.status_none
+                      ? "status_none"
                       : row.status === "one"
-                      ? styles.status_one
+                      ? "status_one"
                       : row.status === "two"
-                      ? styles.status_two
+                      ? "status_two"
                       : row.status === "three"
-                      ? styles.status_three
+                      ? "status_three"
                       : row.status === "repair card"
-                      ? styles.status_repair_card
+                      ? "status_repair_card"
                       : row.status === "reception desk"
-                      ? styles.status_reception_desk
+                      ? "status_reception_desk"
                       : row.status === "done"
-                      ? styles.status_done
+                      ? "status_done"
                       : row.status === "cancelled"
-                      ? styles.status_cancelled
+                      ? "status_cancelled"
                       : row.status === "expert confirmation"
-                      ? styles.status_expert_confirmation
+                      ? "status_expert_confirmation"
                       : row.status === "awaiting expert approval"
-                      ? styles.status_awaiting_expert
-                      : styles.status_none // fallback
+                      ? "status_awaiting_expert"
+                      : "status_none" // fallback
                   }`}
                 >
                   {row.status === "none"

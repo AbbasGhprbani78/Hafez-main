@@ -39,6 +39,7 @@
   font-weight: bold;
   color: var(--color-3);
   margin-top: 2rem;
+  cursor: pointer;
 }
 @media (max-width: 768px) {
   .wrap_input {

@@ -6,7 +6,6 @@ import {
   toFarsiNumber,
 } from "../../utils/helper";
 import TableCustom from "../../Components/Modules/TableCustom/TableCustom";
-
 import { faBuilding, faHashtag } from "@fortawesome/free-solid-svg-icons";
 import Input from "../../Components/Modules/Input/Input";
 import Grid from "@mui/material/Grid2";

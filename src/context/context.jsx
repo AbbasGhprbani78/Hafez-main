@@ -15,7 +15,6 @@ export const MyProvider = ({ children }) => {
     try {
       const response = await apiClient("user/profile/me/");
       if (response.status === 200) {
-        console.log(response.data);
         setUserInfo(response.data);
       }
     } catch (error) {

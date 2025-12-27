@@ -7,6 +7,7 @@ import {
   faTrash,
   faAngleDown,
   faMoneyCheckDollar,
+  faNewspaper,
 } from "@fortawesome/free-solid-svg-icons";
 import TableForm from "../../../Modules/Table/TableForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -312,6 +313,34 @@ export default function Geret({ data, id, expertStatements }) {
     }
   };
 
+  const handleDownloadContract = async () => {
+    try {
+      const response = await apiClient.get("/user/contract-download/", {
+        responseType: "blob",
+      });
+
+      if (response.status === 200) {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+
+        const filename = "قرارداد_صافکاری_نقاشی.pdf";
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        window.URL.revokeObjectURL(url);
+
+        successMessage("قرارداد با موفقیت دانلود شد!");
+      }
+    } catch (error) {
+      console.error("خطا در دانلود قرارداد:", error);
+      errorMessage("خطا در دانلود قرارداد. لطفاً دوباره تلاش کنید.");
+    }
+  };
+
   useEffect(() => {
     if (geretModalData.ExpertStatementsCode) {
       getWagesPricerepairman();
@@ -551,15 +580,10 @@ export default function Geret({ data, id, expertStatements }) {
             </Grid>
           ))}
         </Grid>
-        {/* <div className={styles.wrap_contract}>
+        <div className={styles.wrap_contract} onClick={handleDownloadContract}>
           <FontAwesomeIcon icon={faNewspaper} />
           <p className={styles.contract_text}>قرارداد صافکاری - نقاشی</p>
-        </div> */}
-        {/* <div className="p-form-actions">
-          <div className="p-form-actions">
-            <ConfirmBtn type="submit" isSubmitting={""} />
-          </div>
-        </div> */}
+        </div>
       </div>
     </>
   );

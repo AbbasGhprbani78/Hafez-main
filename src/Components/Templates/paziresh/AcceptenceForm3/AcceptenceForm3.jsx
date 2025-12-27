@@ -394,6 +394,7 @@ function AcceptenceForm3({
 
       if (response.status === 200) {
         successMessage("فرم با موفقیت به کارشناس ارجاع داده شد");
+        navigate("/allform");
       }
     } catch (error) {
       errorMessage(error?.response?.message || "خطا در ارسال داده‌ها");

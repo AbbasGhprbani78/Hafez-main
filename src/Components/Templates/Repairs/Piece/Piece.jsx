@@ -530,7 +530,7 @@ export default function Piece({ id, pieces }) {
               value={supplierCode}
             />
           </div>
-          {/* <Button2 onClick={""}>مشاهده جزئیات گارانتی</Button2> */}
+          <Button2 onClick={""}>مشاهده جزئیات گارانتی</Button2>
         </Box>
         <div className={`${styles.wrap_actions} wrap_button_repairs`}>
           <Button2

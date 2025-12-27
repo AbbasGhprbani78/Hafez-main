@@ -181,6 +181,87 @@ button {
   background-color: #fde487;
 }
 
+.status_btn {
+  border-radius: 100px;
+  width: 102px;
+  padding: 8px;
+  font-family: "iranYekan";
+}
+.status_pending {
+  color: #28b2c8;
+  background-color: #d5f0f4;
+}
+
+.status_in_progress {
+  color: #ffc900;
+  background-color: #f5eac2;
+}
+
+.status_completed {
+  color: #629d89;
+  background-color: #e0ebe7;
+}
+
+.status_cancelled {
+  color: #e74c3c;
+  background-color: #fadbd8;
+}
+
+.status_on_hold {
+  color: #8e44ad;
+  background-color: #ebdef0;
+}
+
+.status_none {
+  color: #7f8c8d;
+  background-color: #ecf0f1;
+}
+
+.status_one {
+  color: #3498db;
+  background-color: #d6eaf8;
+}
+
+.status_two {
+  color: #9b59b6;
+  background-color: #ebdef0;
+}
+
+.status_three {
+  color: #e67e22;
+  background-color: #fdebd0;
+}
+
+.status_repair_card {
+  color: #ffc900;
+  background-color: #f5eac2;
+}
+
+.status_reception_desk {
+  color: #28b2c8;
+  background-color: #d5f0f4;
+}
+
+.status_done {
+  color: #629d89;
+  background-color: #e0ebe7;
+}
+
+.status_cancelled {
+  color: #e74c3c;
+  background-color: #fadbd8;
+}
+
+.status_expert_confirmation {
+  color: #27ae60;
+  background-color: #d5f5e3;
+}
+
+.status_awaiting_expert {
+  color: #f39c12;
+  background-color: #fef5e7;
+}
+
 @media print {
   .no-print {
     display: none !important;

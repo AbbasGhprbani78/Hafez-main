@@ -41,7 +41,7 @@ export default function AboutCar({ id }) {
           <Grid size={{ xs: 12, sm: 6, md: 4 }}>
             <span className={styles.title_info_car}>شماره شاسی : </span>
             <span className={styles.text_info_car}>
-              {dataCar?.chassis_number}
+              {toFarsiNumber(dataCar?.chassis_number)}
             </span>
           </Grid>
           <Grid size={{ xs: 12, sm: 6, md: 4 }}>
@@ -57,13 +57,13 @@ export default function AboutCar({ id }) {
           <Grid size={{ xs: 12, sm: 6, md: 4 }}>
             <span className={styles.title_info_car}>کیلومتر : </span>
             <span className={styles.text_info_car}>
-              {toFarsiNumber(dataCar?.car_km_text)}
+              {toFarsiNumber(dataCar?.car_km_text || dataCar?.car_operation)}
             </span>
           </Grid>
           <Grid size={{ xs: 12, sm: 6, md: 4 }}>
             <span className={styles.title_info_car}>شماره هرم : </span>
             <span className={styles.text_info_car}>
-              {dataCar?.pyramid_number}
+              {toFarsiNumber(dataCar?.pyramid_number)}
             </span>
           </Grid>
           {/* <Grid size={{ xs: 12, sm: 6, md: 4 }}>

@@ -25,7 +25,7 @@ const columns = [
   "سالن",
   "زمان و هزینه تخمینی",
   "زمان تعمیرات (ساعت)",
-  "تعمیرگاه",
+
   "نوقف در سالن (ساعت)",
   "زمان پیش فاکتور (ساعت)",
   "زمان پذیرش تا ترخیص (ساعت)",
@@ -145,7 +145,7 @@ export default function Receptionreports() {
 
       if (response.status === 200) {
         const data = response.data;
-
+        console.log(response.data.results);
         setTotalRows(data.count || 0);
         const mappedRows = (data.results || []).map((item) => ({
           id: item.admission_number,
@@ -154,7 +154,10 @@ export default function Receptionreports() {
             vin: item?.second_form?.chassis_number || "-",
             color: item.second_form?.color || "-",
             plate: item.second_form?.license_plate_number || "-",
-            mileage: item.second_form?.car_km_text || "-",
+            mileage:
+              item.second_form?.car_km_text ||
+              item.second_form?.car_operation ||
+              "-",
           },
           customerInfo: {
             name: `${item.owner_first_name || ""} ${
@@ -167,7 +170,10 @@ export default function Receptionreports() {
           services: item.type_of_service?.map((s) => s.name) || [],
           hall: item?.salon || "-",
           estimate: {
-            time: item.salon?.time || "-",
+            time:
+              item.salon?.time ||
+              item?.third_form?.estimated_repair_time ||
+              "-",
             cost: item.salon?.cost || "-",
           },
           repairTime: item.repair_time_hours || "-",
@@ -393,7 +399,11 @@ export default function Receptionreports() {
                 sx={{ fontFamily: "iranYekan" }}
                 className={styles.info_cell}
               >
-                <div>{toFarsiNumber(`زمان: ${row.estimate.time}`)}</div>
+                <div>
+                  {toFarsiNumber(
+                    `زمان: ${convertGregorianToPersian(row.estimate.time)}`
+                  )}
+                </div>
                 <div>
                   {toFarsiNumber(
                     `هزینه: ${formatWithThousandSeparators(row.estimate.cost)}`
@@ -403,10 +413,6 @@ export default function Receptionreports() {
 
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                 {toFarsiNumber(row.repairTime)}
-              </TableCell>
-
-              <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                {toFarsiNumber(row.repairShop)}
               </TableCell>
 
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
@@ -421,32 +427,27 @@ export default function Receptionreports() {
                 {toFarsiNumber(row.totalTime)}
               </TableCell>
 
-              <TableCell
-                align="center"
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  fontFamily: "iranYekan",
-                  padding: "19px",
-                }}
-              >
+              <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                 <div
-                  className={`${styles.status_btn} ${
-                    row.status === "done" ||
-                    row.status === "repair card" ||
-                    row.status === "repair_card" ||
-                    row.status === "reception desk" ||
-                    row.status === "reception_desk"
-                      ? styles.status_none
-                      : ["one", "two", "three"].includes(row.status)
-                      ? styles.status_one
-                      : row.status === "awaiting expert approval" ||
-                        row.status === "awaiting_expert_approval"
-                      ? styles.status_three
-                      : row.status === "expert confirmation" ||
-                        row.status === "expert_confirmation"
-                      ? styles.status_four
-                      : styles.status_default
+                  className={`status_btn ${
+                    row.status_display === "done" ||
+                    row.status_display === "repair card" ||
+                    row.status_display === "Repair card" ||
+                    row.status_display === "reception desk" ||
+                    row.status_display === "Reception desk"
+                      ? "status_none"
+                      : ["one", "two", "three"].includes(row.status_display) ||
+                        ["one", "two", "three"].includes(
+                          row.status?.toLowerCase()
+                        )
+                      ? "status_one"
+                      : row.status_display === "awaiting expert approval" ||
+                        row.status_display === "Awaiting expert approval"
+                      ? "status_three"
+                      : row.status_display === "expert confirmation" ||
+                        row.status_display === "Expert confirmation"
+                      ? "status_four"
+                      : "status_none" // fallback
                   }`}
                 >
                   {{
@@ -462,7 +463,12 @@ export default function Receptionreports() {
                     repair_card: "اتمام پذیرش",
                     "reception desk": "اتمام پذیرش",
                     reception_desk: "اتمام پذیرش",
-                  }[row.status] ??
+                    "Repair card": "اتمام پذیرش",
+                  }[row.status?.toLowerCase()] ??
+                    {
+                      "Repair card": "اتمام پذیرش",
+                      "Reception desk": "اتمام پذیرش",
+                    }[row.status_display] ??
                     row.status_display ??
                     "نامشخص"}
                 </div>

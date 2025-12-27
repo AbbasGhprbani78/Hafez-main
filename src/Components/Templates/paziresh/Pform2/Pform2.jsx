@@ -68,7 +68,7 @@ export default function Pform2({
       amount_fuel: "",
       amount_cng: "",
       tire_wear_rate: "",
-      number_punctured_tires: "",
+      number_punctured_tires: 0,
       condition_spare_tire: false,
       erosion_rate: "",
       car_cleanliness: 0,

@@ -2,7 +2,6 @@ import TitleWithSearch from "../../../Components/Modules/TitleWithSearch/TitleWi
 import TableCustom from "../../../Components/Modules/TableCustom/TableCustom";
 import { Box, TableCell, TableRow, Typography } from "@mui/material";
 import { useEffect, useState, useRef, useCallback } from "react";
-import styles from "./RunningTasks.module.css";
 import { errorMessage } from "../../../Components/Modules/Toast/ToastCustom";
 import apiClient from "../../../config/axiosConfig";
 import { ChnageDate } from "../../../Components/Modules/ChnageDate/ChnageDate";
@@ -215,18 +214,18 @@ export default function RunningTasks() {
                 style={{ display: "flex", justifyContent: "center" }}
               >
                 <div
-                  className={`${styles.status_btn} ${
+                  className={`status_btn ${
                     row.status === "pending"
-                      ? styles.status_pending
+                      ? "status_pending"
                       : row.status === "in_progress"
-                      ? styles.status_in_progress
+                      ? "status_in_progress"
                       : row.status === "completed"
-                      ? styles.status_completed
+                      ? "status_completed"
                       : row.status === "cancelled"
-                      ? styles.status_cancelled
+                      ? "status_cancelled"
                       : row.status === "on_hold"
-                      ? styles.status_on_hold
-                      : styles.status_pending
+                      ? "status_on_hold"
+                      : "status_pending"
                   }`}
                 >
                   {row.status === "pending"
