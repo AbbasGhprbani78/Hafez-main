@@ -128,7 +128,7 @@ export default function SignUp() {
                             onChange={handleChange}
                           />
                           {errors.first_name && touched.first_name && (
-                            <p className="error mt-2">{errors.first_name}</p>
+                            <p className="error mt-2 ">{errors.first_name}</p>
                           )}
                         </div>
                         <div className="input-item-wrapper">
@@ -142,7 +142,7 @@ export default function SignUp() {
                             onChange={handleChange}
                           />
                           {errors.last_name && touched.last_name && (
-                            <p className="error mt-2">{errors.last_name}</p>
+                            <p className="error mt-2 ">{errors.last_name}</p>
                           )}
                         </div>
                       </div>
@@ -164,7 +164,7 @@ export default function SignUp() {
                           }
                         />
                         {errors.email && touched.email && (
-                          <p className="error mt-2">{errors.email}</p>
+                          <p className="error mt-2 ">{errors.email}</p>
                         )}
                       </div>
                       <div className="signin-phone-wrapper margin-buttom">
@@ -185,7 +185,7 @@ export default function SignUp() {
                           }
                         />
                         {errors.phone_number && touched.phone_number && (
-                          <p className="error mt-2">{errors.phone_number}</p>
+                          <p className="error mt-2 ">{errors.phone_number}</p>
                         )}
                       </div>
                       <div className="signin-phone-wrapper margin-buttom">
@@ -206,7 +206,7 @@ export default function SignUp() {
                           }
                         />
                         {errors.password && touched.password && (
-                          <p className="error mt-2">{errors.password}</p>
+                          <p className="error mt-2 ">{errors.password}</p>
                         )}
                       </div>
                     </div>

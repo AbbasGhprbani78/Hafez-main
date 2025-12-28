@@ -98,7 +98,11 @@ export default function InputUloadPform2({
             <div className={styles.drag_drop_text}>drag and drop</div>
           )}
 
-          <label htmlFor={name} className={`${styles.label_uploadInput}`}>
+          <label
+            htmlFor={name}
+            className={`${styles.label_uploadInput}`}
+            style={{ cursor: "pointer" }}
+          >
             آپلود
           </label>
         </div>

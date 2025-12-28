@@ -53,3 +53,12 @@
   justify-content: center;
   color: #9f9f9f;
 }
+
+@media (max-width: 560px) {
+  .top_table {
+    flex-direction: column;
+    justify-items: start;
+    align-items: start;
+    gap: 20px;
+  }
+}

@@ -52,6 +52,12 @@
 }
 
 @media (max-width: 640px) {
+  .wrapper {
+    width: 100%;
+  }
+  .search_container {
+    width: 100%;
+  }
   .wrap_input {
     width: 100%;
   }

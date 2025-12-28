@@ -220,6 +220,7 @@ export default function History() {
                 style={{ display: "flex", justifyContent: "center" }}
               >
                 <div
+                  style={{ width: "180px" }}
                   className={`status_btn ${
                     row.status === "none"
                       ? "status_none"

@@ -122,6 +122,6 @@
 
 @media (max-width: 640px) {
   .name_porfile {
-    display: none;
+    font-size: 0.8rem;
   }
 }

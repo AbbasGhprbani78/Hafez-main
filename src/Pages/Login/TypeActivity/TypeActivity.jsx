@@ -430,7 +430,10 @@ export default function TypeActivity() {
                                 value={values.first_name}
                               />
                               {errors.first_name && touched.first_name && (
-                                <p className="error mt-2">
+                                <p
+                                  className="error mt-2"
+                                  style={{ fontFamily: "iranYekan" }}
+                                >
                                   {errors.first_name}
                                 </p>
                               )}
@@ -446,7 +449,12 @@ export default function TypeActivity() {
                                 onChange={handleChange}
                               />
                               {errors.last_name && touched.last_name && (
-                                <p className="error mt-2">{errors.last_name}</p>
+                                <p
+                                  className="error mt-2"
+                                  style={{ fontFamily: "iranYekan" }}
+                                >
+                                  {errors.last_name}
+                                </p>
                               )}
                             </div>
                           </div>
@@ -470,7 +478,10 @@ export default function TypeActivity() {
                               />
                               {errors.national_code &&
                                 touched.national_code && (
-                                  <p className="error mt-2">
+                                  <p
+                                    className="error mt-2"
+                                    style={{ fontFamily: "iranYekan" }}
+                                  >
                                     {errors.national_code}
                                   </p>
                                 )}
@@ -496,7 +507,10 @@ export default function TypeActivity() {
                               />
                               {errors.applicant_phone_number &&
                                 touched.applicant_phone_number && (
-                                  <p className="error mt-2">
+                                  <p
+                                    className="error mt-2"
+                                    style={{ fontFamily: "iranYekan" }}
+                                  >
                                     {errors.applicant_phone_number}
                                   </p>
                                 )}
@@ -513,7 +527,12 @@ export default function TypeActivity() {
                               value={values.address}
                             />
                             {errors.address && touched.address && (
-                              <p className="error mt-2">{errors.address}</p>
+                              <p
+                                className="error mt-2"
+                                style={{ fontFamily: "iranYekan" }}
+                              >
+                                {errors.address}
+                              </p>
                             )}
                           </div>
                           <div className="signin-basic-info-wrapper margin-buttom">
@@ -535,7 +554,10 @@ export default function TypeActivity() {
                                 value={toFarsiNumber(values.postal_code)}
                               />
                               {errors.postal_code && touched.postal_code && (
-                                <p className="error mt-2">
+                                <p
+                                  className="error mt-2"
+                                  style={{ fontFamily: "iranYekan" }}
+                                >
                                   {errors.postal_code}
                                 </p>
                               )}
@@ -559,7 +581,10 @@ export default function TypeActivity() {
                               />
                               {errors.work_place_number &&
                                 touched.work_place_number && (
-                                  <p className="error mt-2">
+                                  <p
+                                    className="error mt-2"
+                                    style={{ fontFamily: "iranYekan" }}
+                                  >
                                     {errors.work_place_number}
                                   </p>
                                 )}
@@ -576,7 +601,10 @@ export default function TypeActivity() {
                               />
                               {errors.business_license_image &&
                                 touched.business_license_image && (
-                                  <p className="error mt-2">
+                                  <p
+                                    className="error mt-2"
+                                    style={{ fontFamily: "iranYekan" }}
+                                  >
                                     {errors.business_license_image}
                                   </p>
                                 )}
@@ -591,7 +619,12 @@ export default function TypeActivity() {
                               />
                               {errors.national_card_image &&
                                 touched.national_card_image && (
-                                  <p className="error mt-2">
+                                  <p
+                                    className="error mt-2"
+                                    style={{
+                                      fontFamily: "iranYekan",
+                                    }}
+                                  >
                                     {errors.national_card_image}
                                   </p>
                                 )}
@@ -637,7 +670,10 @@ export default function TypeActivity() {
                           />
                           {errors.dataFormCompany
                             .applicants_position_in_company && (
-                            <p className="error mt-2">
+                            <p
+                              className="error mt-2"
+                              style={{ fontFamily: "iranYekan" }}
+                            >
                               {
                                 errors.dataFormCompany
                                   .applicants_position_in_company
@@ -692,7 +728,10 @@ export default function TypeActivity() {
                             />
                           </div>
                           {errors.dataFormCompany.signed_right && (
-                            <p className="error mt-2">
+                            <p
+                              className="error mt-2"
+                              style={{ fontFamily: "iranYekan" }}
+                            >
                               {errors.dataFormCompany.signed_right}
                             </p>
                           )}
@@ -735,7 +774,10 @@ export default function TypeActivity() {
                                   />
                                   {errors.firstSignature[index]
                                     ?.owner_first_signature && (
-                                    <p className="error mt-2">
+                                    <p
+                                      className="error mt-2"
+                                      style={{ fontFamily: "iranYekan" }}
+                                    >
                                       {
                                         errors.firstSignature[index]
                                           .owner_first_signature
@@ -770,7 +812,10 @@ export default function TypeActivity() {
                                   />
                                   {errors.firstSignature[index]
                                     ?.national_code && (
-                                    <p className="error mt-2">
+                                    <p
+                                      className="error mt-2"
+                                      style={{ fontFamily: "iranYekan" }}
+                                    >
                                       {
                                         errors.firstSignature[index]
                                           .national_code
@@ -829,7 +874,10 @@ export default function TypeActivity() {
                                       }}
                                     />
                                     {errors.addSignature[index]?.full_name && (
-                                      <p className="error mt-2">
+                                      <p
+                                        className="error mt-2"
+                                        style={{ fontFamily: "iranYekan" }}
+                                      >
                                         {errors.addSignature[index].full_name}
                                       </p>
                                     )}
@@ -862,7 +910,10 @@ export default function TypeActivity() {
                                     />
                                     {errors.addSignature[index]
                                       ?.position_incompany && (
-                                      <p className="error mt-2">
+                                      <p
+                                        className="error mt-2"
+                                        style={{ fontFamily: "iranYekan" }}
+                                      >
                                         {
                                           errors.addSignature[index]
                                             .position_incompany
@@ -896,7 +947,10 @@ export default function TypeActivity() {
                                     />
                                     {errors.addSignature[index]
                                       ?.national_code && (
-                                      <p className="error mt-2">
+                                      <p
+                                        className="error mt-2"
+                                        style={{ fontFamily: "iranYekan" }}
+                                      >
                                         {
                                           errors.addSignature[index]
                                             .national_code
@@ -930,7 +984,10 @@ export default function TypeActivity() {
                                     />
                                     {errors.addSignature[index]
                                       ?.phone_number && (
-                                      <p className="error mt-2">
+                                      <p
+                                        className="error mt-2"
+                                        style={{ fontFamily: "iranYekan" }}
+                                      >
                                         {
                                           errors.addSignature[index]
                                             .phone_number
@@ -991,7 +1048,10 @@ export default function TypeActivity() {
                               )}
                             />
                             {errors.dataFormCompany.company_national_id && (
-                              <p className="error mt-2">
+                              <p
+                                className="error mt-2"
+                                style={{ fontFamily: "iranYekan" }}
+                              >
                                 {errors.dataFormCompany.company_national_id}
                               </p>
                             )}
@@ -1021,7 +1081,10 @@ export default function TypeActivity() {
                               )}
                             />
                             {errors.dataFormCompany.phone_number && (
-                              <p className="error mt-2">
+                              <p
+                                className="error mt-2"
+                                style={{ fontFamily: "iranYekan" }}
+                              >
                                 {errors.dataFormCompany.phone_number}
                               </p>
                             )}
@@ -1051,7 +1114,10 @@ export default function TypeActivity() {
                               value={dataFormCompany.address}
                             />
                             {errors.dataFormCompany.address && (
-                              <p className="error mt-2">
+                              <p
+                                className="error mt-2"
+                                style={{ fontFamily: "iranYekan" }}
+                              >
                                 {errors.dataFormCompany.address}
                               </p>
                             )}
@@ -1079,7 +1145,10 @@ export default function TypeActivity() {
                               value={toFarsiNumber(dataFormCompany.postal_code)}
                             />
                             {errors.dataFormCompany.postal_code && (
-                              <p className="error mt-2">
+                              <p
+                                className="error mt-2"
+                                style={{ fontFamily: "iranYekan" }}
+                              >
                                 {errors.dataFormCompany.postal_code}
                               </p>
                             )}
@@ -1095,7 +1164,10 @@ export default function TypeActivity() {
                               }
                             />
                             {errors.dataFormCompany.company_statute_image && (
-                              <p className="error mt-2">
+                              <p
+                                className="error mt-2"
+                                style={{ fontFamily: "iranYekan" }}
+                              >
                                 {errors.dataFormCompany.company_statute_image}
                               </p>
                             )}
@@ -1109,7 +1181,10 @@ export default function TypeActivity() {
                               }
                             />
                             {errors.dataFormCompany.last_ad_changes_image && (
-                              <p className="error mt-2">
+                              <p
+                                className="error mt-2"
+                                style={{ fontFamily: "iranYekan" }}
+                              >
                                 {errors.dataFormCompany.last_ad_changes_image}
                               </p>
                             )}
@@ -1123,7 +1198,10 @@ export default function TypeActivity() {
                               }
                             />
                             {errors.dataFormCompany.company_image && (
-                              <p className="error mt-2">
+                              <p
+                                className="error mt-2"
+                                style={{ fontFamily: "iranYekan" }}
+                              >
                                 {errors.dataFormCompany.company_image}
                               </p>
                             )}

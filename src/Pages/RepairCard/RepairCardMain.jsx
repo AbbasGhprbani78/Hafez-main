@@ -168,13 +168,15 @@ function RepairCardMain() {
         item
         size={{ xs: 12 }}
         container
-        sx={{
-          display: "flex",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          flexDirection: "column",
-          width: "100%",
-        }}
+        sx={
+          {
+            // display: "flex",
+            // justifyContent: "flex-start",
+            // alignItems: "center",
+            // flexDirection: "column",
+            // width: "100%",
+          }
+        }
         minWidth={100}
         gap={{ xs: "1rem", sm: "1.5rem", md: "2rem", lg: "2.5rem", xl: "3rem" }}
         className={`space-content ${styles.wrap_repairs}`}

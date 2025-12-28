@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CreatableSelect from "react-select/creatable";
-import styles from "./SelectDropDown2.module.css";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { components } from "react-select";
 

@@ -118,6 +118,14 @@ export default function Paziresh() {
     }
   }, [editMode]);
 
+  useEffect(() => {
+    if (printRef.current) {
+      printRef.current.scrollTop = 0;
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [currentTab]);
+
   return (
     <Grid size={12} sx={{ display: "flex" }}>
       <SideBar />

@@ -129,6 +129,7 @@ function AcceptenceForm3({
   };
 
   const handleChange = (field, value, label) => {
+    console.log(field, value, label);
     setDataForm3((prev) => ({
       ...prev,
       [field]: value,

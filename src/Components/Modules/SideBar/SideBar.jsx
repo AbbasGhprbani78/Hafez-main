@@ -160,6 +160,7 @@ export default function SideBar({
                   isActive ? styles.active : ""
                 }`
               }
+              end
             >
               <div className={styles.icon_sidebar_wrapper}>
                 <FontAwesomeIcon icon={item.icon} />

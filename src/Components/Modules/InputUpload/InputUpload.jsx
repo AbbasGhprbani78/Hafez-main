@@ -78,7 +78,11 @@ export default function InputUpload({ label, name, onChange }) {
             </div>
           )}
 
-          <label htmlFor={name} className={`${styles.label_uploadInput} mt-2`}>
+          <label
+            htmlFor={name}
+            className={`${styles.label_uploadInput} mt-2`}
+            style={{ cursor: "pointer" }}
+          >
             آپلود
           </label>
         </div>
