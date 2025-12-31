@@ -11,7 +11,7 @@ import {
 export default function TableForm({ columns, children, maxHeight = 340 }) {
   return (
     <>
-      <TableContainer sx={{ maxHeight }}>
+      <TableContainer sx={{ maxHeight }} className="scroll-right">
         <Table
           aria-label="dynamic table"
           stickyHeader

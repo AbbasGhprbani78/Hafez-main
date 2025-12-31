@@ -187,8 +187,7 @@ export default function AllForm() {
           width: "100%",
         }}
         minWidth={100}
-        direction={"column"}
-        className="space-content "
+        className="space-content scroll-contant"
       >
         <Header title={"کارتابل پذیرش:"} handleClick={handleGoToPaziresh} />
         <Grid

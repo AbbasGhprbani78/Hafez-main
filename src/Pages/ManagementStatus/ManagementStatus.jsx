@@ -30,7 +30,7 @@ import {
 import apiClient from "../../config/axiosConfig";
 import Button3 from "../../Components/Modules/Button3/Button3";
 import { toFarsiNumber } from "../../utils/helper";
-import axios from "axios";
+import { useSearchParams } from "react-router-dom";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -58,7 +58,9 @@ function ManagementStatus() {
   const [tabInformation, setTabInformation] = useState([]);
   const [filterRows, setFilterRows] = useState([]);
   const [selectedRowInfo, setSelectedRowInfo] = useState(item1);
-  const [tab, setTab] = useState(1);
+  const [searchParams] = useSearchParams();
+  const initialTab = Number(searchParams.get("tab")) || 1;
+  const [tab, setTab] = useState(initialTab);
   const [modal, setModal] = useState(false);
   const [operation, setOperation] = useState("add");
   const [searchInput, setSearchInput] = useState("");

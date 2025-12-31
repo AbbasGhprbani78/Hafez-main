@@ -21,7 +21,6 @@ import {
 import { NavLink, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { MyContext } from "../../../context/context";
-import { icon } from "@fortawesome/fontawesome-svg-core";
 
 export default function SideBar({
   routes = [
@@ -88,7 +87,7 @@ export default function SideBar({
 
   return (
     <div
-      className={`no-print ${styles.sidebar_container} ${
+      className={`no-print ${styles.sidebar_container} hide-scroll ${
         isOpen ? styles.active_sidebar : ""
       }`}
     >

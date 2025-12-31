@@ -53,7 +53,6 @@ function RepairCardMain() {
       warningMessage("فقط عدد وارد نمایید!");
     }
   };
-
   const navigate = useNavigate();
 
   const handleGoToPaziresh = () => {
@@ -165,21 +164,14 @@ function RepairCardMain() {
       <SideBar />
       <ToastContainerCustom />
       <Grid
-        item
         size={{ xs: 12 }}
         container
-        sx={
-          {
-            // display: "flex",
-            // justifyContent: "flex-start",
-            // alignItems: "center",
-            // flexDirection: "column",
-            // width: "100%",
-          }
-        }
+        sx={{
+          width: "100%",
+        }}
         minWidth={100}
+        className="space-content scroll-contant"
         gap={{ xs: "1rem", sm: "1.5rem", md: "2rem", lg: "2.5rem", xl: "3rem" }}
-        className={`space-content ${styles.wrap_repairs}`}
       >
         <Header title={"لیست پذیرش‌ها:"} handleClick={handleGoToPaziresh} />
         <Grid

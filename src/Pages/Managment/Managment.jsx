@@ -19,6 +19,7 @@ import { faWarehouse } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../../Components/Modules/Modal/Modal";
 import notifItemStyles from "../../Components/Modules/NotificationItem/NtificationItem.module.css";
 import PropTypes from "prop-types";
+import { Button } from "react-bootstrap";
 
 const columns = [
   "کد",
@@ -34,7 +35,7 @@ export default function Managment() {
   const [data, setData] = useState();
   const [selectedNotif, setSelectedNotif] = useState(null);
   const [showNotifModal, setShowNotifModal] = useState(false);
-
+  const [activeTab, setActiveTab] = useState("repairmen");
   const handleOpenNotif = (notif) => {
     setSelectedNotif(notif);
     setShowNotifModal(true);
@@ -63,8 +64,13 @@ export default function Managment() {
           <Header title={"داشبورد مدیریت"} />
           <div className={styles.container}>
             <div className={`${styles.div1} ${styles.div_item}`}>
-              <BoxCard title={"تجهیزات"} icon={faBoxArchive} link="/status">
-                <div className={styles.wrap_tools}>
+              <BoxCard
+                title={"تجهیزات"}
+                icon={faBoxArchive}
+                route="/management/status"
+                tabIndex={2}
+              >
+                <div className={`${styles.wrap_tools} scroll-right`}>
                   {data?.equipments?.items.map((item) => (
                     <StatusItem key={item.id} item={item} />
                   ))}
@@ -72,8 +78,13 @@ export default function Managment() {
               </BoxCard>
             </div>
             <div className={`${styles.div2} ${styles.div_item}`}>
-              <BoxCard title={"سالن"} icon={faWarehouse} link="/status">
-                <div className={styles.wrap_tools}>
+              <BoxCard
+                title={"سالن"}
+                icon={faWarehouse}
+                route="/management/status"
+                tabIndex={0}
+              >
+                <div className={`${styles.wrap_tools} scroll-right`}>
                   {data?.salons?.items.map((item) => (
                     <StatusItem key={item.id} item={item} />
                   ))}
@@ -86,10 +97,50 @@ export default function Managment() {
               </BoxCard>
             </div>
             <div className={`${styles.div4} ${styles.div_item}`}>
-              <BoxCard title={"تعمیرکاران"} icon={faUsers} link="/status">
-                <TableForm columns={columns} maxHeight={280}>
-                  {data?.repairmen.length > 0 &&
-                    data?.repairmen.map((item) => (
+              <BoxCard
+                title={"کاربران و تعمیرکاران"}
+                icon={faUsers}
+                route="/management/status"
+                tabIndex={1}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1rem",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <Button
+                    onClick={() => setActiveTab("repairmen")}
+                    variant="contained"
+                    className={` ${
+                      activeTab === "repairmen" ? "active_btn" : "manual_btn"
+                    }`}
+                  >
+                    تعمیرکاران
+                  </Button>
+                  <Button
+                    onClick={() => setActiveTab("users")}
+                    variant="contained"
+                    className={` ${
+                      activeTab === "users" ? "active_btn" : "manual_btn"
+                    }`}
+                  >
+                    کاربران
+                  </Button>
+                </div>
+
+                <TableForm
+                  columns={activeTab === "repairmen" ? columns : columns2}
+                  maxHeight={420}
+                >
+                  {(activeTab === "repairmen" ? data?.repairmen : data?.users)
+                    ?.length > 0 &&
+                    (activeTab === "repairmen"
+                      ? data?.repairmen
+                      : data?.users
+                    )?.map((item) => (
                       <TableRow key={item.id}>
                         <TableCell
                           align="center"
@@ -111,13 +162,15 @@ export default function Managment() {
                           {Array.isArray(item?.specialty) &&
                           item.specialty.length > 0
                             ? item.specialty.map((t) => t.name).join(" / ")
-                            : "Invalid data"}
+                            : "—"}
                         </TableCell>
                         <TableCell
                           align="center"
                           sx={{ fontFamily: "iranYekan" }}
                         >
-                          {toFarsiNumber(item.work_time)}
+                          {activeTab === "repairmen"
+                            ? toFarsiNumber(item.work_time)
+                            : toFarsiNumber(item.phone_number)}
                         </TableCell>
                         <TableCell
                           align="center"
@@ -135,51 +188,6 @@ export default function Managment() {
                 notifications={data?.announcements}
                 onOpenNotif={handleOpenNotif}
               />
-            </div>
-            <div className={`${styles.div6} ${styles.div_item}`}>
-              <BoxCard title={"کاربر"} icon={faUsers}>
-                <TableForm columns={columns2} maxHeight={150}>
-                  {data?.users?.length > 0 &&
-                    data?.users?.map((item) => (
-                      <TableRow key={item.id}>
-                        <TableCell
-                          align="center"
-                          sx={{ fontFamily: "iranYekan" }}
-                        >
-                          {toFarsiNumber(item.code)}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          sx={{ fontFamily: "iranYekan" }}
-                        >
-                          {toFarsiNumber(item.first_name)}{" "}
-                          {toFarsiNumber(item.last_name)}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          sx={{ fontFamily: "iranYekan" }}
-                        >
-                          {Array.isArray(item?.specialty) &&
-                          item.specialty.length > 0
-                            ? item.specialty.map((t) => t.name).join(" / ")
-                            : "Invalid data"}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          sx={{ fontFamily: "iranYekan" }}
-                        >
-                          {toFarsiNumber(item.phone_number)}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          sx={{ fontFamily: "iranYekan" }}
-                        >
-                          <StatusItem item={item} />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableForm>
-              </BoxCard>
             </div>
           </div>
           <Modal showModal={showNotifModal} setShowModal={setShowNotifModal}>

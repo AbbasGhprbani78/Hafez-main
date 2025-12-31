@@ -5,7 +5,7 @@ import { useEffect } from "react";
 export const MyContext = createContext();
 
 export const MyProvider = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [dataForm, setDataForm] = useState("");
   const [idForm, setIdForm] = useState("");
   const [currentTab, setCurrentTab] = useState(1);

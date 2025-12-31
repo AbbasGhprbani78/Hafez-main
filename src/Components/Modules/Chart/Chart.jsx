@@ -24,13 +24,13 @@ const data = [
 
 export default function Chart() {
   return (
-    <div className={styles.wrapper}>
+    <div className={`${styles.wrapper} home-item`}>
       <div className={styles.title}>
         <FontAwesomeIcon icon={faChartPie} />
         <span>گزارش</span>
       </div>
       <div className={styles.chartContainer}>
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height={200}>
           <LineChart data={data}>
             <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
 

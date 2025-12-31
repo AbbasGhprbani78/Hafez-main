@@ -22,10 +22,10 @@ export default function TableStatus({
       <TableContainer
         style={{
           maxHeight: 500,
-          direction: "rtl",
           borderTopLeftRadius: "10px",
           borderTopRightRadius: "10px",
         }}
+        className="scroll-right"
       >
         <Table
           stickyHeader

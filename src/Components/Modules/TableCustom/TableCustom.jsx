@@ -44,10 +44,10 @@ function TableCustom({
         id="table_custome_info"
         style={{
           maxHeight: maxHeight,
-          direction: "rtl",
           borderTopLeftRadius: "10px",
           borderTopRightRadius: "10px",
         }}
+        className="scroll-right"
       >
         <Table
           stickyHeader

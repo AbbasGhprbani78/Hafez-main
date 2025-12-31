@@ -23,7 +23,11 @@ export default function Table({ pendingTask = [] }) {
         <span>تسک‌های در حال اجرا</span>
       </div>
 
-      <TableContainer component={Paper} style={{ height: "100%" }}>
+      <TableContainer
+        component={Paper}
+        style={{ height: "100%" }}
+        className="scroll-right"
+      >
         <MuiTable
           stickyHeader
           aria-label="sticky table"

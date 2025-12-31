@@ -176,7 +176,7 @@ export default function TableForm3({
   currentTab,
 }) {
   return (
-    <TableContainer component={Paper} dir="rtl">
+    <TableContainer component={Paper} dir="rtl" className="scroll-right">
       <Table aria-label="collapsible table" sx={{ minWidth: 750 }}>
         <TableHead>
           <TableRow>

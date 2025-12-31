@@ -31,6 +31,9 @@
   --border-radius-2: 20px;
 }
 
+html {
+  direction: ltr;
+}
 body {
   direction: rtl;
   background-color: #f9f9f9;
@@ -46,6 +49,19 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.scroll-right {
+  direction: ltr;
+  overflow-y: auto;
+}
+
+.scroll-right > * {
+  direction: rtl;
+}
+
+/* ::-webkit-scrollbar {
+  display: none;
+} */
 
 p {
   margin-bottom: 0;
@@ -94,10 +110,6 @@ p {
   color: var(--color-21);
   opacity: 1;
   font-size: clamp(0.8rem, 0.9vw, 1rem);
-}
-
-::-webkit-scrollbar {
-  display: none;
 }
 
 @font-face {
@@ -160,7 +172,20 @@ button {
 }
 .scroll-contant {
   max-height: 100vh;
-  overflow-y: scroll;
+  scrollbar-width: none;
+  overflow-y: auto;
+}
+
+.scroll-contant::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scroll {
+  scrollbar-width: none;
+}
+
+.hide-scroll::-webkit-scrollbar {
+  display: none;
 }
 
 .title_top {
@@ -262,6 +287,54 @@ button {
   background-color: #fef5e7;
 }
 
+.manual_btn {
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  color: #ffffff !important;
+  background-color: #c3c3c3 !important;
+  border-radius: 100px !important;
+  border: none !important;
+  outline: none !important;
+  font-family: "iranYekan", sans-serif !important;
+  line-height: 20px !important;
+  font-weight: 500;
+  padding: 9px 20px !important;
+  /* box-shadow: none !important; */
+}
+.active_btn {
+  font-family: "iranYekan", sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  line-height: 20px !important;
+  color: #ffffff !important;
+  background-color: var(--color-3) !important;
+  border-radius: 100px !important;
+  border: none !important;
+  outline: none !important;
+  padding: 9px 20px !important;
+}
+
+* {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #768b95;
+}
+
+/* WebKit: Chrome, Edge, Safari */
+*::-webkit-scrollbar {
+  width: 1px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #768b95;
+  border-radius: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-button {
+  display: none;
+}
 @media print {
   .no-print {
     display: none !important;

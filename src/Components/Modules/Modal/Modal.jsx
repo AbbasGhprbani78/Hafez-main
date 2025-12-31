@@ -22,7 +22,7 @@ export default function Modal({ children, style, showModal, setShowModal }) {
     >
       <div className={styles.closemodal}></div>
       <div
-        className={`${styles.modal_contant} ${style}`}
+        className={`${styles.modal_contant} ${style} scroll-right`}
         onClick={handleContentClick}
       >
         {children}
