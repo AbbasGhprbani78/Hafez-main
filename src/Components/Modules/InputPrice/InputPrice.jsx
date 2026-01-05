@@ -4,8 +4,6 @@ import {
   toEnglishNumber,
   toFarsiNumber,
 } from "../../../utils/helper";
-
-import styles from "./InputPrice.module.css";
 import { faMoneyCheckDollar } from "@fortawesome/free-solid-svg-icons";
 
 export default function InputPrice({

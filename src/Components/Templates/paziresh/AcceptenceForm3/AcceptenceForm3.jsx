@@ -18,6 +18,8 @@ import "react-toastify/dist/ReactToastify.css";
 import DateObject from "react-date-object";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
+import GraphicEqIcon from "@mui/icons-material/GraphicEq";
+import PermMediaOutlinedIcon from "@mui/icons-material/PermMediaOutlined";
 
 //Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -41,6 +43,7 @@ import SelectDropDown2 from "../../../Modules/SelectDropDown2/SelectDropDown2";
 import { toFarsiNumber } from "../../../../utils/helper";
 import TableCustom from "../../../Modules/TableCustom/TableCustom";
 import { useNavigate } from "react-router-dom";
+import MultilineCreatableSelect from "../../../Modules/MultilineCreatableSelect/MultilineCreatableSelect";
 
 const columns = [
   "کد",
@@ -988,118 +991,139 @@ function AcceptenceForm3({
                     alignItems: "flex-start",
                     width: "100%",
                     flexDirection: { xs: "column", sm: "row" },
-                    gap: { xs: "0.5rem", lg: "0" },
+                    gap: { xs: "2rem", lg: "0" },
                   }}
                 >
                   <Grid
                     size={{ xs: 12, sm: 6 }}
                     sx={{
                       display: "flex",
-                      flexDirection: { xs: "column", sm: "row", lg: "row" },
-                      alignItems: { xs: "flex-end", sm: "flex-start" },
+                      flexDirection: { xs: "column" },
+                      alignItems: { sx: "flex-start" },
                       justifyContent: { xs: "center", lg: "flex-start" },
                       width: "100%",
-                      gap: { xs: ".5rem" },
                     }}
                   >
-                    <Grid
+                    <label className="label_input">اظهارات مشتری</label>
+                    <Box
                       sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "flex-start",
-                        alignItems: "flex-start",
                         width: "100%",
+                        display: "flex",
+                        alignItems: "start",
+                        gap: ".5rem",
                       }}
-                      size={{ xs: 12, sm: 11, md: 10, lg: 7 }}
                     >
-                      <div className={styles.select_car_wrapper}>
-                        <SelectDropDown2
-                          icon={faAngleDown}
-                          label={"اظهارات مشتری"}
-                          items={customerTexts}
-                          name="CustomerStatements"
-                          placeHolder={"اظهارات مشتری را انتخاب  کنید."}
-                          isDesirableValue={false}
-                          onChange={handleChange}
-                          value={dataform3.CustomerStatements}
+                      <Grid
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "flex-start",
+                          alignItems: "flex-start",
+                          width: "100%",
+                        }}
+                        size={{ xs: 12, sm: 11, md: 10, lg: 7 }}
+                      >
+                        <div className={styles.select_car_wrapper}>
+                          <MultilineCreatableSelect
+                            icon={faAngleDown}
+                            items={customerTexts}
+                            name="CustomerStatements"
+                            placeHolder={"اظهارات مشتری را انتخاب  کنید."}
+                            isDesirableValue={false}
+                            onChange={handleChange}
+                            value={dataform3.CustomerStatements}
+                          />
+                        </div>
+                      </Grid>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: ".5rem",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <UploaderButton
+                          imageCount={dataform3.CustomerFile.length}
+                          voiceCount={0}
+                          type="CustomerFile"
+                          setShowModal={setShowModal}
+                          setTypeModal={setTypeModal}
+                          setTypeUser={setTypeUser}
+                          currentTab={currentTab}
+                        />
+
+                        <UploaderButton
+                          imageCount={0}
+                          voiceCount={dataform3.CustomerVoice.length}
+                          type="CustomerVoice"
+                          setShowModal={setShowModal}
+                          setTypeModal={setTypeModal}
+                          setTypeUser={setTypeUser}
+                          currentTab={currentTab}
                         />
                       </div>
-                    </Grid>
-
-                    <div style={{ display: "flex", gap: ".5rem" }}>
-                      <UploaderButton
-                        imageCount={dataform3.CustomerFile.length}
-                        voiceCount={0}
-                        type="CustomerFile"
-                        setShowModal={setShowModal}
-                        setTypeModal={setTypeModal}
-                        setTypeUser={setTypeUser}
-                        currentTab={currentTab}
-                      />
-
-                      <UploaderButton
-                        imageCount={0}
-                        voiceCount={dataform3.CustomerVoice.length}
-                        type="CustomerVoice"
-                        setShowModal={setShowModal}
-                        setTypeModal={setTypeModal}
-                        setTypeUser={setTypeUser}
-                        currentTab={currentTab}
-                      />
-                    </div>
+                    </Box>
                   </Grid>
                   <Grid
                     size={{ xs: 12, sm: 6 }}
                     sx={{
                       display: "flex",
-                      flexDirection: { xs: "column", sm: "row", lg: "row" },
-                      alignItems: { xs: "flex-end", sm: "flex-start" },
+                      flexDirection: { xs: "column" },
+                      alignItems: { sx: "flex-start" },
                       justifyContent: { xs: "center", lg: "flex-start" },
                       width: "100%",
-                      gap: { xs: ".5rem" },
                     }}
                   >
-                    <Grid
-                      size={{ xs: 12, sm: 11, md: 10, lg: 7 }}
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "flex-start",
-                        alignItems: "flex-start",
-                        width: "100%",
-                      }}
-                    >
-                      <SearchAndSelectDropDwon
-                        icon={faAngleDown}
-                        label={"اظهارات کارشناس"}
-                        items={expertTexts}
-                        name="ExpertStatements"
-                        placeHolder={"اظهار کارشناس را انتخاب کنید."}
-                        isDesirableValue={false}
-                        onChange={handleChange}
-                        value={dataform3.ExpertStatements}
-                      />
-                    </Grid>
+                    <label className="label_input">اظهارات کارشناس</label>
+                    <Box sx={{ width: "100%", display: "flex", gap: ".5rem" }}>
+                      <Grid
+                        size={{ xs: 12, sm: 11, md: 10, lg: 7 }}
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "flex-start",
+                          alignItems: "flex-start",
+                          width: "100%",
+                        }}
+                      >
+                        <SearchAndSelectDropDwon
+                          icon={faAngleDown}
+                          // label={"اظهارات کارشناس"}
+                          items={expertTexts}
+                          name="ExpertStatements"
+                          placeHolder={"اظهار کارشناس را انتخاب کنید."}
+                          isDesirableValue={false}
+                          onChange={handleChange}
+                          value={dataform3.ExpertStatements}
+                        />
+                      </Grid>
 
-                    <div style={{ display: "flex", gap: ".5rem" }}>
-                      <UploaderButton
-                        imageCount={dataform3.ExpertFile.length}
-                        voiceCount={0}
-                        type="ExpertFile"
-                        setShowModal={setShowModal}
-                        setTypeModal={setTypeModal}
-                        setTypeUser={setTypeUser}
-                      />
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: ".5rem",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <UploaderButton
+                          imageCount={dataform3.ExpertFile.length}
+                          voiceCount={0}
+                          type="ExpertFile"
+                          setShowModal={setShowModal}
+                          setTypeModal={setTypeModal}
+                          setTypeUser={setTypeUser}
+                        />
 
-                      <UploaderButton
-                        imageCount={0}
-                        voiceCount={dataform3.ExpertVoice.length}
-                        type="ExpertVoice"
-                        setShowModal={setShowModal}
-                        setTypeModal={setTypeModal}
-                        setTypeUser={setTypeUser}
-                      />
-                    </div>
+                        <UploaderButton
+                          imageCount={0}
+                          voiceCount={dataform3.ExpertVoice.length}
+                          type="ExpertVoice"
+                          setShowModal={setShowModal}
+                          setTypeModal={setTypeModal}
+                          setTypeUser={setTypeUser}
+                        />
+                      </div>
+                    </Box>
                   </Grid>
                 </Grid>
                 <Grid size={12} sx={{ marginTop: "2rem" }}>
@@ -1137,7 +1161,7 @@ function AcceptenceForm3({
                       index={index}
                     />
                   ))}
-                  <div ref={endRef} style={{ height: "100px" }} />
+                  <div ref={endRef} style={{ height: "10px" }} />
                 </Grid>
                 <Grid
                   size={12}
@@ -1276,7 +1300,6 @@ function AcceptenceForm3({
 }
 
 const PayRowComponent = ({
-  disable = false,
   payItems = [],
   payValue,
   paySet,
@@ -1296,17 +1319,17 @@ const PayRowComponent = ({
       columnSpacing={4}
       sx={{
         display: "flex",
-        justifyContent: "center",
         alignItems: "center",
         flexDirection: { xs: "column", sm: "row", md: "row" },
         width: "100%",
         position: "relative",
         marginTop: "15px",
+        flexWrap: "wrap",
       }}
       className={`${styles.payComponent}`}
     >
       <Grid
-        size={{ xs: 12, sm: 4, md: 4 }}
+        size={{ xs: 12, sm: 4, md: 5, lg: 3 }}
         sx={{
           display: "flex",
           justifyContent: "flex-start",
@@ -1328,7 +1351,7 @@ const PayRowComponent = ({
         />
       </Grid>
       <Grid
-        size={{ xs: 12, sm: 4, md: 4 }}
+        size={{ xs: 12, sm: 4, md: 5, lg: 3 }}
         sx={{
           display: "flex",
           justifyContent: "flex-start",
@@ -1349,7 +1372,7 @@ const PayRowComponent = ({
         </div>
       </Grid>
       <Grid
-        size={{ xs: 12, sm: 4, md: 4 }}
+        size={{ xs: 12, sm: 4, md: 5, lg: 3 }}
         sx={{
           display: "flex",
           justifyContent: "flex-start",
@@ -1408,6 +1431,7 @@ const UploaderButton = ({
       <Box sx={{ display: "flex", alignItems: "center" }}>
         {isVoice && (
           <Typography
+            sx={{ display: "flex", alignItems: "center" }}
             className={styles.uploadIcon}
             onClick={() => {
               if (currentTab !== 4) {
@@ -1417,12 +1441,26 @@ const UploaderButton = ({
               }
             }}
           >
-            {`(${voiceCount}) `}
-            <FontAwesomeIcon icon={faFileAudio} />
+            {/* {`(${voiceCount}) `} */}
+            <Box
+              sx={{
+                background: "var(--color-1)",
+                color: "#ffff",
+                width: "30px",
+                height: "30px",
+                borderRadius: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <GraphicEqIcon sx={{ fontSize: "1rem" }} />
+            </Box>
           </Typography>
         )}
         {isFile && (
           <Typography
+            sx={{ display: "flex", alignItems: "center" }}
             className={styles.uploadIcon}
             onClick={() => {
               if (currentTab !== 4) {
@@ -1432,8 +1470,25 @@ const UploaderButton = ({
               }
             }}
           >
-            {`(${imageCount}) `}
-            <FontAwesomeIcon icon={faFileImage} />
+            {/* {`(${imageCount}) `} */}
+            <Box
+              sx={{
+                background: "var(--color-1)",
+                color: "#ffff",
+                width: "30px",
+                height: "30px",
+                borderRadius: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <PermMediaOutlinedIcon
+                sx={{
+                  fontSize: "1rem",
+                }}
+              />
+            </Box>
           </Typography>
         )}
       </Box>

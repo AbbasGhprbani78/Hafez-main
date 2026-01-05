@@ -61,7 +61,11 @@
 }
 
 .input_container {
-  width: 198px;
+  width: 100%;
+}
+
+.select_car_wrapper {
+  width: 100%;
 }
 
 @media (max-width: 800px) {
@@ -75,12 +79,6 @@
 @media (max-width: 723px) {
   .input_container {
     width: 180px;
-  }
-}
-
-@media (min-width: 600px) {
-  .select_car_wrapper {
-    max-width: 215.18px;
   }
 }
 

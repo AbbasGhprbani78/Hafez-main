@@ -13,7 +13,7 @@ export default function PartMachine({
   return (
     <div className="partmachine-wrapper">
       <span className="title-partmachine">
-        {toFarsiNumber(part.value_number)} {part.name}
+        {toFarsiNumber(part.value_number)} {part.name} :
       </span>
       {part?.children?.map((belonging) => (
         <InputCheckBoxPartMachine

@@ -34,20 +34,12 @@ export const validateFields = (form2,otherCar, otherColor) => {
     if (!form2.customer_secend_form.license_plate_number) {
         newErrors.license_plate_number = 'وارد کردن شماره پلاک الزامیست';
     }
-    if (!form2.customer_secend_form.amount_fuel) {
-        newErrors.amount_fuel = 'تعیین میزان سوخت الزامیست';
-    }
-    if (!form2.customer_secend_form.amount_cng) {
-        newErrors.amount_cng = 'تعیین میزان CNG الزامیست';
-    }
     if (!form2.customer_secend_form.tire_wear_rate) {
         newErrors.tire_wear_rate = 'تعیین فرسایش لاستیک ها الزامیست';
     }
 
     const puncturedTires = form2.customer_secend_form.number_punctured_tires;
-    if (!puncturedTires) {
-        newErrors.number_punctured_tires = 'تعیین تعداد لاستیک های پنچر الزامی است';
-    } else if (!/^[0-4]$/.test(puncturedTires)) {
+    if (puncturedTires !== undefined && puncturedTires !== null && puncturedTires !== "" && !/^[0-4]$/.test(String(puncturedTires))) {
         newErrors.number_punctured_tires = 'تعداد لاستیک های پنچر باید بین 0 تا 4 باشد';
     }
 

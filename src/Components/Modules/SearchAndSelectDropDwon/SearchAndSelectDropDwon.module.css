@@ -3,7 +3,9 @@
     max-width: 215.18px;
   }
 } */
-
+.select_car_wrapper {
+  width: 100%;
+}
 @media (max-width: 600px) {
   .select_car_wrapper {
     width: 100%;

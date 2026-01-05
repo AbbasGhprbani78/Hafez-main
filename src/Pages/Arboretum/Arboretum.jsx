@@ -547,14 +547,7 @@ export default function Arboretum() {
         <div className="space-content">
           <Header title={"درختواره"} />
           <div className={styles.arboretum_container}>
-            {loading ? (
-              <div className={styles.loading}>در حال دریافت داده‌ها...</div>
-            ) : error ? (
-              <div className={styles.error}>{error}</div>
-            ) : null}
             <div className={styles.separate_tables_container}>
-              {/* Statements Table */}
-
               <div className={styles.table_column}>
                 <div className={styles.table_header}>اظهارات</div>
                 <SearchSection

@@ -89,6 +89,8 @@ export default function Receptionreports() {
 
       if (response.status === 200) {
         setReceptionFilterData(response.data);
+
+        console.log(response.data);
       }
     } catch (error) {
       console.log(error);
@@ -428,50 +430,47 @@ export default function Receptionreports() {
               </TableCell>
 
               <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                <div
-                  className={`status_btn ${
-                    row.status_display === "done" ||
-                    row.status_display === "repair card" ||
-                    row.status_display === "Repair card" ||
-                    row.status_display === "reception desk" ||
-                    row.status_display === "Reception desk"
-                      ? "status_none"
-                      : ["one", "two", "three"].includes(row.status_display) ||
-                        ["one", "two", "three"].includes(
-                          row.status?.toLowerCase()
-                        )
-                      ? "status_one"
-                      : row.status_display === "awaiting expert approval" ||
-                        row.status_display === "Awaiting expert approval"
-                      ? "status_three"
-                      : row.status_display === "expert confirmation" ||
-                        row.status_display === "Expert confirmation"
-                      ? "status_four"
-                      : "status_none" // fallback
-                  }`}
-                >
-                  {{
-                    done: "اتمام پذیرش",
-                    one: "ناتمام",
-                    two: "ناتمام",
-                    three: "ناتمام",
-                    "expert confirmation": "تایید کارشناس",
-                    expert_confirmation: "تایید کارشناس",
-                    "awaiting expert approval": "در انتظار تایید کارشناس",
-                    awaiting_expert_approval: "در انتظار تایید کارشناس",
-                    "repair card": "اتمام پذیرش",
-                    repair_card: "اتمام پذیرش",
-                    "reception desk": "اتمام پذیرش",
-                    reception_desk: "اتمام پذیرش",
-                    "Repair card": "اتمام پذیرش",
-                  }[row.status?.toLowerCase()] ??
-                    {
-                      "Repair card": "اتمام پذیرش",
-                      "Reception desk": "اتمام پذیرش",
-                    }[row.status_display] ??
-                    row.status_display ??
-                    "نامشخص"}
-                </div>
+                {(() => {
+                  const statusDisplayLower =
+                    row.status_display?.toLowerCase() || "";
+                  const statusLower = row.status?.toLowerCase() || "";
+                  return (
+                    <div
+                      className={`status_btn ${
+                        statusDisplayLower === "done" ||
+                        statusDisplayLower === "repair card" ||
+                        statusDisplayLower === "reception desk"
+                          ? "status_none"
+                          : ["one", "two", "three"].includes(
+                              statusDisplayLower
+                            ) || ["one", "two", "three"].includes(statusLower)
+                          ? "status_one"
+                          : statusDisplayLower === "awaiting expert approval"
+                          ? "status_three"
+                          : statusDisplayLower === "expert confirmation"
+                          ? "status_four"
+                          : "status_none"
+                      }`}
+                    >
+                      {{
+                        done: "اتمام پذیرش",
+                        one: "ناتمام",
+                        two: "ناتمام",
+                        three: "ناتمام",
+                        "expert confirmation": "تایید کارشناس",
+                        "awaiting expert approval": "در انتظار تایید کارشناس",
+                        "repair card": "اتمام پذیرش",
+                        "reception desk": "اتمام پذیرش",
+                      }[statusLower] ??
+                        {
+                          "repair card": "اتمام پذیرش",
+                          "reception desk": "اتمام پذیرش",
+                        }[statusDisplayLower] ??
+                        row.status_display ??
+                        "نامشخص"}
+                    </div>
+                  );
+                })()}
               </TableCell>
             </TableRow>
           ))}

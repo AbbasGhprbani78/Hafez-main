@@ -6,6 +6,7 @@ body {
 
 .content-conatiner {
   display: flex;
+  align-items: start;
 }
 
 .subtitle-project {

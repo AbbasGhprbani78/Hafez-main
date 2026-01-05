@@ -8,7 +8,7 @@ export const MyProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [dataForm, setDataForm] = useState("");
   const [idForm, setIdForm] = useState("");
-  const [currentTab, setCurrentTab] = useState(1);
+  const [currentTab, setCurrentTab] = useState(2);
   const [userInfo, setUserInfo] = useState("");
 
   const getUserInfo = async () => {
