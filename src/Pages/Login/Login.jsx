@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./Login.css";
 import { Formik } from "formik";
 import Button1 from "../../Components/Modules/Button1/Button1";
@@ -11,6 +11,7 @@ import TypeActivity from "./TypeActivity/TypeActivity";
 import { Link, useNavigate } from "react-router-dom";
 import { toFarsiNumber, toEnglishNumber } from "../../utils/helper";
 import Grid from "@mui/material/Grid2";
+import { MyContext } from "../../context/context";
 
 export default function Login() {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -18,6 +19,7 @@ export default function Login() {
   const [isShowActivityForm, setIsShowActivityForm] = useState(
     localStorage.getItem("level")
   );
+  const { setPermissions, setIsLoggedIn } = useContext(MyContext);
 
   return (
     <>
@@ -86,6 +88,8 @@ export default function Login() {
                         if (response.data.type[0] === "repairman") {
                           navigate("/p-repairman/");
                         } else {
+                          setPermissions(response.data.permissions_tree || []);
+                          setIsLoggedIn(true);
                           navigate("/");
                         }
                       } else {

@@ -71,7 +71,6 @@ export default function History() {
         });
 
         if (response.status === 200) {
-          console.log(response.data.results);
           setRows(response.data.results || []);
           setTotalRows(response.data.count || 0);
         }

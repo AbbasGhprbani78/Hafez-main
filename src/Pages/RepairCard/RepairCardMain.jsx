@@ -56,7 +56,7 @@ function RepairCardMain() {
   const navigate = useNavigate();
 
   const handleGoToPaziresh = () => {
-    navigate("/paziresh");
+    navigate("/admission");
   };
 
   const handleChangePage = (newPage) => {

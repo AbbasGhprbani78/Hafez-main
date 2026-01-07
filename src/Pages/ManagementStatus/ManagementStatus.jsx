@@ -9,7 +9,6 @@ import Modal from "../../Components/Modules/Modal/Modal";
 import AddAndEditEquipment from "./ManagementsModals/AddAndEditEquipment";
 import AddAndEditHalls from "./ManagementsModals/AddAndEditHalls";
 import AddAndEditRepairman from "./ManagementsModals/AddAndEditRepairman";
-import AddAndEditUserModal from "./ManagementsModals/AddAndEditUserModal";
 import DeleteError from "./ManagementsModals/DeleteError";
 import Input from "../../Components/Modules/Input/Input";
 import Button2 from "../../Components/Modules/Button2/Button2";
@@ -55,7 +54,6 @@ CustomTabPanel.propTypes = {
 };
 
 function ManagementStatus() {
-  const [tabInformation, setTabInformation] = useState([]);
   const [filterRows, setFilterRows] = useState([]);
   const [selectedRowInfo, setSelectedRowInfo] = useState(item1);
   const [searchParams] = useSearchParams();
@@ -101,41 +99,31 @@ function ManagementStatus() {
         };
         if (searchValue && searchValue.length > 0) params.search = searchValue;
         const config = { params };
-        if (tab === 0) {
-          response = await apiClient.get(`/app/get-all-salon/`, config);
-          if (response.status === 200) {
-            setTabInformation(response.data.results);
-            setFilterRows(response.data.results);
-            setCount(response.data.count);
-          }
-        } else if (tab === 1) {
+        if (tab === 1) {
           response = await apiClient.get(
             `/app/api/repairman-schedule/`,
             config
           );
           if (response.status === 200) {
             const schedules = response.data?.results?.all_schedules ?? [];
-            setTabInformation(schedules);
             setFilterRows(schedules);
             setCount(response.data.count);
           }
         } else if (tab === 2) {
           response = await apiClient.get(`/app/equipment/`, config);
           if (response.status === 200) {
-            setTabInformation(response.data?.results);
             setFilterRows(response.data?.results);
             setCount(response.data.count);
           }
         } else if (tab === 3) {
-          response = await apiClient.get(`/app/add-user/`, config);
+          response = await apiClient.get(`/app/get-all-salon/`, config);
           if (response.status === 200) {
-            setTabInformation(response.data.users);
-            setFilterRows(response.data.users);
+            setFilterRows(response.data.results);
+            setCount(response.data.count);
           }
         }
       } catch (error) {
         errorMessage("خطا در برقراری ارتباط با سرور");
-        setTabInformation([]);
         setFilterRows([]);
       }
     },
@@ -181,36 +169,7 @@ function ManagementStatus() {
   return (
     <Grid className="content-conatiner">
       <Modal showModal={modal} setShowModal={handleToggleModal}>
-        {tab === 0 ? (
-          operation === "add" ? (
-            <AddAndEditHalls
-              modal={modal}
-              tab={tab}
-              toggleModal={handleToggleModal}
-              handleToggleUpdate={handleRebuildAndToggleModal}
-              action="add"
-              infoItem={selectedRowInfo}
-            />
-          ) : operation === "edit" ? (
-            <AddAndEditHalls
-              modal={modal}
-              tab={tab}
-              toggleModal={handleToggleModal}
-              handleToggleUpdate={handleRebuildAndToggleModal}
-              action="edit"
-              infoItem={selectedRowInfo}
-            />
-          ) : operation === "delete" ? (
-            <DeleteError
-              handleToggleUpdate={handleRebuildAndToggleModal}
-              toggleModal={handleToggleModal}
-              type="hall"
-              infoItem={selectedRowInfo}
-            />
-          ) : (
-            <></>
-          )
-        ) : tab === 1 ? (
+        {tab === 1 ? (
           operation === "add" ? (
             <AddAndEditRepairman
               modal={modal}
@@ -270,7 +229,7 @@ function ManagementStatus() {
           )
         ) : tab === 3 ? (
           operation === "add" ? (
-            <AddAndEditUserModal
+            <AddAndEditHalls
               modal={modal}
               tab={tab}
               toggleModal={handleToggleModal}
@@ -279,7 +238,7 @@ function ManagementStatus() {
               infoItem={selectedRowInfo}
             />
           ) : operation === "edit" ? (
-            <AddAndEditUserModal
+            <AddAndEditHalls
               modal={modal}
               tab={tab}
               toggleModal={handleToggleModal}
@@ -291,7 +250,7 @@ function ManagementStatus() {
             <DeleteError
               handleToggleUpdate={handleRebuildAndToggleModal}
               toggleModal={handleToggleModal}
-              type="user"
+              type="hall"
               infoItem={selectedRowInfo}
             />
           ) : (
@@ -416,119 +375,16 @@ function ManagementStatus() {
               style={"search_btn"}
               onClick={() => handleOpenModal(item1, "add")}
             >
-              {tab === 0
-                ? "تعریف سالن جدید"
-                : tab === 1
+              {tab === 1
                 ? "تعریف تعمیرکار جدید"
                 : tab === 2
                 ? "تعریف تجهیزات جدید"
                 : tab === 3
-                ? "تعریف کاربر جدید"
+                ? "تعریف سالن جدید"
                 : ""}
             </Button2>
           </Grid>
           <Box sx={{ width: "100%" }}>
-            <CustomTabPanel value={tab} index={0}>
-              <InfoTabel
-                tableInformation={filterRows}
-                page={page}
-                handleChange={handleChangePage}
-                totalRows={filterRows?.length}
-                pageLength={rowsPerPage}
-                columnsTitle={halls_columns}
-                key={21}
-              >
-                {filterRows !== undefined &&
-                  filterRows.length > 0 &&
-                  filterRows
-                    .slice(page * rowsPerPage, (page + 1) * rowsPerPage)
-                    .map((row, index) => (
-                      <TableRow
-                        key={index}
-                        sx={{
-                          backgroundColor: index % 2 === 0 ? "#fff" : "#f2f2f2",
-                          fontFamily: "iranYekan",
-                        }}
-                      >
-                        <TableCell
-                          align={"center"}
-                          sx={{ fontFamily: "iranYekan" }}
-                        >
-                          {toFarsiNumber(row.code)}
-                        </TableCell>
-                        <TableCell
-                          align={"center"}
-                          sx={{ fontFamily: "iranYekan" }}
-                        >
-                          {toFarsiNumber(row.name)}
-                        </TableCell>
-
-                        <TableCell
-                          align={"center"}
-                          sx={{ fontFamily: "iranYekan" }}
-                        >
-                          {`${toFarsiNumber(row.remaining_capacity)}`}
-                        </TableCell>
-
-                        <TableCell
-                          sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            fontFamily: "iranYekan",
-                            padding: "19px",
-                          }}
-                        >
-                          <div
-                            className={`${styles.status_btn_halls} ${
-                              row.status === true
-                                ? styles.status_halls_one
-                                : row.status === false
-                                ? styles.status_halls_two
-                                : styles.status_halls_defualt
-                            }`}
-                          >
-                            {row.status === true
-                              ? "فعال"
-                              : row.status === false
-                              ? "غیرفعال"
-                              : "نامشخص"}
-                          </div>
-                        </TableCell>
-
-                        <TableCell
-                          align={"center"}
-                          sx={{ fontFamily: "iranYekan" }}
-                        >
-                          {toFarsiNumber(row.descriptions)}
-                        </TableCell>
-
-                        <TableCell
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            flexDirection: "row",
-                            gap: "1rem",
-                            padding: "18px 10px",
-                          }}
-                        >
-                          <Button3
-                            icon={faPencil}
-                            variant="contained"
-                            style={"edit_delete_btn"}
-                            onClick={() => handleOpenModal(row, "edit")}
-                          />
-                          <Button3
-                            icon={faTrashCan}
-                            variant="contained"
-                            style={"edit_delete_btn"}
-                            onClick={() => handleOpenModal(row, "delete")}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-              </InfoTabel>
-            </CustomTabPanel>
             <CustomTabPanel value={tab} index={1}>
               {filterRows === undefined ? (
                 <LoadingForm />
@@ -678,7 +534,7 @@ function ManagementStatus() {
                   tableInformation={filterRows}
                   page={page}
                   handleChange={handleChangePage}
-                  totalRows={filterRows.length}
+                  totalRows={count}
                   pageLength={rowsPerPage}
                   columnsTitle={equipment_columns}
                   key={23}
@@ -770,6 +626,107 @@ function ManagementStatus() {
                 </InfoTabel>
               )}
             </CustomTabPanel>
+            <CustomTabPanel value={tab} index={3}>
+              <InfoTabel
+                tableInformation={filterRows}
+                page={page}
+                handleChange={handleChangePage}
+                totalRows={count}
+                pageLength={rowsPerPage}
+                columnsTitle={halls_columns}
+                key={21}
+              >
+                {filterRows !== undefined &&
+                  filterRows.length > 0 &&
+                  filterRows
+                    .slice(page * rowsPerPage, (page + 1) * rowsPerPage)
+                    .map((row, index) => (
+                      <TableRow
+                        key={index}
+                        sx={{
+                          backgroundColor: index % 2 === 0 ? "#fff" : "#f2f2f2",
+                          fontFamily: "iranYekan",
+                        }}
+                      >
+                        <TableCell
+                          align={"center"}
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {toFarsiNumber(row.code)}
+                        </TableCell>
+                        <TableCell
+                          align={"center"}
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {toFarsiNumber(row.name)}
+                        </TableCell>
+
+                        <TableCell
+                          align={"center"}
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {`${toFarsiNumber(row.remaining_capacity)}`}
+                        </TableCell>
+
+                        <TableCell
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            fontFamily: "iranYekan",
+                            padding: "19px",
+                          }}
+                        >
+                          <div
+                            className={`${styles.status_btn_halls} ${
+                              row.status === true
+                                ? styles.status_halls_one
+                                : row.status === false
+                                ? styles.status_halls_two
+                                : styles.status_halls_defualt
+                            }`}
+                          >
+                            {row.status === true
+                              ? "فعال"
+                              : row.status === false
+                              ? "غیرفعال"
+                              : "نامشخص"}
+                          </div>
+                        </TableCell>
+
+                        <TableCell
+                          align={"center"}
+                          sx={{ fontFamily: "iranYekan" }}
+                        >
+                          {toFarsiNumber(row.descriptions)}
+                        </TableCell>
+
+                        <TableCell
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            flexDirection: "row",
+                            gap: "1rem",
+                            padding: "18px 10px",
+                          }}
+                        >
+                          <Button3
+                            icon={faPencil}
+                            variant="contained"
+                            style={"edit_delete_btn"}
+                            onClick={() => handleOpenModal(row, "edit")}
+                          />
+                          <Button3
+                            icon={faTrashCan}
+                            variant="contained"
+                            style={"edit_delete_btn"}
+                            onClick={() => handleOpenModal(row, "delete")}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+              </InfoTabel>
+            </CustomTabPanel>
           </Box>
         </Grid>
       </Grid>
@@ -819,6 +776,16 @@ export function InfoTabel({
   );
 }
 
+InfoTabel.propTypes = {
+  tableInformation: PropTypes.array,
+  handleChange: PropTypes.func,
+  page: PropTypes.number,
+  pageLength: PropTypes.number,
+  totalRows: PropTypes.number,
+  columnsTitle: PropTypes.array,
+  children: PropTypes.node,
+};
+
 const tabHeaders = [
   {
     value: 1,
@@ -826,7 +793,7 @@ const tabHeaders = [
     tabNameEn: "Repairman Scheduling",
   },
   { value: 2, label: "تجهیزات", tabNameEn: "Equipment" },
-  { value: 0, label: "سالن‌ها", tabNameEn: "Halls" },
+  { value: 3, label: "سالن‌ها", tabNameEn: "Halls" },
 ];
 
 const item1 = {

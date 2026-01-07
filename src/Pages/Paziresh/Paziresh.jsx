@@ -93,18 +93,18 @@ export default function Paziresh() {
     }
   };
 
-  // useEffect(() => {
-  //   if (!idForm && !formId) {
-  //     setCurrentTab(1);
-  //   }
-  // }, [idForm, formId]);
+  useEffect(() => {
+    if (!idForm && !formId) {
+      setCurrentTab(1);
+    }
+  }, [idForm, formId]);
 
-  // useEffect(() => {
-  //   return () => {
-  //     setIdForm("");
-  //     setCurrentTab(1);
-  //   };
-  // }, []);
+  useEffect(() => {
+    return () => {
+      setIdForm("");
+      setCurrentTab(1);
+    };
+  }, []);
 
   useEffect(() => {
     if (idForm || formId) {

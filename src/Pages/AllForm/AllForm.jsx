@@ -48,7 +48,7 @@ export default function AllForm() {
   const handleGoToPaziresh = () => {
     setIdForm("");
     setCurrentTab(1);
-    navigate("/paziresh");
+    navigate("/admission");
   };
 
   const handleChangePage = (newPage) => {
@@ -161,7 +161,7 @@ export default function AllForm() {
     };
 
     setCurrentTab(tabMap[step] ?? 2);
-    navigate("/paziresh");
+    navigate("/admission");
   };
 
   useEffect(() => {

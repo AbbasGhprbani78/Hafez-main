@@ -53,7 +53,6 @@ function DeleteError({
     }
   };
 
-  console.log(infoItem);
   return (
     <Grid
       container

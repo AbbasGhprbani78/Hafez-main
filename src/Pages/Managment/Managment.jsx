@@ -44,7 +44,6 @@ export default function Managment() {
     try {
       const response = await apiClient.get("/app/api/admin-dashboard/");
       if (response.status === 200) {
-        console.log(response.data);
         setData(response.data);
       }
     } catch (error) {
@@ -82,7 +81,7 @@ export default function Managment() {
                 title={"سالن"}
                 icon={faWarehouse}
                 route="/management/status"
-                tabIndex={0}
+                tabIndex={3}
               >
                 <div className={`${styles.wrap_tools} scroll-right`}>
                   {data?.salons?.items.map((item) => (

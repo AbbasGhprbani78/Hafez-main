@@ -8,14 +8,19 @@ export const MyProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [dataForm, setDataForm] = useState("");
   const [idForm, setIdForm] = useState("");
-  const [currentTab, setCurrentTab] = useState(2);
+  const [currentTab, setCurrentTab] = useState(1);
   const [userInfo, setUserInfo] = useState("");
+  const [permissions, setPermissions] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const getUserInfo = async () => {
     try {
       const response = await apiClient("user/profile/me/");
       if (response.status === 200) {
-        setUserInfo(response.data);
+        console.log(response.data);
+        setUserInfo(response.data.permissions_tree);
+        setPermissions(response.data.permissions_tree || []);
+        setIsLoggedIn(true);
       }
     } catch (error) {
       console.log(error);
@@ -43,6 +48,10 @@ export const MyProvider = ({ children }) => {
         currentTab,
         setCurrentTab,
         userInfo,
+        permissions,
+        setPermissions,
+        isLoggedIn,
+        setIsLoggedIn,
       }}
     >
       {children}

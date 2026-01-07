@@ -46,7 +46,7 @@ export default function Header({ title, isPanel, routes }) {
               <Button2
                 style="search_btn"
                 icon={faPlus}
-                onClick={() => navigate("/paziresh")}
+                onClick={() => navigate("/admission")}
               >
                 {"پذیرش جدید"}
               </Button2>

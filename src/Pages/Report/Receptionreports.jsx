@@ -89,8 +89,6 @@ export default function Receptionreports() {
 
       if (response.status === 200) {
         setReceptionFilterData(response.data);
-
-        console.log(response.data);
       }
     } catch (error) {
       console.log(error);
@@ -147,7 +145,6 @@ export default function Receptionreports() {
 
       if (response.status === 200) {
         const data = response.data;
-        console.log(response.data.results);
         setTotalRows(data.count || 0);
         const mappedRows = (data.results || []).map((item) => ({
           id: item.admission_number,
