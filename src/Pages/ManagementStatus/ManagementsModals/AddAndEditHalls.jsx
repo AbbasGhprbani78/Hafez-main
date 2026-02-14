@@ -109,7 +109,7 @@ function AddAndEditHalls({
       try {
         const response = await apiClient.post(
           `/app/get-all-salon/`,
-          requestData
+          requestData,
         );
 
         if (response.status === 201) {
@@ -126,7 +126,7 @@ function AddAndEditHalls({
       try {
         const response = await apiClient.put(
           `/app/salon-update/${hallsInfo.hall_id}`,
-          requestData
+          requestData,
         );
 
         if (response.status === 200) {
@@ -143,26 +143,16 @@ function AddAndEditHalls({
   };
 
   useEffect(() => {
-    if (tab === 0) {
-      if (modal === true) {
-        if (action === "edit") {
-          setHallsInfo({
-            hall_id: infoItem.id,
-            hall_status: infoItem.status,
-            hall_name: infoItem.name,
-            hall_code: infoItem.code,
-            hall_description: infoItem.descriptions,
-          });
-        } else if (action === "add") {
-          setHallsInfo({
-            hall_id: 0,
-            hall_status: true,
-            hall_name: "",
-            hall_code: "",
-            hall_description: "",
-          });
-        }
-      } else {
+    if (modal === true) {
+      if (action === "edit") {
+        setHallsInfo({
+          hall_id: infoItem.id,
+          hall_status: infoItem.status,
+          hall_name: infoItem.name,
+          hall_code: infoItem.code,
+          hall_description: infoItem.descriptions,
+        });
+      } else if (action === "add") {
         setHallsInfo({
           hall_id: 0,
           hall_status: true,
@@ -170,15 +160,25 @@ function AddAndEditHalls({
           hall_code: "",
           hall_description: "",
         });
-        setHelperText({
-          help_name: "",
-          help_code: "",
-          help_description: "",
-        });
       }
+    } else {
+      setHallsInfo({
+        hall_id: 0,
+        hall_status: true,
+        hall_name: "",
+        hall_code: "",
+        hall_description: "",
+      });
+      setHelperText({
+        help_name: "",
+        help_code: "",
+        help_description: "",
+      });
     }
   }, [action, infoItem, tab, modal]);
 
+  console.log(infoItem);
+  console.log(action);
   return (
     <Grid
       container
@@ -204,8 +204,8 @@ function AddAndEditHalls({
           {action === "add"
             ? "تعریف سالن جدید"
             : action === "edit"
-            ? `ویرایش سالن ${infoItem ? infoItem.code : "123"}`
-            : "افزودن آیتم"}
+              ? `ویرایش سالن ${infoItem ? infoItem.code : "123"}`
+              : "افزودن آیتم"}
         </Typography>
         <Box className={styles.delete_icon_modal} onClick={() => toggleModal()}>
           <FontAwesomeIcon icon={faXmark} />

@@ -5,8 +5,6 @@ import Login from "./Pages/Login/Login";
 import AllForm from "./Pages/AllForm/AllForm";
 import Repairs from "./Pages/Repairs/Repairs";
 import RepairPlan from "./Pages/RepairPlan/RepairPlan";
-import Fund from "./Pages/Fund/Fund";
-import FundItem from "./Pages/Fund/FundItem";
 import RepairCardMain from "./Pages/RepairCard/RepairCardMain";
 import ManagementStatus from "./Pages/ManagementStatus/ManagementStatus";
 import PRepairmanPrivate from "./Components/Modules/Privates/PRepairmanPrivate";
@@ -27,6 +25,10 @@ import DailyBilling from "./Pages/finance/DailyBilling";
 import WorkOfContractors from "./Pages/finance/WorkOfContractors";
 import Mangement from "./Pages/Managment/Managment";
 import ExpertReferralItem from "./Pages/ExpertReferralItem/ExpertReferralItem";
+import Accounting from "./Pages/Accounting/Accounting";
+import AccountingItem from "./Pages/Accounting/AccountingItem";
+import Fund from "./Pages/Fund/Fund";
+import FundItem from "./Pages/Fund/FundItem";
 const routes = [
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <SignUp /> },
@@ -68,7 +70,6 @@ const routes = [
     ),
   },
   {
-    //حسابداری
     path: "/fund",
     element: (
       <NonRepairmanPrivate>
@@ -77,7 +78,22 @@ const routes = [
     ),
   },
   {
-    //درختواره
+    path: "/fund/:id",
+    element: (
+      <NonRepairmanPrivate>
+        <FundItem />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
+    path: "/accounting",
+    element: (
+      <NonRepairmanPrivate>
+        <Accounting />
+      </NonRepairmanPrivate>
+    ),
+  },
+  {
     path: "/arboretum",
     element: (
       <NonRepairmanPrivate>
@@ -86,7 +102,6 @@ const routes = [
     ),
   },
   {
-    //گزارش پذیرش
     path: "/reports/reception-reports",
     element: (
       <NonRepairmanPrivate>
@@ -194,10 +209,10 @@ const routes = [
   },
   {
     //سینگل فاکتور
-    path: "/fund/:id",
+    path: "/accounting/:id",
     element: (
       <NonRepairmanPrivate>
-        <FundItem />
+        <AccountingItem />
       </NonRepairmanPrivate>
     ),
   },

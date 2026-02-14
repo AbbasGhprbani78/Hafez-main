@@ -270,7 +270,7 @@ export default function Users() {
 
         if (parent && parent.children) {
           const allChecked = parent.children.every(
-            (child) => newState[child.id]
+            (child) => newState[child.id],
           );
           newState[parent.id] = allChecked;
         }
@@ -309,7 +309,7 @@ export default function Users() {
     } catch (error) {
       console.error(error);
       errorMessage(
-        error.response?.data?.message || "خطا در به‌روزرسانی دسترسی‌ها"
+        error.response?.data?.message || "خطا در به‌روزرسانی دسترسی‌ها",
       );
     } finally {
       setLoading(false);
@@ -353,7 +353,7 @@ export default function Users() {
           response?.data?.map((item) => ({
             value: item.id,
             label: item.type,
-          }))
+          })),
         );
       }
     } catch (error) {
@@ -390,8 +390,8 @@ export default function Users() {
       if (response.status === 200) {
         setRows((prevRows) =>
           prevRows.map((row) =>
-            row.id === userId ? { ...row, status: newStatus } : row
-          )
+            row.id === userId ? { ...row, status: newStatus } : row,
+          ),
         );
       }
     } catch (error) {
@@ -437,7 +437,7 @@ export default function Users() {
       permissionsData.forEach((category) => {
         if (category.children && category.children.length > 0) {
           const allChildrenSelected = category.children.every((child) =>
-            permissionIds.includes(child.id)
+            permissionIds.includes(child.id),
           );
           if (allChildrenSelected) {
             initialChecked[category.id] = true;
@@ -1053,8 +1053,9 @@ export default function Users() {
                     {toFarsiNumber(row?.national_code)}
                   </TableCell>
                   <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
-                    {toFarsiNumber(row.first_name)}{" "}
-                    {toFarsiNumber(row.last_name)}
+                    {row?.full_name
+                      ? toFarsiNumber(row.full_name)
+                      : `${toFarsiNumber(row.first_name || "")} ${toFarsiNumber(row.last_name || "")}`}
                   </TableCell>
                   <ChnageDate date={row?.date_joined} />
                   <TableCell

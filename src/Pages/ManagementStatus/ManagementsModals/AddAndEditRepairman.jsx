@@ -323,7 +323,7 @@ function AddAndEditRepairman({
       try {
         const response = await apiClient.post(
           `/app/add-repairman/`,
-          requestData
+          requestData,
         );
 
         if (response.status === 201) {
@@ -340,7 +340,7 @@ function AddAndEditRepairman({
       try {
         const response = await apiClient.put(
           `/app/add-repairman/${repairmanInfo.id}`,
-          requestData
+          requestData,
         );
 
         if (response.status === 200) {
@@ -375,13 +375,13 @@ function AddAndEditRepairman({
           setItemRepairHalls(
             Array.isArray(infoItem.salon) && infoItem.salon.length > 0
               ? infoItem.salon
-              : []
+              : [],
           );
           // type is already an array of IDs: [1, 2, 3]
           setItemRepairExpertise(
             Array.isArray(infoItem.type) && infoItem.type.length > 0
               ? infoItem.type
-              : []
+              : [],
           );
         } else if (action === "add") {
           setRepairmanInfo({
@@ -477,10 +477,10 @@ function AddAndEditRepairman({
           {action === "add"
             ? "تعریف تعمیرکار جدید"
             : action === "edit"
-            ? `ویرایش اطلاعات ${
-                infoItem ? `${infoItem.full_name}` : "نام تعمیرکار"
-              } `
-            : "افزودن تعمیرکار جدید"}
+              ? `ویرایش اطلاعات ${
+                  infoItem ? `${infoItem.full_name}` : "نام تعمیرکار"
+                } `
+              : "افزودن تعمیرکار جدید"}
         </Typography>
         <Box className={styles.delete_icon_modal} onClick={() => toggleModal()}>
           <FontAwesomeIcon icon={faXmark} />

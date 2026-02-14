@@ -52,7 +52,7 @@ export default function Paziresh() {
   const getDataAllForm = async () => {
     try {
       const response = await apiClient.get(
-        `/app/get-complated-form/${idForm ? idForm : formId}`
+        `/app/get-complated-form/${idForm ? idForm : formId}`,
       );
       if (response.status === 200) {
         setAllDataForms(response.data);
@@ -65,7 +65,7 @@ export default function Paziresh() {
   const getDataEditForms = async () => {
     try {
       const response = await apiClient.get(
-        `/app/get-full-complated-form/${idForm ? idForm : formId}/`
+        `/app/get-full-complated-form/${idForm ? idForm : formId}/`,
       );
       if (response.status === 200) {
         setAllDataForms(response.data);
@@ -79,7 +79,7 @@ export default function Paziresh() {
     setLoading(true);
     try {
       const response = await apiClient.post(
-        `/app/forms-update-step-reception-desk/${idForm ? idForm : formId}`
+        `/app/forms-update-step-reception-desk/${idForm ? idForm : formId}`,
       );
       if (response.status == 200) {
         successMessage("فرم با موفقیت تکمیل و تایید شد");
@@ -139,7 +139,7 @@ export default function Paziresh() {
         />
         <Grid container size={12} spacing={2}>
           <MuiStepper activeStep={currentTab} />
-          <div
+          {/* <div
             style={{
               display: currentTab === 1 || currentTab === 4 ? "block" : "none",
               width: "100%",
@@ -197,6 +197,48 @@ export default function Paziresh() {
             }}
           >
             <Pform4 />
+          </div> */}
+          <div className="form-container" style={{ width: "100%" }}>
+            {(currentTab === 1 || currentTab === 4) && (
+              <Pform1
+                nextTab={handleNextTab}
+                setContent={setContent}
+                setFormId={setFormId}
+                formId={formId}
+                currentTab={currentTab}
+                form1={allDataForms.customer_form}
+                editMode={editMode}
+              />
+            )}
+
+            {(currentTab === 2 || currentTab === 4) && (
+              <Pform2
+                nextTab={handleNextTab}
+                prevTab={handlePrevTab}
+                setContent={setContent}
+                formId={formId}
+                currentTab={currentTab}
+                form2Data={allDataForms.customer_form_two}
+                editMode={editMode}
+              />
+            )}
+
+            {(currentTab === 3 || currentTab === 4) && (
+              <AcceptenceForm3
+                nextTab={handleNextTab}
+                prevTab={handlePrevTab}
+                setContent={setContent}
+                formId={formId}
+                currentTab={currentTab}
+                form3={allDataForms.customer_form_three}
+              />
+            )}
+
+            {currentTab === 4 && (
+              <div style={{ marginBottom: "1rem" }}>
+                <Pform4 />
+              </div>
+            )}
           </div>
         </Grid>
         {currentTab === 4 &&

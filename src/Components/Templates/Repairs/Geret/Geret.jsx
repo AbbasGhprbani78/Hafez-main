@@ -69,7 +69,7 @@ export default function Geret({ data, id, expertStatements }) {
 
     if (field === "ExpertStatementsCode" && Array.isArray(data)) {
       const matchedItem = data.find(
-        (item) => item.expert_statement.code == value
+        (item) => item.expert_statement.code == value,
       );
 
       if (matchedItem) {
@@ -201,7 +201,7 @@ export default function Geret({ data, id, expertStatements }) {
         });
         if (response.status === 200 || response.status === 204) {
           setGeretDataTable((prev) =>
-            prev.filter((_, i) => i !== indexId.index)
+            prev.filter((_, i) => i !== indexId.index),
           );
           successMessage(" با موفقیت حذف شد");
         }
@@ -243,27 +243,27 @@ export default function Geret({ data, id, expertStatements }) {
     if (geretModalData.ExpertStatementsCode) {
       try {
         const response = await apiClient.get(
-          `/app/get-statement/${geretModalData.ExpertStatementsCode}`
+          `/app/get-statement/${geretModalData.ExpertStatementsCode}`,
         );
         if (response.status === 200) {
           setRepairmen(
             response.data.repairmen.map((item) => ({
               value_id: item.id,
               value: item.full_name,
-            }))
+            })),
           );
           setWages(
             response.data.statements.map((item) => ({
               value_id: item.id,
               value: item.descriptions,
-            }))
+            })),
           );
 
           setPrices(
             response.data.statements.map((item) => ({
               value_id: item.id,
               value: item.price,
-            }))
+            })),
           );
         }
       } catch (error) {
@@ -353,7 +353,7 @@ export default function Geret({ data, id, expertStatements }) {
         expertStatements?.map((item) => ({
           value_id: item?.code,
           value: item?.expert_statements_text,
-        }))
+        })),
       );
     } else {
       console.warn("data is not an array:", data);
@@ -375,7 +375,7 @@ export default function Geret({ data, id, expertStatements }) {
         price: defect.price || "",
         third_form: item.id || "",
         id: defect?.id,
-      }))
+      })),
     );
 
     setGeretDataTable(allDefects);
@@ -554,7 +554,7 @@ export default function Geret({ data, id, expertStatements }) {
                           } catch (error) {
                             console.error(
                               "خطا در دریافت اطلاعات قیمت تعمیرکار:",
-                              error
+                              error,
                             );
                             errorMessage("دریافت اطلاعات با خطا مواجه شد.");
                           }
@@ -567,7 +567,7 @@ export default function Geret({ data, id, expertStatements }) {
               ))}
           </TableForm>
         </div>
-        <p className={styles.sub_title}>نوع خدمات و انتخاب تعمیرکار :</p>
+        <p className={styles.sub_title}> تعمیرکار :</p>
         <Grid
           container
           className={styles.occultationItem_container}

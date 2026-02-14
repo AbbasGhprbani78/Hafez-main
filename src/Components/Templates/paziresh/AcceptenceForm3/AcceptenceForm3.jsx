@@ -183,7 +183,7 @@ function AcceptenceForm3({
     setDataForm3((prev) => ({
       ...prev,
       invoiceItems: prev.invoiceItems.filter(
-        (_, index) => index !== indexToRemove
+        (_, index) => index !== indexToRemove,
       ),
     }));
   };
@@ -209,7 +209,7 @@ function AcceptenceForm3({
         })
       ) {
         errorMessage(
-          "لطفاً تمام فیلدهای آیتم‌های فاکتور را به‌درستی وارد کنید (قیمت نباید منفی باشد)."
+          "لطفاً تمام فیلدهای آیتم‌های فاکتور را به‌درستی وارد کنید (قیمت نباید منفی باشد).",
         );
         return;
       }
@@ -296,7 +296,7 @@ function AcceptenceForm3({
           response.data.map((item) => ({
             value_id: item?.description,
             value: item?.description,
-          }))
+          })),
         );
       }
     } catch (error) {
@@ -312,7 +312,7 @@ function AcceptenceForm3({
           response.data.map((item) => ({
             value_id: item?.id,
             value: item?.descriptions,
-          }))
+          })),
         );
       }
     } catch (error) {
@@ -353,7 +353,7 @@ function AcceptenceForm3({
 
       if (hasInvalidInvoiceItems) {
         errorMessage(
-          "لطفاً تمام فیلدهای آیتم‌های فاکتور را به‌درستی وارد کنید (قیمت نباید منفی باشد)."
+          "لطفاً تمام فیلدهای آیتم‌های فاکتور را به‌درستی وارد کنید (قیمت نباید منفی باشد).",
         );
         return;
       }
@@ -363,7 +363,7 @@ function AcceptenceForm3({
     try {
       const response = await apiClient[submitMethod](
         `/app/submit-repair-form/${idForm ? idForm : formId}`,
-        selectedData
+        selectedData,
       );
 
       if (response.status === 200) {
@@ -371,8 +371,8 @@ function AcceptenceForm3({
           selectedData?.referral_to_an_expert === "normal"
             ? "فرم با موفقیت ارسال شد"
             : selectedData?.referral_to_an_expert === "expert approve"
-            ? "فرم با موفقیت تایید شد"
-            : ""
+              ? "فرم با موفقیت تایید شد"
+              : "",
         );
         selectedData?.referral_to_an_expert === "normal" && nextTab();
         selectedData?.referral_to_an_expert === "expert approve" &&
@@ -393,7 +393,7 @@ function AcceptenceForm3({
     try {
       const response = await apiClient.post(
         `app/form/${idForm ? idForm : formId}/referral-to-expert/`,
-        formPayload
+        formPayload,
       );
 
       if (response.status === 200) {
@@ -410,27 +410,27 @@ function AcceptenceForm3({
   const getWagesPricerepairman = async () => {
     try {
       const response = await apiClient.get(
-        `/app/get-statement/${dataform3.ExpertStatements}`
+        `/app/get-statement/${dataform3.ExpertStatements}`,
       );
       if (response.status === 200) {
         setRepairmen(
           response.data.repairmen.map((item) => ({
             value_id: item.id,
             value: item.full_name,
-          }))
+          })),
         );
         setWages(
           response.data.statements.map((item) => ({
             value_id: item.id,
             value: item.descriptions,
-          }))
+          })),
         );
 
         setPrices(
           response.data.statements.map((item) => ({
             value_id: item.id,
             value: item.price,
-          }))
+          })),
         );
       }
     } catch (error) {
@@ -464,7 +464,7 @@ function AcceptenceForm3({
   const getForm3Data = async () => {
     try {
       const response = await apiClient.get(
-        `/app/submit-repair-form/${idForm ? idForm : formId}`
+        `/app/submit-repair-form/${idForm ? idForm : formId}`,
       );
 
       if (response.status === 200) {
@@ -485,30 +485,30 @@ function AcceptenceForm3({
           tableForm.map(async (item) => {
             const CustomerFile = await Promise.all(
               item.CustomerFile.map(async (file) =>
-                file.startsWith("data:image") ? file : await urlToBase64(file)
-              )
+                file.startsWith("data:image") ? file : await urlToBase64(file),
+              ),
             );
 
             const ExpertFile = await Promise.all(
               item.ExpertFile.map(async (file) =>
-                file.startsWith("data:image") ? file : await urlToBase64(file)
-              )
+                file.startsWith("data:image") ? file : await urlToBase64(file),
+              ),
             );
 
             const CustomerVoice = await Promise.all(
               item.CustomerVoice.map(async (file) =>
-                file.startsWith("data:audio") ? file : await urlToBase64(file)
-              )
+                file.startsWith("data:audio") ? file : await urlToBase64(file),
+              ),
             );
 
             const ExpertVoice = await Promise.all(
               item.ExpertVoice.map(async (file) =>
-                file.startsWith("data:audio") ? file : await urlToBase64(file)
-              )
+                file.startsWith("data:audio") ? file : await urlToBase64(file),
+              ),
             );
 
             const matchedExpert = expertTexts.find(
-              (opt) => opt.value_id === item.ExpertStatements
+              (opt) => opt.value_id === item.ExpertStatements,
             );
 
             return {
@@ -519,7 +519,7 @@ function AcceptenceForm3({
               ExpertVoice,
               ExpertStatementsText: matchedExpert ? matchedExpert.value : "",
             };
-          })
+          }),
         );
 
         const referralValue =
@@ -548,7 +548,7 @@ function AcceptenceForm3({
   const getRepairmanSchedules = async (
     search = "",
     pageNumber = page,
-    pageSize = rowsPerPage
+    pageSize = rowsPerPage,
   ) => {
     try {
       setSchedulesLoading(true);
@@ -564,7 +564,7 @@ function AcceptenceForm3({
         setTotalSchedules(
           response.data.count ||
             response.data.total ||
-            (response.data.all_schedules || []).length
+            (response.data.all_schedules || []).length,
         );
       }
     } catch (error) {
@@ -647,7 +647,7 @@ function AcceptenceForm3({
       setAssignLoading(true);
       const response = await apiClient.post(
         "/app/api/repairman-schedule/",
-        payload
+        payload,
       );
       if (response.status === 200 || response.status === 201) {
         successMessage("تعمیرکار با موفقیت برنامه‌ریزی شد.");
@@ -812,15 +812,15 @@ function AcceptenceForm3({
                           item?.work_status === "free"
                             ? "free"
                             : item?.work_status === "in_repair"
-                            ? "under"
-                            : "hide"
+                              ? "under"
+                              : "hide"
                         }`}
                       >
                         {item?.work_status === "free"
                           ? "آزاد"
                           : item?.work_status === "in_repair"
-                          ? "درحال تعمیر"
-                          : "Hide"}
+                            ? "درحال تعمیر"
+                            : "Hide"}
                       </div>
                     </TableCell>
                   </TableRow>
@@ -1196,7 +1196,7 @@ function AcceptenceForm3({
                     }}
                   >
                     <Typography
-                      className={styles.label_input_form3}
+                      className={"label_input_form3"}
                       sx={{ marginBottom: { xs: "5px" } }}
                     >
                       {"تخمین زمان تعمیرکار"}
@@ -1363,7 +1363,7 @@ const PayRowComponent = ({
       >
         <div className={styles.input_container}>
           <InputPrice
-            label="قیمت محصول"
+            label="قیمت"
             value={priceValue}
             onChange={priceSet}
             name="price"

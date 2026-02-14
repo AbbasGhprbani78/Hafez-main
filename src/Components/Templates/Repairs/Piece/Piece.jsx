@@ -184,12 +184,12 @@ export default function Piece({ id, pieces }) {
       setLoading(true);
       try {
         const response = await apiClient.delete(
-          `app/piece-for-form/${indexId.id}/delete/`
+          `app/piece-for-form/${indexId.id}/delete/`,
         );
         if (response.status === 204) {
           successMessage("با موفقیت حذف شد");
           setPiceDataTable((prev) =>
-            prev.filter((_, i) => i !== indexId.index)
+            prev.filter((_, i) => i !== indexId.index),
           );
         }
       } catch (error) {
@@ -219,7 +219,7 @@ export default function Piece({ id, pieces }) {
     try {
       const response = await apiClient.put(
         "app/piece-for-form-update/",
-        payload
+        payload,
       );
 
       if (response.status === 201 || response.status === 200) {
@@ -356,6 +356,8 @@ export default function Piece({ id, pieces }) {
     getsuppliers();
     getRepairMans();
   }, []);
+
+  console.log(suppliers);
 
   return (
     <>
@@ -515,11 +517,11 @@ export default function Piece({ id, pieces }) {
           }}
         >
           <div className={`${styles.wrap_drop} `}>
-            <span className={styles.text_drop}>تامین کننده :</span>
+            {/* <span className={styles.text_drop}>تامین کننده :</span> */}
             <SearchAndSelectDropDwon
               text={"خدمات دهنده"}
               icon={faAngleDown}
-              label={""}
+              label={"تامین کننده"}
               items={suppliers.map((item) => ({
                 value_id: item.id,
                 value: item.name,

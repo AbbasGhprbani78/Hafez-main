@@ -123,7 +123,7 @@ export default function OutWork({ id, pieces }) {
     setEditMode(true);
     setShowModal(true);
     const mainEditRow = [...outOfworkModaldataTable].filter(
-      (_, i) => i === index
+      (_, i) => i === index,
     );
     setOutOfworkModalData({
       action: mainEditRow[0]?.action,
@@ -177,20 +177,22 @@ export default function OutWork({ id, pieces }) {
       newErrors.price = "قیمت الزامی است";
     }
 
-    if (!outOfworkModaldata.departurekm.trim()) {
-      newErrors.departurekm = "کیلومتر خروج الزامی است";
-    } else if (!onlyNumbers.test(outOfworkModaldata.departurekm)) {
-      newErrors.departurekm = "فقط عدد مجاز است";
+    if (outOfworkModaldata.type === 1) {
+      if (!outOfworkModaldata.departurekm.trim()) {
+        newErrors.departurekm = "کیلومتر خروج الزامی است";
+      } else if (!onlyNumbers.test(outOfworkModaldata.departurekm)) {
+        newErrors.departurekm = "فقط عدد مجاز است";
+      }
+
+      if (!outOfworkModaldata.Arrivalkm.trim()) {
+        newErrors.Arrivalkm = "کیلومتر ورود الزامی است";
+      } else if (!onlyNumbers.test(outOfworkModaldata.Arrivalkm)) {
+        newErrors.Arrivalkm = "فقط عدد مجاز است";
+      }
     }
 
     if (!outOfworkModaldata.departuretime) {
       newErrors.departuretime = "زمان خروج الزامی است";
-    }
-
-    if (!outOfworkModaldata.Arrivalkm.trim()) {
-      newErrors.Arrivalkm = "کیلومتر ورود الزامی است";
-    } else if (!onlyNumbers.test(outOfworkModaldata.Arrivalkm)) {
-      newErrors.Arrivalkm = "فقط عدد مجاز است";
     }
 
     if (!outOfworkModaldata.arrivaltime) {
@@ -307,7 +309,7 @@ export default function OutWork({ id, pieces }) {
     try {
       const response = await apiClient.put(
         `app/api/work-abroad/${indexId.id}`,
-        payload
+        payload,
       );
 
       if (response.status === 201 || response.status === 200) {
@@ -325,12 +327,12 @@ export default function OutWork({ id, pieces }) {
       setLoading(true);
       try {
         const response = await apiClient.delete(
-          `app/api/work-abroad/${indexId.id}`
+          `app/api/work-abroad/${indexId.id}`,
         );
         if (response.status === 200 || response.status === 204) {
           successMessage("با موفقیت حذف شد");
           setOutOfworkModaldataTable((prev) =>
-            prev.filter((_, i) => i !== indexId.index)
+            prev.filter((_, i) => i !== indexId.index),
           );
         }
       } catch (error) {
@@ -340,7 +342,7 @@ export default function OutWork({ id, pieces }) {
       }
     } else {
       setOutOfworkModaldataTable((prev) =>
-        prev.filter((_, i) => i !== indexId.index)
+        prev.filter((_, i) => i !== indexId.index),
       );
       successMessage(" با موفقیت حذف شد");
     }
@@ -410,63 +412,106 @@ export default function OutWork({ id, pieces }) {
                   {errors.price && <p className="error">{errors.price}</p>}
                 </Grid>
               </Grid>
-              <Grid
-                container
-                className={"distancerow"}
-                rowSpacing={2}
-                columnSpacing={4}
-              >
-                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
-                  <Input
-                    label="کیلومتر ورود"
-                    placeholder="کیلومتر ورود"
-                    icon={faGauge}
-                    name="Arrivalkm"
-                    value={toFarsiNumber(outOfworkModaldata.Arrivalkm)}
-                    onChange={(e) => {
-                      const { name, value } = e.target;
-                      const englishValue = toEnglishNumber(value);
-                      const digitRegex = /^\d*$/;
-
-                      if (digitRegex.test(englishValue)) {
-                        setOutOfworkModalData((prevState) => ({
-                          ...prevState,
-                          [name]: englishValue,
-                        }));
-                        setErrors((prev) => ({ ...prev, [name]: "" }));
+              <div className={styles.wrap_radio}>
+                {typesExit.length > 0 &&
+                  typesExit.map((item) => (
+                    <InputRadio
+                      key={item.id}
+                      text={item.type}
+                      onChange={() =>
+                        setOutOfworkModalData((prev) => ({
+                          ...prev,
+                          type: item.id,
+                        }))
                       }
-                    }}
-                  />
-                  {errors.Arrivalkm && (
-                    <p className="error">{errors.Arrivalkm}</p>
-                  )}
-                </Grid>
+                      checked={item.id === outOfworkModaldata.type}
+                      name={item.type}
+                      value={item.id}
+                    />
+                  ))}
+              </div>
+              {outOfworkModaldata.type === 2 && (
                 <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
-                  <Input
-                    label="کیلومتر خروج"
-                    placeholder="کیلومتر خروج"
-                    icon={faGauge}
-                    name="departurekm"
-                    value={toFarsiNumber(outOfworkModaldata.departurekm)}
-                    onChange={(e) => {
-                      const { name, value } = e.target;
-                      const englishValue = toEnglishNumber(value);
-                      const digitRegex = /^\d*$/;
-
-                      if (digitRegex.test(englishValue)) {
-                        setOutOfworkModalData((prevState) => ({
-                          ...prevState,
-                          [name]: englishValue,
-                        }));
-                        setErrors((prev) => ({ ...prev, [name]: "" }));
-                      }
-                    }}
+                  <SearchAndSelectDropDwon
+                    icon={faAngleDown}
+                    label={"نام قطعه"}
+                    items={pieces.map((item) => ({
+                      value_id: item.id,
+                      value: item.name,
+                    }))}
+                    name="piece"
+                    placeHolder={"قطعه را انتخاب کنید"}
+                    onChange={(name, value, label) =>
+                      setOutOfworkModalData((prev) => ({
+                        ...prev,
+                        piece: value,
+                      }))
+                    }
+                    value={outOfworkModaldata.piece}
                   />
-                  {errors.departurekm && (
-                    <p className="error">{errors.departurekm}</p>
-                  )}
+
+                  {errors.piece && <p className="error">{errors.piece}</p>}
                 </Grid>
-              </Grid>
+              )}
+              {outOfworkModaldata.type === 1 && (
+                <Grid
+                  container
+                  className={"distancerow"}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                >
+                  <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                    <Input
+                      label="کیلومتر ورود"
+                      placeholder="کیلومتر ورود"
+                      icon={faGauge}
+                      name="Arrivalkm"
+                      value={toFarsiNumber(outOfworkModaldata.Arrivalkm)}
+                      onChange={(e) => {
+                        const { name, value } = e.target;
+                        const englishValue = toEnglishNumber(value);
+                        const digitRegex = /^\d*$/;
+
+                        if (digitRegex.test(englishValue)) {
+                          setOutOfworkModalData((prevState) => ({
+                            ...prevState,
+                            [name]: englishValue,
+                          }));
+                          setErrors((prev) => ({ ...prev, [name]: "" }));
+                        }
+                      }}
+                    />
+                    {errors.Arrivalkm && (
+                      <p className="error">{errors.Arrivalkm}</p>
+                    )}
+                  </Grid>
+                  <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
+                    <Input
+                      label="کیلومتر خروج"
+                      placeholder="کیلومتر خروج"
+                      icon={faGauge}
+                      name="departurekm"
+                      value={toFarsiNumber(outOfworkModaldata.departurekm)}
+                      onChange={(e) => {
+                        const { name, value } = e.target;
+                        const englishValue = toEnglishNumber(value);
+                        const digitRegex = /^\d*$/;
+
+                        if (digitRegex.test(englishValue)) {
+                          setOutOfworkModalData((prevState) => ({
+                            ...prevState,
+                            [name]: englishValue,
+                          }));
+                          setErrors((prev) => ({ ...prev, [name]: "" }));
+                        }
+                      }}
+                    />
+                    {errors.departurekm && (
+                      <p className="error">{errors.departurekm}</p>
+                    )}
+                  </Grid>
+                </Grid>
+              )}
               <Grid
                 container
                 className={"distancerow"}
@@ -526,47 +571,7 @@ export default function OutWork({ id, pieces }) {
                   <p className="error">{errors.description}</p>
                 )}
               </Grid>
-              {outOfworkModaldata.type === 2 && (
-                <Grid size={{ xs: 12, md: 6 }} sx={{ width: "100%" }}>
-                  <SearchAndSelectDropDwon
-                    icon={faAngleDown}
-                    label={"نام قطعه"}
-                    items={pieces.map((item) => ({
-                      value_id: item.id,
-                      value: item.name,
-                    }))}
-                    name="piece"
-                    placeHolder={"قطعه را انتخاب کنید"}
-                    onChange={(name, value, label) =>
-                      setOutOfworkModalData((prev) => ({
-                        ...prev,
-                        piece: value,
-                      }))
-                    }
-                    value={outOfworkModaldata.piece}
-                  />
 
-                  {errors.piece && <p className="error">{errors.piece}</p>}
-                </Grid>
-              )}
-              <div className={styles.wrap_radio}>
-                {typesExit.length > 0 &&
-                  typesExit.map((item) => (
-                    <InputRadio
-                      key={item.id}
-                      text={item.type}
-                      onChange={() =>
-                        setOutOfworkModalData((prev) => ({
-                          ...prev,
-                          type: item.id,
-                        }))
-                      }
-                      checked={item.id === outOfworkModaldata.type}
-                      name={item.type}
-                      value={item.id}
-                    />
-                  ))}
-              </div>
               {errors.type && <p className="error">{errors.type}</p>}
               <Box sx={{ display: "flex", justifyContent: "end" }}>
                 <Button2 onClick={addToTable}>تایید</Button2>
@@ -611,12 +616,12 @@ export default function OutWork({ id, pieces }) {
                 </TableCell>
                 <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                   {toFarsiNumber(
-                    moment(item.arrivaltime).format("jYYYY/jMM/jDD HH:mm")
+                    moment(item.arrivaltime).format("jYYYY/jMM/jDD HH:mm"),
                   )}
                 </TableCell>
                 <TableCell align="center" sx={{ fontFamily: "iranYekan" }}>
                   {toFarsiNumber(
-                    moment(item.departuretime).format("jYYYY/jMM/jDD HH:mm")
+                    moment(item.departuretime).format("jYYYY/jMM/jDD HH:mm"),
                   )}
                 </TableCell>
 

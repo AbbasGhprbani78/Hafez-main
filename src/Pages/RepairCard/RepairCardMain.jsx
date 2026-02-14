@@ -36,7 +36,6 @@ function RepairCardMain() {
   const [page, setPage] = useState(0);
   const [totalRows, setTotalRows] = useState(undefined);
   const pageLength = 4;
-
   const [information, setInformation] = useState([]);
   const [admissionNumber, setAdmissionNumber] = useState("");
   const [startDate, setStartDate] = useState(null);
@@ -120,7 +119,7 @@ function RepairCardMain() {
             from_date: en_start_date,
             to_date: en_end_date,
           },
-        }
+        },
       );
       if (response.status === 200) {
         const url = window.URL.createObjectURL(new Blob([response.data]));

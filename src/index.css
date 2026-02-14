@@ -114,7 +114,8 @@ p {
 
 @font-face {
   font-family: "iranYekan";
-  src: url("/public/fonts/light/iranyekanweblight.ttf") format("ttf"),
+  src:
+    url("/public/fonts/light/iranyekanweblight.ttf") format("ttf"),
     url("/public/fonts/light/iranyekanweblight.woff2") format("woff2"),
     url("/public/fonts/light/iranyekanweblight.woff") format("woff"),
     url("/public/fonts/light/iranyekanweblight.eot") format("eot"),
@@ -127,7 +128,8 @@ p {
 }
 @font-face {
   font-family: "poppins";
-  src: url("/public/fonts/Poppins/Poppins-Light.ttf") format("ttf"),
+  src:
+    url("/public/fonts/Poppins/Poppins-Light.ttf") format("ttf"),
     url("/public/fonts/Poppins/Poppins-Bold.ttf") format("ttf");
 }
 
@@ -192,6 +194,7 @@ button {
   font-size: 1rem !important;
   font-weight: 600 !important;
   color: #15616d;
+  font-family: "iranYekan", sans-serif !important;
 }
 
 .free {
@@ -313,6 +316,24 @@ button {
   border: none !important;
   outline: none !important;
   padding: 9px 20px !important;
+}
+
+.key_item {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.value_item {
+  font-weight: 400px;
+  margin-right: 5px;
+  font-size: 0.9rem;
+}
+.label_input_form3 {
+  color: var(--color-1) !important;
+  margin-right: 8px !important;
+  font-size: clamp(0.8rem, 0.9vw, 1rem) !important;
+  font-weight: bold !important;
+  font-family: "iranYekan", sans-serif !important;
 }
 
 * {

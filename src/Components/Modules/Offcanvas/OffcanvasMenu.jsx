@@ -216,6 +216,7 @@ import {
   faUserTie,
   faTree,
   faScrewdriverWrench,
+  faCircleDollarToSlot,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "./Offcanvas.module.css";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -228,9 +229,9 @@ function ResponsiveDrawer({ show, setIsShowSideBar }) {
     { path: "/admission", label: "پذیرش", icon: faNewspaper },
     { path: "/arboretum", label: "درختواره", icon: faTree },
     { path: "/repairsall", label: "کارت تعمیر", icon: faScrewdriverWrench },
-    { path: "/fund", label: "حسابداری", icon: faLayerGroup },
+    { path: "/fund", label: "صندوق", icon: faCircleDollarToSlot },
+    { path: "/accounting", label: "حسابداری", icon: faLayerGroup },
     { path: "/allform", label: "فرم‌ها", icon: faListCheck },
-
     {
       label: "گزارشات",
       icon: faChartPie,
@@ -309,9 +310,9 @@ function ResponsiveDrawer({ show, setIsShowSideBar }) {
     view_admission_reports: "/admission",
     view_arboretum: "/arboretum",
     view_repair_cards: "/repairsall",
-    view_accounting: "/fund",
+    view_accounting: "/accounting",
+    view_fund: "/fund",
     view_forms: "/allform",
-
     Finance: "finance",
     Warehouse: "warehouse",
     Reports: "reports",
@@ -348,6 +349,9 @@ function ResponsiveDrawer({ show, setIsShowSideBar }) {
   const filteredRoutes = useMemo(() => {
     return allRoutes.filter((item) => {
       if (item.path) {
+        // Ensure the `/fund` route is always visible regardless of permissions
+        if (item.path === "/fund") return true;
+
         return hasAccessToPath(item.path);
       }
       if (item.subRoutes) {
@@ -376,7 +380,7 @@ function ResponsiveDrawer({ show, setIsShowSideBar }) {
         {filteredRoutes.map((item) => {
           if (item.subRoutes) {
             const accessibleSubs = item.subRoutes.filter((sub) =>
-              hasAccessToPath(sub.path)
+              hasAccessToPath(sub.path),
             );
 
             if (accessibleSubs.length === 0) return null;

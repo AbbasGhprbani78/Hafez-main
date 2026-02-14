@@ -20,17 +20,6 @@
   margin-top: 1.3rem;
 }
 
-.key_item {
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-
-.value_item {
-  font-weight: 400px;
-  margin-right: 5px;
-  font-size: 0.9rem;
-}
-
 .payment_method {
   display: flex;
   flex-direction: column;
